@@ -1,4 +1,7 @@
-*
+*~
+*.jou
+*.log
+/*
 !.gitignore
 !*/
 !*.xdc
@@ -11,3 +14,11 @@
 !*_wrapper.v
 !src/**
 !vrf/**
+
+# added by anthony
+!/device/
+!/device/*
+/device/*~
+!/submodules/
+!/submodules/*
+!/mem_map/
