@@ -1,14 +1,14 @@
 /**
- * Header file for the SMARTPIX28 C++ Caribou Device
+ * Header file for the CMSPIX28 C++ Caribou Device
  */
 
-#ifndef DEVICE_SMARTPIX28_H
-#define DEVICE_SMARTPIX28_H
+#ifndef DEVICE_CMSPIX28_H
+#define DEVICE_CMSPIX28_H
 
 #include "device/CaribouDevice.hpp"
 #include "hardware_abstraction/carboard/Carboard.hpp"
 
-#include "SMARTPIX28Defaults.hpp"
+#include "CMSPIX28Defaults.hpp"
 
 #include <fstream>
 
@@ -16,11 +16,11 @@ namespace caribou {
 
   /** SParkDream Device class definition
    */
-  class SMARTPIX28Device : public CaribouDevice<carboard::Carboard, iface_mem> {
+  class CMSPIX28Device : public CaribouDevice<carboard::Carboard, iface_mem> {
 
   public:
-    SMARTPIX28Device(const caribou::Configuration config);
-    ~SMARTPIX28Device();
+    CMSPIX28Device(const caribou::Configuration config);
+    ~CMSPIX28Device();
 
     void daqStart() override;
     void daqStop() override;
@@ -35,4 +35,4 @@ namespace caribou {
 
 } // namespace caribou
 
-#endif /* DEVICE_SMARTPIX28_H */
+#endif /* DEVICE_CMSPIX28_H */

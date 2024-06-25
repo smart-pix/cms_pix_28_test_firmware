@@ -1,21 +1,21 @@
 /**
- * Caribou C++ Device for SMARTPIX28
+ * Caribou C++ Device for CMSPIX28
  */
 
-#include "SMARTPIX28Device.hpp"
+#include "CMSPIX28Device.hpp"
 #include "utils/log.hpp"
 
 using namespace caribou;
 
-SMARTPIX28Device::SMARTPIX28Device(const caribou::Configuration config)
+CMSPIX28Device::CMSPIX28Device(const caribou::Configuration config)
     : CaribouDevice(config, iface_mem::configuration_type(MEM_PATH, FPGA_MEM)) {
 
 
   // (1) ADD CUSTOM FUNCTIONS TO THE DISPATCHER
   //     This allows them to be called dynamically from Spacely.
 
-  // _dispatcher.add("setUsrclkFreq", &SMARTPIX28Device::setUsrclkFreq, this);
-  _dispatcher.add("accessRegWrdOut", &SMARTPIX28Device::accessRegWrdOut, this);
+  // _dispatcher.add("setUsrclkFreq", &CMSPIX28Device::setUsrclkFreq, this);
+  _dispatcher.add("accessRegWrdOut", &CMSPIX28Device::accessRegWrdOut, this);
 
   // (2) SET UP PERIPHERY WITH CARBOARD DEVICES 
   // _periphery.add("PWR_OUT_1", carboard::PWR_OUT_1);
@@ -50,12 +50,12 @@ SMARTPIX28Device::SMARTPIX28Device(const caribou::Configuration config)
 
 // CUSTOM FUNCTIONS
 
-void SMARTPIX28Device::accessRegWrdOut() {
+void CMSPIX28Device::accessRegWrdOut() {
   LOG(INFO) << "reg_wrdout" << getMemory("reg_wrdout");
   return;
 }
 
-// void SMARTPIX28Device::setUsrclkFreq(const uint64_t freq) {
+// void CMSPIX28Device::setUsrclkFreq(const uint64_t freq) {
 
 
 //   LOG(DEBUG) << "Unbinding Linux driver for Si570";
@@ -80,30 +80,30 @@ void SMARTPIX28Device::accessRegWrdOut() {
 // SKELETON METHODS
 //Need to provide definitions for these superclass functions
 //or it will throw an error.
-void SMARTPIX28Device::powerUp() {
+void CMSPIX28Device::powerUp() {
   LOG(INFO) << "Powering up (Not Implemented)";
   return;
 }
 
-void SMARTPIX28Device::powerDown() {
+void CMSPIX28Device::powerDown() {
   LOG(INFO) << "Powering down (Not Implemented)";
   return;
 }
 
 
-void SMARTPIX28Device::daqStart() {
+void CMSPIX28Device::daqStart() {
   LOG(INFO) << "DAQ Starting (Not Implemented)";
   return;
 }
 
 
-void SMARTPIX28Device::daqStop() {
+void CMSPIX28Device::daqStop() {
   LOG(INFO) << "DAQ Stopping (Not Implemented)";
   return;
 }
 
 
-SMARTPIX28Device::~SMARTPIX28Device() {
+CMSPIX28Device::~CMSPIX28Device() {
   LOG(INFO) << "Shutdown, delete device.";
   powerOff();
 }
