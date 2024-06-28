@@ -226,7 +226,7 @@ module fw_ipx_wrap_tb ();
     //logic dn_event_toggle;
   endfunction
 
-  function logic [255:0][15:0] conter_cfg_array();
+  function logic [255:0][15:0] counter_cfg_array();
     logic [255:0][15:0] my_cfg_array;
     for(int i=0; i<256; i++) begin
 //      my_cfg_array[i][ 7:0] = i       & 8'hFF;
@@ -540,7 +540,7 @@ module fw_ipx_wrap_tb ();
     // Test 4: cfg_array_0/1 write/read counter/random
     tb_testcase = "T4. cfg_array_0/1 write/read counter/random";
     tb_number   = 4;
-    tb_w_cfg_array_counter = conter_cfg_array();
+    tb_w_cfg_array_counter = counter_cfg_array();
     tb_w_cfg_array_random  = random_cfg_array();
     tb_firmware_id       = firmware_id_2;
     #(5*fw_axi_clk_period);
