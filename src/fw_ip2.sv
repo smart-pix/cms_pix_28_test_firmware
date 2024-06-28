@@ -364,8 +364,8 @@ module fw_ip2 (
   localparam logic [9 : 0]                       sm_testx_i_scanchain_reg_width = 768;
   logic [sm_testx_i_scanchain_reg_width-1 : 0]   sm_testx_i_scanchain_reg;               // 768-bits shift register; bit#0 drives DUT scan_in; used by all tests 1,2,3
   logic [9 : 0]                                  sm_testx_i_scanchain_reg_shift_cnt;     // counting from 0 to sm_testx_i_scanchain_reg_width = 768
-  logic                                          sm_test1_o_scanchain_reg_load;          // LOAD  control for shift register; independent control by each test 1,2,3
-  logic                                          sm_test1_o_scanchain_reg_shift_right;   // SHIFT control for shift register; independent control by each test 1,2,3
+  logic                                          sm_test1_o_scanchain_reg_load;          // LOAD  control for shift register; independent control by each test 1,2,3,4
+  logic                                          sm_test1_o_scanchain_reg_shift_right;   // SHIFT control for shift register; independent control by each test 1,2,3,4
   logic                                          sm_test2_o_scanchain_reg_load;
   logic                                          sm_test2_o_scanchain_reg_shift_right;
   logic                                          sm_test3_o_scanchain_reg_load;          assign sm_test3_o_scanchain_reg_load        = 1'b0;    // TODO to be driven by sm_test3
@@ -587,7 +587,6 @@ module fw_ip2 (
     end
   end
   //
-
 
 endmodule
 
