@@ -4,6 +4,9 @@
 /*
 !.gitignore
 !*/
+
+
+# Vivado related
 !*.xdc
 !*.xpr
 !*.xci
@@ -14,6 +17,17 @@
 !*_wrapper.v
 !src/**
 !vrf/**
+
+
+# Xcelium related
+xcelium.d/*
+waves.shm/*
+.simvision/*
+
+
+# DVT related
+.dvt/.profiling/*
+
 
 # added by anthony
 !/device/
