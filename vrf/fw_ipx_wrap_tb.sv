@@ -341,7 +341,7 @@ module fw_ipx_wrap_tb ();
     tb_sw_write24_0[w_execute_cfg_test_mask_reset_not_index                                                         ] = tb_test_mask_reset_not;
     sw_write32_0             = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
     #(1*fw_axi_clk_period);
-    $display("time=%06.2f tb_test_number=%02d tb_test_delay=%02d tb_test_sample=%02d tb_test_loopback=%02d tb_test_trig_out_phase=%02d tb_test_mask_reset_not=%01d",
+    $display("time=%06.2f tb_test_number=0x%01h tb_test_delay=0x%02h tb_test_sample=0x%02h tb_test_loopback=0x%01h tb_test_trig_out_phase=0x%02h tb_test_mask_reset_not=0x%01h",
       $realtime(), tb_test_number, tb_test_delay, tb_test_sample, tb_test_loopback, tb_test_trig_out_phase, tb_test_mask_reset_not);
     //fw_op_code_w_execute     = 1'b0;
     //sw_write24_0             = 24'h0;

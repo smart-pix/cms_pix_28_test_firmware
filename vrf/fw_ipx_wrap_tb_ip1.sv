@@ -373,7 +373,7 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_sw_write24_0[w_execute_cfg_test_mask_reset_not_index                                                         ] = tb_test_mask_reset_not;
     sw_write32_0             = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
     #(1*fw_axi_clk_period);
-    $display("time=%06.2f tb_test_number=%02d tb_test_delay=%02d tb_test_sample=%02d tb_test_loopback=%02d tb_test_mask_reset_not=%01d",
+    $display("time=%06.2f tb_test_number=0x%01h tb_test_delay=0x%02h tb_test_sample=0x%02h tb_test_loopback=0x%01h tb_test_mask_reset_not=0x%01h",
       $realtime(), tb_test_number, tb_test_delay, tb_test_sample, tb_test_loopback, tb_test_mask_reset_not);
     //fw_op_code_w_execute     = 1'b0;
     //sw_write24_0             = 24'h0;
@@ -391,9 +391,35 @@ module fw_ipx_wrap_tb_ip1 ();
         $display("time=%06.2f FAIL PERIOD fast_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_fast_configclk_period=%03d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_fast_configclk_period);
         tb_err[tb_err_index_fast_configclk_period]=1'b1;
       end
-      // 2. CHECK fw_bxclk PERIOD
+      // 2. CHECK slow_configclk PERIOD
       @(posedge DUT.fw_ip1_inst.slow_configclk); tb_time_t1 = $realtime();
       @(posedge DUT.fw_ip1_inst.slow_configclk); tb_time_t2 = $realtime();
+      if(tb_time_t2-tb_time_t1 != tb_slow_configclk_period * fw_axi_clk_period) begin
+        $display("time=%06.2f FAIL PERIOD slow_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_slow_configclk_period=%06d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_slow_configclk_period);
+        tb_err[tb_err_index_slow_configclk_period]=1'b1;
+      end
+      @(negedge fw_axi_clk);           // ensure exit on FE of AXI CLK
+    end
+  endtask
+
+  task check_fast_configclk_period_test3();
+    begin
+      // 1. CHECK fast_configclk PERIOD
+      @(posedge DUT.config_clk); tb_time_t1 = $realtime();
+      @(posedge DUT.config_clk); tb_time_t2 = $realtime();
+      if(tb_time_t2-tb_time_t1 != tb_fast_configclk_period * fw_axi_clk_period) begin
+        $display("time=%06.2f FAIL PERIOD fast_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_fast_configclk_period=%03d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_fast_configclk_period);
+        tb_err[tb_err_index_fast_configclk_period]=1'b1;
+      end
+      @(negedge fw_axi_clk);           // ensure exit on FE of AXI CLK
+    end
+  endtask
+
+  task check_slow_configclk_period_test4();
+    begin
+      // 2. CHECK slow_configclk PERIOD
+      @(posedge DUT.config_clk); tb_time_t1 = $realtime();
+      @(posedge DUT.config_clk); tb_time_t2 = $realtime();
       if(tb_time_t2-tb_time_t1 != tb_slow_configclk_period * fw_axi_clk_period) begin
         $display("time=%06.2f FAIL PERIOD slow_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_slow_configclk_period=%06d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_slow_configclk_period);
         tb_err[tb_err_index_slow_configclk_period]=1'b1;
@@ -553,7 +579,7 @@ module fw_ipx_wrap_tb_ip1 ();
     w_reset();
     #(5*fw_axi_clk_period);
     tb_firmware_id = firmware_id_1;
-    for (tb_i_test = 1; tb_i_test <= 8; tb_i_test++) begin
+    for (tb_i_test = 1; tb_i_test <= 3; tb_i_test++) begin           // use limit tb_i_test <= 8; to test all tb_slow_configclk_period; CAUTION: test-run-time very long....
       tb_fast_configclk_period = ('d10 * tb_i_test) & 7'h3F;
       tb_super_pix_sel         = tb_i_test % 2;
       tb_slow_configclk_period = (10**tb_i_test) & 27'h7FFFFFF;
@@ -574,6 +600,87 @@ module fw_ipx_wrap_tb_ip1 ();
     #(500*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
     //---------------------------------------------------------------------------------------------
+    // Test 33: using test3 - fast_configclk fixed period test write/read
+    tb_testcase = "T33. using test3 - fast_configclk fixed period test write/read";
+    tb_number   = 33;
+    #(5*fw_axi_clk_period);
+    w_reset();
+    #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_1;
+    //
+    tb_test_delay            = 7'h06;                      // on clock domain fw_axi_clk
+    tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
+    tb_test_number           = 4'h4;                       // use test_number==test_number==4'h4 to enable test3_enable
+    tb_test_loopback         = 1'b1;                       // on clock domain fw_axi_clk
+    tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
+    //
+    for (tb_i_test = 1; tb_i_test <= 3; tb_i_test++) begin           // use maximum tb_i_test <= 8; to test all tb_slow_configclk_period; CAUTION: test-run-time very long....
+      tb_fast_configclk_period = ('d10 * tb_i_test) & 7'h3F;
+      tb_super_pix_sel         = tb_i_test % 2;
+      tb_slow_configclk_period = (10**tb_i_test) & 27'h7FFFFFF;
+      w_cfg_static_0_and_1_fixed();
+      tb_number   = 331;
+      // Dummy wait before doing w_execute();
+      #(5*fw_axi_clk_period);
+      w_execute();
+      tb_number   = 332;
+      // Dummy wait before doing check_fast_configclk_period_test3()
+      #(2*fw_axi_clk_period*tb_slow_configclk_period);
+      check_fast_configclk_period_test3();
+      tb_number   = 333;
+      // Dummy wait before doing check_r_cfg_static_0_and_1()
+      #(5*fw_axi_clk_period);
+      check_r_cfg_static_0_and_1();
+      tb_number   = 334;
+      // Dummy wait before next tb_i_test
+      #(2*fw_axi_clk_period*tb_slow_configclk_period);
+    end
+    // Dummy wait before next tb_i_test
+    #(500*fw_axi_clk_period);
+    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+    //---------------------------------------------------------------------------------------------
+    // Test 34: using test4 - slow_configclk fixed period test write/read
+    tb_testcase = "T34. using test4 - slow_configclk fixed period test write/read";
+    tb_number   = 34;
+    #(5*fw_axi_clk_period);
+    w_reset();
+    #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_1;
+    //
+    tb_test_delay            = 7'h06;                      // on clock domain fw_axi_clk
+    tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
+    tb_test_number           = 4'h8;                       // use test_number==test_number==4'h4 to enable test3_enable
+    tb_test_loopback         = 1'b1;                       // on clock domain fw_axi_clk
+    tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
+    //
+    for (tb_i_test = 1; tb_i_test <= 3; tb_i_test++) begin           // use maximum tb_i_test <= 8; to test all tb_slow_configclk_period; CAUTION: test-run-time very long....
+      tb_fast_configclk_period = ('d10 * tb_i_test) & 7'h3F;
+      tb_super_pix_sel         = tb_i_test % 2;
+      tb_slow_configclk_period = (10**tb_i_test) & 27'h7FFFFFF;
+      w_cfg_static_0_and_1_fixed();
+      tb_number   = 341;
+      // Dummy wait before doing w_execute();
+      #(5*fw_axi_clk_period);
+      w_execute();
+      tb_number   = 342;
+      // Dummy wait before doing check_fast_configclk_period_test3()
+      #(2*fw_axi_clk_period*tb_slow_configclk_period);
+      check_slow_configclk_period_test4();
+      tb_number   = 343;
+      // Dummy wait before doing check_r_cfg_static_0_and_1()
+      #(5*fw_axi_clk_period);
+      check_r_cfg_static_0_and_1();
+      tb_number   = 344;
+      // Dummy wait before next tb_i_test
+      #(2*fw_axi_clk_period*tb_slow_configclk_period);
+    end
+    // Dummy wait before next tb_i_test
+    #(500*fw_axi_clk_period);
+    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+    //---------------------------------------------------------------------------------------------
+
+
+
 
 //    //---------------------------------------------------------------------------------------------
 //    // Test 3: cfg_array_0/1 write/read counter/random

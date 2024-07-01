@@ -366,14 +366,14 @@ module fw_ip1 (
   logic           sm_test2_o_vin_test_trig_out;  assign sm_test2_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test2
   logic           sm_test2_o_scan_in;            assign sm_test2_o_scan_in           = 1'b0;       // TODO to be driven by sm_test2
   logic           sm_test2_o_scan_load;          assign sm_test2_o_scan_load         = 1'b0;       // TODO to be driven by sm_test2
-  logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = 1'b0;       // TODO to be driven by sm_test3
+  logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = fast_configclk;       // Debug assignment; sm_test3 is not defined
   logic           sm_test3_o_reset_not;          assign sm_test3_o_reset_not         = 1'b0;       // TODO to be driven by sm_test3
   logic           sm_test3_o_config_in;          assign sm_test3_o_config_in         = 1'b0;       // TODO to be driven by sm_test3
   logic           sm_test3_o_config_load;        assign sm_test3_o_config_load       = LOAD_CONFIG;// TODO to be driven by sm_test3
   logic           sm_test3_o_vin_test_trig_out;  assign sm_test3_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test3
   logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;       // TODO to be driven by sm_test3
   logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = 1'b0;       // TODO to be driven by sm_test4
+  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = slow_configclk;       // Debug assignment; sm_test3 is not defined
   logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;       // TODO to be driven by sm_test4
   logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;       // TODO to be driven by sm_test4
   logic           sm_test4_o_config_load;        assign sm_test4_o_config_load       = LOAD_CONFIG;// TODO to be driven by sm_test4
