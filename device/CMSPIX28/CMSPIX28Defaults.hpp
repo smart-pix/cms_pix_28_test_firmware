@@ -1,5 +1,5 @@
-#ifndef DEVICE_SMARTPIX28_DEFAULTS_H
-#define DEVICE_SMARTPIX28_DEFAULTS_H
+#ifndef DEVICE_CMSPIX28_DEFAULTS_H
+#define DEVICE_CMSPIX28_DEFAULTS_H
 
 #include "utils/dictionary.hpp"
 
@@ -23,4 +23,4 @@ namespace caribou {
     {"sw_read32_1", {FPGA_MEM, register_t<size_t>(0x000008, 0xffffffff, true, true, false)}}, \
   }
 }
-#endif /* DEVICE_SMARTPIX28_DEFAULTS_H */
+#endif /* DEVICE_CMSPIX28_DEFAULTS_H */
