@@ -112,6 +112,7 @@
 ./src/com_fw_to_dut.sv
 ./src/com_op_code_decoder.sv
 ./src/com_config_write_regs.sv
+./src/com_testx_decoder.sv
 #./src/com_cdc_synch.sv
 ./src/configclk_generator.sv
 ./src/ip1_test1.sv

@@ -298,52 +298,25 @@ module fw_ip1 (
   assign test_loopback       = sw_write24_0[w_execute_cfg_test_loopback                                              ];
   assign test_mask_reset_not = sw_write24_0[w_execute_cfg_test_mask_reset_not_index                                  ];
   //
-  logic test1_enable; logic test1_enable_del; logic test1_enable_re;
-  logic test2_enable; logic test2_enable_del; logic test2_enable_re;
-  logic test3_enable; logic test3_enable_del; logic test3_enable_re;
-  logic test4_enable; logic test4_enable_del; logic test4_enable_re;
-  always @(posedge fw_axi_clk) begin
-    if(op_code_w_reset) begin
-      test1_enable  <= 1'b0;
-      test2_enable  <= 1'b0;
-      test3_enable  <= 1'b0;
-      test4_enable  <= 1'b0;
-    end else begin
-      if(op_code_w_execute==1'b1 && test_number==4'h1) begin
-        test1_enable <= 1'b1;
-      end else begin
-        test1_enable <= 1'b0;
-      end
-      //
-      if(op_code_w_execute==1'b1 && test_number==4'h2) begin
-        test2_enable <= 1'b1;
-      end else begin
-        test2_enable <= 1'b0;
-      end
-      //
-      if(op_code_w_execute==1'b1 && test_number==4'h4) begin
-        test3_enable <= 1'b1;
-      end else begin
-        test3_enable <= 1'b0;
-      end
-      //
-      if(op_code_w_execute==1'b1 && test_number==4'h8) begin
-        test4_enable <= 1'b1;
-      end else begin
-        test4_enable <= 1'b0;
-      end
-    end
-  end
-  always @(posedge fw_axi_clk) begin
-    test1_enable_del <= test1_enable;
-    test2_enable_del <= test2_enable;
-    test3_enable_del <= test3_enable;
-    test4_enable_del <= test4_enable;
-  end
-  assign test1_enable_re = test1_enable & ~test1_enable_del;
-  assign test2_enable_re = test2_enable & ~test2_enable_del;
-  assign test3_enable_re = test3_enable & ~test3_enable_del;
-  assign test4_enable_re = test4_enable & ~test4_enable_del;
+  // Instantiate module com_testx_decoder.sv
+  logic test1_enable; logic test1_enable_re;
+  logic test2_enable; logic test2_enable_re;                                   // TODO to be used by sm_test2
+  logic test3_enable; logic test3_enable_re;                                   // TODO to be used by sm_test3
+  logic test4_enable; logic test4_enable_re;                                   // TODO to be used by sm_test4
+  com_testx_decoder com_testx_decoder_inst (
+    .clk                     (fw_axi_clk),                 // mapped to appropriate clock: S_AXI_ACLK or pl_clk1
+    .op_code_w_reset         (op_code_w_reset),
+    .op_code_w_execute       (op_code_w_execute),
+    .test_number             (test_number),
+    .test1_enable            (test1_enable),
+    .test2_enable            (test2_enable),
+    .test3_enable            (test3_enable),
+    .test4_enable            (test4_enable),
+    .test1_enable_re         (test1_enable_re),
+    .test2_enable_re         (test2_enable_re),
+    .test3_enable_re         (test3_enable_re),
+    .test4_enable_re         (test4_enable_re)
+  );
   //
   // Define enumerated type shift_reg_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
   typedef enum logic {
