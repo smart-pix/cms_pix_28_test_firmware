@@ -72,7 +72,7 @@ module ip1_test1 (
   assign sm_test1_o_config_clk        = sm_testx_i_fast_config_clk;
   assign sm_test1_o_scan_in           = 1'b0;       // signal not used-in / driven-by sm_test1_proc
   assign sm_test1_o_scan_load         = 1'b0;       // signal not used-in / driven-by sm_test1_proc
-  assign sm_test1_o_vin_test_trig_out = 1'b0;       // signal not used-in / diven-by sm_test1_proc
+  assign sm_test1_o_vin_test_trig_out = 1'b0;       // signal not used-in / driven-by sm_test1_proc
   always @(posedge clk) begin : sm_test1_proc
     if(~enable | reset) begin
       sm_test1 <= IDLE_T1;

@@ -116,6 +116,7 @@
 #./src/com_cdc_synch.sv
 ./src/configclk_generator.sv
 ./src/ip1_test1.sv
+./src/ip1_test2.sv
 ./src/fw_ip1.sv
 ./src/bxclks_generator.sv
 ./src/ip2_test1.sv
