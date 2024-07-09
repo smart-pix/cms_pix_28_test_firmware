@@ -9,27 +9,10 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-06-13  Cristian  Gingu        Created template
-// 2024-06-21  Neha Kharwadkar        Added tb for ip1
-// 2024-06-28  Cristian Gingu         Review (commit/7e8871d41ab68ebdd0cc6e3d7ebc2ac75c8c49f4) and make the following changes:
-// - put back localparam fw_pl_clk1_period =  2.5;           // FM clock 400MHz       mapped to pl_clk
-// - change   localparam w_execute_cfg_test_* with indexes specific for IP1 (instead of IP2)
-// - change   tb_test_delay and tb_test_sample width from 6-bits IP2) to 7-bits(IP1)
-// - add new  localparam tb_err_index_slow_configclk_period  =  1;
-// - assign   localparam tb_err_index_op_code_r_cfg_static_1 =  3;
-// - put back logic   tb_fw_pl_clk1_initial;
-// - add      logic [26:0] tb_slow_configclk_period;
-// - put back process gen_fw_pl_clk1
-// - replace  task w_cfg_static_random(integer index); with task w_cfg_static_0_and_1_random; which includes both OP_CODE_W_CFG_STATIC_0 and _1
-// - replace  task w_cfg_static_fixed (integer index); with task w_cfg_static_0_and_1_fixed;  which includes both OP_CODE_W_CFG_STATIC_0 and _1
-// - remove   logic [5:0]  tb_test_trig_out_phase;
-// - fix      task w_execute(); customize for IP1 (instead of IP2)
-// - fix      task check_r_cfg_static(integer index); customize for IP1 (instead of IP2)
-// - replace  task check_r_cfg_static(integer index); with task check_r_cfg_static_0_and_1;
-// - put back tb_fw_pl_clk1_initial  = $urandom_range(1, 0) & 1'b1;
-// - fix      "initial begin" to contain only tb_firmware_id = firmware_id_1; and not mixes with tb_firmware_id = firmware_id_2;
-// - rename   task check_r_data_array_1_counter to task check_r_data_array_1_random and fix code inside task
-// - put back task check_fast_slow_configclk_period(); to check fast_configclk and slow_configclk periods
-// - rewrite  Test 3: fast/slow_configclk fixed period and delay test write/read
+// 2024-06-27  Cristian Gingu         Write RTL code; implement ip1_test1 ip1_test1_inst
+// 2024-07-xx  Cristian Gingu         Use sm_test3 to forward internal fast_configclk to output port fw_config_clk
+// 2024-07-xx  Cristian Gingu         Use sm_test4 to forward internal slow_configclk to output port fw_config_clk
+// 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb_ip1__
 `define __fw_ipx_wrap_tb_ip1__

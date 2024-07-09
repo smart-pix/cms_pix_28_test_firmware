@@ -9,6 +9,8 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-06-18  Cristian  Gingu        Created template
+// 2024-07-xx  Cristian Gingu         Write RTL code; implement ip2_test2 ip2_test2_inst
+// 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test2__
 `define __ip2_test2__
