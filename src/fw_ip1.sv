@@ -444,8 +444,12 @@ module fw_ip1 (
     .sm_testx_i_slow_config_clk              (slow_configclk),
     .sm_testx_i_shift_reg_bit0               (sm_testx_i_shift_reg[0]),
     .sm_testx_i_shift_reg_shift_cnt          (sm_testx_i_shift_reg_shift_cnt),
-    .sm_testx_i_shift_reg_shift_cnt_max_fc   (sm_testx_i_shift_reg_width_fc),  // fast config clock related max counter == 5188-24 ==5164 bits
+
+
+    .sm_testx_i_shift_reg_shift_cnt_max_fc   (sm_testx_i_shift_reg_width), // (sm_testx_i_shift_reg_width_fc),  // fast config clock related max counter == 5188-24 ==5164 bits
     .sm_testx_i_shift_reg_shift_cnt_max_sc   (sm_testx_i_shift_reg_width),     // slow config clock related max counter == 5188 bits
+
+
     .sm_test2_o_shift_reg_load               (sm_test2_o_shift_reg_load),
     .sm_test2_o_shift_reg_shift              (sm_test2_o_shift_reg_shift_right),
     .sm_test2_o_status_done                  (sm_test2_o_status_done),
@@ -484,11 +488,23 @@ module fw_ip1 (
       end
     end else if(test2_enable) begin
       // use data specific for test case test2
-      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width*{1'b0}};     // TODO
-
-
-
-
+      if(sm_test2==SHIFT_IN_0_T2 | sm_test2==SHIFT_IN_T2) begin
+        if(test_sample==fast_configclk_clk_counter) begin
+          if(test_loopback) begin
+            // shift-in new bit using loop-back data from sm_test1_o_scan_in
+            sm_testx_o_shift_reg <= {sm_test2_o_config_in, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+          end else begin
+            // shift-in new bit using readout-data from DUT
+            sm_testx_o_shift_reg <= {fw_config_out,        sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+          end
+        end else begin
+          // keep old value
+          sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
+        end
+      end else begin
+        // keep old value
+        sm_testx_o_shift_reg     <= sm_testx_o_shift_reg;
+      end
     end else if(test3_enable) begin
       // use data specific for test case test3
       sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width*{1'b0}};     // TODO
@@ -563,12 +579,12 @@ module fw_ip1 (
         error_w_execute_cfg <= 1'b0;
       end
     end else if(test2_enable) begin
-      // use data specific for test case test2
-      error_w_execute_cfg <= 1'b0;     // TODO
-
-
-
-
+      if(test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>fast_configclk_period)) begin
+        // inferred from state machine sm_test2 logic
+        error_w_execute_cfg <= 1'b1;
+      end else begin
+        error_w_execute_cfg <= 1'b0;
+      end
     end else if(test3_enable) begin
       // use data specific for test case test3
       error_w_execute_cfg <= 1'b0;     // TODO
