@@ -817,9 +817,9 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_number   = 500;
     #(5*fw_axi_clk_period);
     // Use following defined tb_fast/slow_configclk_period parameters, configure w_cfg_static_0_and_1_fixed() bits:
-    tb_fast_configclk_period = ('d10) & 7'h7F;            // 100MHz/10  => 1MHz;   fast_configclk USED in TEST_NUMBER==2
+    tb_fast_configclk_period = ('d10) & 7'h7F;             // 100MHz/10  => 1MHz;   fast_configclk USED in TEST_NUMBER==2
     tb_super_pix_sel         = 1'b0;
-    tb_slow_configclk_period = ('d100) & 27'h7FFFFFF;     // 100MHz/100 => 100KHz; slow_configclk USED in TEST_NUMBER==2
+    tb_slow_configclk_period = ('d100) & 27'h7FFFFFF;      // 100MHz/100 => 100KHz; slow_configclk USED in TEST_NUMBER==2
     w_cfg_static_0_and_1_fixed();
     tb_number   = 601;
     // Dummy wait before doing check_r_cfg_static_0_and_1()
