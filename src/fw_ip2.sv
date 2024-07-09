@@ -1,6 +1,5 @@
 // ------------------------------------------------------------------------------------
-// Author       : Neha Kharwadkar      nehak@fnal.gov
-//              : Cristian Gingu       gingu@fnal.gov
+// Author       : Cristian Gingu       gingu@fnal.gov
 // Created      : 2024-05-22
 // ------------------------------------------------------------------------------------
 // Copyright (c) 2024 by FNAL This model is the confidential and
@@ -10,6 +9,9 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-24  Cristian  Gingu        Created template
+// 2024-06-xx  Cristian Gingu         Write RTL code; implement ip2_test1 ip2_test1_inst
+// 2024-07-xx  Cristian Gingu         Write RTL code; implement ip2_test2 ip2_test2_inst
+// 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__

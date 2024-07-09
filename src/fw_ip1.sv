@@ -1,5 +1,4 @@
 // ------------------------------------------------------------------------------------
-// Author       : Neha Kharwadkar      nehak@fnal.gov
 //              : Cristian Gingu       gingu@fnal.gov
 // Created      : 2024-05-22
 // ------------------------------------------------------------------------------------
@@ -10,18 +9,11 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-22  Cristian Gingu         Created Template
-// 2024-06-18  Neha Kharwadkar        Added code for fw_ip1
-// 2024-06-27  Cristian Gingu         Review (commit/9fd4b39431e5ef81d8d7ba82bed0e2cb7d81abfb) and make the following changes:
-// - change sm_testx_o_shift_reg_array32 width definition: replace 32 with 28
-// - change sm_testx_o_shift_reg_array32 equation to avoid out-of-range on last 163rd 32-bit word
-// - change fw_read_data32_comb equation when operation code is op_code_r_data_array_1
-// - replace module fast_configclk_generator with parameterized configclk_generator
-// - add local parameter w_execute_cfg_test_mask_reset_not_index for consistency with fw_ip2.sv
-// - change sm_testx_i_shift_reg equation
-// - fix error_w_execute_cfg equation for case test1_enable
-// - change indexes for localparam w_execute_cfg_*
-// - change width   for signals    test_delay and test_sample
-// - change definition for localparam logic [12 : 0] sm_testx_i_shift_reg_width = 5188;
+// 2024-06-27  Cristian Gingu         Write RTL code; implement ip1_test1 ip1_test1_inst
+// 2024-07-xx  Cristian Gingu         Use sm_test3 to forward internal fast_configclk to output port fw_config_clk
+// 2024-07-xx  Cristian Gingu         Use sm_test4 to forward internal slow_configclk to output port fw_config_clk
+// 2024-07-09  Cristian Gingu         Clean header file Description and Author
+// 2024-07-09  Cristian Gingu         Fix latch inferred for signal fw_read_data32_comb
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -179,6 +171,8 @@ module fw_ip1 (
       end else begin
         fw_read_data32_comb = 32'b0;                       // return ZERO if address is outside range for op_code_r_data_array_0
       end
+    end else begin
+      fw_read_data32_comb = 32'b0;
     end
   end
   assign fw_read_data32 = fw_read_data32_comb;

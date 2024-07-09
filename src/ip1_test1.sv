@@ -1,5 +1,5 @@
 // ------------------------------------------------------------------------------------
-//              : Neha Kharwadkar       nehak@fnal.gov
+//              : Cristian Gingu       gingu@fnal.gov
 // Created      : 2024-06-19
 // ------------------------------------------------------------------------------------
 // Copyright (c) 2024 by FNAL This model is the confidential and
@@ -8,16 +8,9 @@
 // ------------------------------------------------------------------------------------
 // Revisions  :
 // Date        Author                 Description
-// 2024-06-19  Neha Kharwadkar        Created
-// 2024-06-27  Cristian Gingu         Review (commit/366ca95a81e6b612f6e190abc776af01092bd351) and make the following changes:
-// - fix module port name: output logic       sm_test1_o_shift_reg_shift
-// - fix module port name: output logic       sm_test1_o_scan_in
-// - fix module port name: output logic       sm_test1_o_scan_load
-// - fix module port names and signals containing _reg_reg_ to _reg_
-// - add module port name: input  logic       test_mask_reset_not
-// - add module port name: input  logic       sm_testx_i_fast_config_clk
-// - fix unassigned port:  output logic       sm_test1_o_config_clk
-// - replace sm_test1_o_shift_reg with sm_test1_o_shift_reg_shift in state machine equations
+// 2024-06-19  Cristian Gingu         Created Template
+// 2024-06-27  Cristian Gingu         Write RTL code; implement ip1_test1 ip1_test1_inst
+// 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test1__
 `define __ip1_test1__
