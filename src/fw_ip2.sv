@@ -13,6 +13,7 @@
 // 2024-07-xx  Cristian Gingu         Write RTL code; implement ip2_test2 ip2_test2_inst
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
+// 2024-07-10  Cristian Gingu         Update bxclks_generators_inst to make bxclk and bxclk_ana always enabled, regardless of fw_dev_id_enable being HIGH or LOW
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -237,7 +238,7 @@ module fw_ip2 (
   bxclks_generators bxclks_generators_inst (
     .clk                (fw_pl_clk1),                      // FM clock 400MHz       mapped to pl_clk1
     .reset              (op_code_w_reset),
-    .enable             (fw_dev_id_enable),                // up to 15 FW can be connected
+    .enable             (1'b1),                            // make bxclk and bxclk_ana always enabled, regardless of fw_dev_id_enable being HIGH or LOW
     // Input ports: controls
     .bxclk_period       (bxclk_period),
     .bxclk_delay        (bxclk_delay),
