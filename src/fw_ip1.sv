@@ -554,9 +554,9 @@ module fw_ip1 (
     end else begin
       fw_super_pixel_sel     = 1'b0;
       fw_config_clk          = 1'b0;
-      fw_reset_not           = 1'b0;
+      fw_reset_not           = 1'b1;
       fw_config_in           = 1'b0;
-      fw_config_load         = 1'b0;
+      fw_config_load         = LOAD_CONFIG;
       fw_vin_test_trig_out   = 1'b0;
       fw_scan_in             = 1'b0;
       fw_scan_load           = 1'b0;
