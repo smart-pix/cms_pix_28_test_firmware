@@ -12,6 +12,7 @@
 // 2024-06-xx  Cristian Gingu         Write RTL code; implement ip2_test1 ip2_test1_inst
 // 2024-07-xx  Cristian Gingu         Write RTL code; implement ip2_test2 ip2_test2_inst
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
+// 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -529,9 +530,9 @@ module fw_ip2 (
     end else begin
       fw_super_pixel_sel     = 1'b0;
       fw_config_clk          = 1'b0;
-      fw_reset_not           = 1'b0;
+      fw_reset_not           = 1'b1;
       fw_config_in           = 1'b0;
-      fw_config_load         = 1'b0;
+      fw_config_load         = 1'b1;
       fw_vin_test_trig_out   = 1'b0;
       fw_scan_in             = 1'b0;
       fw_scan_load           = 1'b0;
