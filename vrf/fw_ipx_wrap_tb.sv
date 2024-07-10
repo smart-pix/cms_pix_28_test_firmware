@@ -165,15 +165,15 @@ module fw_ipx_wrap_tb ();
   op_code      tb_function_id;
   logic [23:0] tb_sw_write24_0;
   //
-  // Signals related with w_cfg_static_0_reg
+  // IP2: Signals related with w_cfg_static_0_reg
   logic [5:0]  tb_bxclk_period;
   logic [4:0]  tb_bxclk_delay;
   logic        tb_bxclk_delay_sign;
-  logic        tb_super_pix_sel;
-  // Signals related with w_cfg_array_0/1_reg
+  logic        tb_super_pix_sel;                           // this signal is defined in both IP1 and IP2
+  // IP2: Signals related with w_cfg_array_0/1_reg
   logic [255:0][15:0] tb_w_cfg_array_counter;
   logic [255:0][15:0] tb_w_cfg_array_random;
-  // Signals related with w_execute: test_number and test_delay
+  // IP2: Signals related with w_execute: test_number/delay/sample, etc
   logic [5:0]  tb_test_delay;                              // on clock domain fw_axi_clk
   logic [5:0]  tb_test_sample;                             // on clock domain fw_axi_clk
   logic [3:0]  tb_test_number;                             // on clock domain fw_axi_clk
