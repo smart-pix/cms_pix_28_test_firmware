@@ -12,6 +12,9 @@
 // 2024-06-xx  Cristian Gingu         Write RTL code; implement ip2_test1 ip2_test1_inst
 // 2024-07-xx  Cristian Gingu         Write RTL code; implement ip2_test2 ip2_test2_inst
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
+// 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
+// 2024-07-10  Cristian Gingu         Update bxclks_generators_inst to make bxclk and bxclk_ana always enabled, regardless of fw_dev_id_enable being HIGH or LOW
+// 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -129,9 +132,9 @@ module fw_ip2 (
 
   // Combinatorial logic for SW readout data fw_read_data32
   logic [31:0] fw_read_data32_comb;                        // 32-bit read_data   from FW to SW
-  localparam                                          sm_testx_o_scanchain_reg_width = 768;
-  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg;                    // 768-bits shift register; bit#767 receives DUT scan_out; used by all tests 1,2,3
-  logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_reg_array32;            // remap the 768-bits register into one array of 32-bits; array depth is 768/32=24 words
+  localparam                                          sm_testx_o_scanchain_reg_width = 2*768;
+  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg;                    // 2*768=1536-bits shift register; used by all tests 1,2,3,4
+  logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_reg_array32;            // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
   for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_reg_array32_gen
     assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg[(i+1)*32-1 : i*32];
   end
@@ -151,9 +154,9 @@ module fw_ip2 (
       // For efficiency, read also w_cfg_array_1_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
       fw_read_data32_comb = {w_cfg_array_1_reg[sw_write24_0[23:16]+1], w_cfg_array_1_reg[sw_write24_0[23:16]]};
     end else if(op_code_r_data_array_0) begin
-      // AXI SW will readout sm_testx_o_scanchain_reg signal which is 768-bits for the requested address sw_write24_0[23:16].
-      // CAUTION: SW must take care not to OVERFLOW addresses: valid are 0-to-23 (768/32=24 words, 32-bits each)
-      if(sw_write24_0[23:16]<24) begin
+      // AXI SW will readout sm_testx_o_scanchain_reg signal which is 2*768-bits for the requested address sw_write24_0[23:16].
+      // CAUTION: SW must take care not to OVERFLOW addresses: valid range is 0-to-47 (2*768/32=2*24=48 words, 32-bits each)
+      if(sw_write24_0[23:16]<48) begin
         fw_read_data32_comb = sm_testx_o_scanchain_reg_array32[sw_write24_0[23:16]];
       end else begin
         fw_read_data32_comb = 32'b0;                       // pad with ZERO
@@ -236,7 +239,7 @@ module fw_ip2 (
   bxclks_generators bxclks_generators_inst (
     .clk                (fw_pl_clk1),                      // FM clock 400MHz       mapped to pl_clk1
     .reset              (op_code_w_reset),
-    .enable             (fw_dev_id_enable),                // up to 15 FW can be connected
+    .enable             (1'b1),                            // make bxclk and bxclk_ana always enabled, regardless of fw_dev_id_enable being HIGH or LOW
     // Input ports: controls
     .bxclk_period       (bxclk_period),
     .bxclk_delay        (bxclk_delay),
@@ -329,16 +332,16 @@ module fw_ip2 (
   logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;       // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = LOAD_COMP;  // TODO to be driven by sm_test4
-  // State Machine Input signals from DUT
-  logic           sm_testx_i_config_out;
-  logic           sm_testx_i_scan_out;
-  logic           sm_testx_i_dnn_output_0;
-  logic           sm_testx_i_dnn_output_1;
-  logic           sm_testx_i_dn_event_toggle;
+  // Input signals to FW from DUT; assign to State Machine Input signals:
+  logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT) not used in IP2
+  logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // used in IP2 test 1,2
+  logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // TODO to be used in IP2 test x
+  logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // TODO to be used in IP2 test x
+  logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // TODO to be used in IP2 test x
   // State Machine Control signals from logic/configuration
-  localparam logic [9 : 0]                       sm_testx_i_scanchain_reg_width = 768;
-  logic [sm_testx_i_scanchain_reg_width-1 : 0]   sm_testx_i_scanchain_reg;               // 768-bits shift register; bit#0 drives DUT scan_in; used by all tests 1,2,3
-  logic [9 : 0]                                  sm_testx_i_scanchain_reg_shift_cnt;     // counting from 0 to sm_testx_i_scanchain_reg_width = 768
+  localparam logic [10 : 0]                      sm_testx_i_scanchain_reg_width = 2*768;
+  logic [sm_testx_i_scanchain_reg_width-1 : 0]   sm_testx_i_scanchain_reg;               // 2*768=1536-bits shift register; bit#0 drives DUT scan_in; used by all tests 1,2,3
+  logic [10 : 0]                                 sm_testx_i_scanchain_reg_shift_cnt;     // counting from 0 to sm_testx_i_scanchain_reg_width = 2*768=1536 == 0x600
   logic                                          sm_test1_o_scanchain_reg_load;          // LOAD  control for shift register; independent control by each test 1,2,3,4
   logic                                          sm_test1_o_scanchain_reg_shift_right;   // SHIFT control for shift register; independent control by each test 1,2,3,4
   logic                                          sm_test2_o_scanchain_reg_load;
@@ -351,7 +354,7 @@ module fw_ip2 (
   always @(posedge fw_pl_clk1) begin : sm_testx_i_scanchain_reg_proc
     if(sm_test1_o_scanchain_reg_load | sm_test2_o_scanchain_reg_load | sm_test3_o_scanchain_reg_load | sm_test4_o_scanchain_reg_load) begin
       sm_testx_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
-      sm_testx_i_scanchain_reg_shift_cnt <= 10'h0;
+      sm_testx_i_scanchain_reg_shift_cnt <= 11'h0;
     end else if(sm_test1_o_scanchain_reg_shift_right | sm_test2_o_scanchain_reg_shift_right | sm_test3_o_scanchain_reg_shift_right | sm_test4_o_scanchain_reg_shift_right) begin
       sm_testx_i_scanchain_reg           <= {1'b0, sm_testx_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
       sm_testx_i_scanchain_reg_shift_cnt <= sm_testx_i_scanchain_reg_shift_cnt + 1'b1;
@@ -442,10 +445,10 @@ module fw_ip2 (
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_scanchain_reg <= {sm_test1_o_scan_in, sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg <= {sm_test1_o_scan_in,    sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_scanchain_reg <= {fw_scan_out,        sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg <= {sm_testx_i_scan_out,   sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
@@ -461,10 +464,10 @@ module fw_ip2 (
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_scanchain_reg <= {sm_test2_o_scan_in, sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg <= {sm_test2_o_scan_in,    sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_scanchain_reg <= {fw_scan_out,        sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg <= {sm_testx_i_scan_out,   sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
@@ -529,9 +532,9 @@ module fw_ip2 (
     end else begin
       fw_super_pixel_sel     = 1'b0;
       fw_config_clk          = 1'b0;
-      fw_reset_not           = 1'b0;
+      fw_reset_not           = 1'b1;
       fw_config_in           = 1'b0;
-      fw_config_load         = 1'b0;
+      fw_config_load         = 1'b1;
       fw_vin_test_trig_out   = 1'b0;
       fw_scan_in             = 1'b0;
       fw_scan_load           = 1'b0;

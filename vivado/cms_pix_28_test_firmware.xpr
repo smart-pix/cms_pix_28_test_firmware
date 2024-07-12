@@ -262,11 +262,11 @@
         <CompFileExtendedInfo CompFileName="clock_wizard.bd" FileRelPathName="ip/clock_wizard_zynq_ultra_ps_e_0_0/clock_wizard_zynq_ultra_ps_e_0_0.xci">
           <Proxy FileSetName="clock_wizard_zynq_ultra_ps_e_0_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="clock_wizard.bd" FileRelPathName="ip/clock_wizard_proc_sys_reset_0_0/clock_wizard_proc_sys_reset_0_0.xci">
-          <Proxy FileSetName="clock_wizard_proc_sys_reset_0_0"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="clock_wizard.bd" FileRelPathName="ip/clock_wizard_clk_wiz_0_0/clock_wizard_clk_wiz_0_0.xci">
           <Proxy FileSetName="clock_wizard_clk_wiz_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="clock_wizard.bd" FileRelPathName="ip/clock_wizard_proc_sys_reset_0_0/clock_wizard_proc_sys_reset_0_0.xci">
+          <Proxy FileSetName="clock_wizard_proc_sys_reset_0_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PGENDIR/sources_1/bd/clock_wizard/hdl/clock_wizard_wrapper.v">

@@ -166,15 +166,21 @@ module fw_ipx_wrap_tb_ip1 ();
   op_code      tb_function_id;
   logic [23:0] tb_sw_write24_0;
   //
-  // Signals related with w_cfg_static_0_reg
+  // IP2: Signals related with w_cfg_static_0_reg
+  logic [5:0]  tb_bxclk_period;
+  logic [4:0]  tb_bxclk_delay;
+  logic        tb_bxclk_delay_sign;
+  //logic      tb_super_pix_sel;                           // this signal is defined in both IP1 and IP2
+  //
+  // IP1: Signals related with w_cfg_static_0_reg
   logic [6:0]  tb_fast_configclk_period;
-  logic        tb_super_pix_sel;
-  // Signals related with w_cfg_static_1_reg (and part of w_cfg_static_0_reg)
+  logic        tb_super_pix_sel;                           // this signal is defined in both IP1 and IP2
+  // IP1: Signals related with w_cfg_static_1_reg (and part of w_cfg_static_0_reg)
   logic [26:0] tb_slow_configclk_period;
-  // Signals related with w_cfg_array_0/1_reg
+  // IP1: Signals related with w_cfg_array_0/1_reg
   logic [255:0][15:0] tb_w_cfg_array_counter;
   logic [255:0][15:0] tb_w_cfg_array_random;
-  // Signals related with w_execute: test_number and test_delay
+  // IP1: Signals related with w_execute: test_number/delay/sample, etc
   logic [6:0]  tb_test_delay;                              // on clock domain fw_axi_clk
   logic [6:0]  tb_test_sample;                             // on clock domain fw_axi_clk
   logic [3:0]  tb_test_number;                             // on clock domain fw_axi_clk
@@ -302,6 +308,16 @@ module fw_ipx_wrap_tb_ip1 ();
     #(1*fw_axi_clk_period);
     // display helper
     $display("time=%06.2f tb_i_test=%02d tb_slow_configclk_period=%09d tb_super_pix_sel=%01d tb_fast_configclk_period=%03d", $realtime(), tb_i_test, tb_slow_configclk_period, tb_super_pix_sel, tb_fast_configclk_period);
+  endtask
+
+  task w_cfg_static_fixed(integer index);
+    @(negedge fw_axi_clk);             // ensure enter on FE of AXI CLK
+    if(index%2==0) tb_function_id = OP_CODE_W_CFG_STATIC_0; else tb_function_id = OP_CODE_W_CFG_STATIC_1;
+    sw_write32_0             = {tb_firmware_id, tb_function_id, 11'b0, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
+    #(1*fw_axi_clk_period);
+    $display("time=%06.2f tb_bxclk_period=%02d tb_bxclk_delay=%02d tb_bxclk_delay_sign=%01d tb_super_pix_sel=%01d", $realtime(), tb_bxclk_period, tb_bxclk_delay, tb_bxclk_delay_sign, tb_super_pix_sel);
+    tb_function_id           = OP_CODE_NOOP;
+    sw_write32_0             = {tb_firmware_id, tb_function_id, 11'b0, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
   endtask
 
   task w_cfg_array_0_counter();
@@ -574,12 +590,31 @@ module fw_ipx_wrap_tb_ip1 ();
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
     #(10*fw_axi_clk_period);
     //---------------------------------------------------------------------------------------------
-    // Test 2: w_status_clear
-    tb_testcase = "T2. w_status_clear";
+    // Test 2: w_reset() w_status_clear()
+    tb_testcase = "T2. w_reset() w_status_clear()";
     tb_number   = 2;
-    tb_firmware_id = firmware_id_1;
-    w_status_clear();
+    tb_firmware_id = firmware_id_1; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_2; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_3; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_4; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+    #(5*fw_axi_clk_period);
+    //---------------------------------------------------------------------------------------------
+    // Test 21: IP2 related - set predefined BXCLK/ANA 40MHz with 5ns delay
+    tb_testcase = "T21. IP2 related - set predefined BXCLK/ANA 40MHz with 5ns delay";
+    tb_number   = 21;
+    tb_firmware_id           = firmware_id_2;              // use firmware_id_2 to program BXCLK and BXCLK_ANA
+    tb_bxclk_period          = 6'h0A;                      // on clock domain fw_axi_clk
+    tb_bxclk_delay           = 5'h2;                       // on clock domain fw_axi_clk
+    tb_bxclk_delay_sign      = 1'h0;                       // on clock domain fw_axi_clk
+    tb_super_pix_sel         = 1'h0;                       // on clock domain fw_axi_clk
+    w_cfg_static_fixed(.index(0));
+    tb_number   = 210;                                     // BXCLK/ANA is programmed
+    #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
+    tb_firmware_id           = firmware_id_1;              // put back current firmware_id_1
+    tb_number   = 211;
+    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+    #(5*fw_axi_clk_period);
     //---------------------------------------------------------------------------------------------
     // Test 3: fast+slow_configclk fixed period test write/read
     tb_testcase = "T30. fast+slow_configclk fixed period test write/read";

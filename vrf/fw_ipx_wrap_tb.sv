@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-06-13  Cristian  Gingu        Created template
+// 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -165,15 +166,15 @@ module fw_ipx_wrap_tb ();
   op_code      tb_function_id;
   logic [23:0] tb_sw_write24_0;
   //
-  // Signals related with w_cfg_static_0_reg
+  // IP2: Signals related with w_cfg_static_0_reg
   logic [5:0]  tb_bxclk_period;
   logic [4:0]  tb_bxclk_delay;
   logic        tb_bxclk_delay_sign;
-  logic        tb_super_pix_sel;
-  // Signals related with w_cfg_array_0/1_reg
+  logic        tb_super_pix_sel;                           // this signal is defined in both IP1 and IP2
+  // IP2: Signals related with w_cfg_array_0/1_reg
   logic [255:0][15:0] tb_w_cfg_array_counter;
   logic [255:0][15:0] tb_w_cfg_array_random;
-  // Signals related with w_execute: test_number and test_delay
+  // IP2: Signals related with w_execute: test_number/delay/sample, etc
   logic [5:0]  tb_test_delay;                              // on clock domain fw_axi_clk
   logic [5:0]  tb_test_sample;                             // on clock domain fw_axi_clk
   logic [3:0]  tb_test_number;                             // on clock domain fw_axi_clk
@@ -208,22 +209,20 @@ module fw_ipx_wrap_tb ();
     end
   endtask
 
-  //assign scan_out = scan_in;
+  // Inputs from DUT
+  assign config_out          = 1'b0;
   always @(posedge fw_pl_clk1) begin
     // arbitrary one clock delay
     scan_out <= scan_in;
   end
+  assign dnn_output_0        = 1'b0;
+  assign dnn_output_1        = 1'b0;
+  assign dn_event_toggle     = 1'b0;
 
   function void initialize();
     // SW side signals
     sw_write32_0             = 32'h0;
     tb_sw_write24_0          = 24'h0;
-    // Inputs from DUT
-    //logic config_out;
-    //logic scan_out;
-    //logic dnn_output_0;
-    //logic dnn_output_1;
-    //logic dn_event_toggle;
   endfunction
 
   function logic [255:0][15:0] counter_cfg_array();
@@ -233,8 +232,10 @@ module fw_ipx_wrap_tb ();
 //      my_cfg_array[i][15:8] = (255-i) & 8'hFF;
 //      my_cfg_array[i][ 7:0] = (i+1) & 8'hFF;
       my_cfg_array[i][ 7:0]   = 8'h01;
-      if(i==768/16-1) begin
+      if(i==768/16-1) begin                      // 768/16  ==48
         my_cfg_array[i][15:8] = 8'hC3;
+      end else if(i==2*768/16-1) begin           // 2*768/16==96
+        my_cfg_array[i][15:8] = 8'hE7;
       end else begin
         my_cfg_array[i][15:8] = 8'h00;
       end
@@ -494,11 +495,13 @@ module fw_ipx_wrap_tb ();
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
     #(10*fw_axi_clk_period);
     //---------------------------------------------------------------------------------------------
-    // Test 2: w_status_clear
-    tb_testcase = "T2. w_status_clear";
+    // Test 2: w_reset() w_status_clear()
+    tb_testcase = "T2. w_reset() w_status_clear()";
     tb_number   = 2;
-    tb_firmware_id = firmware_id_2;
-    w_status_clear();
+    tb_firmware_id = firmware_id_1; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_2; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_3; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
+    tb_firmware_id = firmware_id_4; w_reset(); #(5*fw_axi_clk_period); w_status_clear(); #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
     //---------------------------------------------------------------------------------------------
     // Test 3: BXCLK/ANA random period and delay test write/read
@@ -585,18 +588,18 @@ module fw_ipx_wrap_tb ();
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
     tb_number   = 503;
-    #(770*tb_bxclk_period*fw_pl_clk1_period);              // execution: wait for at least 768+1 BXCLK cycles; alternatively check when bit#10 is set in fw_read_status32_reg[10] <= sm_test1_o_status_done;
+    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when bit#12 is set in fw_read_status32_reg[12] <= sm_test1_o_status_done;
     if(sw_read32_1[12]==1'b1) begin
-      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d done; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), firmware_id_2, tb_test_loopback);
+      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d done; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin
-      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d mode NOT done", $realtime(), firmware_id_2, tb_test_loopback);
+      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d mode NOT done", $realtime(), tb_firmware_id, tb_test_loopback);
       tb_err[tb_err_index_test1] = 1'b1;
     end
     #(10*fw_axi_clk_period);
     tb_number   = 504;
     // READ fw_op_code_r_data_array_0
-    check_r_data_array_0_counter(.read_n_32bit_words(24)); // readout: number of 32-bit words is 24 for tb_test_number==1 and tb_test_loopback==HIGH
-    #(30*fw_axi_clk_period);                               // readout: wait for at least 24 AXI clock cycles
+    check_r_data_array_0_counter(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for tb_test_number==1 and tb_test_loopback==HIGH
+    #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
@@ -624,18 +627,18 @@ module fw_ipx_wrap_tb ();
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
     tb_number   = 603;
-    #(770*tb_bxclk_period*fw_pl_clk1_period);              // execution: wait for at least 768+1 BXCLK cycles; alternatively check when bit#12 is set in fw_read_status32_reg[12] <= sm_test1_o_status_done;
+    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when bit#12 is set in fw_read_status32_reg[12] <= sm_test1_o_status_done;
     if(sw_read32_1[12]==1'b1) begin
-      $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), firmware_id_2, tb_test_loopback);
+      $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin
-      $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d mode NOT DONE", $realtime(), firmware_id_2, tb_test_loopback);
+      $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d mode NOT DONE", $realtime(), tb_firmware_id, tb_test_loopback);
       tb_err[tb_err_index_test2] = 1'b1;
     end
     #(10*fw_axi_clk_period);
     tb_number   = 604;
     // READ fw_op_code_r_data_array_0
-    check_r_data_array_0_counter(.read_n_32bit_words(24)); // readout: number of 32-bit words is 24 for tb_test_number==1 and tb_test_loopback==HIGH
-    #(30*fw_axi_clk_period);                               // readout: wait for at least 24 AXI clock cycles
+    check_r_data_array_0_counter(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for tb_test_number==1 and tb_test_loopback==HIGH
+    #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});

@@ -14,6 +14,7 @@
 // 2024-07-xx  Cristian Gingu         Use sm_test4 to forward internal slow_configclk to output port fw_config_clk
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // 2024-07-09  Cristian Gingu         Fix latch inferred for signal fw_read_data32_comb
+// 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -514,6 +515,9 @@ module fw_ip1 (
 
   // Assign module output signals:
   // They may be or may be not dependent of State Machine sm_test1, sm_test2, sm_test3, sm_test4
+
+  assign fw_bxclk_ana        = 1'b0;
+  assign fw_bxclk            = 1'b0;
   always_comb begin
     if(test1_enable) begin
       fw_super_pixel_sel     = super_pixel_sel;
@@ -556,7 +560,7 @@ module fw_ip1 (
       fw_config_clk          = 1'b0;
       fw_reset_not           = 1'b1;
       fw_config_in           = 1'b0;
-      fw_config_load         = LOAD_CONFIG;
+      fw_config_load         = 1'b1;
       fw_vin_test_trig_out   = 1'b0;
       fw_scan_in             = 1'b0;
       fw_scan_load           = 1'b0;
