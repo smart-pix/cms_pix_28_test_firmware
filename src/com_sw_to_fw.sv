@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-22  Cristian  Gingu        Created; this is a combinatorial module
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // ------------------------------------------------------------------------------------
 `ifndef __com_sw_to_fw__
 `define __com_sw_to_fw__
@@ -30,6 +31,8 @@ module com_sw_to_fw(
     output logic        fw_op_code_r_cfg_array_0,
     output logic        fw_op_code_w_cfg_array_1,
     output logic        fw_op_code_r_cfg_array_1,
+    output logic        fw_op_code_w_cfg_array_2,
+    output logic        fw_op_code_r_cfg_array_2,
     output logic        fw_op_code_r_data_array_0,
     output logic        fw_op_code_r_data_array_1,
     output logic        fw_op_code_w_status_clear,
@@ -57,10 +60,12 @@ module com_sw_to_fw(
     OP_CODE_R_CFG_ARRAY_0    = 4'h7,
     OP_CODE_W_CFG_ARRAY_1    = 4'h8,
     OP_CODE_R_CFG_ARRAY_1    = 4'h9,
-    OP_CODE_R_DATA_ARRAY_0   = 4'hA,
-    OP_CODE_R_DATA_ARRAY_1   = 4'hB,
-    OP_CODE_W_STATUS_FW_CLEAR= 4'hC,
-    OP_CODE_W_EXECUTE        = 4'hD
+    OP_CODE_W_CFG_ARRAY_2    = 4'hA,
+    OP_CODE_R_CFG_ARRAY_2    = 4'hB,
+    OP_CODE_R_DATA_ARRAY_0   = 4'hC,
+    OP_CODE_R_DATA_ARRAY_1   = 4'hD,
+    OP_CODE_W_STATUS_FW_CLEAR= 4'hE,
+    OP_CODE_W_EXECUTE        = 4'hF
   } op_code;
 
   // Device ID decoder: this is used to enable one-and-only-one firmware at a time.
@@ -100,6 +105,8 @@ module com_sw_to_fw(
   assign fw_op_code_r_cfg_array_0  = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_R_CFG_ARRAY_0     ) ? 1'b1 : 1'b0;
   assign fw_op_code_w_cfg_array_1  = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_W_CFG_ARRAY_1     ) ? 1'b1 : 1'b0;
   assign fw_op_code_r_cfg_array_1  = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_R_CFG_ARRAY_1     ) ? 1'b1 : 1'b0;
+  assign fw_op_code_w_cfg_array_2  = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_W_CFG_ARRAY_2     ) ? 1'b1 : 1'b0;
+  assign fw_op_code_r_cfg_array_2  = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_R_CFG_ARRAY_2     ) ? 1'b1 : 1'b0;
   assign fw_op_code_r_data_array_0 = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_R_DATA_ARRAY_0    ) ? 1'b1 : 1'b0;
   assign fw_op_code_r_data_array_1 = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_R_DATA_ARRAY_1    ) ? 1'b1 : 1'b0;
   assign fw_op_code_w_status_clear = (sw_write32_0[windex_op_code_max:windex_op_code_min]==OP_CODE_W_STATUS_FW_CLEAR ) ? 1'b1 : 1'b0;

@@ -15,6 +15,8 @@
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // 2024-07-09  Cristian Gingu         Fix latch inferred for signal fw_read_data32_comb
 // 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
+// 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -35,6 +37,8 @@ module fw_ip1 (
     input  logic        fw_op_code_r_cfg_array_0,
     input  logic        fw_op_code_w_cfg_array_1,
     input  logic        fw_op_code_r_cfg_array_1,
+    input  logic        fw_op_code_w_cfg_array_2,
+    input  logic        fw_op_code_r_cfg_array_2,
     input  logic        fw_op_code_r_data_array_0,
     input  logic        fw_op_code_r_data_array_1,
     input  logic        fw_op_code_w_status_clear,
@@ -72,6 +76,8 @@ module fw_ip1 (
   logic op_code_r_cfg_array_0;
   logic op_code_w_cfg_array_1;
   logic op_code_r_cfg_array_1;
+  logic op_code_w_cfg_array_2;
+  logic op_code_r_cfg_array_2;
   logic op_code_r_data_array_0;
   logic op_code_r_data_array_1;
   logic op_code_w_status_clear;
@@ -87,6 +93,8 @@ module fw_ip1 (
     .fw_op_code_r_cfg_array_0  (fw_op_code_r_cfg_array_0),
     .fw_op_code_w_cfg_array_1  (fw_op_code_w_cfg_array_1),
     .fw_op_code_r_cfg_array_1  (fw_op_code_r_cfg_array_1),
+    .fw_op_code_w_cfg_array_2  (fw_op_code_w_cfg_array_2),
+    .fw_op_code_r_cfg_array_2  (fw_op_code_r_cfg_array_2),
     .fw_op_code_r_data_array_0 (fw_op_code_r_data_array_0),
     .fw_op_code_r_data_array_1 (fw_op_code_r_data_array_1),
     .fw_op_code_w_status_clear (fw_op_code_w_status_clear),
@@ -101,6 +109,8 @@ module fw_ip1 (
     .op_code_r_cfg_array_0   (op_code_r_cfg_array_0),
     .op_code_w_cfg_array_1   (op_code_w_cfg_array_1),
     .op_code_r_cfg_array_1   (op_code_r_cfg_array_1),
+    .op_code_w_cfg_array_2   (op_code_w_cfg_array_2),
+    .op_code_r_cfg_array_2   (op_code_r_cfg_array_2),
     .op_code_r_data_array_0  (op_code_r_data_array_0),
     .op_code_r_data_array_1  (op_code_r_data_array_1),
     .op_code_w_status_clear  (op_code_w_status_clear),
@@ -112,6 +122,7 @@ module fw_ip1 (
   logic [23:0]        w_cfg_static_1_reg;
   logic [255:0][15:0] w_cfg_array_0_reg;
   logic [255:0][15:0] w_cfg_array_1_reg;
+  logic [255:0][15:0] w_cfg_array_2_reg;
   com_config_write_regs com_config_write_regs_inst (
     .fw_clk_100              (fw_axi_clk),                 // FW clock 100MHz       mapped to S_AXI_ACLK
     .fw_rst_n                (fw_rst_n),                   // FW reset, active low  mapped to S_AXI_ARESETN
@@ -121,24 +132,26 @@ module fw_ip1 (
     .op_code_w_cfg_static_1  (op_code_w_cfg_static_1),
     .op_code_w_cfg_array_0   (op_code_w_cfg_array_0),
     .op_code_w_cfg_array_1   (op_code_w_cfg_array_1),
+    .op_code_w_cfg_array_2   (op_code_w_cfg_array_2),
     .sw_write24_0            (sw_write24_0),               // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
     //
     .w_cfg_static_0_reg      (w_cfg_static_0_reg),         // on clock domain fw_axi_clk
     .w_cfg_static_1_reg      (w_cfg_static_1_reg),         // on clock domain fw_axi_clk
     .w_cfg_array_0_reg       (w_cfg_array_0_reg),          // on clock domain fw_axi_clk
-    .w_cfg_array_1_reg       (w_cfg_array_1_reg)           // on clock domain fw_axi_clk
+    .w_cfg_array_1_reg       (w_cfg_array_1_reg),          // on clock domain fw_axi_clk
+    .w_cfg_array_2_reg       (w_cfg_array_2_reg)           // on clock domain fw_axi_clk           // on clock domain fw_axi_clk
   );
 
   // Combinatorial logic for SW readout data fw_read_data32
   logic [31:0] fw_read_data32_comb;                        // 32-bit read_data   from FW to SW
-  localparam                                           sm_testx_o_shift_reg_width = 5188;
-  logic [sm_testx_o_shift_reg_width-1   :0]            sm_testx_o_shift_reg;               // 5188 bit shft register == 4652(NWEIGHTS) + 512(PIXEL_CONFIG) + 24(HIDDEN)
-  logic [(sm_testx_o_shift_reg_width+28)/32-1:0][31:0] sm_testx_o_shift_reg_array32;       // add 28 to round up to nearest whole number of 32-bits; 5188+28=5216; 5216/32=163 32-bit words
-  for(genvar i = 0; i <= (sm_testx_o_shift_reg_width+28)/32-1; i++) begin: sm_testx_o_shift_reg_array32_gen
-    if(i==(sm_testx_o_shift_reg_width+28)/32-1) begin
-      assign sm_testx_o_shift_reg_array32[i] = {28'h0000000, sm_testx_o_shift_reg[5187:5184]};     // last  163 32-bit word: this contains most-significant-four-bits and must be pad with zero
+  localparam                                           sm_testx_o_shift_reg_width = 2*5188;
+  logic [sm_testx_o_shift_reg_width-1   :0]            sm_testx_o_shift_reg;                       // 2*5188 bit shift register == 2*{4652(NWEIGHTS) + 512(PIXEL_CONFIG) + 24(HIDDEN)} == 10376-bits
+  logic [(sm_testx_o_shift_reg_width+24)/32-1:0][31:0] sm_testx_o_shift_reg_array32;               // add 24 to round up to nearest whole number of 32-bits; 10376+24=10400; 10400/32=325 32-bit words
+  for(genvar i = 0; i <= (sm_testx_o_shift_reg_width+24)/32-1; i++) begin: sm_testx_o_shift_reg_array32_gen
+    if(i==(sm_testx_o_shift_reg_width+24)/32-1) begin
+      assign sm_testx_o_shift_reg_array32[i] = {24'h000000, sm_testx_o_shift_reg[10375:10368]};    // last:  325 32-bit word: this contains most-significant-eight-bits and must be pad with zero
     end else begin
-      assign sm_testx_o_shift_reg_array32[i] = sm_testx_o_shift_reg[(i+1)*32-1 : i*32];            // first 162 32-bit words
+      assign sm_testx_o_shift_reg_array32[i] = sm_testx_o_shift_reg[(i+1)*32-1 : i*32];            // first: 325 32-bit words
     end
   end
   always_comb begin : fw_read_data32_comb_proc
@@ -156,21 +169,21 @@ module fw_ip1 (
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_1_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_1_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
       fw_read_data32_comb = {w_cfg_array_1_reg[sw_write24_0[23:16]+1], w_cfg_array_1_reg[sw_write24_0[23:16]]};
+    end else if(op_code_r_cfg_array_2) begin
+      // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_2_reg, which is 16-bits for the requested address sw_write24_0[23:16].
+      // For efficiency, read also w_cfg_array_2_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
+      fw_read_data32_comb = {w_cfg_array_2_reg[sw_write24_0[23:16]+1], w_cfg_array_2_reg[sw_write24_0[23:16]]};
     end else if(op_code_r_data_array_0) begin
-      // AXI SW will readout sm_testx_o_shift_reg signal which is 5188-bits for the requested address sw_write24_0[23:16].
-      // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_0, valid addresses are 0-to-127 out of 163 addresses each containing one 32-bit word
-      if(sw_write24_0[23:16]<128) begin
-        fw_read_data32_comb = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]];
-      end else begin
-        fw_read_data32_comb = 32'b0;                       // return ZERO if address is outside range for op_code_r_data_array_0
-      end
+      // AXI SW will readout sm_testx_o_shift_reg signal which is 2*5188-bits for the requested address sw_write24_0[23:16].
+      // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_0, valid addresses are 0-to-255 which means first 256 out of total 325 addresses each containing one 32-bit word
+      fw_read_data32_comb = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]];
     end else if(op_code_r_data_array_1) begin
-      // AXI SW will readout sm_testx_o_shift_reg signal which is 5188-bits for the requested address sw_write24_0[23:16].
-      // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_1, valid addresses are 128-to-162 out of 163 addresses each containing one 32-bit word
-      if(sw_write24_0[23:16]>= 128 && sw_write24_0[23:16]<163) begin
-        fw_read_data32_comb = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]];
+      // AXI SW will readout sm_testx_o_shift_reg signal which is 2*5188-bits for the requested address sw_write24_0[23:16].
+      // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_1, valid addresses are 0-to-68  which means next   69 out of total 325 addresses each containing one 32-bit word
+      if(sw_write24_0[23:16]<69) begin
+        fw_read_data32_comb = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]];               // apply address offset 256
       end else begin
-        fw_read_data32_comb = 32'b0;                       // return ZERO if address is outside range for op_code_r_data_array_0
+        fw_read_data32_comb = 32'b0;                       // return ZERO if address is outside range for op_code_r_data_array_1
       end
     end else begin
       fw_read_data32_comb = 32'b0;
@@ -198,14 +211,16 @@ module fw_ip1 (
       if(op_code_r_cfg_array_0)  fw_read_status32_reg[ 6] <= 1'b1;
       if(op_code_w_cfg_array_1)  fw_read_status32_reg[ 7] <= 1'b1;
       if(op_code_r_cfg_array_1)  fw_read_status32_reg[ 8] <= 1'b1;
-      if(op_code_r_data_array_0) fw_read_status32_reg[ 9] <= 1'b1;
-      if(op_code_r_data_array_1) fw_read_status32_reg[10] <= 1'b1;
-      if(op_code_w_execute)      fw_read_status32_reg[11] <= 1'b1;
-      fw_read_status32_reg[12]    <= sm_test1_o_status_done;
-      fw_read_status32_reg[13]    <= sm_test2_o_status_done;
-      fw_read_status32_reg[14]    <= sm_test3_o_status_done;
-      fw_read_status32_reg[15]    <= sm_test4_o_status_done;
-      fw_read_status32_reg[30:16] <= 15'b0;
+      if(op_code_w_cfg_array_2)  fw_read_status32_reg[ 9] <= 1'b1;
+      if(op_code_r_cfg_array_2)  fw_read_status32_reg[10] <= 1'b1;
+      if(op_code_r_data_array_0) fw_read_status32_reg[11] <= 1'b1;
+      if(op_code_r_data_array_1) fw_read_status32_reg[12] <= 1'b1;
+      if(op_code_w_execute)      fw_read_status32_reg[13] <= 1'b1;
+      fw_read_status32_reg[14]    <= sm_test1_o_status_done;
+      fw_read_status32_reg[15]    <= sm_test2_o_status_done;
+      fw_read_status32_reg[16]    <= sm_test3_o_status_done;
+      fw_read_status32_reg[17]    <= sm_test4_o_status_done;
+      fw_read_status32_reg[30:18] <= 13'b0;
       fw_read_status32_reg[31]    <= error_w_execute_cfg;
     end
   end
@@ -355,9 +370,9 @@ module fw_ip1 (
   logic           sm_testx_i_dnn_output_1;
   logic           sm_testx_i_dn_event_toggle;
   // State Machine Control signals from logic/configuration
-  localparam logic [12 : 0]                      sm_testx_i_shift_reg_width = 5188;
-  logic [sm_testx_i_shift_reg_width-1 : 0]       sm_testx_i_shift_reg;               // 5188-bits shift register; bit#0 drives DUT config_in; used by all tests 1,2,3
-  logic [12 : 0]                                 sm_testx_i_shift_reg_shift_cnt;     // counting from 0 to sm_testx_i_shift_reg_width = 5188
+  localparam logic [13 : 0]                      sm_testx_i_shift_reg_width = 2*5188;
+  logic [sm_testx_i_shift_reg_width-1 : 0]       sm_testx_i_shift_reg;               // 2*5188-bits shift register; bit#0 drives DUT config_in; used by all tests 1,2,3,4
+  logic [13 : 0]                                 sm_testx_i_shift_reg_shift_cnt;     // counting from 0 to sm_testx_i_shift_reg_width = 2*5188=10376 == 0x2888
   logic                                          sm_test1_o_shift_reg_load;          // LOAD  control for shift register; independent control by each test 1,2,3,4
   logic                                          sm_test1_o_shift_reg_shift_right;   // SHIFT control for shift register; independent control by each test 1,2,3,4
   logic                                          sm_test2_o_shift_reg_load;          assign sm_test2_o_shift_reg_load        = 1'b0;    // TODO to be driven by sm_test2
@@ -369,8 +384,8 @@ module fw_ip1 (
   //
   always @(posedge fw_axi_clk) begin : sm_testx_i_shift_reg_proc
     if(sm_test1_o_shift_reg_load | sm_test2_o_shift_reg_load | sm_test3_o_shift_reg_load | sm_test4_o_shift_reg_load) begin
-      sm_testx_i_shift_reg           <= {w_cfg_array_1_reg[68][3:0], w_cfg_array_1_reg[67:0], w_cfg_array_0_reg};  // lower 256-addresses of 16-bit words from w_cfg_array_0_reg; upper 69-addresses from w_cfg_array_1_reg : 68 full + 4-bits from 69th.
-      sm_testx_i_shift_reg_shift_cnt <= 13'h0;
+      sm_testx_i_shift_reg           <= {w_cfg_array_2_reg[136][7:0], w_cfg_array_2_reg[135:0], w_cfg_array_1_reg, w_cfg_array_0_reg};  // all 256-addresses of 16-bit words from w_cfg_array_0_reg and w_cfg_array_1_reg; then 137-addresses from w_cfg_array_2_reg : 136full + 8-bits from 137th.
+      sm_testx_i_shift_reg_shift_cnt <= 14'h0;
     end else if(sm_test1_o_shift_reg_shift_right | sm_test2_o_shift_reg_shift_right | sm_test3_o_shift_reg_shift_right | sm_test4_o_shift_reg_shift_right) begin
       sm_testx_i_shift_reg           <= {1'b0, sm_testx_i_shift_reg[sm_testx_i_shift_reg_width-1 : 1]};
       sm_testx_i_shift_reg_shift_cnt <= sm_testx_i_shift_reg_shift_cnt + 1'b1;

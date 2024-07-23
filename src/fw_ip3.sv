@@ -10,6 +10,7 @@
 // Date        Author                 Description
 // 2024-05-24  Cristian Gingu         Created template
 // 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip3__
 `define __fw_ip3__
@@ -30,6 +31,8 @@ module fw_ip3 (
     input  logic        fw_op_code_r_cfg_array_0,
     input  logic        fw_op_code_w_cfg_array_1,
     input  logic        fw_op_code_r_cfg_array_1,
+    input  logic        fw_op_code_w_cfg_array_2,
+    input  logic        fw_op_code_r_cfg_array_2,
     input  logic        fw_op_code_r_data_array_0,
     input  logic        fw_op_code_r_data_array_1,
     input  logic        fw_op_code_w_status_clear,

@@ -15,6 +15,7 @@
 // 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
 // 2024-07-10  Cristian Gingu         Update bxclks_generators_inst to make bxclk and bxclk_ana always enabled, regardless of fw_dev_id_enable being HIGH or LOW
 // 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -36,6 +37,8 @@ module fw_ip2 (
     input  logic        fw_op_code_r_cfg_array_0,
     input  logic        fw_op_code_w_cfg_array_1,
     input  logic        fw_op_code_r_cfg_array_1,
+    input  logic        fw_op_code_w_cfg_array_2,
+    input  logic        fw_op_code_r_cfg_array_2,
     input  logic        fw_op_code_r_data_array_0,
     input  logic        fw_op_code_r_data_array_1,
     input  logic        fw_op_code_w_status_clear,
@@ -73,6 +76,8 @@ module fw_ip2 (
   logic op_code_r_cfg_array_0;
   logic op_code_w_cfg_array_1;
   logic op_code_r_cfg_array_1;
+  logic op_code_w_cfg_array_2;
+  logic op_code_r_cfg_array_2;
   logic op_code_r_data_array_0;
   logic op_code_r_data_array_1;
   logic op_code_w_status_clear;
@@ -88,6 +93,8 @@ module fw_ip2 (
     .fw_op_code_r_cfg_array_0  (fw_op_code_r_cfg_array_0),
     .fw_op_code_w_cfg_array_1  (fw_op_code_w_cfg_array_1),
     .fw_op_code_r_cfg_array_1  (fw_op_code_r_cfg_array_1),
+    .fw_op_code_w_cfg_array_2  (fw_op_code_w_cfg_array_2),
+    .fw_op_code_r_cfg_array_2  (fw_op_code_r_cfg_array_2),
     .fw_op_code_r_data_array_0 (fw_op_code_r_data_array_0),
     .fw_op_code_r_data_array_1 (fw_op_code_r_data_array_1),
     .fw_op_code_w_status_clear (fw_op_code_w_status_clear),
@@ -102,6 +109,8 @@ module fw_ip2 (
     .op_code_r_cfg_array_0   (op_code_r_cfg_array_0),
     .op_code_w_cfg_array_1   (op_code_w_cfg_array_1),
     .op_code_r_cfg_array_1   (op_code_r_cfg_array_1),
+    .op_code_w_cfg_array_2   (op_code_w_cfg_array_2),
+    .op_code_r_cfg_array_2   (op_code_r_cfg_array_2),
     .op_code_r_data_array_0  (op_code_r_data_array_0),
     .op_code_r_data_array_1  (op_code_r_data_array_1),
     .op_code_w_status_clear  (op_code_w_status_clear),
@@ -113,6 +122,7 @@ module fw_ip2 (
   logic [23:0]        w_cfg_static_1_reg;
   logic [255:0][15:0] w_cfg_array_0_reg;
   logic [255:0][15:0] w_cfg_array_1_reg;
+  logic [255:0][15:0] w_cfg_array_2_reg;
   com_config_write_regs com_config_write_regs_inst (
     .fw_clk_100              (fw_axi_clk),                 // FW clock 100MHz       mapped to S_AXI_ACLK
     .fw_rst_n                (fw_rst_n),                   // FW reset, active low  mapped to S_AXI_ARESETN
@@ -122,12 +132,14 @@ module fw_ip2 (
     .op_code_w_cfg_static_1  (op_code_w_cfg_static_1),
     .op_code_w_cfg_array_0   (op_code_w_cfg_array_0),
     .op_code_w_cfg_array_1   (op_code_w_cfg_array_1),
+    .op_code_w_cfg_array_2   (op_code_w_cfg_array_2),
     .sw_write24_0            (sw_write24_0),               // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
     //
     .w_cfg_static_0_reg      (w_cfg_static_0_reg),         // on clock domain fw_axi_clk
     .w_cfg_static_1_reg      (w_cfg_static_1_reg),         // on clock domain fw_axi_clk
     .w_cfg_array_0_reg       (w_cfg_array_0_reg),          // on clock domain fw_axi_clk
-    .w_cfg_array_1_reg       (w_cfg_array_1_reg)           // on clock domain fw_axi_clk
+    .w_cfg_array_1_reg       (w_cfg_array_1_reg),          // on clock domain fw_axi_clk
+    .w_cfg_array_2_reg       (w_cfg_array_2_reg)           // on clock domain fw_axi_clk
   );
 
   // Combinatorial logic for SW readout data fw_read_data32
@@ -153,6 +165,10 @@ module fw_ip2 (
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_1_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_1_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
       fw_read_data32_comb = {w_cfg_array_1_reg[sw_write24_0[23:16]+1], w_cfg_array_1_reg[sw_write24_0[23:16]]};
+    end else if(op_code_r_cfg_array_2) begin
+      // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_2_reg, which is 16-bits for the requested address sw_write24_0[23:16].
+      // For efficiency, read also w_cfg_array_2_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
+      fw_read_data32_comb = {w_cfg_array_2_reg[sw_write24_0[23:16]+1], w_cfg_array_2_reg[sw_write24_0[23:16]]};
     end else if(op_code_r_data_array_0) begin
       // AXI SW will readout sm_testx_o_scanchain_reg signal which is 2*768-bits for the requested address sw_write24_0[23:16].
       // CAUTION: SW must take care not to OVERFLOW addresses: valid range is 0-to-47 (2*768/32=2*24=48 words, 32-bits each)
@@ -190,14 +206,16 @@ module fw_ip2 (
       if(op_code_r_cfg_array_0)  fw_read_status32_reg[ 6] <= 1'b1;
       if(op_code_w_cfg_array_1)  fw_read_status32_reg[ 7] <= 1'b1;
       if(op_code_r_cfg_array_1)  fw_read_status32_reg[ 8] <= 1'b1;
-      if(op_code_r_data_array_0) fw_read_status32_reg[ 9] <= 1'b1;
-      if(op_code_r_data_array_1) fw_read_status32_reg[10] <= 1'b1;
-      if(op_code_w_execute)      fw_read_status32_reg[11] <= 1'b1;
-      fw_read_status32_reg[12]    <= sm_test1_o_status_done;
-      fw_read_status32_reg[13]    <= sm_test2_o_status_done;
-      fw_read_status32_reg[14]    <= sm_test3_o_status_done;
-      fw_read_status32_reg[15]    <= sm_test4_o_status_done;
-      fw_read_status32_reg[30:16] <= 15'b0;
+      if(op_code_w_cfg_array_2)  fw_read_status32_reg[ 9] <= 1'b1;
+      if(op_code_r_cfg_array_2)  fw_read_status32_reg[10] <= 1'b1;
+      if(op_code_r_data_array_0) fw_read_status32_reg[11] <= 1'b1;
+      if(op_code_r_data_array_1) fw_read_status32_reg[12] <= 1'b1;
+      if(op_code_w_execute)      fw_read_status32_reg[13] <= 1'b1;
+      fw_read_status32_reg[14]    <= sm_test1_o_status_done;
+      fw_read_status32_reg[15]    <= sm_test2_o_status_done;
+      fw_read_status32_reg[16]    <= sm_test3_o_status_done;
+      fw_read_status32_reg[17]    <= sm_test4_o_status_done;
+      fw_read_status32_reg[30:18] <= 13'b0;
       fw_read_status32_reg[31]    <= error_w_execute_cfg;
     end
   end

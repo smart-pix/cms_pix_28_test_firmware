@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-06-13  Cristian  Gingu        Created
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap__
 `define __fw_ipx_wrap__
@@ -58,6 +59,8 @@ module fw_ipx_wrap (
   logic        fw_op_code_r_cfg_array_0;
   logic        fw_op_code_w_cfg_array_1;
   logic        fw_op_code_r_cfg_array_1;
+  logic        fw_op_code_w_cfg_array_2;
+  logic        fw_op_code_r_cfg_array_2;
   logic        fw_op_code_r_data_array_0;
   logic        fw_op_code_r_data_array_1;
   logic        fw_op_code_w_status_clear;
@@ -81,6 +84,8 @@ module fw_ipx_wrap (
     .fw_op_code_r_cfg_array_0  (fw_op_code_r_cfg_array_0),
     .fw_op_code_w_cfg_array_1  (fw_op_code_w_cfg_array_1),
     .fw_op_code_r_cfg_array_1  (fw_op_code_r_cfg_array_1),
+    .fw_op_code_w_cfg_array_2  (fw_op_code_w_cfg_array_2),
+    .fw_op_code_r_cfg_array_2  (fw_op_code_r_cfg_array_2),
     .fw_op_code_r_data_array_0 (fw_op_code_r_data_array_0),
     .fw_op_code_r_data_array_1 (fw_op_code_r_data_array_1),
     .fw_op_code_w_status_clear (fw_op_code_w_status_clear),
@@ -164,6 +169,8 @@ module fw_ipx_wrap (
     .fw_op_code_r_cfg_array_0  (fw_op_code_r_cfg_array_0),
     .fw_op_code_w_cfg_array_1  (fw_op_code_w_cfg_array_1),
     .fw_op_code_r_cfg_array_1  (fw_op_code_r_cfg_array_1),
+    .fw_op_code_w_cfg_array_2  (fw_op_code_w_cfg_array_2),
+    .fw_op_code_r_cfg_array_2  (fw_op_code_r_cfg_array_2),
     .fw_op_code_r_data_array_0 (fw_op_code_r_data_array_0),
     .fw_op_code_r_data_array_1 (fw_op_code_r_data_array_1),
     .fw_op_code_w_status_clear (fw_op_code_w_status_clear),
@@ -207,6 +214,8 @@ module fw_ipx_wrap (
     .fw_op_code_r_cfg_array_0  (fw_op_code_r_cfg_array_0),
     .fw_op_code_w_cfg_array_1  (fw_op_code_w_cfg_array_1),
     .fw_op_code_r_cfg_array_1  (fw_op_code_r_cfg_array_1),
+    .fw_op_code_w_cfg_array_2  (fw_op_code_w_cfg_array_2),
+    .fw_op_code_r_cfg_array_2  (fw_op_code_r_cfg_array_2),
     .fw_op_code_r_data_array_0 (fw_op_code_r_data_array_0),
     .fw_op_code_r_data_array_1 (fw_op_code_r_data_array_1),
     .fw_op_code_w_status_clear (fw_op_code_w_status_clear),
@@ -249,6 +258,8 @@ module fw_ipx_wrap (
     .fw_op_code_r_cfg_array_0  (fw_op_code_r_cfg_array_0),
     .fw_op_code_w_cfg_array_1  (fw_op_code_w_cfg_array_1),
     .fw_op_code_r_cfg_array_1  (fw_op_code_r_cfg_array_1),
+    .fw_op_code_w_cfg_array_2  (fw_op_code_w_cfg_array_2),
+    .fw_op_code_r_cfg_array_2  (fw_op_code_r_cfg_array_2),
     .fw_op_code_r_data_array_0 (fw_op_code_r_data_array_0),
     .fw_op_code_r_data_array_1 (fw_op_code_r_data_array_1),
     .fw_op_code_w_status_clear (fw_op_code_w_status_clear),
@@ -291,6 +302,8 @@ module fw_ipx_wrap (
     .fw_op_code_r_cfg_array_0  (fw_op_code_r_cfg_array_0),
     .fw_op_code_w_cfg_array_1  (fw_op_code_w_cfg_array_1),
     .fw_op_code_r_cfg_array_1  (fw_op_code_r_cfg_array_1),
+    .fw_op_code_w_cfg_array_2  (fw_op_code_w_cfg_array_2),
+    .fw_op_code_r_cfg_array_2  (fw_op_code_r_cfg_array_2),
     .fw_op_code_r_data_array_0 (fw_op_code_r_data_array_0),
     .fw_op_code_r_data_array_1 (fw_op_code_r_data_array_1),
     .fw_op_code_w_status_clear (fw_op_code_w_status_clear),
