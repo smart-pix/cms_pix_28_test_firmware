@@ -4,6 +4,9 @@
 /*
 !.gitignore
 !*/
+
+
+# Vivado related
 !*.xdc
 !*.xpr
 !*.xci
@@ -14,6 +17,20 @@
 !*_wrapper.v
 !src/**
 !vrf/**
+vivado/cms_pix_28_test_firmware.cache/*
+vivado/cms_pix_28_test_firmware.gen/*
+vivado/cms_pix_28_test_firmware.runs/*
+
+
+# Xcelium related
+xcelium.d/*
+waves.shm/*
+.simvision/*
+
+
+# DVT related
+.dvt/.profiling/*
+
 
 # added by anthony
 !/device/

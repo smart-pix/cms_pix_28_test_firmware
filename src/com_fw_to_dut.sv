@@ -9,6 +9,8 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-23  Cristian  Gingu        Created; contains IOB FF
+// 2024-07-10  Cristian Gingu         Update default values: reset_not=1'b1; config_load=1'b1;
+// 2024-07-10  Cristian Gingu         Make outputs bxclk and bxclk_ana driven only by index=1 (fw_ip2.sv)
 // ------------------------------------------------------------------------------------
 `ifndef __com_fw_to_dut__
 `define __com_fw_to_dut__
@@ -86,6 +88,8 @@ module com_fw_to_dut(
 
   // MUX and FANOUT combinatorial logic.
   // The following is assuming hot bit encoding for fw_dev_id_enable. If more than FOUR firmwares will be used, change the equations below.
+  assign bxclk_ana_mux       = fw_bxclk_ana        [1];
+  assign bxclk_mux           = fw_bxclk            [1];
   always_comb begin
     if         (fw_dev_id_enable==4'h1) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [0];
@@ -93,8 +97,6 @@ module com_fw_to_dut(
       reset_not_mux          = fw_reset_not        [0];
       config_in_mux          = fw_config_in        [0];
       config_load_mux        = fw_config_load      [0];
-      bxclk_ana_mux          = fw_bxclk_ana        [0];
-      bxclk_mux              = fw_bxclk            [0];
       vin_test_trig_out_mux  = fw_vin_test_trig_out[0];
       scan_in_mux            = fw_scan_in          [0];
       scan_load_mux          = fw_scan_load        [0];
@@ -124,8 +126,6 @@ module com_fw_to_dut(
       reset_not_mux          = fw_reset_not        [1];
       config_in_mux          = fw_config_in        [1];
       config_load_mux        = fw_config_load      [1];
-      bxclk_ana_mux          = fw_bxclk_ana        [1];
-      bxclk_mux              = fw_bxclk            [1];
       vin_test_trig_out_mux  = fw_vin_test_trig_out[1];
       scan_in_mux            = fw_scan_in          [1];
       scan_load_mux          = fw_scan_load        [1];
@@ -155,8 +155,6 @@ module com_fw_to_dut(
       reset_not_mux          = fw_reset_not        [2];
       config_in_mux          = fw_config_in        [2];
       config_load_mux        = fw_config_load      [2];
-      bxclk_ana_mux          = fw_bxclk_ana        [2];
-      bxclk_mux              = fw_bxclk            [2];
       vin_test_trig_out_mux  = fw_vin_test_trig_out[2];
       scan_in_mux            = fw_scan_in          [2];
       scan_load_mux          = fw_scan_load        [2];
@@ -186,8 +184,6 @@ module com_fw_to_dut(
       reset_not_mux          = fw_reset_not        [3];
       config_in_mux          = fw_config_in        [3];
       config_load_mux        = fw_config_load      [3];
-      bxclk_ana_mux          = fw_bxclk_ana        [3];
-      bxclk_mux              = fw_bxclk            [3];
       vin_test_trig_out_mux  = fw_vin_test_trig_out[3];
       scan_in_mux            = fw_scan_in          [3];
       scan_load_mux          = fw_scan_load        [3];
@@ -214,11 +210,9 @@ module com_fw_to_dut(
     end else begin
       super_pixel_sel_mux    = 1'b0;
       config_clk_mux         = 1'b0;
-      reset_not_mux          = 1'b0;
+      reset_not_mux          = 1'b1;
       config_in_mux          = 1'b0;
-      config_load_mux        = 1'b0;
-      bxclk_ana_mux          = 1'b0;
-      bxclk_mux              = 1'b0;
+      config_load_mux        = 1'b1;
       vin_test_trig_out_mux  = 1'b0;
       scan_in_mux            = 1'b0;
       scan_load_mux          = 1'b0;

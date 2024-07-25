@@ -151,7 +151,7 @@ module fw_ipx_wrap (
 
   // Instantiate FW_IP1:                                             // up to 15 FWs can be connected;
   fw_ip1 fw_ip1_inst (
-    .fw_clk                    (S_AXI_ACLK),                         // FW clock              mapped to S_AXI_ACLK
+    .fw_axi_clk                (S_AXI_ACLK),                         // FW clock              mapped to S_AXI_ACLK
     .fw_rst_n                  (S_AXI_ARESETN),                      // FW reset, active low  mapped to S_AXI_ARESETN
     // SW side signals from/to com_sw_to_fw
     .fw_dev_id_enable          (fw_dev_id_enable[0]),                // up to 15 FW can be connected

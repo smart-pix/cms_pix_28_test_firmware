@@ -9,6 +9,9 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-06-18  Cristian  Gingu        Created template
+// 2024-07-xx  Cristian Gingu         Write RTL code; implement ip2_test2 ip2_test2_inst
+// 2024-07-09  Cristian Gingu         Clean header file Description and Author
+// 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test2__
 `define __ip2_test2__
@@ -26,8 +29,8 @@ module ip2_test2 (
     input  logic       test_mask_reset_not,
     input  logic       test2_enable_re,
     input  logic       sm_testx_i_scanchain_reg_bit0,
-    input  logic [9:0] sm_testx_i_scanchain_reg_shift_cnt,
-    input  logic [9:0] sm_testx_i_scanchain_reg_shift_cnt_max,
+    input  logic [10:0]sm_testx_i_scanchain_reg_shift_cnt,
+    input  logic [10:0]sm_testx_i_scanchain_reg_shift_cnt_max,
     output logic       sm_test2_o_scanchain_reg_load,
     output logic       sm_test2_o_scanchain_reg_shift,
     output logic       sm_test2_o_status_done,
@@ -64,7 +67,7 @@ module ip2_test2 (
   //
   assign sm_test2_o_config_clk        = 1'b0;       // signal not used-in / diven-by sm_test2_proc
   assign sm_test2_o_config_in         = 1'b0;       // signal not used-in / diven-by sm_test2_proc
-  assign sm_test2_o_config_load       = 1'b0;       // signal not used-in / diven-by sm_test2_proc
+  assign sm_test2_o_config_load       = 1'b1;       // signal not used-in / diven-by sm_test2_proc
   always @(posedge clk) begin : vin_test_trig_out_proc
     if(~enable | reset) begin
       sm_test2_o_vin_test_trig_out     <= 1'b0;

@@ -112,7 +112,10 @@
 ./src/com_fw_to_dut.sv
 ./src/com_op_code_decoder.sv
 ./src/com_config_write_regs.sv
+./src/com_testx_decoder.sv
 #./src/com_cdc_synch.sv
+./src/configclk_generator.sv
+./src/ip1_test1.sv
 ./src/fw_ip1.sv
 ./src/bxclks_generator.sv
 ./src/ip2_test1.sv
@@ -134,6 +137,7 @@
 #############################
 //./vrf/fw_ip2_tb.sv
 ./vrf/fw_ipx_wrap_tb.sv
+//./vrf/fw_ipx_wrap_tb_ip1.sv
 #./vrf/citc/testbench_austinw/tb_channelA.sv
 //./UVM/TB/TB2v2/QP_TB2v2_testbench_i2c_top.sv
 

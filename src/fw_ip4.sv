@@ -1,6 +1,5 @@
 // ------------------------------------------------------------------------------------
-// Author       : Neha Kharwadkar      nehak@fnal.gov
-//              : Cristian Gingu       gingu@fnal.gov
+// Author       : Cristian Gingu       gingu@fnal.gov
 // Created      : 2024-05-22
 // ------------------------------------------------------------------------------------
 // Copyright (c) 2024 by FNAL This model is the confidential and
@@ -10,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-24  Cristian  Gingu        Created template
+// 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip4__
 `define __fw_ip4__
@@ -63,9 +63,9 @@ module fw_ip4 (
   assign fw_read_status32     = 32'h0;
   assign fw_super_pixel_sel   = 1'b0;
   assign fw_config_clk        = 1'b0;
-  assign fw_reset_not         = 1'b0;
+  assign fw_reset_not         = 1'b1;
   assign fw_config_in         = 1'b0;
-  assign fw_config_load       = 1'b0;
+  assign fw_config_load       = 1'b1;
   assign fw_bxclk_ana         = 1'b0;
   assign fw_bxclk             = 1'b0;
   assign fw_vin_test_trig_out = 1'b0;
