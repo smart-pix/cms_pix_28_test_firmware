@@ -17,6 +17,7 @@
 // 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
+// 2024-07-29  Cristian Gingu         Change logic for signal error_w_execute_cfg; constrain sm_test1!=IDLE_T1 and add fw_rst_n
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -328,10 +329,10 @@ module fw_ip1 (
     .test4_enable_re         (test4_enable_re)
   );
   //
-  // Define enumerated type shift_reg_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
+  // Define enumerated type shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-comparators; default=HIGH
   typedef enum logic {
-    SHIFT_REG = 1'b0,
-    LOAD_CONFIG = 1'b1
+    SHIFT_REG    = 1'b0,
+    PARALLEL_OUT = 1'b1
   } shift_reg_mode;
   //
   // State Machine Output signals to DUT
@@ -342,27 +343,27 @@ module fw_ip1 (
   logic           sm_test1_o_vin_test_trig_out;
   logic           sm_test1_o_scan_in;
   logic           sm_test1_o_scan_load;
-  logic           sm_test2_o_config_clk;         assign sm_test2_o_config_clk        = 1'b0;       // TODO to be driven by sm_test2
-  logic           sm_test2_o_reset_not;          assign sm_test2_o_reset_not         = 1'b0;       // TODO to be driven by sm_test2
-  logic           sm_test2_o_config_in;          assign sm_test2_o_config_in         = 1'b0;       // TODO to be driven by sm_test2
-  logic           sm_test2_o_config_load;        assign sm_test2_o_config_load       = LOAD_CONFIG;// TODO to be driven by sm_test2
-  logic           sm_test2_o_vin_test_trig_out;  assign sm_test2_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test2
-  logic           sm_test2_o_scan_in;            assign sm_test2_o_scan_in           = 1'b0;       // TODO to be driven by sm_test2
-  logic           sm_test2_o_scan_load;          assign sm_test2_o_scan_load         = 1'b0;       // TODO to be driven by sm_test2
-  logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = fast_configclk;       // Debug assignment; sm_test3 is not defined
-  logic           sm_test3_o_reset_not;          assign sm_test3_o_reset_not         = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_config_in;          assign sm_test3_o_config_in         = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_config_load;        assign sm_test3_o_config_load       = LOAD_CONFIG;// TODO to be driven by sm_test3
-  logic           sm_test3_o_vin_test_trig_out;  assign sm_test3_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = slow_configclk;       // Debug assignment; sm_test3 is not defined
-  logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_config_load;        assign sm_test4_o_config_load       = LOAD_CONFIG;// TODO to be driven by sm_test4
-  logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = 1'b0;       // TODO to be driven by sm_test4
+  logic           sm_test2_o_config_clk;         assign sm_test2_o_config_clk        = 1'b0;            // TODO to be driven by sm_test2
+  logic           sm_test2_o_reset_not;          assign sm_test2_o_reset_not         = 1'b0;            // TODO to be driven by sm_test2
+  logic           sm_test2_o_config_in;          assign sm_test2_o_config_in         = 1'b0;            // TODO to be driven by sm_test2
+  logic           sm_test2_o_config_load;        assign sm_test2_o_config_load       = PARALLEL_OUT;    // TODO to be driven by sm_test2
+  logic           sm_test2_o_vin_test_trig_out;  assign sm_test2_o_vin_test_trig_out = 1'b0;            // TODO to be driven by sm_test2
+  logic           sm_test2_o_scan_in;            assign sm_test2_o_scan_in           = 1'b0;            // TODO to be driven by sm_test2
+  logic           sm_test2_o_scan_load;          assign sm_test2_o_scan_load         = 1'b0;            // TODO to be driven by sm_test2
+  logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = fast_configclk;  // Debug assignment; sm_test3 is not defined
+  logic           sm_test3_o_reset_not;          assign sm_test3_o_reset_not         = 1'b0;            // TODO to be driven by sm_test3
+  logic           sm_test3_o_config_in;          assign sm_test3_o_config_in         = 1'b0;            // TODO to be driven by sm_test3
+  logic           sm_test3_o_config_load;        assign sm_test3_o_config_load       = PARALLEL_OUT;    // TODO to be driven by sm_test3
+  logic           sm_test3_o_vin_test_trig_out;  assign sm_test3_o_vin_test_trig_out = 1'b0;            // TODO to be driven by sm_test3
+  logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;            // TODO to be driven by sm_test3
+  logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = 1'b0;            // TODO to be driven by sm_test3
+  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = slow_configclk;  // Debug assignment; sm_test3 is not defined
+  logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;            // TODO to be driven by sm_test4
+  logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;            // TODO to be driven by sm_test4
+  logic           sm_test4_o_config_load;        assign sm_test4_o_config_load       = PARALLEL_OUT;    // TODO to be driven by sm_test4
+  logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;            // TODO to be driven by sm_test4
+  logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;            // TODO to be driven by sm_test4
+  logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = 1'b0;            // TODO to be driven by sm_test4
   // State Machine Input signals from DUT
   logic           sm_testx_i_config_out;
   logic           sm_testx_i_scan_out;
@@ -469,7 +470,6 @@ module fw_ip1 (
 
   // Assign module output signals:
   // They may be or may be not dependent of State Machine sm_test1, sm_test2, sm_test3, sm_test4
-
   assign fw_bxclk_ana        = 1'b0;
   assign fw_bxclk            = 1'b0;
   always_comb begin
@@ -522,26 +522,30 @@ module fw_ip1 (
   end
 
   // Create signal error_w_execute_cfg; used as a bit in fw_read_status32 to flag wrong user settings
-  always @(posedge fw_axi_clk) begin
-    if(test1_enable) begin
-      if(test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>fast_configclk_period)) begin
-        // inferred from state machine sm_test1 logic
-        error_w_execute_cfg <= 1'b1;
-      end else begin
-        error_w_execute_cfg <= 1'b0;
+  always @(posedge fw_axi_clk or negedge fw_rst_n) begin
+    if(~fw_rst_n) begin
+      error_w_execute_cfg <= 1'b0;
+    end else begin
+      if(test1_enable) begin
+        if(sm_test1!=IDLE_T1 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>fast_configclk_period))) begin
+          // inferred from state machine sm_test1 logic
+          error_w_execute_cfg <= 1'b1;
+        end else begin
+          error_w_execute_cfg <= 1'b0;
+        end
+      end else if(test2_enable) begin
+        // use data specific for test case test2
+        error_w_execute_cfg <= 1'b0;     // TODO
+      end else if(test3_enable) begin
+        // use data specific for test case test3
+        error_w_execute_cfg <= 1'b0;     // TODO
+      end else if(test4_enable) begin
+        // use data specific for test case test4
+        error_w_execute_cfg <= 1'b0;     // TODO
+      end  else begin
+        // keep old value;
+        error_w_execute_cfg <= error_w_execute_cfg;
       end
-    end else if(test2_enable) begin
-      // use data specific for test case test2
-      error_w_execute_cfg <= 1'b0;     // TODO
-    end else if(test3_enable) begin
-      // use data specific for test case test3
-      error_w_execute_cfg <= 1'b0;     // TODO
-    end else if(test4_enable) begin
-      // use data specific for test case test4
-      error_w_execute_cfg <= 1'b0;     // TODO
-    end  else begin
-      // keep old value;
-      error_w_execute_cfg <= error_w_execute_cfg;
     end
   end
   //

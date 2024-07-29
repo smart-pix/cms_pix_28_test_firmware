@@ -57,7 +57,7 @@ module ip1_test1 (
   state_t_sm_test1 sm_test1;
   assign sm_test1_state = sm_test1;
   //
-  // Define enumerated type shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-shift_register; default=HIGH
+  // Define enumerated type shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-comparators; default=HIGH
   typedef enum logic {
     SHIFT_REG    = 1'b0,
     PARALLEL_OUT = 1'b1
@@ -82,7 +82,7 @@ module ip1_test1 (
           // output state machine signal assignment
           sm_test1_o_reset_not                   <= 1'b1;                      // active LOW signal; default is inactive
           sm_test1_o_config_in                   <= 1'b0;                      // arbitrary chosen default LOW
-          sm_test1_o_config_load                 <= PARALLEL_OUT;              // shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-shift_register; default=HIGH
+          sm_test1_o_config_load                 <= PARALLEL_OUT;              // shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-comparators; default=HIGH
           sm_test1_o_shift_reg_load              <= 1'b0;                      //
           sm_test1_o_shift_reg_shift             <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
           sm_test1_o_status_done                 <= sm_test1_o_status_done;    // state machine STATUS flag

@@ -10,6 +10,8 @@
 // Date        Author                 Description
 // 2024-06-13  Cristian  Gingu        Created template
 // 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
+// 2024-07-23  Cristian Gingu         Add task w_cfg_array_2_mixed() task check_r_cfg_array_2_mixed()
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -639,9 +641,9 @@ module fw_ipx_wrap_tb ();
     tb_number   = 503;
     #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when bit#12 is set in fw_read_status32_reg[12] <= sm_test1_o_status_done;
     if(sw_read32_1[14]==1'b1) begin
-      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d done; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
+      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin
-      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d mode NOT done", $realtime(), tb_firmware_id, tb_test_loopback);
+      $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d mode NOT DONE", $realtime(), tb_firmware_id, tb_test_loopback);
       tb_err[tb_err_index_test1] = 1'b1;
     end
     #(10*fw_axi_clk_period);
