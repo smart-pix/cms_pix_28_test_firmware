@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-31  Cristian  Gingu        Created
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // ------------------------------------------------------------------------------------
 `ifndef __com_config_write_regs__
 `define __com_config_write_regs__
@@ -24,12 +25,14 @@ module com_config_write_regs (
     input  logic        op_code_w_cfg_static_1,
     input  logic        op_code_w_cfg_array_0,
     input  logic        op_code_w_cfg_array_1,
+    input  logic        op_code_w_cfg_array_2,
     input  logic [23:0] sw_write24_0,                      // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
     //
     output logic        [23:0] w_cfg_static_0_reg,
     output logic        [23:0] w_cfg_static_1_reg,
     output logic [255:0][15:0] w_cfg_array_0_reg,
-    output logic [255:0][15:0] w_cfg_array_1_reg
+    output logic [255:0][15:0] w_cfg_array_1_reg,
+    output logic [255:0][15:0] w_cfg_array_2_reg
   );
 
   always @(posedge fw_clk_100 or negedge fw_rst_n) begin   // mapped to S_AXI_ACLK, S_AXI_ARESETN
@@ -76,6 +79,18 @@ module com_config_write_regs (
         w_cfg_array_1_reg <= 4096'b0;
       end else if(op_code_w_cfg_array_1) begin
         w_cfg_array_1_reg[sw_write24_0[23:16]] <= sw_write24_0[15:0];
+      end
+    end
+  end
+
+  always @(posedge fw_clk_100 or negedge fw_rst_n) begin   // mapped to S_AXI_ACLK, S_AXI_ARESETN
+    if(~fw_rst_n) begin
+      w_cfg_array_2_reg <= 4096'b0;
+    end else begin
+      if(op_code_w_reset) begin
+        w_cfg_array_2_reg <= 4096'b0;
+      end else if(op_code_w_cfg_array_2) begin
+        w_cfg_array_2_reg[sw_write24_0[23:16]] <= sw_write24_0[15:0];
       end
     end
   end
