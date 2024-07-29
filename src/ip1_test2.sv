@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-07-08  Cristian Gingu         Created
+// 2024-07-29  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test2__
 `define __ip1_test2__
@@ -28,9 +29,9 @@ module ip1_test2 (
     input  logic        sm_testx_i_fast_config_clk,
     input  logic        sm_testx_i_slow_config_clk,
     input  logic        sm_testx_i_shift_reg_bit0,
-    input  logic [12:0] sm_testx_i_shift_reg_shift_cnt,
-    input  logic [12:0] sm_testx_i_shift_reg_shift_cnt_max_fc,  // fast config clock related max counter == 5188-24 ==5164 bits
-    input  logic [12:0] sm_testx_i_shift_reg_shift_cnt_max_sc,  // slow config clock related max counter == 5188 bits
+    input  logic [13:0] sm_testx_i_shift_reg_shift_cnt,
+    input  logic [13:0] sm_testx_i_shift_reg_shift_cnt_max_fc,  // fast config clock related max counter == 2*5188-24 == 10376-24 == 10352 bits
+    input  logic [13:0] sm_testx_i_shift_reg_shift_cnt_max_sc,  // slow config clock related max counter == 2*5188    == 10376 bits
     output logic        sm_test2_o_shift_reg_load,
     output logic        sm_test2_o_shift_reg_shift,
     output logic        sm_test2_o_status_done,
@@ -59,8 +60,8 @@ module ip1_test2 (
   //
   // Define enumerated type shift_reg_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-shift_register; default=HIGH
   typedef enum logic {
-    SHIFT_REG   = 1'b0,
-    LOAD_CONFIG = 1'b1
+    SHIFT_REG    = 1'b0,
+    PARALLEL_OUT = 1'b1
   } shift_reg_mode;
   //
   assign sm_test2_o_config_clk        = sm_testx_i_fast_config_clk;
@@ -82,7 +83,7 @@ module ip1_test2 (
           // output state machine signal assignment
           sm_test2_o_reset_not                   <= 1'b1;                      // active LOW signal; default is inactive
           sm_test2_o_config_in                   <= 1'b0;                      // arbitrary chosen default LOW
-          sm_test2_o_config_load                 <= LOAD_CONFIG;               // scan-chain-mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
+          sm_test2_o_config_load                 <= PARALLEL_OUT;              // shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-comparators; default=HIGH
           sm_test2_o_shift_reg_load              <= 1'b0;                      //
           sm_test2_o_shift_reg_shift             <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
           sm_test2_o_status_done                 <= sm_test2_o_status_done;    // state machine STATUS flag
@@ -104,7 +105,7 @@ module ip1_test2 (
             sm_test2_o_config_load               <= SHIFT_REG;
           end else begin
             sm_test2_o_reset_not                 <= 1'b1;
-            sm_test2_o_config_load               <= LOAD_CONFIG;
+            sm_test2_o_config_load               <= PARALLEL_OUT;
           end
           sm_test2_o_config_in                   <= 1'b0;
           sm_test2_o_shift_reg_load              <= 1'b1;
@@ -162,7 +163,7 @@ module ip1_test2 (
           if(sm_testx_i_shift_reg_shift_cnt==sm_testx_i_shift_reg_shift_cnt_max_fc) begin
             // done shifting all 768 bits;
             sm_test2 <= DONE_T2;
-            sm_test2_o_config_load               <= LOAD_CONFIG;
+            sm_test2_o_config_load               <= PARALLEL_OUT;
             sm_test2_o_status_done               <= 1'b1;
           end else begin
             // continue shifting
@@ -189,7 +190,7 @@ module ip1_test2 (
           // output state machine signal assignment
           sm_test2_o_reset_not                   <= 1'b1;
           sm_test2_o_config_in                   <= 1'b0;
-          sm_test2_o_config_load                 <= LOAD_CONFIG;
+          sm_test2_o_config_load                 <= PARALLEL_OUT;
           sm_test2_o_shift_reg_load              <= 1'b0;
           sm_test2_o_shift_reg_shift             <= 1'b0;
           sm_test2_o_status_done                 <= 1'b1;

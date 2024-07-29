@@ -15,793 +15,640 @@ set id [waveform add -cdivider divider]
 set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT -comment {}]
 waveform format $id -namecolor #ff0000
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.pl_clk1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.pl_clk1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.S_AXI_ACLK}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.S_AXI_ACLK}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.S_AXI_ARESETN}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.S_AXI_ARESETN}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_out}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.dn_event_toggle}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.dn_event_toggle}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.scan_out}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.scan_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.sw_write32_0[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.sw_write32_0[31:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.bxclk_ana}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.bxclk_ana}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.bxclk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.bxclk}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_clk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_clk}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_in}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_in}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_load}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_load}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.reset_not}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.reset_not}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.scan_in}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.scan_in}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.scan_load}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.scan_load}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.super_pixel_sel}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.super_pixel_sel}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_0[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_0[31:0]}]}
+	} ]]
 waveform format $id -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_1[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_1[31:0]}]}
+	} ]]
 waveform format $id -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.vin_test_trig_out}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.vin_test_trig_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_dev_id_enable[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_dev_id_enable[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_reset}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_reset}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_data_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_data_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_data_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_status_clear}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_data_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_execute}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_status_clear}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.sw_write24_0[23:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_execute}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_super_pixel_sel[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.sw_write24_0[23:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_super_pixel_sel[3:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_clk[3:0]}]}
-  } ]]
-waveform format $id -color #ff9900 -namecolor #ff9900
-waveform hierarchy expand $id
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_reset_not[3:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_in[3:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_load[3:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_bxclk_ana[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_clk[3:0]}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_bxclk[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_reset_not[3:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_in[3:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_load[3:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_bxclk_ana[3:0]}]}
+	} ]]
+waveform format $id -color #ff9900 -namecolor #ff9900
+waveform hierarchy collapse $id
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_bxclk[3:0]}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_vin_test_trig_out[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_vin_test_trig_out[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_scan_in[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_scan_in[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_scan_load[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_scan_load[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_out[3:0]}]}
-  } ]]
-waveform hierarchy expand $id
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_out[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_scan_out[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_scan_out[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_dnn_output_0[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_dnn_output_0[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_dnn_output_1[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_dnn_output_1[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_dn_event_toggle[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_dn_event_toggle[3:0]}]}
+	} ]]
 set id [waveform add -cdivider divider]
 set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst -comment {}]
 waveform format $id -namecolor #ff0000
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_read_data32[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_read_data32[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_read_status32[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_read_status32[3:0]}]}
+	} ]]
 waveform hierarchy expand $id
 set id2 [lindex [waveform hierarchy content $id] 2]
 waveform hierarchy collapse $id2
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_write32_0[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_write32_0[31:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_dev_id_enable[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_dev_id_enable[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_reset}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_reset}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_static_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_static_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_data_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_data_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_data_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_r_data_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_execute}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_execute}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_status_clear}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.fw_op_code_w_status_clear}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_read32_0[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_read32_0[31:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_read32_1[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_read32_1[31:0]}]}
+	} ]]
+waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_write24_0[23:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.com_sw_to_fw_inst.sw_write24_0[23:0]}]}
+	} ]]
 set id [waveform add -cdivider divider]
 set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst -comment {}]
 waveform format $id -namecolor #ff0000
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_dev_id_enable}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_dev_id_enable}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_reset}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_reset}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_static_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_static_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_data_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_data_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_data_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_r_data_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_status_clear}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_status_clear}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_execute}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.fw_op_code_w_execute}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_reset}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_reset}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_static_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_static_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_data_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_data_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_data_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_r_data_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_status_clear}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_status_clear}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_execute}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_op_code_decoder_inst.op_code_w_execute}]}
+	} ]]
 set id [waveform add -cdivider divider]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_testcase}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_testcase}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_number}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_number}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_mismatch}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_mismatch}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_err[15:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_err[15:0]}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_w_cfg_array_counter[255:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_w_cfg_array_counter[255:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_w_cfg_array_random[255:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_w_cfg_array_random[255:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_fw_pl_clk1_initial}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_fw_pl_clk1_initial}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_fw_axi_clk_initial}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_fw_axi_clk_initial}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_firmware_id[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_firmware_id[3:0]}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_function_id[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_function_id[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_fast_configclk_period[6:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_fast_configclk_period[6:0]}]}
+	} ]]
 waveform format $id -radix %d
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_super_pix_sel}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_super_pix_sel}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_slow_configclk_period[26:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_slow_configclk_period[26:0]}]}
+	} ]]
 waveform format $id -radix %d
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_test_delay[6:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_test_delay[6:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_test_sample[6:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_test_sample[6:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_test_number[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_test_number[3:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_test_loopback}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_test_loopback}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.tb_test_mask_reset_not}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.tb_test_mask_reset_not}]}
+	} ]]
 set id [waveform add -cdivider divider]
 set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.com_config_write_regs_inst -comment {}]
 waveform format $id -namecolor #ff0000
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.fw_clk_100}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.fw_clk_100}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.fw_rst_n}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.fw_rst_n}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_reset}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_reset}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.sw_write24_0[23:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.sw_write24_0[23:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_static_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_static_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_static_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_static_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_array_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_array_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_array_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_array_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_array_2}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.op_code_w_cfg_array_2}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_static_0_reg[23:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_static_0_reg[23:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_static_1_reg[23:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_static_1_reg[23:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_array_0_reg[255:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_array_0_reg[255:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_array_1_reg[255:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_array_1_reg[255:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_array_2_reg[255:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.com_config_write_regs_inst.w_cfg_array_2_reg[255:0]}]}
+	} ]]
 set id [waveform add -cdivider divider]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.S_AXI_ACLK}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.S_AXI_ACLK}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.pl_clk1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.pl_clk1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.reset_not}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.reset_not}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.bxclk_ana}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.bxclk_ana}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.bxclk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.bxclk}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_clk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_clk}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_in}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_in}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_load}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_load}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.scan_in}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.scan_in}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.scan_load}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.scan_load}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.config_out}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.config_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.dn_event_toggle}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.dn_event_toggle}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_0}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_1}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.dnn_output_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.scan_out}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.scan_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.super_pixel_sel}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.super_pixel_sel}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.vin_test_trig_out}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.vin_test_trig_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_0[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_0[31:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_1[31:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.sw_read32_1[31:0]}]}
+	} ]]
 set id [waveform add -cdivider divider]
 set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst -comment {}]
 waveform format $id -namecolor #ff0000
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_axi_clk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_axi_clk}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_scan_out}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_scan_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_delay[5:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_delay[5:0]}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_sample[5:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_sample[5:0]}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_number[3:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_number[3:0]}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_loopback}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_loopback}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_clk_counter[6:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_clk_counter[6:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_period[6:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_period[6:0]}]}
+	} ]]
 waveform format $id -radix %d
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_clk_counter[26:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_clk_counter[26:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_period[26:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_period[26:0]}]}
+	} ]]
 waveform format $id -radix %d
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.super_pixel_sel}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.super_pixel_sel}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2[2:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1[2:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test1_enable}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test1_enable}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test2_enable}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test2_enable}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test3_enable}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test3_enable}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test4_enable}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test4_enable}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test1_enable_re}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test1_enable_re}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test2_enable_re}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test2_enable_re}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test3_enable_re}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test3_enable_re}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test4_enable_re}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test4_enable_re}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_o_shift_reg_array32[162:0]}]}
-  } ]]
-set id [waveform add -cdivider divider]
-set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst -comment {}]
-waveform format $id -namecolor #ff0000
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_shift_reg[10375:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1[2:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_shift_reg_shift_cnt[13:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.clk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_o_shift_reg[10375:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.reset}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_o_shift_reg_array32[324:0]}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.enable}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_config_clk}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.clk_counter[6:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_reset_not}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_testx_i_fast_config_clk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_config_in}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_testx_i_shift_reg_shift_cnt[12:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_config_load}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_testx_i_shift_reg_shift_cnt_max[12:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_vin_test_trig_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_shift_reg_load}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_scan_in}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_shift_reg_shift}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_scan_load}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_status_done}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_shift_reg_load}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_shift_reg_shift_right}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_test1_o_status_done}]}
+	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_state[2:0]}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_config_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_config_clk}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_scan_out}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_reset_not}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_dnn_output_0}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_config_in}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_dnn_output_1}]}
+	} ]]
 set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_config_load}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_vin_test_trig_out}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_scan_in}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1_o_scan_load}]}
-  } ]]
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_dn_event_toggle}]}
+	} ]]
 set id [waveform add -cdivider divider]
-set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst -comment {}]
-waveform format $id -namecolor #ff0000
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2[2:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.clk}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.reset}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.enable}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.clk_counter_fc[6:0]}]}
-  } ]]
-waveform format $id -radix %d
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.clk_counter_sc[26:0]}]}
-  } ]]
-waveform format $id -radix %d
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_testx_i_fast_config_clk}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_testx_i_slow_config_clk}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_testx_i_shift_reg_shift_cnt[12:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_testx_i_shift_reg_shift_cnt_max_fc[12:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_testx_i_shift_reg_shift_cnt_max_sc[12:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_shift_reg_load}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_shift_reg_shift}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_status_done}]}
-  } ]]
-waveform format $id -color #ff9900 -namecolor #ff9900
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_state[2:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_config_clk}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_shift_reg[10375:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_shift_reg_shift_cnt[13:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_o_shift_reg[10375:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_o_shift_reg_array32[324:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_reset_not}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_config_in}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_config_load}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_vin_test_trig_out}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_scan_in}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test2_inst.sm_test2_o_scan_load}]}
-  } ]]
-set id [waveform add -cdivider divider]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_config_out}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_scan_out}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_dnn_output_0}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_dnn_output_1}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_dn_event_toggle}]}
-  } ]]
-set id [waveform add -cdivider divider]
-set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_generator_inst -comment {}]
-waveform format $id -namecolor #ff0000
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_generator_inst.clk}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_generator_inst.configclk_period[6:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_generator_inst.enable}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_generator_inst.reset}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_generator_inst.clk_counter[6:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fast_configclk_generator_inst.configclk}]}
-  } ]]
-set id [waveform add -cdivider divider]
-set id [waveform add -label fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_generator_inst -comment {}]
-waveform format $id -namecolor #ff0000
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_generator_inst.clk}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_generator_inst.configclk_period[26:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_generator_inst.enable}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_generator_inst.reset}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_generator_inst.clk_counter[26:0]}]}
-  } ]]
-set id [waveform add -signals [subst  {
-  {[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.slow_configclk_generator_inst.configclk}]}
-  } ]]
 
 waveform xview limits 0 10795085ns
