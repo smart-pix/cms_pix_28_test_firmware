@@ -19,6 +19,7 @@
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // 2024-07-29  Cristian Gingu         Change logic for signal error_w_execute_cfg; constrain sm_test1!=IDLE_T1 and add fw_rst_n
 // 2024-07-30  Cristian Gingu         Add fw_rst_n to sm_testx_i_shift_reg_proc
+// 2024-07-30  Cristian Gingu         Make outputs config_clk default driven by test1 output sm_test1_o_config_clk
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -579,7 +580,7 @@ module fw_ip1 (
       fw_scan_load           = sm_test4_o_scan_load;
     end else begin
       fw_super_pixel_sel     = 1'b0;
-      fw_config_clk          = 1'b0;
+      fw_config_clk          = sm_test1_o_config_clk;      // Make outputs config_clk default driven by test1 output sm_test1_o_config_clk
       fw_reset_not           = 1'b1;
       fw_config_in           = 1'b0;
       fw_config_load         = 1'b1;

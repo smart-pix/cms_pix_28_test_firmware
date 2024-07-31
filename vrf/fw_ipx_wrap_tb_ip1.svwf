@@ -94,6 +94,12 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_static_0}]}
 	} ]]
 set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_static_1}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_r_cfg_static_1}]}
+	} ]]
+set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_op_code_w_cfg_array_0}]}
 	} ]]
 set id [waveform add -signals [subst  {
@@ -133,6 +139,7 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_config_clk[3:0]}]}
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
+waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_reset_not[3:0]}]}
 	} ]]
@@ -165,7 +172,6 @@ set id [waveform add -signals [subst  {
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_scan_out[3:0]}]}
 	} ]]
-waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_dnn_output_0[3:0]}]}
 	} ]]
@@ -516,7 +522,19 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_axi_clk}]}
 	} ]]
 set id [waveform add -signals [subst  {
-	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_scan_out}]}
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_config_clk}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_config_in}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_config_load}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_reset_not}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_super_pixel_sel}]}
 	} ]]
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.test_delay[5:0]}]}
@@ -587,20 +605,15 @@ set id [waveform add -signals [subst  {
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_shift_reg[10375:0]}]}
 	} ]]
-waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_i_shift_reg_shift_cnt[13:0]}]}
 	} ]]
-waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_o_shift_reg[10375:0]}]}
 	} ]]
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.sm_testx_o_shift_reg_array32[324:0]}]}
 	} ]]
-waveform hierarchy expand $id
-set id2 [lindex [waveform hierarchy content $id] 0]
-waveform hierarchy collapse $id2
 waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.ip1_test1_inst.sm_test1[2:0]}]}
@@ -687,4 +700,4 @@ set id [waveform add -signals [subst  {
 	} ]]
 set id [waveform add -cdivider divider]
 
-waveform xview limits 21088836.06ns 21291325.916ns
+waveform xview limits 0 21415035ns
