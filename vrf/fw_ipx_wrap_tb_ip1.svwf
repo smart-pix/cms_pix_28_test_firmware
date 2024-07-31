@@ -700,4 +700,4 @@ set id [waveform add -signals [subst  {
 	} ]]
 set id [waveform add -cdivider divider]
 
-waveform xview limits 0 21415035ns
+waveform xview limits 0 11878400ns
