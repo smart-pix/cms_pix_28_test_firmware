@@ -18,6 +18,7 @@
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // 2024-07-29  Cristian Gingu         Change logic for signal error_w_execute_cfg; constrain sm_test1!=IDLE_T1 and add fw_rst_n
+// 2024-07-30  Cristian Gingu         Add fw_rst_n to sm_testx_i_shift_reg_proc
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -364,15 +365,16 @@ module fw_ip1 (
   logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;            // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;            // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = 1'b0;            // TODO to be driven by sm_test4
-  // State Machine Input signals from DUT
-  logic           sm_testx_i_config_out;
-  logic           sm_testx_i_scan_out;
-  logic           sm_testx_i_dnn_output_0;
-  logic           sm_testx_i_dnn_output_1;
-  logic           sm_testx_i_dn_event_toggle;
+  // Input signals to FW from DUT; assign to State Machine Input signals:
+  logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT)     used in IP1 test 1,2
+  logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT) not used in IP1
+  logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // input signal (output from DUT) not used in IP1
+  logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // input signal (output from DUT) not used in IP1
+  logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // input signal (output from DUT) not used in IP1
   // State Machine Control signals from logic/configuration
   localparam logic [13 : 0]                      sm_testx_i_shift_reg_width    = 2*5188;
-  localparam logic [13 : 0]                      sm_testx_i_shift_reg_width_fc = sm_testx_i_shift_reg_width - 24;      // fast config clock related max counter == 2*5188-24 == 10376-24 == 10352 bits
+  localparam logic [13 : 0]                      sm_testx_i_shift_reg_width_sc = 24;                                                            // SLOW config clock related max counter == 24 bits
+  localparam logic [13 : 0]                      sm_testx_i_shift_reg_width_fc = sm_testx_i_shift_reg_width - sm_testx_i_shift_reg_width_sc;    // FAST config clock related max counter == 2*5188-24 == 10376-24 == 10352 bits
   logic [sm_testx_i_shift_reg_width-1 : 0]       sm_testx_i_shift_reg;               // 2*5188-bits shift register; bit#0 drives DUT config_in; used by all tests 1,2,3,4
   logic [13 : 0]                                 sm_testx_i_shift_reg_shift_cnt;     // counting from 0 to sm_testx_i_shift_reg_width = 2*5188=10376 == 0x2888
   logic                                          sm_test1_o_shift_reg_load;          // LOAD  control for shift register; independent control by each test 1,2,3,4
@@ -384,13 +386,18 @@ module fw_ip1 (
   logic                                          sm_test4_o_shift_reg_load;          assign sm_test4_o_shift_reg_load        = 1'b0;    // TODO to be driven by sm_test4
   logic                                          sm_test4_o_shift_reg_shift_right;   assign sm_test4_o_shift_reg_shift_right = 1'b0;    // TODO to be driven by sm_test4
   //
-  always @(posedge fw_axi_clk) begin : sm_testx_i_shift_reg_proc
-    if(sm_test1_o_shift_reg_load | sm_test2_o_shift_reg_load | sm_test3_o_shift_reg_load | sm_test4_o_shift_reg_load) begin
-      sm_testx_i_shift_reg           <= {w_cfg_array_2_reg[136][7:0], w_cfg_array_2_reg[135:0], w_cfg_array_1_reg, w_cfg_array_0_reg};  // all 256-addresses of 16-bit words from w_cfg_array_0_reg and w_cfg_array_1_reg; then 137-addresses from w_cfg_array_2_reg : 136full + 8-bits from 137th.
-      sm_testx_i_shift_reg_shift_cnt <= 14'h0;
-    end else if(sm_test1_o_shift_reg_shift_right | sm_test2_o_shift_reg_shift_right | sm_test3_o_shift_reg_shift_right | sm_test4_o_shift_reg_shift_right) begin
-      sm_testx_i_shift_reg           <= {1'b0, sm_testx_i_shift_reg[sm_testx_i_shift_reg_width-1 : 1]};
-      sm_testx_i_shift_reg_shift_cnt <= sm_testx_i_shift_reg_shift_cnt + 1'b1;
+  always @(posedge fw_axi_clk or negedge fw_rst_n) begin : sm_testx_i_shift_reg_proc
+    if(~fw_rst_n) begin
+      sm_testx_i_shift_reg             <= {sm_testx_i_shift_reg_width{1'b0}};
+      sm_testx_i_shift_reg_shift_cnt   <= 14'h0;
+    end else begin
+      if(sm_test1_o_shift_reg_load | sm_test2_o_shift_reg_load | sm_test3_o_shift_reg_load | sm_test4_o_shift_reg_load) begin
+        sm_testx_i_shift_reg           <= {w_cfg_array_2_reg[136][7:0], w_cfg_array_2_reg[135:0], w_cfg_array_1_reg, w_cfg_array_0_reg};  // all 256-addresses of 16-bit words from w_cfg_array_0_reg and w_cfg_array_1_reg; then 137-addresses from w_cfg_array_2_reg : 136full + 8-bits from 137th.
+        sm_testx_i_shift_reg_shift_cnt <= 14'h0;
+      end else if(sm_test1_o_shift_reg_shift_right | sm_test2_o_shift_reg_shift_right | sm_test3_o_shift_reg_shift_right | sm_test4_o_shift_reg_shift_right) begin
+        sm_testx_i_shift_reg           <= {1'b0, sm_testx_i_shift_reg[sm_testx_i_shift_reg_width-1 : 1]};
+        sm_testx_i_shift_reg_shift_cnt <= sm_testx_i_shift_reg_shift_cnt + 1'b1;
+      end
     end
   end
 
@@ -457,8 +464,8 @@ module fw_ip1 (
     .sm_testx_i_shift_reg_shift_cnt          (sm_testx_i_shift_reg_shift_cnt),
 
 
-    .sm_testx_i_shift_reg_shift_cnt_max_fc   (sm_testx_i_shift_reg_width), // (sm_testx_i_shift_reg_width_fc),  // fast config clock related max counter == 5188-24 ==5164 bits
-    .sm_testx_i_shift_reg_shift_cnt_max_sc   (sm_testx_i_shift_reg_width),     // slow config clock related max counter == 5188 bits
+    .sm_testx_i_shift_reg_shift_cnt_max_fc   (sm_testx_i_shift_reg_width),  // FAST config clock related max counter == 5188-24 ==5164 bits
+    .sm_testx_i_shift_reg_shift_cnt_max_sc   (sm_testx_i_shift_reg_width),  // SLOW config clock related max counter == 24 bits
 
 
     .sm_test2_o_shift_reg_load               (sm_test2_o_shift_reg_load),
@@ -484,10 +491,10 @@ module fw_ip1 (
         if(test_sample==fast_configclk_clk_counter) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_shift_reg <= {sm_test1_o_config_in, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            sm_testx_o_shift_reg <= {sm_test1_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_shift_reg <= {fw_config_out,        sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
@@ -503,10 +510,10 @@ module fw_ip1 (
         if(test_sample==fast_configclk_clk_counter) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_shift_reg <= {sm_test2_o_config_in, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            sm_testx_o_shift_reg <= {sm_test2_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_shift_reg <= {fw_config_out,        sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
           end
         end else begin
           // keep old value

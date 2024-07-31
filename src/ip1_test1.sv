@@ -12,6 +12,7 @@
 // 2024-06-27  Cristian Gingu         Write RTL code; implement ip1_test1 ip1_test1_inst
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
+// 2024-07-30  Cristian Gingu         Add sm_test1_o_* assignments when reset=HIGH
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test1__
 `define __ip1_test1__
@@ -69,7 +70,17 @@ module ip1_test1 (
   assign sm_test1_o_vin_test_trig_out = 1'b0;       // signal not used-in / driven-by sm_test1_proc
   always @(posedge clk) begin : sm_test1_proc
     if(~enable | reset) begin
+      // next state machine state logic
       sm_test1 <= IDLE_T1;
+      if(reset) begin
+        // output state machine signal assignment
+        sm_test1_o_reset_not                     <= 1'b1;                      // active LOW signal; default is inactive
+        sm_test1_o_config_in                     <= 1'b0;                      // arbitrary chosen default LOW
+        sm_test1_o_config_load                   <= PARALLEL_OUT;              // shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-comparators; default=HIGH
+        sm_test1_o_shift_reg_load                <= 1'b0;                      //
+        sm_test1_o_shift_reg_shift               <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
+        sm_test1_o_status_done                   <= 1'b0;                      // reset state machine STATUS flag
+      end
     end else begin
       case(sm_test1)
         IDLE_T1 : begin
@@ -85,7 +96,7 @@ module ip1_test1 (
           sm_test1_o_config_load                 <= PARALLEL_OUT;              // shift_reg_mode: LOW==shift-register, HIGH==parallel-output-config-internal-comparators; default=HIGH
           sm_test1_o_shift_reg_load              <= 1'b0;                      //
           sm_test1_o_shift_reg_shift             <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
-          sm_test1_o_status_done                 <= sm_test1_o_status_done;    // state machine STATUS flag
+          sm_test1_o_status_done                 <= sm_test1_o_status_done;    // keep state machine STATUS flag
         end
         DELAY_TEST_T1 : begin
           // next state machine state logic

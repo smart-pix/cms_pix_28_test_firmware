@@ -16,6 +16,8 @@
 // 2024-07-10  Cristian Gingu         Update bxclks_generators_inst to make bxclk and bxclk_ana always enabled, regardless of fw_dev_id_enable being HIGH or LOW
 // 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
+// 2024-07-30  Cristian Gingu         Change logic for signal error_w_execute_cfg; constrain sm_test1!=IDLE_T1 and add fw_rst_n
+// 2024-07-30  Cristian Gingu         Add fw_rst_n to sm_testx_i_shift_reg_proc
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -190,8 +192,8 @@ module fw_ip2 (
   logic [31:0] fw_read_status32_reg;                       // 32-bit read_status from FW to SW
   logic sm_test1_o_status_done;
   logic sm_test2_o_status_done;
-  logic sm_test3_o_status_done; assign sm_test3_o_status_done = 1'b0;
-  logic sm_test4_o_status_done; assign sm_test4_o_status_done = 1'b0;
+  logic sm_test3_o_status_done; assign sm_test3_o_status_done = 1'b0;          // TODO to be driven by sm_test3
+  logic sm_test4_o_status_done; assign sm_test4_o_status_done = 1'b0;          // TODO to be driven by sm_test4
   logic error_w_execute_cfg;
   always @(posedge fw_axi_clk) begin : fw_read_status32_reg_proc
     if(op_code_w_status_clear) begin
@@ -220,14 +222,6 @@ module fw_ip2 (
     end
   end
   assign fw_read_status32 = fw_read_status32_reg;
-
-//  // Instantiate module com_cdc_synch.sv
-//  logic synch_op_code_w_reset;
-//  com_cdc_synch com_cdc_synch_op_code_w_reset (
-//    .i_data        (op_code_w_reset),
-//    .i_clk         (fw_pl_clk1),
-//    .o_data        (synch_op_code_w_reset)
-//    );
 
   localparam w_cfg_static_0_reg_bxclk_period_index_min               =  0;     // USAGE of first 6-bits: bit#0-to-5. USE to set clock PERIOD
   localparam w_cfg_static_0_reg_bxclk_period_index_max               =  5;     // example for setting bxclk==40MHz derived from fw_pl_clk1==400MHz: write 6'h0A => 10*2.5ns=25ns;
@@ -352,7 +346,7 @@ module fw_ip2 (
   logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = LOAD_COMP;  // TODO to be driven by sm_test4
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT) not used in IP2
-  logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // used in IP2 test 1,2
+  logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT)     used in IP2 test 1,2
   logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // TODO to be used in IP2 test x
   logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // TODO to be used in IP2 test x
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // TODO to be used in IP2 test x
@@ -369,13 +363,18 @@ module fw_ip2 (
   logic                                          sm_test4_o_scanchain_reg_load;          assign sm_test4_o_scanchain_reg_load        = 1'b0;    // TODO to be driven by sm_test4
   logic                                          sm_test4_o_scanchain_reg_shift_right;   assign sm_test4_o_scanchain_reg_shift_right = 1'b0;    // TODO to be driven by sm_test4
   //
-  always @(posedge fw_pl_clk1) begin : sm_testx_i_scanchain_reg_proc
-    if(sm_test1_o_scanchain_reg_load | sm_test2_o_scanchain_reg_load | sm_test3_o_scanchain_reg_load | sm_test4_o_scanchain_reg_load) begin
-      sm_testx_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
-      sm_testx_i_scanchain_reg_shift_cnt <= 11'h0;
-    end else if(sm_test1_o_scanchain_reg_shift_right | sm_test2_o_scanchain_reg_shift_right | sm_test3_o_scanchain_reg_shift_right | sm_test4_o_scanchain_reg_shift_right) begin
-      sm_testx_i_scanchain_reg           <= {1'b0, sm_testx_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
-      sm_testx_i_scanchain_reg_shift_cnt <= sm_testx_i_scanchain_reg_shift_cnt + 1'b1;
+  always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_testx_i_scanchain_reg_proc
+    if(~fw_rst_n) begin
+      sm_testx_i_scanchain_reg             <= {sm_testx_i_scanchain_reg_width{1'b0}};
+      sm_testx_i_scanchain_reg_shift_cnt   <= 11'h0;
+    end else begin
+      if(sm_test1_o_scanchain_reg_load | sm_test2_o_scanchain_reg_load | sm_test3_o_scanchain_reg_load | sm_test4_o_scanchain_reg_load) begin
+        sm_testx_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
+        sm_testx_i_scanchain_reg_shift_cnt <= 11'h0;
+      end else if(sm_test1_o_scanchain_reg_shift_right | sm_test2_o_scanchain_reg_shift_right | sm_test3_o_scanchain_reg_shift_right | sm_test4_o_scanchain_reg_shift_right) begin
+        sm_testx_i_scanchain_reg           <= {1'b0, sm_testx_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
+        sm_testx_i_scanchain_reg_shift_cnt <= sm_testx_i_scanchain_reg_shift_cnt + 1'b1;
+      end
     end
   end
 
@@ -415,7 +414,7 @@ module fw_ip2 (
     .sm_test1_o_scan_load                    (sm_test1_o_scan_load)
   );
 
-  // State Machine for "test2": instantiate module ip2_test1.sv
+  // State Machine for "test2": instantiate module ip2_test2.sv
   typedef enum logic [2:0] {
     IDLE_T2            = 3'b000,
     DELAY_TEST_T2      = 3'b001,
@@ -522,10 +521,10 @@ module fw_ip2 (
       fw_scan_load           = sm_test1_o_scan_load;
     end else if(test2_enable) begin
       fw_super_pixel_sel     = super_pixel_sel;
-      fw_config_clk          = sm_test2_o_config_clk;
+      fw_config_clk          = sm_test2_o_config_clk;;          // signal not used-in / diven-by sm_test2_proc
       fw_reset_not           = sm_test2_o_reset_not;
-      fw_config_in           = sm_test2_o_config_in;
-      fw_config_load         = sm_test2_o_config_load;
+      fw_config_in           = sm_test2_o_config_in;            // signal not used-in / diven-by sm_test2_proc
+      fw_config_load         = sm_test2_o_config_load;          // signal not used-in / diven-by sm_test_proc
       fw_vin_test_trig_out   = sm_test2_o_vin_test_trig_out;
       fw_scan_in             = sm_test2_o_scan_in;
       fw_scan_load           = sm_test2_o_scan_load;
@@ -560,26 +559,30 @@ module fw_ip2 (
   end
 
   // Create signal error_w_execute_cfg; used as a bit in fw_read_status32 to flag wrong user settings
-  always @(posedge fw_axi_clk) begin
-    if(test1_enable) begin
-      if(test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period)) begin
-        // inferred from state machine sm_test1 logic
-        error_w_execute_cfg <= 1'b1;
+  always @(posedge fw_axi_clk or negedge fw_rst_n) begin
+    if(~fw_rst_n) begin
+      error_w_execute_cfg <= 1'b0;
+    end else begin
+      if(test1_enable) begin
+        if(sm_test1!=IDLE_T1 & (test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+          // inferred from state machine sm_test1 logic
+          error_w_execute_cfg <= 1'b1;
+        end else begin
+          error_w_execute_cfg <= 1'b0;
+        end
+      end else if(test2_enable) begin
+        // use data specific for test case test2
+        error_w_execute_cfg <= 1'b0;     // TODO
+      end else if(test3_enable) begin
+        // use data specific for test case test3
+        error_w_execute_cfg <= 1'b0;     // TODO
+      end else if(test4_enable) begin
+        // use data specific for test case test4
+        error_w_execute_cfg <= 1'b0;     // TODO
       end else begin
-        error_w_execute_cfg <= 1'b0;
+        // keep old value;
+        error_w_execute_cfg <= error_w_execute_cfg;
       end
-    end else if(test2_enable) begin
-      // use data specific for test case test2
-      error_w_execute_cfg <= 1'b0;     // TODO
-    end else if(test3_enable) begin
-      // use data specific for test case test3
-      error_w_execute_cfg <= 1'b0;     // TODO
-    end else if(test4_enable) begin
-      // use data specific for test case test4
-      error_w_execute_cfg <= 1'b0;     // TODO
-    end  else begin
-      // keep old value;
-      error_w_execute_cfg <= error_w_execute_cfg;
     end
   end
   //
