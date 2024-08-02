@@ -11,7 +11,9 @@
 // 2024-07-08  Cristian Gingu         Created
 // 2024-07-29  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // 2024-07-30  Cristian Gingu         Add sm_test2_o_* assignments when reset=HIGH
-// 2024-07-31  Cristian Gingu         Add internal signal sm_test2_o_sel_cfg_clk and typedef
+// 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
+// 2024-08-02  Cristian Gingu         Update state machine for manage two clocks: sm_testx_i_fast_config_clk sm_testx_i_slow_config_clk
+// 2024-08-02  Cristian Gingu         Add new information for state machine with new input port slow_configclk_period
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test2__
 `define __ip1_test2__
@@ -25,6 +27,7 @@ module ip1_test2 (
     // Control signals:
     input  logic [ 6:0] clk_counter_fc,
     input  logic [26:0] clk_counter_sc,
+    input  logic [26:0] slow_configclk_period,
     input  logic [ 6:0] test_delay,
     input  logic        test_mask_reset_not,
     input  logic        test2_enable_re,
@@ -38,7 +41,7 @@ module ip1_test2 (
     output logic        sm_test2_o_shift_reg_shift,
     output logic        sm_test2_o_status_done,
     // output ports
-    output logic [ 2:0] sm_test2_state,
+    output logic [ 3:0] sm_test2_state,
     output logic        sm_test2_o_config_clk,
     output logic        sm_test2_o_reset_not,
     output logic        sm_test2_o_config_in,
@@ -49,13 +52,17 @@ module ip1_test2 (
   );
   // ------------------------------------------------------------------------------------------------------------------
   // State Machine for "test2". Test SCAN-CHAIN-MODULE as a serial-in / serial-out shift-tegister.
-  typedef enum logic [2:0] {
-    IDLE_T2        = 3'b000,
-    DELAY_TEST_T2  = 3'b001,
-    RESET_NOT_T2   = 3'b010,
-    SHIFT_IN_0_T2  = 3'b011,
-    SHIFT_IN_T2    = 3'b100,
-    DONE_T2        = 3'b101
+  typedef enum logic [3:0] {
+    IDLE_T2                = 4'b0000,
+    DELAY_TEST_T2          = 4'b0001,
+    RESET_NOT_T2           = 4'b0010,
+    SHIFT_IN_0_T2          = 4'b0011,
+    SHIFT_IN_T2            = 4'b0100,
+    WAIT_FAST_CLK_T2       = 4'b0101,
+    WAIT_SLOW_CLK_T2       = 4'b0110,
+    WAIT2_SLOW_CLK_T2      = 4'b0111,
+    SHIFT_IN_SLOW_CLK_T2   = 4'b1000,
+    DONE_T2                = 4'b1001
   } state_t_sm_test2;
   state_t_sm_test2 sm_test2;
   assign sm_test2_state = sm_test2;
@@ -66,13 +73,6 @@ module ip1_test2 (
     PARALLEL_OUT = 1'b1
   } shift_reg_mode;
   //
-  typedef enum logic {
-    SEL_FAST_CFG_CLK = 1'b1,
-    SEL_SLOW_CFG_CLK = 1'b0
-  } sm_sel_cfg_clk;
-  sm_sel_cfg_clk sm_test2_o_sel_cfg_clk;
-  //
-  assign sm_test2_o_config_clk        = sm_test2_o_sel_cfg_clk ? sm_testx_i_fast_config_clk : sm_testx_i_fast_config_clk;
   assign sm_test2_o_scan_in           = 1'b0;       // signal not used-in / driven-by sm_test2_proc
   assign sm_test2_o_scan_load         = 1'b0;       // signal not used-in / driven-by sm_test2_proc
   assign sm_test2_o_vin_test_trig_out = 1'b0;       // signal not used-in / driven-by sm_test2_proc
@@ -88,7 +88,7 @@ module ip1_test2 (
         sm_test2_o_shift_reg_load                <= 1'b0;                      //
         sm_test2_o_shift_reg_shift               <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
         sm_test2_o_status_done                   <= 1'b0;                      // reset state machine STATUS flag
-        sm_test2_o_sel_cfg_clk                   <= SEL_FAST_CFG_CLK;          // default selection to sm_testx_i_fast_config_clk
+        sm_test2_o_config_clk                    <= sm_testx_i_fast_config_clk;// default selection to sm_testx_i_fast_config_clk
       end
     end else begin
       case(sm_test2)
@@ -106,7 +106,7 @@ module ip1_test2 (
           sm_test2_o_shift_reg_load              <= 1'b0;                      //
           sm_test2_o_shift_reg_shift             <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
           sm_test2_o_status_done                 <= sm_test2_o_status_done;    // state machine STATUS flag
-          sm_test2_o_sel_cfg_clk                 <= SEL_FAST_CFG_CLK;
+          sm_test2_o_config_clk                  <= sm_testx_i_fast_config_clk;
         end
         DELAY_TEST_T2 : begin
           // next state machine state logic
@@ -131,7 +131,7 @@ module ip1_test2 (
           sm_test2_o_shift_reg_load              <= 1'b1;
           sm_test2_o_shift_reg_shift             <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
-          sm_test2_o_sel_cfg_clk                 <= SEL_FAST_CFG_CLK;
+          sm_test2_o_config_clk                  <= sm_testx_i_fast_config_clk;
         end
         RESET_NOT_T2 : begin
           // next state machine state logic
@@ -156,7 +156,7 @@ module ip1_test2 (
           sm_test2_o_shift_reg_load              <= 1'b0;
           sm_test2_o_shift_reg_shift             <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
-          sm_test2_o_sel_cfg_clk                 <= SEL_FAST_CFG_CLK;
+          sm_test2_o_config_clk                  <= sm_testx_i_fast_config_clk;
         end
         SHIFT_IN_0_T2 : begin
           // next state machine state logic
@@ -179,15 +179,15 @@ module ip1_test2 (
           sm_test2_o_config_load                 <= SHIFT_REG;
           sm_test2_o_shift_reg_load              <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
-          sm_test2_o_sel_cfg_clk                 <= SEL_FAST_CFG_CLK;
+          sm_test2_o_config_clk                  <= sm_testx_i_fast_config_clk;
         end
         SHIFT_IN_T2 : begin
           // next state machine state logic
           if(sm_testx_i_shift_reg_shift_cnt==sm_testx_i_shift_reg_shift_cnt_max_fc) begin
             // done shifting all 768 bits;
-            sm_test2 <= DONE_T2;
-            sm_test2_o_config_load               <= PARALLEL_OUT;
-            sm_test2_o_status_done               <= 1'b1;
+            sm_test2 <= WAIT_FAST_CLK_T2;                            // DONE_T2;
+            sm_test2_o_config_load               <= SHIFT_REG;       // PARALLEL_OUT;
+            sm_test2_o_status_done               <= 1'b0;            // 1'b1;
           end else begin
             // continue shifting
             sm_test2 <= SHIFT_IN_T2;
@@ -206,7 +206,66 @@ module ip1_test2 (
           sm_test2_o_reset_not                   <= 1'b1;
           sm_test2_o_config_in                   <= sm_testx_i_shift_reg_bit0;
           sm_test2_o_shift_reg_load              <= 1'b0;
-          sm_test2_o_sel_cfg_clk                 <= SEL_FAST_CFG_CLK;
+          sm_test2_o_config_clk                  <= sm_testx_i_fast_config_clk;
+        end
+        WAIT_FAST_CLK_T2 : begin
+          // next state machine state logic
+          if(test_delay==clk_counter_fc) begin
+            sm_test2 <= WAIT_SLOW_CLK_T2;
+          end else begin
+            sm_test2 <= WAIT_FAST_CLK_T2;
+          end
+          // output state machine signal assignment
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_config_in                   <= sm_testx_i_shift_reg_bit0;
+          sm_test2_o_config_load                 <= SHIFT_REG;
+          sm_test2_o_shift_reg_load              <= 1'b0;
+          sm_test2_o_shift_reg_shift             <= 1'b0;
+          sm_test2_o_status_done                 <= 1'b0;
+          sm_test2_o_config_clk                  <= 1'b0;
+        end
+        WAIT_SLOW_CLK_T2 : begin
+          // next state machine state logic
+          if({1'b0, slow_configclk_period[26:1]}+1'b1==clk_counter_sc) begin
+            sm_test2 <= SHIFT_IN_SLOW_CLK_T2;
+          end else begin
+            sm_test2 <= WAIT_SLOW_CLK_T2;
+          end
+          // output state machine signal assignment
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_config_in                   <= sm_testx_i_shift_reg_bit0;
+          sm_test2_o_config_load                 <= SHIFT_REG;
+          sm_test2_o_shift_reg_load              <= 1'b0;
+          sm_test2_o_shift_reg_shift             <= 1'b0;
+          sm_test2_o_status_done                 <= 1'b0;
+          sm_test2_o_config_clk                  <= 1'b0;
+        end
+        SHIFT_IN_SLOW_CLK_T2 : begin
+          // next state machine state logic
+          if(sm_testx_i_shift_reg_shift_cnt==sm_testx_i_shift_reg_shift_cnt_max_fc + sm_testx_i_shift_reg_shift_cnt_max_sc) begin
+            // done shifting all 2*5188 bits;
+            sm_test2 <= DONE_T2;
+            sm_test2_o_config_load               <= PARALLEL_OUT;
+            sm_test2_o_status_done               <= 1'b1;
+          end else begin
+            // continue shifting
+            sm_test2 <= SHIFT_IN_SLOW_CLK_T2;
+            sm_test2_o_config_load               <= SHIFT_REG;
+            sm_test2_o_status_done               <= 1'b0;
+          end
+          // output state machine signal assignment
+          if({1'b0, slow_configclk_period[26:1]}==clk_counter_sc) begin
+            // latency sm_test2_o_shift_reg_shift to sm_testx_i_shift_reg_reg is TWO clk clocks:
+            // * one clk latency due to this process for asserting signal sm_test2_o_shift_reg_shift
+            // * one clk latency due to process sm_testx_i_shift_reg_reg_proc to execute the shift-right
+            sm_test2_o_shift_reg_shift           <= 1'b1;
+          end else begin
+            sm_test2_o_shift_reg_shift           <= 1'b0;
+          end
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_config_in                   <= sm_testx_i_shift_reg_bit0;
+          sm_test2_o_shift_reg_load              <= 1'b0;
+          sm_test2_o_config_clk                  <= sm_testx_i_slow_config_clk;
         end
         DONE_T2 : begin
           // next state machine state logic
@@ -218,7 +277,7 @@ module ip1_test2 (
           sm_test2_o_shift_reg_load              <= 1'b0;
           sm_test2_o_shift_reg_shift             <= 1'b0;
           sm_test2_o_status_done                 <= 1'b1;
-          sm_test2_o_sel_cfg_clk                 <= SEL_FAST_CFG_CLK;
+          sm_test2_o_config_clk                  <= sm_testx_i_slow_config_clk;
         end
         default : begin
           sm_test2 <= IDLE_T2;
