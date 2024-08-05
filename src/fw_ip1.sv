@@ -451,7 +451,9 @@ module fw_ip1 (
     WAIT_SLOW_CLK_T2       = 4'b0110,
     WAIT2_SLOW_CLK_T2      = 4'b0111,
     SHIFT_IN_SLOW_CLK_T2   = 4'b1000,
-    DONE_T2                = 4'b1001
+    DONE_T2                = 4'b1001,
+    WAIT_DONE_SLOW_CLK_T2  = 4'b1010,
+    WAIT_DONE_FAST_CLK_T2  = 4'b1011
   } state_t_sm_test2;
   logic [3:0] sm_test2;
   ip1_test2 ip1_test2_inst (
@@ -461,6 +463,7 @@ module fw_ip1 (
     // Control signals:
     .clk_counter_fc                          (fast_configclk_clk_counter),
     .clk_counter_sc                          (slow_configclk_clk_counter),
+    .fast_configclk_period                   (fast_configclk_period),
     .slow_configclk_period                   (slow_configclk_period),
     .test_delay                              (test_delay),
     .test_mask_reset_not                     (test_mask_reset_not),

@@ -14,6 +14,7 @@
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // 2024-08-02  Cristian Gingu         Update state machine for manage two clocks: sm_testx_i_fast_config_clk sm_testx_i_slow_config_clk
 // 2024-08-02  Cristian Gingu         Add new information for state machine with new input port slow_configclk_period
+// 2024-08-05  Cristian Gingu         Add new information for state machine with new input port fast_configclk_period
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test2__
 `define __ip1_test2__
@@ -27,6 +28,7 @@ module ip1_test2 (
     // Control signals:
     input  logic [ 6:0] clk_counter_fc,
     input  logic [26:0] clk_counter_sc,
+    input  logic [ 6:0] fast_configclk_period,
     input  logic [26:0] slow_configclk_period,
     input  logic [ 6:0] test_delay,
     input  logic        test_mask_reset_not,
@@ -62,7 +64,9 @@ module ip1_test2 (
     WAIT_SLOW_CLK_T2       = 4'b0110,
     WAIT2_SLOW_CLK_T2      = 4'b0111,
     SHIFT_IN_SLOW_CLK_T2   = 4'b1000,
-    DONE_T2                = 4'b1001
+    DONE_T2                = 4'b1001,
+    WAIT_DONE_SLOW_CLK_T2  = 4'b1010,
+    WAIT_DONE_FAST_CLK_T2  = 4'b1011
   } state_t_sm_test2;
   state_t_sm_test2 sm_test2;
   assign sm_test2_state = sm_test2;
@@ -269,7 +273,7 @@ module ip1_test2 (
         end
         DONE_T2 : begin
           // next state machine state logic
-          sm_test2 <= IDLE_T2;
+          sm_test2 <= WAIT_DONE_SLOW_CLK_T2;
           // output state machine signal assignment
           sm_test2_o_reset_not                   <= 1'b1;
           sm_test2_o_config_in                   <= 1'b0;
@@ -277,7 +281,41 @@ module ip1_test2 (
           sm_test2_o_shift_reg_load              <= 1'b0;
           sm_test2_o_shift_reg_shift             <= 1'b0;
           sm_test2_o_status_done                 <= 1'b1;
-          sm_test2_o_config_clk                  <= sm_testx_i_slow_config_clk;
+          sm_test2_o_config_clk                  <= 1'b0;
+        end
+        WAIT_DONE_SLOW_CLK_T2: begin
+          // next state machine state logic
+          if(slow_configclk_period==clk_counter_sc) begin
+            // force/keep sm_test2_o_config_clk=LOW while sm_testx_i_slow_config_clk is LOW
+            sm_test2 <= WAIT_DONE_FAST_CLK_T2;
+          end else begin
+            sm_test2 <= WAIT_DONE_SLOW_CLK_T2;
+          end
+          // output state machine signal assignment
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_config_in                   <= 1'b0;
+          sm_test2_o_config_load                 <= PARALLEL_OUT;
+          sm_test2_o_shift_reg_load              <= 1'b0;
+          sm_test2_o_shift_reg_shift             <= 1'b0;
+          sm_test2_o_status_done                 <= 1'b1;
+          sm_test2_o_config_clk                  <= 1'b0;
+        end
+        WAIT_DONE_FAST_CLK_T2: begin
+          // next state machine state logic
+          if(fast_configclk_period==clk_counter_fc) begin
+            // force/keep sm_test2_o_config_clk=LOW while sm_testx_i_fast_config_clk is LOW
+            sm_test2 <= IDLE_T2;
+          end else begin
+            sm_test2 <= WAIT_DONE_FAST_CLK_T2;
+          end
+          // output state machine signal assignment
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_config_in                   <= 1'b0;
+          sm_test2_o_config_load                 <= PARALLEL_OUT;
+          sm_test2_o_shift_reg_load              <= 1'b0;
+          sm_test2_o_shift_reg_shift             <= 1'b0;
+          sm_test2_o_status_done                 <= 1'b1;
+          sm_test2_o_config_clk                  <= 1'b0;
         end
         default : begin
           sm_test2 <= IDLE_T2;
