@@ -414,7 +414,7 @@ module fw_ip1 (
   } state_t_sm_test1;
   logic [2:0] sm_test1;
   ip1_test1 ip1_test1_inst (
-    .clk                                     (fw_axi_clk),                     // FM clock 400MHz       mapped to pl_clk1
+    .clk                                     (fw_axi_clk),                     // mapped to appropriate clock: S_AXI_ACLK or pl_clk1
     .reset                                   (op_code_w_reset),
     .enable                                  (fw_dev_id_enable),               // up to 15 FW can be connected
     // Control signals:
@@ -455,7 +455,7 @@ module fw_ip1 (
   } state_t_sm_test2;
   logic [3:0] sm_test2;
   ip1_test2 ip1_test2_inst (
-    .clk                                     (fw_axi_clk),                     // FM clock 400MHz       mapped to pl_clk1
+    .clk                                     (fw_axi_clk),                     // mapped to appropriate clock: S_AXI_ACLK or pl_clk1
     .reset                                   (op_code_w_reset),
     .enable                                  (fw_dev_id_enable),               // up to 15 FW can be connected
     // Control signals:
