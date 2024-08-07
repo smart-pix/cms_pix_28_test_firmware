@@ -105,6 +105,11 @@
 ./submodules/spacely-caribou-common-blocks/axi4lite_interface/axi4lite_interface_top.sv
 
 #############################
+# Package Files
+#############################
+./src/cms_pix28_package.sv
+
+#############################
 # DUT Files
 #############################
 ./src/axi4lite_interface_top_for_pix28_fw.sv
