@@ -22,6 +22,7 @@
 // 2024-07-30  Cristian Gingu         Make outputs config_clk default driven by test1 output sm_test1_o_config_clk
 // 2024-08-02  Cristian Gingu         Add coding for ip2_test2
 // 2024-08-06  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2024-08-08  Cristian Gingu         Factorize common module com_status32_reg.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -73,28 +74,6 @@ module fw_ip1 (
 
   import cms_pix28_package::cfg_reg_bits_total;
   import cms_pix28_package::cfg_reg_bits_test;
-  //
-  import cms_pix28_package::status_index_op_code_w_reset;
-  import cms_pix28_package::status_index_op_code_w_cfg_static_0;
-  import cms_pix28_package::status_index_op_code_r_cfg_static_0;
-  import cms_pix28_package::status_index_op_code_w_cfg_static_1;
-  import cms_pix28_package::status_index_op_code_r_cfg_static_1;
-  import cms_pix28_package::status_index_op_code_w_cfg_array_0;
-  import cms_pix28_package::status_index_op_code_r_cfg_array_0;
-  import cms_pix28_package::status_index_op_code_w_cfg_array_1;
-  import cms_pix28_package::status_index_op_code_r_cfg_array_1;
-  import cms_pix28_package::status_index_op_code_w_cfg_array_2;
-  import cms_pix28_package::status_index_op_code_r_cfg_array_2;
-  import cms_pix28_package::status_index_op_code_r_data_array_0;
-  import cms_pix28_package::status_index_op_code_r_data_array_1;
-  import cms_pix28_package::status_index_op_code_w_execute;
-  import cms_pix28_package::status_index_test1_done;
-  import cms_pix28_package::status_index_test2_done;
-  import cms_pix28_package::status_index_test3_done;
-  import cms_pix28_package::status_index_test4_done;
-  import cms_pix28_package::status_index_spare_min;
-  import cms_pix28_package::status_index_spare_max;
-  import cms_pix28_package::status_index_error_w_execute_cfg;
   //
   import cms_pix28_package::w_cfg_static_0_reg_fast_configclk_period_index_min;     // fast_configCLK period is 10ns(AXI100MHz) * 2**7(7-bits) == 10*128 == 1280ns i.e. 0.78125MHz the lowest frequency, thus covering DataSheet minimum 1MHz
   import cms_pix28_package::w_cfg_static_0_reg_fast_configclk_period_index_max;     //
@@ -263,32 +242,34 @@ module fw_ip1 (
   logic sm_test3_o_status_done; assign sm_test3_o_status_done = 1'b0;          // TODO to be driven by sm_test3
   logic sm_test4_o_status_done; assign sm_test4_o_status_done = 1'b0;          // TODO to be driven by sm_test4
   logic error_w_execute_cfg;
-  always @(posedge fw_axi_clk) begin : fw_read_status32_reg_proc
-    if(op_code_w_status_clear) begin
-      fw_read_status32_reg <= 32'b0;                       // incoming data on clock domain fw_axi_clk
-    end else begin
-      if(op_code_w_reset)        fw_read_status32_reg[status_index_op_code_w_reset       ] <= 1'b1;
-      if(op_code_w_cfg_static_0) fw_read_status32_reg[status_index_op_code_w_cfg_static_0] <= 1'b1;
-      if(op_code_r_cfg_static_0) fw_read_status32_reg[status_index_op_code_r_cfg_static_0] <= 1'b1;
-      if(op_code_w_cfg_static_1) fw_read_status32_reg[status_index_op_code_w_cfg_static_1] <= 1'b1;
-      if(op_code_r_cfg_static_1) fw_read_status32_reg[status_index_op_code_r_cfg_static_1] <= 1'b1;
-      if(op_code_w_cfg_array_0)  fw_read_status32_reg[status_index_op_code_w_cfg_array_0 ] <= 1'b1;
-      if(op_code_r_cfg_array_0)  fw_read_status32_reg[status_index_op_code_r_cfg_array_0 ] <= 1'b1;
-      if(op_code_w_cfg_array_1)  fw_read_status32_reg[status_index_op_code_w_cfg_array_1 ] <= 1'b1;
-      if(op_code_r_cfg_array_1)  fw_read_status32_reg[status_index_op_code_r_cfg_array_1 ] <= 1'b1;
-      if(op_code_w_cfg_array_2)  fw_read_status32_reg[status_index_op_code_w_cfg_array_2 ] <= 1'b1;
-      if(op_code_r_cfg_array_2)  fw_read_status32_reg[status_index_op_code_r_cfg_array_2 ] <= 1'b1;
-      if(op_code_r_data_array_0) fw_read_status32_reg[status_index_op_code_r_data_array_0] <= 1'b1;
-      if(op_code_r_data_array_1) fw_read_status32_reg[status_index_op_code_r_data_array_1] <= 1'b1;
-      if(op_code_w_execute)      fw_read_status32_reg[status_index_op_code_w_execute     ] <= 1'b1;
-      fw_read_status32_reg[                           status_index_test1_done            ] <= sm_test1_o_status_done;
-      fw_read_status32_reg[                           status_index_test2_done            ] <= sm_test2_o_status_done;
-      fw_read_status32_reg[                           status_index_test3_done            ] <= sm_test3_o_status_done;
-      fw_read_status32_reg[                           status_index_test4_done            ] <= sm_test4_o_status_done;
-      fw_read_status32_reg[               status_index_spare_max : status_index_spare_min] <= 13'b0;
-      fw_read_status32_reg[                              status_index_error_w_execute_cfg] <= error_w_execute_cfg;
-    end
-  end
+  // Instantiate module com_status32_reg.sv
+  com_status32_reg com_status32_reg_inst (
+    .fw_axi_clk              (fw_axi_clk),                 // FW clock 100MHz       mapped to S_AXI_ACLK
+    .fw_rst_n                (fw_rst_n),                   // FW reset, active low  mapped to S_AXI_ARESETN
+    //
+    .op_code_w_status_clear  (op_code_w_status_clear),
+    .op_code_w_reset         (op_code_w_reset),
+    .op_code_w_cfg_static_0  (op_code_w_cfg_static_0),
+    .op_code_r_cfg_static_0  (op_code_r_cfg_static_0),
+    .op_code_w_cfg_static_1  (op_code_w_cfg_static_1),
+    .op_code_r_cfg_static_1  (op_code_r_cfg_static_1),
+    .op_code_w_cfg_array_0   (op_code_w_cfg_array_0),
+    .op_code_r_cfg_array_0   (op_code_r_cfg_array_0),
+    .op_code_w_cfg_array_1   (op_code_w_cfg_array_1),
+    .op_code_r_cfg_array_1   (op_code_r_cfg_array_1),
+    .op_code_w_cfg_array_2   (op_code_w_cfg_array_2),
+    .op_code_r_cfg_array_2   (op_code_r_cfg_array_2),
+    .op_code_r_data_array_0  (op_code_r_data_array_0),
+    .op_code_r_data_array_1  (op_code_r_data_array_1),
+    .op_code_w_execute       (op_code_w_execute),
+    .sm_test1_o_status_done  (sm_test1_o_status_done),
+    .sm_test2_o_status_done  (sm_test2_o_status_done),
+    .sm_test3_o_status_done  (sm_test3_o_status_done),
+    .sm_test4_o_status_done  (sm_test4_o_status_done),
+    .error_w_execute_cfg     (error_w_execute_cfg),
+    //
+    .fw_read_status32_reg    (fw_read_status32_reg)
+  );
   assign fw_read_status32 = fw_read_status32_reg;
 
   logic [6:0]  fast_configclk_period;                      // on clock domain fw_axi_clk
