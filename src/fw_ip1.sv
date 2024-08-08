@@ -75,26 +75,26 @@ module fw_ip1 (
   import cms_pix28_package::cfg_reg_bits_total;
   import cms_pix28_package::cfg_reg_bits_test;
   //
-  import cms_pix28_package::w_cfg_static_0_reg_fast_configclk_period_index_min;     // fast_configCLK period is 10ns(AXI100MHz) * 2**7(7-bits) == 10*128 == 1280ns i.e. 0.78125MHz the lowest frequency, thus covering DataSheet minimum 1MHz
-  import cms_pix28_package::w_cfg_static_0_reg_fast_configclk_period_index_max;     //
-  import cms_pix28_package::w_cfg_static_0_reg_super_pix_sel_index;                 //
-  import cms_pix28_package::w_cfg_static_0_reg_slow_configclk_period_index_min;     // slow_configCLK period is 10ns(AXI100MHz) * 2**27(27-bits) == 10*134217728 == 1342177280ns i.e. 0.745Hz the lowest frequency, thus covering DataSheet minimum 1Hz
-  import cms_pix28_package::w_cfg_static_0_reg_slow_configclk_period_index_max;     // w_cfg_static_0_reg contains lower 16-bits of the 27-bit period for slow_configCLK
-  import cms_pix28_package::w_cfg_static_1_reg_slow_configclk_period_index_min;     // w_cfg_static_1_reg contains upper 11-bits of the 27-bit period for slow_configCLK
-  import cms_pix28_package::w_cfg_static_1_reg_slow_configclk_period_index_max;
-  import cms_pix28_package::w_cfg_static_1_reg_spare_index_min;
-  import cms_pix28_package::w_cfg_static_1_reg_spare_index_max;
+  import cms_pix28_package::w_cfg_static_0_reg_fast_configclk_period_index_min_IP1;      // fast_configCLK period is 10ns(AXI100MHz) * 2**7(7-bits) == 10*128 == 1280ns i.e. 0.78125MHz the lowest frequency, thus covering DataSheet minimum 1MHz
+  import cms_pix28_package::w_cfg_static_0_reg_fast_configclk_period_index_max_IP1;      //
+  import cms_pix28_package::w_cfg_static_0_reg_super_pix_sel_index_IP1;                  //
+  import cms_pix28_package::w_cfg_static_0_reg_slow_configclk_period_index_min_IP1;      // slow_configCLK period is 10ns(AXI100MHz) * 2**27(27-bits) == 10*134217728 == 1342177280ns i.e. 0.745Hz the lowest frequency, thus covering DataSheet minimum 1Hz
+  import cms_pix28_package::w_cfg_static_0_reg_slow_configclk_period_index_max_IP1;      // w_cfg_static_0_reg contains lower 16-bits of the 27-bit period for slow_configCLK
+  import cms_pix28_package::w_cfg_static_1_reg_slow_configclk_period_index_min_IP1;      // w_cfg_static_1_reg contains upper 11-bits of the 27-bit period for slow_configCLK
+  import cms_pix28_package::w_cfg_static_1_reg_slow_configclk_period_index_max_IP1;
+  import cms_pix28_package::w_cfg_static_1_reg_spare_index_min_IP1;
+  import cms_pix28_package::w_cfg_static_1_reg_spare_index_max_IP1;
   //
-  import cms_pix28_package::w_execute_cfg_test_delay_index_min;                     //
-  import cms_pix28_package::w_execute_cfg_test_delay_index_max;                     //
-  import cms_pix28_package::w_execute_cfg_test_sample_index_min;                    //
-  import cms_pix28_package::w_execute_cfg_test_sample_index_max;                    //
-  import cms_pix28_package::w_execute_cfg_test_number_index_min;                    //
-  import cms_pix28_package::w_execute_cfg_test_number_index_max;                    //
-  import cms_pix28_package::w_execute_cfg_test_loopback;                            //
-  import cms_pix28_package::w_execute_cfg_test_spare_index_min;                     //
-  import cms_pix28_package::w_execute_cfg_test_spare_index_max;                     //
-  import cms_pix28_package::w_execute_cfg_test_mask_reset_not_index;                //
+  import cms_pix28_package::w_execute_cfg_test_delay_index_min_IP1;                      //
+  import cms_pix28_package::w_execute_cfg_test_delay_index_max_IP1;                      //
+  import cms_pix28_package::w_execute_cfg_test_sample_index_min_IP1;                     //
+  import cms_pix28_package::w_execute_cfg_test_sample_index_max_IP1;                     //
+  import cms_pix28_package::w_execute_cfg_test_number_index_min_IP1;                     //
+  import cms_pix28_package::w_execute_cfg_test_number_index_max_IP1;                     //
+  import cms_pix28_package::w_execute_cfg_test_loopback_IP1;                             //
+  import cms_pix28_package::w_execute_cfg_test_spare_index_min_IP1;                      //
+  import cms_pix28_package::w_execute_cfg_test_spare_index_max_IP1;                      //
+  import cms_pix28_package::w_execute_cfg_test_mask_reset_not_index_IP1;                 //
   //
   import cms_pix28_package::state_t_sm_ip1_test1;
   import cms_pix28_package::IDLE_IP1_T1;
@@ -275,23 +275,23 @@ module fw_ip1 (
   logic [6:0]  fast_configclk_period;                      // on clock domain fw_axi_clk
   logic [26:0] slow_configclk_period;                      // on clock domain fw_axi_clk
   logic        super_pixel_sel;                            // on clock domain fw_axi_clk
-  assign fast_configclk_period = w_cfg_static_0_reg[w_cfg_static_0_reg_fast_configclk_period_index_max:w_cfg_static_0_reg_fast_configclk_period_index_min];
+  assign fast_configclk_period = w_cfg_static_0_reg[w_cfg_static_0_reg_fast_configclk_period_index_max_IP1:w_cfg_static_0_reg_fast_configclk_period_index_min_IP1];
   assign slow_configclk_period = {
-      w_cfg_static_1_reg[w_cfg_static_1_reg_slow_configclk_period_index_max:w_cfg_static_1_reg_slow_configclk_period_index_min],
-      w_cfg_static_0_reg[w_cfg_static_0_reg_slow_configclk_period_index_max:w_cfg_static_0_reg_slow_configclk_period_index_min] };
-  assign super_pixel_sel       = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index];
+      w_cfg_static_1_reg[w_cfg_static_1_reg_slow_configclk_period_index_max_IP1:w_cfg_static_1_reg_slow_configclk_period_index_min_IP1],
+      w_cfg_static_0_reg[w_cfg_static_0_reg_slow_configclk_period_index_max_IP1:w_cfg_static_0_reg_slow_configclk_period_index_min_IP1] };
+  assign super_pixel_sel       = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index_IP1];
   //
   logic fast_configclk;
   logic slow_configclk;
   logic [
-    w_cfg_static_0_reg_fast_configclk_period_index_max-w_cfg_static_0_reg_fast_configclk_period_index_min+1-1 : 0] fast_configclk_clk_counter;
+    w_cfg_static_0_reg_fast_configclk_period_index_max_IP1-w_cfg_static_0_reg_fast_configclk_period_index_min_IP1+1-1 : 0] fast_configclk_clk_counter;
   logic [
-    w_cfg_static_1_reg_slow_configclk_period_index_max-w_cfg_static_1_reg_slow_configclk_period_index_min+1+
-    w_cfg_static_0_reg_slow_configclk_period_index_max-w_cfg_static_0_reg_slow_configclk_period_index_min+1-1 : 0] slow_configclk_clk_counter;
+    w_cfg_static_1_reg_slow_configclk_period_index_max_IP1-w_cfg_static_1_reg_slow_configclk_period_index_min_IP1+1+
+    w_cfg_static_0_reg_slow_configclk_period_index_max_IP1-w_cfg_static_0_reg_slow_configclk_period_index_min_IP1+1-1 : 0] slow_configclk_clk_counter;
   //
   // Instantiate module configclk_generator.sv
   configclk_generator #(
-    .CNT_WIDTH(w_cfg_static_0_reg_fast_configclk_period_index_max-w_cfg_static_0_reg_fast_configclk_period_index_min+1)
+    .CNT_WIDTH(w_cfg_static_0_reg_fast_configclk_period_index_max_IP1-w_cfg_static_0_reg_fast_configclk_period_index_min_IP1+1)
   ) fast_configclk_generator_inst (
     .clk                     (fw_axi_clk),
     .reset                   (op_code_w_reset),
@@ -304,8 +304,8 @@ module fw_ip1 (
   );
   configclk_generator #(
     .CNT_WIDTH(
-      w_cfg_static_1_reg_slow_configclk_period_index_max-w_cfg_static_1_reg_slow_configclk_period_index_min+1+
-      w_cfg_static_0_reg_slow_configclk_period_index_max-w_cfg_static_0_reg_slow_configclk_period_index_min+1 )
+      w_cfg_static_1_reg_slow_configclk_period_index_max_IP1-w_cfg_static_1_reg_slow_configclk_period_index_min_IP1+1+
+      w_cfg_static_0_reg_slow_configclk_period_index_max_IP1-w_cfg_static_0_reg_slow_configclk_period_index_min_IP1+1 )
   ) slow_configclk_generator_inst (
     .clk                     (fw_axi_clk),
     .reset                   (op_code_w_reset),
@@ -326,11 +326,11 @@ module fw_ip1 (
   logic [3:0] test_number;                                 // on clock domain fw_axi_clk
   logic       test_loopback;                               // on clock domain fw_axi_clk
   logic       test_mask_reset_not;                         // on clock domain fw_axi_clk
-  assign test_delay          = sw_write24_0[w_execute_cfg_test_delay_index_max  : w_execute_cfg_test_delay_index_min ];
-  assign test_sample         = sw_write24_0[w_execute_cfg_test_sample_index_max : w_execute_cfg_test_sample_index_min];
-  assign test_number         = sw_write24_0[w_execute_cfg_test_number_index_max : w_execute_cfg_test_number_index_min];
-  assign test_loopback       = sw_write24_0[w_execute_cfg_test_loopback                                              ];
-  assign test_mask_reset_not = sw_write24_0[w_execute_cfg_test_mask_reset_not_index                                  ];
+  assign test_delay          = sw_write24_0[w_execute_cfg_test_delay_index_max_IP1  : w_execute_cfg_test_delay_index_min_IP1 ];
+  assign test_sample         = sw_write24_0[w_execute_cfg_test_sample_index_max_IP1 : w_execute_cfg_test_sample_index_min_IP1];
+  assign test_number         = sw_write24_0[w_execute_cfg_test_number_index_max_IP1 : w_execute_cfg_test_number_index_min_IP1];
+  assign test_loopback       = sw_write24_0[w_execute_cfg_test_loopback_IP1                                              ];
+  assign test_mask_reset_not = sw_write24_0[w_execute_cfg_test_mask_reset_not_index_IP1                                  ];
   //
   // Instantiate module com_testx_decoder.sv
   logic test1_enable; logic test1_enable_re;

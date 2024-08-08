@@ -18,6 +18,8 @@
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-07-30  Cristian Gingu         Change logic for signal error_w_execute_cfg; constrain sm_test1!=IDLE_T1 and add fw_rst_n
 // 2024-07-30  Cristian Gingu         Add fw_rst_n to sm_testx_i_shift_reg_proc
+// 2024-08-08  Cristian Gingu         Factorize common module com_status32_reg.sv
+// 2024-08-08  Cristian Gingu         Add references to cms_pix28_package.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -68,6 +70,45 @@ module fw_ip2 (
     input  logic fw_dn_event_toggle
   );
 
+  import cms_pix28_package::scan_reg_bits_total;
+  //
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_min_IP2;     // USAGE of first 6-bits: bit#0-to-5. USE to set clock PERIOD
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_max_IP2;     // example for setting bxclk==40MHz derived from fw_pl_clk1==400MHz: write 6'h0A => 10*2.5ns=25ns;
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_index_min_IP2;      // USAGE of next  5-bits: bit#6-to-10. Use to set clock DELAY (maximum is half clock PERIOD as set by bits 0-to-5)
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_index_max_IP2;      //
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_sign_index_IP2;     // USAGE of next 1-bit: bit#11. Use it to set clock value (Lor H) in the first bxclk_delay clocks within a bxclk_period
+  // 00.00.00.01.02.03.04.05.06.07.08.09.10.01.02.03.04.05.06.07.08.09.10.               fw_pl_clk1_cnt
+  // LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.            fw_bxclk_ana_ff
+  // LL.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.      fw_bxclk_ff when bxclk_delay_sign==0 and bxclk_delay==2
+  // LL.LL.LL.LL.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.                  fw_bxclk_ff when bxclk_delay_sign==1 and bxclk_delay==2
+  import cms_pix28_package::w_cfg_static_0_reg_super_pix_sel_index_IP2;
+  import cms_pix28_package::w_cfg_static_0_reg_spare_index_min_IP2;            //
+  import cms_pix28_package::w_cfg_static_0_reg_spare_index_max_IP2;            //
+  //
+  import cms_pix28_package::w_execute_cfg_test_delay_index_min_IP2;            //
+  import cms_pix28_package::w_execute_cfg_test_delay_index_max_IP2;            //
+  import cms_pix28_package::w_execute_cfg_test_sample_index_min_IP2;           //
+  import cms_pix28_package::w_execute_cfg_test_sample_index_max_IP2;           //
+  import cms_pix28_package::w_execute_cfg_test_number_index_min_IP2;           //
+  import cms_pix28_package::w_execute_cfg_test_number_index_max_IP2;           //
+  import cms_pix28_package::w_execute_cfg_test_loopback_IP2;                   //
+  import cms_pix28_package::w_execute_cfg_test_vin_test_trig_out_index_min_IP2;// this field controls the position of vin_test_trig_out pulse, one bxclk_period wide, within
+  import cms_pix28_package::w_execute_cfg_test_vin_test_trig_out_index_max_IP2;// within time-window defined by state machine sm_test2==SCANLOAD_HIGH_1_T2 + SCANLOAD_HIGH_2_T2
+  import cms_pix28_package::w_execute_cfg_test_mask_reset_not_index_IP2;       //
+  //
+  import cms_pix28_package::state_t_sm_ip2_test1;
+  import cms_pix28_package::IDLE_IP2_T1;
+  import cms_pix28_package::SHIFT_IN_0_IP2_T1;
+  import cms_pix28_package::SHIFT_IN_IP2_T1;
+  //
+  import cms_pix28_package::state_t_sm_ip2_test2;
+  import cms_pix28_package::IDLE_IP2_T2;
+  import cms_pix28_package::SHIFT_IN_0_IP2_T2;
+  import cms_pix28_package::SHIFT_IN_IP2_T2;
+  //
+  import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
+  import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
+  //
   // Instantiate module com_op_code_decoder.sv
   logic op_code_w_reset;
   logic op_code_w_cfg_static_0;
@@ -146,7 +187,7 @@ module fw_ip2 (
 
   // Combinatorial logic for SW readout data fw_read_data32
   logic [31:0] fw_read_data32_comb;                        // 32-bit read_data   from FW to SW
-  localparam                                          sm_testx_o_scanchain_reg_width = 2*768;
+  localparam                                          sm_testx_o_scanchain_reg_width = 2*scan_reg_bits_total;
   logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg;                    // 2*768=1536-bits shift register; used by all tests 1,2,3,4
   logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_reg_array32;            // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
   for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_reg_array32_gen
@@ -195,56 +236,45 @@ module fw_ip2 (
   logic sm_test3_o_status_done; assign sm_test3_o_status_done = 1'b0;          // TODO to be driven by sm_test3
   logic sm_test4_o_status_done; assign sm_test4_o_status_done = 1'b0;          // TODO to be driven by sm_test4
   logic error_w_execute_cfg;
-  always @(posedge fw_axi_clk) begin : fw_read_status32_reg_proc
-    if(op_code_w_status_clear) begin
-      fw_read_status32_reg <= 32'b0;                       // incoming data on clock domain fw_pl_clk1
-    end else begin
-      if(op_code_w_reset)        fw_read_status32_reg[ 0] <= 1'b1;
-      if(op_code_w_cfg_static_0) fw_read_status32_reg[ 1] <= 1'b1;
-      if(op_code_r_cfg_static_0) fw_read_status32_reg[ 2] <= 1'b1;
-      if(op_code_w_cfg_static_1) fw_read_status32_reg[ 3] <= 1'b1;
-      if(op_code_r_cfg_static_1) fw_read_status32_reg[ 4] <= 1'b1;
-      if(op_code_w_cfg_array_0)  fw_read_status32_reg[ 5] <= 1'b1;
-      if(op_code_r_cfg_array_0)  fw_read_status32_reg[ 6] <= 1'b1;
-      if(op_code_w_cfg_array_1)  fw_read_status32_reg[ 7] <= 1'b1;
-      if(op_code_r_cfg_array_1)  fw_read_status32_reg[ 8] <= 1'b1;
-      if(op_code_w_cfg_array_2)  fw_read_status32_reg[ 9] <= 1'b1;
-      if(op_code_r_cfg_array_2)  fw_read_status32_reg[10] <= 1'b1;
-      if(op_code_r_data_array_0) fw_read_status32_reg[11] <= 1'b1;
-      if(op_code_r_data_array_1) fw_read_status32_reg[12] <= 1'b1;
-      if(op_code_w_execute)      fw_read_status32_reg[13] <= 1'b1;
-      fw_read_status32_reg[14]    <= sm_test1_o_status_done;
-      fw_read_status32_reg[15]    <= sm_test2_o_status_done;
-      fw_read_status32_reg[16]    <= sm_test3_o_status_done;
-      fw_read_status32_reg[17]    <= sm_test4_o_status_done;
-      fw_read_status32_reg[30:18] <= 13'b0;
-      fw_read_status32_reg[31]    <= error_w_execute_cfg;
-    end
-  end
+  // Instantiate module com_status32_reg.sv
+  com_status32_reg com_status32_reg_inst (
+    .fw_axi_clk              (fw_axi_clk),                 // FW clock 100MHz       mapped to S_AXI_ACLK
+    .fw_rst_n                (fw_rst_n),                   // FW reset, active low  mapped to S_AXI_ARESETN
+    //
+    .op_code_w_status_clear  (op_code_w_status_clear),
+    .op_code_w_reset         (op_code_w_reset),
+    .op_code_w_cfg_static_0  (op_code_w_cfg_static_0),
+    .op_code_r_cfg_static_0  (op_code_r_cfg_static_0),
+    .op_code_w_cfg_static_1  (op_code_w_cfg_static_1),
+    .op_code_r_cfg_static_1  (op_code_r_cfg_static_1),
+    .op_code_w_cfg_array_0   (op_code_w_cfg_array_0),
+    .op_code_r_cfg_array_0   (op_code_r_cfg_array_0),
+    .op_code_w_cfg_array_1   (op_code_w_cfg_array_1),
+    .op_code_r_cfg_array_1   (op_code_r_cfg_array_1),
+    .op_code_w_cfg_array_2   (op_code_w_cfg_array_2),
+    .op_code_r_cfg_array_2   (op_code_r_cfg_array_2),
+    .op_code_r_data_array_0  (op_code_r_data_array_0),
+    .op_code_r_data_array_1  (op_code_r_data_array_1),
+    .op_code_w_execute       (op_code_w_execute),
+    .sm_test1_o_status_done  (sm_test1_o_status_done),
+    .sm_test2_o_status_done  (sm_test2_o_status_done),
+    .sm_test3_o_status_done  (sm_test3_o_status_done),
+    .sm_test4_o_status_done  (sm_test4_o_status_done),
+    .error_w_execute_cfg     (error_w_execute_cfg),
+    //
+    .fw_read_status32_reg    (fw_read_status32_reg)
+  );
   assign fw_read_status32 = fw_read_status32_reg;
 
-  localparam w_cfg_static_0_reg_bxclk_period_index_min               =  0;     // USAGE of first 6-bits: bit#0-to-5. USE to set clock PERIOD
-  localparam w_cfg_static_0_reg_bxclk_period_index_max               =  5;     // example for setting bxclk==40MHz derived from fw_pl_clk1==400MHz: write 6'h0A => 10*2.5ns=25ns;
-  localparam w_cfg_static_0_reg_bxclk_delay_index_min                =  6;     // USAGE of next  5-bits: bit#6-to-10. Use to set clock DELAY (maximum is half clock PERIOD as set by bits 0-to-5)
-  localparam w_cfg_static_0_reg_bxclk_delay_index_max                = 10;     //
-  localparam w_cfg_static_0_reg_bxclk_delay_sign_index               = 11;     // USAGE of next 1-bit: bit#11. Use it to set clock value (Lor H) in the first bxclk_delay clocks within a bxclk_period
-  // 00.00.00.01.02.03.04.05.06.07.08.09.10.01.02.03.04.05.06.07.08.09.10.               fw_pl_clk1_cnt
-  // LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.            fw_bxclk_ana_ff
-  // LL.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.      fw_bxclk_ff when bxclk_delay_sign==0 and bxclk_delay==2
-  // LL.LL.LL.LL.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.                  fw_bxclk_ff when bxclk_delay_sign==1 and bxclk_delay==2
-  localparam w_cfg_static_0_reg_super_pix_sel_index                  = 12;
-  localparam w_cfg_static_0_reg_spare_index_min                      = 13;     //
-  localparam w_cfg_static_0_reg_spare_index_max                      = 23;     //
   //
   logic [5:0] bxclk_period;                                // on clock domain fw_axi_clk
   logic [4:0] bxclk_delay;                                 // on clock domain fw_axi_clk
   logic       bxclk_delay_sign;                            // on clock domain fw_axi_clk
   logic       super_pixel_sel;                             // on clock domain fw_axi_clk
-
-  assign bxclk_period     = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_period_index_max : w_cfg_static_0_reg_bxclk_period_index_min];
-  assign bxclk_delay      = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_index_max  : w_cfg_static_0_reg_bxclk_delay_index_min ];
-  assign bxclk_delay_sign = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_sign_index                                            ];
-  assign super_pixel_sel  = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index                                               ];
+  assign bxclk_period     = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_period_index_max_IP2 : w_cfg_static_0_reg_bxclk_period_index_min_IP2];
+  assign bxclk_delay      = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_index_max_IP2  : w_cfg_static_0_reg_bxclk_delay_index_min_IP2 ];
+  assign bxclk_delay_sign = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_sign_index_IP2                                                ];
+  assign super_pixel_sel  = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index_IP2                                                   ];
 
   // Instantiate module bxclks_generators.sv
   logic [5:0] fw_pl_clk1_cnt;
@@ -265,29 +295,18 @@ module fw_ip2 (
   // SCAN-CHAIN-MODULE as a serial-in / serial-out shift-tegister. The test is configured using:
   // 1. byte#3=={fw_dev_id_enable, fw_op_code_w_execute}
   // 2. byte#2-to-byte#0==sw_write24_0 where each bit defined as follows:
-  localparam w_execute_cfg_test_delay_index_min                      =  0;     //
-  localparam w_execute_cfg_test_delay_index_max                      =  5;     //
-  localparam w_execute_cfg_test_sample_index_min                     =  6;     //
-  localparam w_execute_cfg_test_sample_index_max                     = 11;     //
-  localparam w_execute_cfg_test_number_index_min                     = 12;     //
-  localparam w_execute_cfg_test_number_index_max                     = 15;     //
-  localparam w_execute_cfg_test_loopback                             = 16;     //
-  localparam w_execute_cfg_test_vin_test_trig_out_index_min          = 17;     // this field controls the position of vin_test_trig_out pulse, one bxclk_period wide, within
-  localparam w_execute_cfg_test_vin_test_trig_out_index_max          = 22;     // within time-window defined by state machine sm_test2==SCANLOAD_HIGH_1_T2 + SCANLOAD_HIGH_2_T2
-  localparam w_execute_cfg_test_mask_reset_not_index                 = 23;     //
-  //
   logic [5:0] test_delay;                                  // on clock domain fw_axi_clk
   logic [5:0] test_sample;                                 // on clock domain fw_axi_clk
   logic [3:0] test_number;                                 // on clock domain fw_axi_clk
   logic       test_loopback;                               // on clock domain fw_axi_clk
   logic [5:0] test_trig_out_phase;                         // on clock domain fw_axi_clk
   logic       test_mask_reset_not;                         // on clock domain fw_axi_clk
-  assign test_delay          = sw_write24_0[w_execute_cfg_test_delay_index_max             : w_execute_cfg_test_delay_index_min            ];
-  assign test_sample         = sw_write24_0[w_execute_cfg_test_sample_index_max            : w_execute_cfg_test_sample_index_min           ];
-  assign test_number         = sw_write24_0[w_execute_cfg_test_number_index_max            : w_execute_cfg_test_number_index_min           ];
-  assign test_loopback       = sw_write24_0[w_execute_cfg_test_loopback                                                                    ];
-  assign test_trig_out_phase = sw_write24_0[w_execute_cfg_test_vin_test_trig_out_index_max : w_execute_cfg_test_vin_test_trig_out_index_min];
-  assign test_mask_reset_not = sw_write24_0[w_execute_cfg_test_mask_reset_not_index                                                        ];
+  assign test_delay          = sw_write24_0[w_execute_cfg_test_delay_index_max_IP2             : w_execute_cfg_test_delay_index_min_IP2            ];
+  assign test_sample         = sw_write24_0[w_execute_cfg_test_sample_index_max_IP2            : w_execute_cfg_test_sample_index_min_IP2           ];
+  assign test_number         = sw_write24_0[w_execute_cfg_test_number_index_max_IP2            : w_execute_cfg_test_number_index_min_IP2           ];
+  assign test_loopback       = sw_write24_0[w_execute_cfg_test_loopback_IP2                                                                        ];
+  assign test_trig_out_phase = sw_write24_0[w_execute_cfg_test_vin_test_trig_out_index_max_IP2 : w_execute_cfg_test_vin_test_trig_out_index_min_IP2];
+  assign test_mask_reset_not = sw_write24_0[w_execute_cfg_test_mask_reset_not_index_IP2                                                            ];
   //
   // Instantiate module com_testx_decoder.sv
   logic test1_enable; logic test1_enable_re;
@@ -309,12 +328,6 @@ module fw_ip2 (
     .test4_enable_re         (test4_enable_re)
   );
   //
-  // Define enumerated type scan_chain_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
-  typedef enum logic {
-    SHIFT_REG = 1'b0,
-    LOAD_COMP = 1'b1
-  } scan_chain_mode;
-  //
   // State Machine Output signals to DUT
   logic           sm_test1_o_config_clk;
   logic           sm_test1_o_reset_not;
@@ -330,20 +343,20 @@ module fw_ip2 (
   logic           sm_test2_o_vin_test_trig_out;
   logic           sm_test2_o_scan_in;
   logic           sm_test2_o_scan_load;
-  logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_reset_not;          assign sm_test3_o_reset_not         = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_config_in;          assign sm_test3_o_config_in         = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_config_load;        assign sm_test3_o_config_load       = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_vin_test_trig_out;  assign sm_test3_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;       // TODO to be driven by sm_test3
-  logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = LOAD_COMP;  // TODO to be driven by sm_test3
-  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_config_load;        assign sm_test4_o_config_load       = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;       // TODO to be driven by sm_test4
-  logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = LOAD_COMP;  // TODO to be driven by sm_test4
+  logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = 1'b0;                      // TODO to be driven by sm_test3
+  logic           sm_test3_o_reset_not;          assign sm_test3_o_reset_not         = 1'b0;                      // TODO to be driven by sm_test3
+  logic           sm_test3_o_config_in;          assign sm_test3_o_config_in         = 1'b0;                      // TODO to be driven by sm_test3
+  logic           sm_test3_o_config_load;        assign sm_test3_o_config_load       = 1'b0;                      // TODO to be driven by sm_test3
+  logic           sm_test3_o_vin_test_trig_out;  assign sm_test3_o_vin_test_trig_out = 1'b0;                      // TODO to be driven by sm_test3
+  logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;                      // TODO to be driven by sm_test3
+  logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = SCAN_REG_MODE_LOAD_COMP;   // TODO to be driven by sm_test3
+  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = 1'b0;                      // TODO to be driven by sm_test4
+  logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;                      // TODO to be driven by sm_test4
+  logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;                      // TODO to be driven by sm_test4
+  logic           sm_test4_o_config_load;        assign sm_test4_o_config_load       = 1'b0;                      // TODO to be driven by sm_test4
+  logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;                      // TODO to be driven by sm_test4
+  logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;                      // TODO to be driven by sm_test4
+  logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = SCAN_REG_MODE_LOAD_COMP;   // TODO to be driven by sm_test4
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT) not used in IP2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT)     used in IP2 test 1,2
@@ -351,7 +364,7 @@ module fw_ip2 (
   logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // TODO to be used in IP2 test x
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // TODO to be used in IP2 test x
   // State Machine Control signals from logic/configuration
-  localparam logic [10 : 0]                      sm_testx_i_scanchain_reg_width = 2*768;
+  localparam logic [10 : 0]                      sm_testx_i_scanchain_reg_width = 2*scan_reg_bits_total;
   logic [sm_testx_i_scanchain_reg_width-1 : 0]   sm_testx_i_scanchain_reg;               // 2*768=1536-bits shift register; bit#0 drives DUT scan_in; used by all tests 1,2,3
   logic [10 : 0]                                 sm_testx_i_scanchain_reg_shift_cnt;     // counting from 0 to sm_testx_i_scanchain_reg_width = 2*768=1536 == 0x600
   logic                                          sm_test1_o_scanchain_reg_load;          // LOAD  control for shift register; independent control by each test 1,2,3,4
@@ -379,15 +392,7 @@ module fw_ip2 (
   end
 
   // State Machine for "test1": instantiate module ip2_test1.sv
-  typedef enum logic [2:0] {
-    IDLE_T1        = 3'b000,
-    DELAY_TEST_T1  = 3'b001,
-    RESET_NOT_T1   = 3'b010,
-    SHIFT_IN_0_T1  = 3'b011,
-    SHIFT_IN_T1    = 3'b100,
-    DONE_T1        = 3'b101
-  } state_t_sm_test1;
-  logic [2:0] sm_test1;
+  state_t_sm_ip2_test1 sm_test1;
   ip2_test1 ip2_test1_inst (
     .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
     .reset                                   (op_code_w_reset),
@@ -415,17 +420,7 @@ module fw_ip2 (
   );
 
   // State Machine for "test2": instantiate module ip2_test2.sv
-  typedef enum logic [2:0] {
-    IDLE_T2            = 3'b000,
-    DELAY_TEST_T2      = 3'b001,
-    RESET_NOT_T2       = 3'b010,
-    SCANLOAD_HIGH_1_T2 = 3'b011,
-    SCANLOAD_HIGH_2_T2 = 3'b100,
-    SHIFT_IN_0_T2      = 3'b101,
-    SHIFT_IN_T2        = 3'b110,
-    DONE_T2            = 3'b111
-  } state_t_sm_test2;
-  logic [2:0] sm_test2;
+  state_t_sm_ip2_test2 sm_test2;
   ip2_test2 ip2_test2_inst (
     .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
     .reset                                   (op_code_w_reset),
@@ -458,7 +453,7 @@ module fw_ip2 (
   always @(posedge fw_pl_clk1) begin : sm_testx_o_scanchain_reg_proc
     if(test1_enable) begin
       // use data specific for test case test1
-      if(sm_test1==SHIFT_IN_0_T1 | sm_test1==SHIFT_IN_T1) begin
+      if(sm_test1==SHIFT_IN_0_IP2_T1 | sm_test1==SHIFT_IN_IP2_T1) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
@@ -477,7 +472,7 @@ module fw_ip2 (
       end
     end else if(test2_enable) begin
       // use data specific for test case test2
-      if(sm_test2==SHIFT_IN_0_T2 | sm_test2==SHIFT_IN_T2) begin
+      if(sm_test2==SHIFT_IN_0_IP2_T2 | sm_test2==SHIFT_IN_IP2_T2) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
@@ -564,15 +559,19 @@ module fw_ip2 (
       error_w_execute_cfg <= 1'b0;
     end else begin
       if(test1_enable) begin
-        if(sm_test1!=IDLE_T1 & (test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+        if(sm_test1!=IDLE_IP2_T1 & (test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
           // inferred from state machine sm_test1 logic
           error_w_execute_cfg <= 1'b1;
         end else begin
           error_w_execute_cfg <= 1'b0;
         end
       end else if(test2_enable) begin
-        // use data specific for test case test2
-        error_w_execute_cfg <= 1'b0;     // TODO
+        if(sm_test2!=IDLE_IP2_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+          // inferred from state machine sm_test1 logic
+          error_w_execute_cfg <= 1'b1;
+        end else begin
+          error_w_execute_cfg <= 1'b0;
+        end
       end else if(test3_enable) begin
         // use data specific for test case test3
         error_w_execute_cfg <= 1'b0;     // TODO

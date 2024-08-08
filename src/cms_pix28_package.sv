@@ -16,6 +16,10 @@
 
 package cms_pix28_package;
   //
+  parameter cfg_reg_bits_total    = 5188;
+  parameter cfg_reg_bits_test     = 24;
+  parameter scan_reg_bits_total   = 768;
+  //
   parameter status_index_op_code_w_reset               = 0;
   parameter status_index_op_code_w_cfg_static_0        = 1;
   parameter status_index_op_code_r_cfg_static_0        = 2;
@@ -41,29 +45,26 @@ package cms_pix28_package;
   //---------------------------------------------------------------------------
   // fw_ip1.sv
   //---------------------------------------------------------------------------
-  parameter cfg_reg_bits_total = 5188;
-  parameter cfg_reg_bits_test  = 24;
+  parameter w_cfg_static_0_reg_fast_configclk_period_index_min_IP1   =  0;     // fast_configCLK period is 10ns(AXI100MHz) * 2**7(7-bits) == 10*128 == 1280ns i.e. 0.78125MHz the lowest frequency, thus covering DataSheet minimum 1MHz
+  parameter w_cfg_static_0_reg_fast_configclk_period_index_max_IP1   =  6;     //
+  parameter w_cfg_static_0_reg_super_pix_sel_index_IP1               =  7;     //
+  parameter w_cfg_static_0_reg_slow_configclk_period_index_min_IP1   =  8;     // slow_configCLK period is 10ns(AXI100MHz) * 2**27(27-bits) == 10*134217728 == 1342177280ns i.e. 0.745Hz the lowest frequency, thus covering DataSheet minimum 1Hz
+  parameter w_cfg_static_0_reg_slow_configclk_period_index_max_IP1   =  23;    // w_cfg_static_0_reg contains lower 16-bits of the 27-bit period for slow_configCLK
+  parameter w_cfg_static_1_reg_slow_configclk_period_index_min_IP1   =  0;     // w_cfg_static_1_reg contains upper 11-bits of the 27-bit period for slow_configCLK
+  parameter w_cfg_static_1_reg_slow_configclk_period_index_max_IP1   = 10;
+  parameter w_cfg_static_1_reg_spare_index_min_IP1                   = 11;
+  parameter w_cfg_static_1_reg_spare_index_max_IP1                   = 23;
   //
-  parameter w_cfg_static_0_reg_fast_configclk_period_index_min       =  0;     // fast_configCLK period is 10ns(AXI100MHz) * 2**7(7-bits) == 10*128 == 1280ns i.e. 0.78125MHz the lowest frequency, thus covering DataSheet minimum 1MHz
-  parameter w_cfg_static_0_reg_fast_configclk_period_index_max       =  6;     //
-  parameter w_cfg_static_0_reg_super_pix_sel_index                   =  7;     //
-  parameter w_cfg_static_0_reg_slow_configclk_period_index_min       =  8;     // slow_configCLK period is 10ns(AXI100MHz) * 2**27(27-bits) == 10*134217728 == 1342177280ns i.e. 0.745Hz the lowest frequency, thus covering DataSheet minimum 1Hz
-  parameter w_cfg_static_0_reg_slow_configclk_period_index_max       =  23;    // w_cfg_static_0_reg contains lower 16-bits of the 27-bit period for slow_configCLK
-  parameter w_cfg_static_1_reg_slow_configclk_period_index_min       =  0;     // w_cfg_static_1_reg contains upper 11-bits of the 27-bit period for slow_configCLK
-  parameter w_cfg_static_1_reg_slow_configclk_period_index_max       = 10;
-  parameter w_cfg_static_1_reg_spare_index_min                       = 11;
-  parameter w_cfg_static_1_reg_spare_index_max                       = 23;
-  //
-  parameter w_execute_cfg_test_delay_index_min                       =  0;     //
-  parameter w_execute_cfg_test_delay_index_max                       =  6;     //
-  parameter w_execute_cfg_test_sample_index_min                      =  7;     //
-  parameter w_execute_cfg_test_sample_index_max                      = 13;     //
-  parameter w_execute_cfg_test_number_index_min                      = 14;     //
-  parameter w_execute_cfg_test_number_index_max                      = 17;     //
-  parameter w_execute_cfg_test_loopback                              = 18;     //
-  parameter w_execute_cfg_test_spare_index_min                       = 19;     //
-  parameter w_execute_cfg_test_spare_index_max                       = 22;     //
-  parameter w_execute_cfg_test_mask_reset_not_index                  = 23;     //
+  parameter w_execute_cfg_test_delay_index_min_IP1                   =  0;     //
+  parameter w_execute_cfg_test_delay_index_max_IP1                   =  6;     //
+  parameter w_execute_cfg_test_sample_index_min_IP1                  =  7;     //
+  parameter w_execute_cfg_test_sample_index_max_IP1                  = 13;     //
+  parameter w_execute_cfg_test_number_index_min_IP1                  = 14;     //
+  parameter w_execute_cfg_test_number_index_max_IP1                  = 17;     //
+  parameter w_execute_cfg_test_loopback_IP1                          = 18;     //
+  parameter w_execute_cfg_test_spare_index_min_IP1                   = 19;     //
+  parameter w_execute_cfg_test_spare_index_max_IP1                   = 22;     //
+  parameter w_execute_cfg_test_mask_reset_not_index_IP1              = 23;     //
   //
   typedef enum logic [2:0] {
     IDLE_IP1_T1        = 3'b000,
@@ -100,7 +101,29 @@ package cms_pix28_package;
   //---------------------------------------------------------------------------
   // fw_ip2.sv
   //---------------------------------------------------------------------------
-  parameter scan_reg_bits_total = 768;
+  localparam w_cfg_static_0_reg_bxclk_period_index_min_IP2           =  0;     // USAGE of first 6-bits: bit#0-to-5. USE to set clock PERIOD
+  localparam w_cfg_static_0_reg_bxclk_period_index_max_IP2           =  5;     // example for setting bxclk==40MHz derived from fw_pl_clk1==400MHz: write 6'h0A => 10*2.5ns=25ns;
+  localparam w_cfg_static_0_reg_bxclk_delay_index_min_IP2            =  6;     // USAGE of next  5-bits: bit#6-to-10. Use to set clock DELAY (maximum is half clock PERIOD as set by bits 0-to-5)
+  localparam w_cfg_static_0_reg_bxclk_delay_index_max_IP2            = 10;     //
+  localparam w_cfg_static_0_reg_bxclk_delay_sign_index_IP2           = 11;     // USAGE of next 1-bit: bit#11. Use it to set clock value (Lor H) in the first bxclk_delay clocks within a bxclk_period
+  // 00.00.00.01.02.03.04.05.06.07.08.09.10.01.02.03.04.05.06.07.08.09.10.               fw_pl_clk1_cnt
+  // LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.            fw_bxclk_ana_ff
+  // LL.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.      fw_bxclk_ff when bxclk_delay_sign==0 and bxclk_delay==2
+  // LL.LL.LL.LL.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.                  fw_bxclk_ff when bxclk_delay_sign==1 and bxclk_delay==2
+  localparam w_cfg_static_0_reg_super_pix_sel_index_IP2              = 12;
+  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 13;     //
+  localparam w_cfg_static_0_reg_spare_index_max_IP2                  = 23;     //
+  //
+  localparam w_execute_cfg_test_delay_index_min_IP2                  =  0;     //
+  localparam w_execute_cfg_test_delay_index_max_IP2                  =  5;     //
+  localparam w_execute_cfg_test_sample_index_min_IP2                 =  6;     //
+  localparam w_execute_cfg_test_sample_index_max_IP2                 = 11;     //
+  localparam w_execute_cfg_test_number_index_min_IP2                 = 12;     //
+  localparam w_execute_cfg_test_number_index_max_IP2                 = 15;     //
+  localparam w_execute_cfg_test_loopback_IP2                         = 16;     //
+  localparam w_execute_cfg_test_vin_test_trig_out_index_min_IP2      = 17;     // this field controls the position of vin_test_trig_out pulse, one bxclk_period wide, within
+  localparam w_execute_cfg_test_vin_test_trig_out_index_max_IP2      = 22;     // within time-window defined by state machine sm_test2==SCANLOAD_HIGH_1_T2 + SCANLOAD_HIGH_2_T2
+  localparam w_execute_cfg_test_mask_reset_not_index_IP2             = 23;     //
   //
   typedef enum logic [2:0] {
     IDLE_IP2_T1        = 3'b000,
