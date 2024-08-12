@@ -12,6 +12,7 @@
 // 2024-07-10  Cristian Gingu         Update default values: reset_not=1'b1; config_load=1'b1;
 // 2024-07-10  Cristian Gingu         Make outputs bxclk and bxclk_ana driven only by index=1 (fw_ip2.sv)
 // 2024-07-31  Cristian Gingu         Make outputs config_clk          driven only by index=0 (fw_ip1.sv)
+// 2024-08-12  Cristian Gingu         Add references to cms_pix28_package.sv
 // ------------------------------------------------------------------------------------
 `ifndef __com_fw_to_dut__
 `define __com_fw_to_dut__
@@ -58,6 +59,11 @@ module com_fw_to_dut(
     input  logic dnn_output_1,
     input  logic dn_event_toggle
   );
+
+  import cms_pix28_package::firmware_id_1;
+  import cms_pix28_package::firmware_id_2;
+  import cms_pix28_package::firmware_id_3;
+  import cms_pix28_package::firmware_id_4;
   //
   logic super_pixel_sel_mux;
   logic config_clk_mux;
@@ -93,7 +99,7 @@ module com_fw_to_dut(
   assign bxclk_ana_mux       = fw_bxclk_ana        [1];    // Make outputs bxclk and bxclk_ana driven only by index=1 (fw_ip2.sv)
   assign bxclk_mux           = fw_bxclk            [1];    // Make outputs bxclk and bxclk_ana driven only by index=1 (fw_ip2.sv)
   always_comb begin
-    if         (fw_dev_id_enable==4'h1) begin
+    if         (fw_dev_id_enable==firmware_id_1) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [0];
       reset_not_mux          = fw_reset_not        [0];
       config_in_mux          = fw_config_in        [0];
@@ -121,7 +127,7 @@ module com_fw_to_dut(
       fw_dnn_output_0    [3] = 1'b0;
       fw_dnn_output_1    [3] = 1'b0;
       fw_dn_event_toggle [3] = 1'b0;
-    end else if(fw_dev_id_enable==4'h2) begin
+    end else if(fw_dev_id_enable==firmware_id_2) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [1];
       reset_not_mux          = fw_reset_not        [1];
       config_in_mux          = fw_config_in        [1];
@@ -149,7 +155,7 @@ module com_fw_to_dut(
       fw_dnn_output_0    [0] = 1'b0;
       fw_dnn_output_1    [0] = 1'b0;
       fw_dn_event_toggle [0] = 1'b0;
-    end else if(fw_dev_id_enable==4'h4) begin
+    end else if(fw_dev_id_enable==firmware_id_3) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [2];
       reset_not_mux          = fw_reset_not        [2];
       config_in_mux          = fw_config_in        [2];
@@ -177,7 +183,7 @@ module com_fw_to_dut(
       fw_dnn_output_0    [1] = 1'b0;
       fw_dnn_output_1    [1] = 1'b0;
       fw_dn_event_toggle [1] = 1'b0;
-    end else if(fw_dev_id_enable==4'h8) begin
+    end else if(fw_dev_id_enable==firmware_id_4) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [3];
       reset_not_mux          = fw_reset_not        [3];
       config_in_mux          = fw_config_in        [3];

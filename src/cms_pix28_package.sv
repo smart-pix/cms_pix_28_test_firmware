@@ -16,31 +16,68 @@
 
 package cms_pix28_package;
   //
-  parameter cfg_reg_bits_total    = 5188;
-  parameter cfg_reg_bits_test     = 24;
-  parameter scan_reg_bits_total   = 768;
+  parameter cfg_reg_bits_total         = 5188;             // configuration register total bits number (including test bits)
+  parameter cfg_reg_bits_test          = 24;               // configuration register test  bits number
+  parameter scan_reg_bits_total        = 768;              // scan-chain    register total bits number
   //
-  parameter status_index_op_code_w_reset               = 0;
-  parameter status_index_op_code_w_cfg_static_0        = 1;
-  parameter status_index_op_code_r_cfg_static_0        = 2;
-  parameter status_index_op_code_w_cfg_static_1        = 3;
-  parameter status_index_op_code_r_cfg_static_1        = 4;
-  parameter status_index_op_code_w_cfg_array_0         = 5;
-  parameter status_index_op_code_r_cfg_array_0         = 6;
-  parameter status_index_op_code_w_cfg_array_1         = 7;
-  parameter status_index_op_code_r_cfg_array_1         = 8;
-  parameter status_index_op_code_w_cfg_array_2         = 9;
-  parameter status_index_op_code_r_cfg_array_2         = 10;
-  parameter status_index_op_code_r_data_array_0        = 11;
-  parameter status_index_op_code_r_data_array_1        = 12;
-  parameter status_index_op_code_w_execute             = 13;
-  parameter status_index_test1_done                    = 14;
-  parameter status_index_test2_done                    = 15;
-  parameter status_index_test3_done                    = 16;
-  parameter status_index_test4_done                    = 17;
-  parameter status_index_spare_min                     = 18;
-  parameter status_index_spare_max                     = 30;
-  parameter status_index_error_w_execute_cfg           = 31;
+  parameter windex_device_id_max       = 31;               // write index for device_id       (upper)
+  parameter windex_device_id_min       = 28;               // write index for device_id       (lower)
+  parameter windex_op_code_max         = 27;               // write index for operation_code  (upper)
+  parameter windex_op_code_min         = 24;               // write index for operation_code  (lower)
+  parameter windex_body_max            = 23;               // write index for body_data       (upper)
+  parameter windex_body_min            =  0;               // write index for body_data       (lower)
+  //
+  parameter logic [3:0] firmware_id_1            = 4'h1;
+  parameter logic [3:0] firmware_id_2            = 4'h2;
+  parameter logic [3:0] firmware_id_3            = 4'h4;
+  parameter logic [3:0] firmware_id_4            = 4'h8;
+  parameter logic [3:0] firmware_id_none         = 4'h0;
+  //
+  parameter logic [3:0] test_number_1            = 4'h1;
+  parameter logic [3:0] test_number_2            = 4'h2;
+  parameter logic [3:0] test_number_3            = 4'h4;
+  parameter logic [3:0] test_number_4            = 4'h8;
+  //
+  typedef enum logic [3:0] {                               // operation_code enumerated type
+    OP_CODE_NOOP                       = 4'h0,
+    OP_CODE_W_RST_FW                   = 4'h1,
+    OP_CODE_W_CFG_STATIC_0             = 4'h2,
+    OP_CODE_R_CFG_STATIC_0             = 4'h3,
+    OP_CODE_W_CFG_STATIC_1             = 4'h4,
+    OP_CODE_R_CFG_STATIC_1             = 4'h5,
+    OP_CODE_W_CFG_ARRAY_0              = 4'h6,
+    OP_CODE_R_CFG_ARRAY_0              = 4'h7,
+    OP_CODE_W_CFG_ARRAY_1              = 4'h8,
+    OP_CODE_R_CFG_ARRAY_1              = 4'h9,
+    OP_CODE_W_CFG_ARRAY_2              = 4'hA,
+    OP_CODE_R_CFG_ARRAY_2              = 4'hB,
+    OP_CODE_R_DATA_ARRAY_0             = 4'hC,
+    OP_CODE_R_DATA_ARRAY_1             = 4'hD,
+    OP_CODE_W_STATUS_FW_CLEAR          = 4'hE,
+    OP_CODE_W_EXECUTE                  = 4'hF
+  } op_code;
+  //
+  parameter status_index_op_code_w_reset         = 0;
+  parameter status_index_op_code_w_cfg_static_0  = 1;
+  parameter status_index_op_code_r_cfg_static_0  = 2;
+  parameter status_index_op_code_w_cfg_static_1  = 3;
+  parameter status_index_op_code_r_cfg_static_1  = 4;
+  parameter status_index_op_code_w_cfg_array_0   = 5;
+  parameter status_index_op_code_r_cfg_array_0   = 6;
+  parameter status_index_op_code_w_cfg_array_1   = 7;
+  parameter status_index_op_code_r_cfg_array_1   = 8;
+  parameter status_index_op_code_w_cfg_array_2   = 9;
+  parameter status_index_op_code_r_cfg_array_2   = 10;
+  parameter status_index_op_code_r_data_array_0  = 11;
+  parameter status_index_op_code_r_data_array_1  = 12;
+  parameter status_index_op_code_w_execute       = 13;
+  parameter status_index_test1_done              = 14;
+  parameter status_index_test2_done              = 15;
+  parameter status_index_test3_done              = 16;
+  parameter status_index_test4_done              = 17;
+  parameter status_index_spare_min               = 18;
+  parameter status_index_spare_max               = 30;
+  parameter status_index_error_w_execute_cfg     = 31;
   //
   //---------------------------------------------------------------------------
   // fw_ip1.sv

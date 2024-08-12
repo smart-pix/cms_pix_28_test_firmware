@@ -26,6 +26,11 @@ module com_testx_decoder (
     output logic test4_enable,  output logic test4_enable_re
   );
 
+  import cms_pix28_package::test_number_1;
+  import cms_pix28_package::test_number_2;
+  import cms_pix28_package::test_number_3;
+  import cms_pix28_package::test_number_4;
+
   logic test1_enable_ff; logic test1_enable_ff_del;
   logic test2_enable_ff; logic test2_enable_ff_del;
   logic test3_enable_ff; logic test3_enable_ff_del;
@@ -38,25 +43,25 @@ module com_testx_decoder (
       test3_enable_ff  <= 1'b0;
       test4_enable_ff  <= 1'b0;
     end else begin
-      if(op_code_w_execute==1'b1 && test_number==4'h1) begin
+      if(op_code_w_execute==1'b1 && test_number==test_number_1) begin
         test1_enable_ff <= 1'b1;
       end else begin
         test1_enable_ff <= 1'b0;
       end
       //
-      if(op_code_w_execute==1'b1 && test_number==4'h2) begin
+      if(op_code_w_execute==1'b1 && test_number==test_number_2) begin
         test2_enable_ff <= 1'b1;
       end else begin
         test2_enable_ff <= 1'b0;
       end
       //
-      if(op_code_w_execute==1'b1 && test_number==4'h4) begin
+      if(op_code_w_execute==1'b1 && test_number==test_number_3) begin
         test3_enable_ff <= 1'b1;
       end else begin
         test3_enable_ff <= 1'b0;
       end
       //
-      if(op_code_w_execute==1'b1 && test_number==4'h8) begin
+      if(op_code_w_execute==1'b1 && test_number==test_number_4) begin
         test4_enable_ff <= 1'b1;
       end else begin
         test4_enable_ff <= 1'b0;

@@ -16,6 +16,7 @@
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // 2024-08-02  Cristian Gingu         Add Test 7: Test CONFIG-CLK-MODULE as a serial-in / serial-out shift-tegister. TEST_NUMBER==2
+// 2024-08-12  Cristian Gingu         Add references to src/cms_pix28_package.sv vrf/cms_pix28_package_vrf.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb_ip1__
 `define __fw_ipx_wrap_tb_ip1__
@@ -86,85 +87,63 @@ module fw_ipx_wrap_tb_ip1 ();
   localparam fw_pl_clk1_period =  2.5;           // FM clock 400MHz       mapped to pl_clk1
   localparam fw_axi_clk_period = 10.0;           // FW clock 100MHz       mapped to S_AXI_ACLK
   //
-  localparam windex_device_id_max  = 31;                   // write index for device_id       (upper)
-  localparam windex_device_id_min  = 28;                   // write index for device_id       (lower)
-  localparam windex_op_code_max    = 27;                   // write index for operation_code  (upper)
-  localparam windex_op_code_min    = 24;                   // write index for operation_code  (lower)
-  localparam windex_body_max       = 23;                   // write index for body_data       (upper)
-  localparam windex_body_min       =  0;                   // write index for body_data       (lower)
+  import cms_pix28_package::firmware_id_1;
+  import cms_pix28_package::firmware_id_2;
+  import cms_pix28_package::firmware_id_3;
+  import cms_pix28_package::firmware_id_4;
+  import cms_pix28_package::firmware_id_none;
   //
-  typedef enum logic [3:0] {                               // operation_code enumerated type
-    OP_CODE_NOOP             = 4'h0,
-    OP_CODE_W_RST_FW         = 4'h1,
-    OP_CODE_W_CFG_STATIC_0   = 4'h2,
-    OP_CODE_R_CFG_STATIC_0   = 4'h3,
-    OP_CODE_W_CFG_STATIC_1   = 4'h4,
-    OP_CODE_R_CFG_STATIC_1   = 4'h5,
-    OP_CODE_W_CFG_ARRAY_0    = 4'h6,
-    OP_CODE_R_CFG_ARRAY_0    = 4'h7,
-    OP_CODE_W_CFG_ARRAY_1    = 4'h8,
-    OP_CODE_R_CFG_ARRAY_1    = 4'h9,
-    OP_CODE_W_CFG_ARRAY_2    = 4'hA,
-    OP_CODE_R_CFG_ARRAY_2    = 4'hB,
-    OP_CODE_R_DATA_ARRAY_0   = 4'hC,
-    OP_CODE_R_DATA_ARRAY_1   = 4'hD,
-    OP_CODE_W_STATUS_FW_CLEAR= 4'hE,
-    OP_CODE_W_EXECUTE        = 4'hF
-  } op_code;
+  import cms_pix28_package::op_code;
+  import cms_pix28_package::OP_CODE_NOOP;
+  import cms_pix28_package::OP_CODE_W_RST_FW;
+  import cms_pix28_package::OP_CODE_W_CFG_STATIC_0;
+  import cms_pix28_package::OP_CODE_R_CFG_STATIC_0;
+  import cms_pix28_package::OP_CODE_W_CFG_STATIC_1;
+  import cms_pix28_package::OP_CODE_R_CFG_STATIC_1;
+  import cms_pix28_package::OP_CODE_W_CFG_ARRAY_0;
+  import cms_pix28_package::OP_CODE_R_CFG_ARRAY_0;
+  import cms_pix28_package::OP_CODE_W_CFG_ARRAY_1;
+  import cms_pix28_package::OP_CODE_R_CFG_ARRAY_1;
+  import cms_pix28_package::OP_CODE_W_CFG_ARRAY_2;
+  import cms_pix28_package::OP_CODE_R_CFG_ARRAY_2;
+  import cms_pix28_package::OP_CODE_R_DATA_ARRAY_0;
+  import cms_pix28_package::OP_CODE_R_DATA_ARRAY_1;
+  import cms_pix28_package::OP_CODE_W_STATUS_FW_CLEAR;
+  import cms_pix28_package::OP_CODE_W_EXECUTE;
   //
-
-  localparam w_cfg_static_0_reg_fast_configclk_period_index_min      =  0;     // fast_configCLK period is 10ns(AXI100MHz) * 2**7(7-bits) == 10*128 == 1280ns i.e. 0.78125MHz the lowest frequency, thus covering DataSheet minimum 1MHz
-  localparam w_cfg_static_0_reg_fast_configclk_period_index_max      =  6;     //
-  localparam w_cfg_static_0_reg_super_pix_sel_index                  =  7;     //
-  localparam w_cfg_static_0_reg_slow_configclk_period_index_min      =  8;     // slow_configCLK period is 10ns(AXI100MHz) * 2**27(27-bits) == 10*134217728 == 1342177280ns i.e. 0.745Hz the lowest frequency, thus covering DataSheet minimum 1Hz
-  localparam w_cfg_static_0_reg_slow_configclk_period_index_max      =  23;    // w_cfg_static_0_reg contains lower 16-bits of the 27-bit period for slow_configCLK
-  localparam w_cfg_static_1_reg_slow_configclk_period_index_min      =  0;     // w_cfg_static_1_reg contains upper 11-bits of the 27-bit period for slow_configCLK
-  localparam w_cfg_static_1_reg_slow_configclk_period_index_max      = 10;
-  localparam w_cfg_static_1_reg_spare_index_min                      = 11;
-  localparam w_cfg_static_1_reg_spare_index_max                      = 23;
+  import cms_pix28_package::w_execute_cfg_test_delay_index_min_IP1;
+  import cms_pix28_package::w_execute_cfg_test_delay_index_max_IP1;
+  import cms_pix28_package::w_execute_cfg_test_sample_index_min_IP1;
+  import cms_pix28_package::w_execute_cfg_test_sample_index_max_IP1;
+  import cms_pix28_package::w_execute_cfg_test_number_index_min_IP1;
+  import cms_pix28_package::w_execute_cfg_test_number_index_max_IP1;
+  import cms_pix28_package::w_execute_cfg_test_loopback_IP1;
+  import cms_pix28_package::w_execute_cfg_test_spare_index_min_IP1;
+  import cms_pix28_package::w_execute_cfg_test_spare_index_max_IP1;
+  import cms_pix28_package::w_execute_cfg_test_mask_reset_not_index_IP1;
   //
-  localparam tb_err_index_fast_configclk_period  =  0;
-  localparam tb_err_index_slow_configclk_period  =  1;
-  localparam tb_err_index_op_code_r_cfg_static_0 =  2;
-  localparam tb_err_index_op_code_r_cfg_static_1 =  3;
-  localparam tb_err_index_op_code_r_cfg_array_0  =  4;
-  localparam tb_err_index_op_code_r_cfg_array_1  =  5;
-  localparam tb_err_index_op_code_r_cfg_array_2  =  6;
-  localparam tb_err_index_op_code_r_data_array_0 =  7;
-  localparam tb_err_index_op_code_r_data_array_1 =  8;
-  localparam tb_err_index_test1                  =  9;
-  localparam tb_err_index_test2                  = 10;
-  localparam tb_err_index_test3                  = 11;
-  localparam tb_err_index_test4                  = 12;
+  import cms_pix28_package::status_index_test1_done;
+  import cms_pix28_package::status_index_test2_done;
   //
-  // CONFIG-CLK-MODULE as a serial-in / serial-out shift-tegister. The test is configured using:
-  // 1. byte#3=={fw_dev_id_enable, fw_op_code_w_execute}
-  // 2. byte#2-to-byte#0==sw_write24_0 where each bit defined as follows:
-  localparam w_execute_cfg_test_delay_index_min      =  0; //
-  localparam w_execute_cfg_test_delay_index_max      =  6; //
-  localparam w_execute_cfg_test_sample_index_min     =  7; //
-  localparam w_execute_cfg_test_sample_index_max     = 13; //
-  localparam w_execute_cfg_test_number_index_min     = 14; //
-  localparam w_execute_cfg_test_number_index_max     = 17; //
-  localparam w_execute_cfg_test_loopback             = 18; //
-  localparam w_execute_cfg_spare_index_min           = 19; //
-  localparam w_execute_cfg_spare_index_max           = 22; //
-  localparam w_execute_cfg_test_mask_reset_not_index = 23; //
-  //
-  localparam logic [3:0] firmware_id_1           = 4'h1;
-  localparam logic [3:0] firmware_id_2           = 4'h2;
-  localparam logic [3:0] firmware_id_3           = 4'h4;
-  localparam logic [3:0] firmware_id_4           = 4'h8;
-  localparam logic [3:0] firmware_id_none        = 4'h0;
+  import cms_pix28_package_vrf::tb_err_index_fast_configclk_period_IP1;
+  import cms_pix28_package_vrf::tb_err_index_slow_configclk_period_IP1;
+  import cms_pix28_package_vrf::tb_err_index_op_code_r_cfg_static_0;
+  import cms_pix28_package_vrf::tb_err_index_op_code_r_cfg_static_1;
+  import cms_pix28_package_vrf::tb_err_index_op_code_r_cfg_array_0;
+  import cms_pix28_package_vrf::tb_err_index_op_code_r_cfg_array_1;
+  import cms_pix28_package_vrf::tb_err_index_op_code_r_cfg_array_2;
+  import cms_pix28_package_vrf::tb_err_index_op_code_r_data_array_0;
+  import cms_pix28_package_vrf::tb_err_index_op_code_r_data_array_1;
+  import cms_pix28_package_vrf::tb_err_index_test1;
+  import cms_pix28_package_vrf::tb_err_index_test2;
   //
   // Test Signals
   string  tb_testcase;
   integer tb_number;
-  logic   tb_mismatch;
   integer tb_i_test;
   logic   tb_fw_pl_clk1_initial;
   logic   tb_fw_axi_clk_initial;
-  logic [15:0] tb_err;
+  logic [31:0] tb_err;
   real         tb_time_t1;
   real         tb_time_t2;
   //
@@ -176,8 +155,6 @@ module fw_ipx_wrap_tb_ip1 ();
   logic [5:0]  tb_bxclk_period;
   logic [4:0]  tb_bxclk_delay;
   logic        tb_bxclk_delay_sign;
-  //logic      tb_super_pix_sel;                           // this signal is defined in both IP1 and IP2
-  //
   // IP1: Signals related with w_cfg_static_0_reg
   logic [6:0]  tb_fast_configclk_period;
   logic        tb_super_pix_sel;                           // this signal is defined in both IP1 and IP2
@@ -230,12 +207,6 @@ module fw_ipx_wrap_tb_ip1 ();
     // SW side signals
     sw_write32_0             = 32'h0;
     tb_sw_write24_0          = 24'h0;
-    // Inputs from DUT
-    //logic config_out;
-    //logic scan_out;
-    //logic dnn_output_0;
-    //logic dnn_output_1;
-    //logic dn_event_toggle;
   endfunction
 
   function logic [255:0][15:0] counter_cfg_array();
@@ -401,12 +372,12 @@ module fw_ipx_wrap_tb_ip1 ();
   task w_execute();
     @(negedge fw_axi_clk);             // ensure enter on FE of AXI CLK
     tb_function_id           = OP_CODE_W_EXECUTE;
-    tb_sw_write24_0[w_execute_cfg_test_delay_index_max             : w_execute_cfg_test_delay_index_min             ] = tb_test_delay;
-    tb_sw_write24_0[w_execute_cfg_test_sample_index_max            : w_execute_cfg_test_sample_index_min            ] = tb_test_sample;
-    tb_sw_write24_0[w_execute_cfg_test_number_index_max            : w_execute_cfg_test_number_index_min            ] = tb_test_number;
-    tb_sw_write24_0[w_execute_cfg_test_loopback                                                                     ] = tb_test_loopback;
-    tb_sw_write24_0[w_execute_cfg_spare_index_max                  : w_execute_cfg_spare_index_min                  ] = 4'h0;
-    tb_sw_write24_0[w_execute_cfg_test_mask_reset_not_index                                                         ] = tb_test_mask_reset_not;
+    tb_sw_write24_0[w_execute_cfg_test_delay_index_max_IP1         : w_execute_cfg_test_delay_index_min_IP1         ] = tb_test_delay;
+    tb_sw_write24_0[w_execute_cfg_test_sample_index_max_IP1        : w_execute_cfg_test_sample_index_min_IP1        ] = tb_test_sample;
+    tb_sw_write24_0[w_execute_cfg_test_number_index_max_IP1        : w_execute_cfg_test_number_index_min_IP1        ] = tb_test_number;
+    tb_sw_write24_0[w_execute_cfg_test_loopback_IP1                                                                 ] = tb_test_loopback;
+    tb_sw_write24_0[w_execute_cfg_test_spare_index_max_IP1         : w_execute_cfg_test_spare_index_min_IP1         ] = 4'h0;
+    tb_sw_write24_0[w_execute_cfg_test_mask_reset_not_index_IP1                                                     ] = tb_test_mask_reset_not;
     sw_write32_0             = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
     #(1*fw_axi_clk_period);
     $display("time=%06.2f tb_test_number=%01d tb_test_delay=%03d tb_test_sample=%03d tb_test_loopback=%01d tb_test_mask_reset_not=%01d",
@@ -425,14 +396,14 @@ module fw_ipx_wrap_tb_ip1 ();
       @(posedge DUT.fw_ip1_inst.fast_configclk); tb_time_t2 = $realtime();
       if(tb_time_t2-tb_time_t1 != tb_fast_configclk_period * fw_axi_clk_period) begin
         $display("time=%06.2f FAIL PERIOD fast_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_fast_configclk_period=%03d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_fast_configclk_period);
-        tb_err[tb_err_index_fast_configclk_period]=1'b1;
+        tb_err[tb_err_index_fast_configclk_period_IP1]=1'b1;
       end
       // 2. CHECK slow_configclk PERIOD
       @(posedge DUT.fw_ip1_inst.slow_configclk); tb_time_t1 = $realtime();
       @(posedge DUT.fw_ip1_inst.slow_configclk); tb_time_t2 = $realtime();
       if(tb_time_t2-tb_time_t1 != tb_slow_configclk_period * fw_axi_clk_period) begin
         $display("time=%06.2f FAIL PERIOD slow_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_slow_configclk_period=%06d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_slow_configclk_period);
-        tb_err[tb_err_index_slow_configclk_period]=1'b1;
+        tb_err[tb_err_index_slow_configclk_period_IP1]=1'b1;
       end
       @(negedge fw_axi_clk);           // ensure exit on FE of AXI CLK
     end
@@ -445,7 +416,7 @@ module fw_ipx_wrap_tb_ip1 ();
       @(posedge DUT.config_clk); tb_time_t2 = $realtime();
       if(tb_time_t2-tb_time_t1 != tb_fast_configclk_period * fw_axi_clk_period) begin
         $display("time=%06.2f FAIL PERIOD fast_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_fast_configclk_period=%03d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_fast_configclk_period);
-        tb_err[tb_err_index_fast_configclk_period]=1'b1;
+        tb_err[tb_err_index_fast_configclk_period_IP1]=1'b1;
       end
       @(negedge fw_axi_clk);           // ensure exit on FE of AXI CLK
     end
@@ -458,7 +429,7 @@ module fw_ipx_wrap_tb_ip1 ();
       @(posedge DUT.config_clk); tb_time_t2 = $realtime();
       if(tb_time_t2-tb_time_t1 != tb_slow_configclk_period * fw_axi_clk_period) begin
         $display("time=%06.2f FAIL PERIOD slow_configclk: tb_time_t1=%06.2f tb_time_t2=%06.2f tb_time_t2-tb_time_t1=%06.2f tb_slow_configclk_period=%06d", $realtime(), tb_time_t1, tb_time_t2, tb_time_t2-tb_time_t1, tb_slow_configclk_period);
-        tb_err[tb_err_index_slow_configclk_period]=1'b1;
+        tb_err[tb_err_index_slow_configclk_period_IP1]=1'b1;
       end
       @(negedge fw_axi_clk);           // ensure exit on FE of AXI CLK
     end
@@ -505,7 +476,7 @@ module fw_ipx_wrap_tb_ip1 ();
       sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
       @(posedge fw_axi_clk);
       if(sw_read32_0 != {tb_w_cfg_array_counter[i_addr+1], tb_w_cfg_array_counter[i_addr]}) begin
-        $display("time=%06.2f FAIL op_code_r_cfg_array_0 (counter)i_addr=%03d sw_read32_0=0x%08h expected {0x%04h 0x%04h}", $realtime(), i_addr, sw_read32_0, tb_w_cfg_array_counter[i_addr+1], tb_w_cfg_array_counter[i_addr]);
+        $display("time=%06.2f FAIL op_code_r_cfg_array_0 (counter) i_addr=%03d sw_read32_0=0x%08h expected {0x%04h 0x%04h}", $realtime(), i_addr, sw_read32_0, tb_w_cfg_array_counter[i_addr+1], tb_w_cfg_array_counter[i_addr]);
         tb_err[tb_err_index_op_code_r_cfg_array_0]=1'b1;
       end
       @(negedge fw_axi_clk);
@@ -628,7 +599,6 @@ module fw_ipx_wrap_tb_ip1 ();
     initialize();
     tb_testcase = "T0. initialize";
     tb_number = 0;
-    tb_mismatch = 0;
     tb_err = 16'b0;
     tb_w_cfg_array_counter = {256{16'h0}};
     tb_w_cfg_array_random  = {256{16'hFFFF}};
@@ -858,7 +828,7 @@ module fw_ipx_wrap_tb_ip1 ();
     $display("time=%06.2f ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
     tb_number   = 610;
     // Check sm_test1_o_status_done bit is set in fw_read_status32_reg[14]:
-    if(sw_read32_1[14]==1'b1) begin
+    if(sw_read32_1[status_index_test1_done]==1'b1) begin
       $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d DONE; starting to check readout data:", $realtime(), firmware_id_1, 1, tb_test_loopback);
     end else begin
       $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d mode NOT DONE", $realtime(), firmware_id_1, 1, tb_test_loopback);
@@ -936,7 +906,7 @@ module fw_ipx_wrap_tb_ip1 ();
     $display("time=%06.2f ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
     tb_number   = 711;
     // Check sm_test1_o_status_done bit is set in fw_read_status32_reg[14]:
-    if(sw_read32_1[15]==1'b1) begin
+    if(sw_read32_1[status_index_test2_done]==1'b1) begin
       $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d DONE; starting to check readout data:", $realtime(), firmware_id_1, 2, tb_test_loopback);
     end else begin
       $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d mode NOT DONE", $realtime(), firmware_id_1, 2, tb_test_loopback);
