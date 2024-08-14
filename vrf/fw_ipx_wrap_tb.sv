@@ -622,7 +622,7 @@ module fw_ipx_wrap_tb ();
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
     tb_number   = 503;
-    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when bit#12 is set in fw_read_status32_reg[12] <= sm_test1_o_status_done;
+    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test1_o_status_done is asserted
     if(sw_read32_1[status_index_test1_done]==1'b1) begin
       $display("time=%06.2f firmware_id=%01d test1 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin
@@ -661,7 +661,7 @@ module fw_ipx_wrap_tb ();
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
     tb_number   = 603;
-    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when bit#12 is set in fw_read_status32_reg[12] <= sm_test1_o_status_done;
+    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test2_o_status_done is asserted
     if(sw_read32_1[status_index_test2_done]==1'b1) begin
       $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin
@@ -704,7 +704,7 @@ module fw_ipx_wrap_tb ();
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
     tb_number   = 703;
-    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when bit#12 is set in fw_read_status32_reg[12] <= sm_test1_o_status_done;
+    #(40*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 32+1 BXCLK cycles; alternatively check when sm_test3_o_status_done;
     if(sw_read32_1[status_index_test3_done]==1'b1) begin
       $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin
@@ -714,7 +714,7 @@ module fw_ipx_wrap_tb ();
     #(10*fw_axi_clk_period);
     tb_number   = 704;
     // READ fw_op_code_r_data_array_0
-    check_r_data_array_0_counter(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for tb_test_number==1 and tb_test_loopback==HIGH
+    check_r_data_array_0_counter(.read_n_32bit_words(4));  // readout: number of 32-bit words is 2 for tb_test_number==3 and tb_test_loopback==HIGH
     #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);

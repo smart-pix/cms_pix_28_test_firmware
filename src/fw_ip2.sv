@@ -107,6 +107,10 @@ module fw_ip2 (
   import cms_pix28_package::SHIFT_IN_0_IP2_T2;
   import cms_pix28_package::SHIFT_IN_IP2_T2;
   //
+  import cms_pix28_package::sm_test3_i_dnn_reg_cnt_max;
+  import cms_pix28_package::sm_test3_i_dnn_reg_default_0;
+  import cms_pix28_package::sm_test3_i_dnn_reg_default_1;
+
   import cms_pix28_package::state_t_sm_ip2_test3;
   import cms_pix28_package::IDLE_IP2_T3;
   import cms_pix28_package::SHIFT_IN_0_IP2_T3;
@@ -356,6 +360,8 @@ module fw_ip2 (
   logic           sm_test3_o_vin_test_trig_out;
   logic           sm_test3_o_scan_in;
   logic           sm_test3_o_scan_load;
+  logic [31:0]    sm_test3_o_dnn_output_0;
+  logic [31:0]    sm_test3_o_dnn_output_1;
   logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = 1'b0;                      // TODO to be driven by sm_test4
   logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;                      // TODO to be driven by sm_test4
   logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;                      // TODO to be driven by sm_test4
@@ -366,8 +372,8 @@ module fw_ip2 (
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT) not used in IP2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT)     used in IP2 test 1,2
-  logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // TODO to be used in IP2 test x
-  logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // TODO to be used in IP2 test x
+  logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // input signal (output from DUT)     used in IP2 test 3
+  logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // input signal (output from DUT)     used in IP2 test 3
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // TODO to be used in IP2 test x
   // State Machine Control signals from logic/configuration
   localparam logic [10 : 0]                      sm_testx_i_scanchain_reg_width = 2*scan_reg_bits_total;
@@ -467,8 +473,10 @@ module fw_ip2 (
     .test_mask_reset_not                     (test_mask_reset_not),
     .test2_enable_re                         (test3_enable_re),
     .sm_testx_i_scanchain_reg_bit0           (sm_testx_i_scanchain_reg[0]),
-    .sm_testx_i_scanchain_reg_shift_cnt      (sm_testx_i_scanchain_reg_shift_cnt),
-    .sm_testx_i_scanchain_reg_shift_cnt_max  (sm_testx_i_scanchain_reg_width),
+    .sm_testx_i_scanchain_reg_shift_cnt      (sm_testx_i_scanchain_reg_shift_cnt[7:0]),
+    .sm_testx_i_scanchain_reg_shift_cnt_max  (sm_test3_i_dnn_reg_cnt_max),
+    .sm_testx_i_dnn_output_0                 (sm_testx_i_dnn_output_0),
+    .sm_testx_i_dnn_output_1                 (sm_testx_i_dnn_output_1),
     .sm_test3_o_scanchain_reg_load           (sm_test3_o_scanchain_reg_load),
     .sm_test3_o_scanchain_reg_shift          (sm_test3_o_scanchain_reg_shift_right),
     .sm_test3_o_status_done                  (sm_test3_o_status_done),
@@ -480,7 +488,9 @@ module fw_ip2 (
     .sm_test3_o_config_load                  (sm_test3_o_config_load),
     .sm_test3_o_vin_test_trig_out            (sm_test3_o_vin_test_trig_out),
     .sm_test3_o_scan_in                      (sm_test3_o_scan_in),
-    .sm_test3_o_scan_load                    (sm_test3_o_scan_load)
+    .sm_test3_o_scan_load                    (sm_test3_o_scan_load),
+    .sm_test3_o_dnn_output_0                 (sm_test3_o_dnn_output_0),
+    .sm_test3_o_dnn_output_1                 (sm_test3_o_dnn_output_1)
   );
 
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
@@ -529,11 +539,13 @@ module fw_ip2 (
       if(sm_test3==SHIFT_IN_0_IP2_T3 | sm_test3==SHIFT_IN_IP2_T3) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
-            // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_scanchain_reg <= {sm_test3_o_scan_in,    sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg[31: 0]                                 <= sm_test3_i_dnn_reg_default_0;
+            sm_testx_o_scanchain_reg[63:32]                                 <= sm_test3_i_dnn_reg_default_1;
+            sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 64] <= {(sm_testx_i_scanchain_reg_width-64){1'b0}};
           end else begin
-            // shift-in new bit using readout-data from DUT
-            sm_testx_o_scanchain_reg <= {sm_testx_i_scan_out,   sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg[31: 0]                                 <= sm_test3_o_dnn_output_0;
+            sm_testx_o_scanchain_reg[63:32]                                 <= sm_test3_o_dnn_output_1;
+            sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 64] <= {(sm_testx_i_scanchain_reg_width-64){1'b0}};
           end
         end else begin
           // keep old value

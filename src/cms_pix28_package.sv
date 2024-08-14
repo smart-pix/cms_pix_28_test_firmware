@@ -102,7 +102,7 @@ package cms_pix28_package;
   parameter w_execute_cfg_test_spare_index_min_IP1                   = 19;     //
   parameter w_execute_cfg_test_spare_index_max_IP1                   = 22;     //
   parameter w_execute_cfg_test_mask_reset_not_index_IP1              = 23;     //
-  //
+  // IP1 TEST1
   typedef enum logic [2:0] {
     IDLE_IP1_T1        = 3'b000,
     DELAY_TEST_IP1_T1  = 3'b001,
@@ -111,7 +111,7 @@ package cms_pix28_package;
     SHIFT_IN_IP1_T1    = 3'b100,
     DONE_IP1_T1        = 3'b101
   } state_t_sm_ip1_test1;
-  //
+  // IP1 TEST2
   typedef enum logic [3:0] {
     IDLE_IP1_T2                = 4'b0000,
     DELAY_TEST_IP1_T2          = 4'b0001,
@@ -161,7 +161,7 @@ package cms_pix28_package;
   localparam w_execute_cfg_test_vin_test_trig_out_index_min_IP2      = 17;     // this field controls the position of vin_test_trig_out pulse, one bxclk_period wide, within
   localparam w_execute_cfg_test_vin_test_trig_out_index_max_IP2      = 22;     // within time-window defined by state machine sm_test2==SCANLOAD_HIGH_1_T2 + SCANLOAD_HIGH_2_T2
   localparam w_execute_cfg_test_mask_reset_not_index_IP2             = 23;     //
-  //
+  // IP2 TEST1
   typedef enum logic [2:0] {
     IDLE_IP2_T1        = 3'b000,
     DELAY_TEST_IP2_T1  = 3'b001,
@@ -170,7 +170,7 @@ package cms_pix28_package;
     SHIFT_IN_IP2_T1    = 3'b100,
     DONE_IP2_T1        = 3'b101
   } state_t_sm_ip2_test1;
-  //
+  // IP2 TEST2
   typedef enum logic [2:0] {
     IDLE_IP2_T2            = 3'b000,
     DELAY_TEST_IP2_T2      = 3'b001,
@@ -181,7 +181,10 @@ package cms_pix28_package;
     SHIFT_IN_IP2_T2        = 3'b110,
     DONE_IP2_T2            = 3'b111
   } state_t_sm_ip2_test2;
-  //
+  // IP2 TEST3
+  parameter  logic [ 7:0] sm_test3_i_dnn_reg_cnt_max   = 8'h20;                // 32-bits storage dnn_reg
+  localparam logic [31:0] sm_test3_i_dnn_reg_default_0 = 32'h12345678;         // 32-bits storage dnn_reg
+  localparam logic [31:0] sm_test3_i_dnn_reg_default_1 = 32'h9ABCDEF0;         // 32-bits storage dnn_reg
   typedef enum logic [2:0] {
     IDLE_IP2_T3            = 3'b000,
     DELAY_TEST_IP2_T3      = 3'b001,

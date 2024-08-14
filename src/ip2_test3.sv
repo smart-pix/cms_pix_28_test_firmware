@@ -26,8 +26,10 @@ module ip2_test3 (
     input  logic       test_mask_reset_not,
     input  logic       test2_enable_re,
     input  logic       sm_testx_i_scanchain_reg_bit0,
-    input  logic [10:0]sm_testx_i_scanchain_reg_shift_cnt,
-    input  logic [10:0]sm_testx_i_scanchain_reg_shift_cnt_max,
+    input  logic [7:0] sm_testx_i_scanchain_reg_shift_cnt,
+    input  logic [7:0] sm_testx_i_scanchain_reg_shift_cnt_max,
+    input  logic       sm_testx_i_dnn_output_0,
+    input  logic       sm_testx_i_dnn_output_1,
     output logic       sm_test3_o_scanchain_reg_load,
     output logic       sm_test3_o_scanchain_reg_shift,
     output logic       sm_test3_o_status_done,
@@ -39,7 +41,9 @@ module ip2_test3 (
     output logic       sm_test3_o_config_load,
     output logic       sm_test3_o_vin_test_trig_out,
     output logic       sm_test3_o_scan_in,
-    output logic       sm_test3_o_scan_load
+    output logic       sm_test3_o_scan_load,
+    output logic [31:0]sm_test3_o_dnn_output_0,
+    output logic [31:0]sm_test3_o_dnn_output_1
   );
 
   import cms_pix28_package::state_t_sm_ip2_test3;
@@ -54,6 +58,9 @@ module ip2_test3 (
   //
   import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
   import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
+  //
+  import cms_pix28_package::sm_test3_i_dnn_reg_default_0;
+  import cms_pix28_package::sm_test3_i_dnn_reg_default_1;
 
   // ------------------------------------------------------------------------------------------------------------------
   // State Machine for "test1". Test SCAN-CHAIN-MODULE as a serial-in / serial-out shift-tegister.
@@ -63,6 +70,8 @@ module ip2_test3 (
   assign sm_test3_o_config_clk        = 1'b0;       // signal not used-in / diven-by sm_test3_proc
   assign sm_test3_o_config_in         = 1'b0;       // signal not used-in / diven-by sm_test3_proc
   assign sm_test3_o_config_load       = 1'b1;       // signal not used-in / diven-by sm_test3_proc
+  assign sm_test3_o_dnn_output_0      = sm_test3_i_dnn_reg_default_1;          // TODO output port signal should be driven by state machine sm_test3_proc
+  assign sm_test3_o_dnn_output_1      = sm_test3_i_dnn_reg_default_0;          // TODO output port signal should be driven by state machine sm_test3_proc
   always @(posedge clk) begin : vin_test_trig_out_proc
     if(~enable | reset) begin
       sm_test3_o_vin_test_trig_out     <= 1'b0;
@@ -93,6 +102,8 @@ module ip2_test3 (
           sm_test3_o_scanchain_reg_load          <= 1'b0;                      //
           sm_test3_o_scanchain_reg_shift         <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
           sm_test3_o_status_done                 <= sm_test3_o_status_done;    // state machine STATUS flag
+//          sm_testx_o_dnn_output_0                <= sm_test3_i_dnn_reg_default_0;
+//          sm_testx_o_dnn_output_1                <= sm_test3_i_dnn_reg_default_1;
         end
         DELAY_TEST_IP2_T3 : begin
           // next state machine state logic
