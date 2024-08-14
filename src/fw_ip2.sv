@@ -20,6 +20,7 @@
 // 2024-07-30  Cristian Gingu         Add fw_rst_n to sm_testx_i_shift_reg_proc
 // 2024-08-08  Cristian Gingu         Factorize common module com_status32_reg.sv
 // 2024-08-08  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2024-08-14  Cristian Gingu         Add instance of ip2_test3.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -105,6 +106,11 @@ module fw_ip2 (
   import cms_pix28_package::IDLE_IP2_T2;
   import cms_pix28_package::SHIFT_IN_0_IP2_T2;
   import cms_pix28_package::SHIFT_IN_IP2_T2;
+  //
+  import cms_pix28_package::state_t_sm_ip2_test3;
+  import cms_pix28_package::IDLE_IP2_T3;
+  import cms_pix28_package::SHIFT_IN_0_IP2_T3;
+  import cms_pix28_package::SHIFT_IN_IP2_T3;
   //
   import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
   import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
@@ -233,7 +239,7 @@ module fw_ip2 (
   logic [31:0] fw_read_status32_reg;                       // 32-bit read_status from FW to SW
   logic sm_test1_o_status_done;
   logic sm_test2_o_status_done;
-  logic sm_test3_o_status_done; assign sm_test3_o_status_done = 1'b0;          // TODO to be driven by sm_test3
+  logic sm_test3_o_status_done;
   logic sm_test4_o_status_done; assign sm_test4_o_status_done = 1'b0;          // TODO to be driven by sm_test4
   logic error_w_execute_cfg;
   // Instantiate module com_status32_reg.sv
@@ -311,7 +317,7 @@ module fw_ip2 (
   // Instantiate module com_testx_decoder.sv
   logic test1_enable; logic test1_enable_re;
   logic test2_enable; logic test2_enable_re;
-  logic test3_enable; logic test3_enable_re;                                   // TODO to be used by sm_test3
+  logic test3_enable; logic test3_enable_re;
   logic test4_enable; logic test4_enable_re;                                   // TODO to be used by sm_test4
   com_testx_decoder com_testx_decoder_inst (
     .clk                     (fw_pl_clk1),                 // mapped to appropriate clock: S_AXI_ACLK or pl_clk1
@@ -343,13 +349,13 @@ module fw_ip2 (
   logic           sm_test2_o_vin_test_trig_out;
   logic           sm_test2_o_scan_in;
   logic           sm_test2_o_scan_load;
-  logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = 1'b0;                      // TODO to be driven by sm_test3
-  logic           sm_test3_o_reset_not;          assign sm_test3_o_reset_not         = 1'b0;                      // TODO to be driven by sm_test3
-  logic           sm_test3_o_config_in;          assign sm_test3_o_config_in         = 1'b0;                      // TODO to be driven by sm_test3
-  logic           sm_test3_o_config_load;        assign sm_test3_o_config_load       = 1'b0;                      // TODO to be driven by sm_test3
-  logic           sm_test3_o_vin_test_trig_out;  assign sm_test3_o_vin_test_trig_out = 1'b0;                      // TODO to be driven by sm_test3
-  logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;                      // TODO to be driven by sm_test3
-  logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = SCAN_REG_MODE_LOAD_COMP;   // TODO to be driven by sm_test3
+  logic           sm_test3_o_config_clk;
+  logic           sm_test3_o_reset_not;
+  logic           sm_test3_o_config_in;
+  logic           sm_test3_o_config_load;
+  logic           sm_test3_o_vin_test_trig_out;
+  logic           sm_test3_o_scan_in;
+  logic           sm_test3_o_scan_load;
   logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = 1'b0;                      // TODO to be driven by sm_test4
   logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;                      // TODO to be driven by sm_test4
   logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;                      // TODO to be driven by sm_test4
@@ -371,8 +377,8 @@ module fw_ip2 (
   logic                                          sm_test1_o_scanchain_reg_shift_right;   // SHIFT control for shift register; independent control by each test 1,2,3,4
   logic                                          sm_test2_o_scanchain_reg_load;
   logic                                          sm_test2_o_scanchain_reg_shift_right;
-  logic                                          sm_test3_o_scanchain_reg_load;          assign sm_test3_o_scanchain_reg_load        = 1'b0;    // TODO to be driven by sm_test3
-  logic                                          sm_test3_o_scanchain_reg_shift_right;   assign sm_test3_o_scanchain_reg_shift_right = 1'b0;    // TODO to be driven by sm_test3
+  logic                                          sm_test3_o_scanchain_reg_load;
+  logic                                          sm_test3_o_scanchain_reg_shift_right;
   logic                                          sm_test4_o_scanchain_reg_load;          assign sm_test4_o_scanchain_reg_load        = 1'b0;    // TODO to be driven by sm_test4
   logic                                          sm_test4_o_scanchain_reg_shift_right;   assign sm_test4_o_scanchain_reg_shift_right = 1'b0;    // TODO to be driven by sm_test4
   //
@@ -448,6 +454,35 @@ module fw_ip2 (
     .sm_test2_o_scan_load                    (sm_test2_o_scan_load)
   );
 
+  // State Machine for "test3": instantiate module ip2_test3.sv
+  state_t_sm_ip2_test3 sm_test3;
+  ip2_test3 ip2_test3_inst (
+    .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
+    .reset                                   (op_code_w_reset),
+    .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
+    // Control signals:
+    .clk_counter                             (fw_pl_clk1_cnt),
+    .test_delay                              (test_delay),
+    .test_trig_out_phase                     (test_trig_out_phase),
+    .test_mask_reset_not                     (test_mask_reset_not),
+    .test2_enable_re                         (test3_enable_re),
+    .sm_testx_i_scanchain_reg_bit0           (sm_testx_i_scanchain_reg[0]),
+    .sm_testx_i_scanchain_reg_shift_cnt      (sm_testx_i_scanchain_reg_shift_cnt),
+    .sm_testx_i_scanchain_reg_shift_cnt_max  (sm_testx_i_scanchain_reg_width),
+    .sm_test3_o_scanchain_reg_load           (sm_test3_o_scanchain_reg_load),
+    .sm_test3_o_scanchain_reg_shift          (sm_test3_o_scanchain_reg_shift_right),
+    .sm_test3_o_status_done                  (sm_test3_o_status_done),
+    // output ports
+    .sm_test3_state                          (sm_test3),
+    .sm_test3_o_config_clk                   (sm_test3_o_config_clk),
+    .sm_test3_o_reset_not                    (sm_test3_o_reset_not),
+    .sm_test3_o_config_in                    (sm_test3_o_config_in),
+    .sm_test3_o_config_load                  (sm_test3_o_config_load),
+    .sm_test3_o_vin_test_trig_out            (sm_test3_o_vin_test_trig_out),
+    .sm_test3_o_scan_in                      (sm_test3_o_scan_in),
+    .sm_test3_o_scan_load                    (sm_test3_o_scan_load)
+  );
+
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
   // This is State Machine for test dependent: sm_test1, sm_test2, sm_test3, sm_test4
   always @(posedge fw_pl_clk1) begin : sm_testx_o_scanchain_reg_proc
@@ -491,7 +526,23 @@ module fw_ip2 (
       end
     end else if(test3_enable) begin
       // use data specific for test case test3
-      sm_testx_o_scanchain_reg <= {sm_testx_o_scanchain_reg_width*{1'b0}};     // TODO
+      if(sm_test3==SHIFT_IN_0_IP2_T3 | sm_test3==SHIFT_IN_IP2_T3) begin
+        if(test_sample==fw_pl_clk1_cnt) begin
+          if(test_loopback) begin
+            // shift-in new bit using loop-back data from sm_test1_o_scan_in
+            sm_testx_o_scanchain_reg <= {sm_test3_o_scan_in,    sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+          end else begin
+            // shift-in new bit using readout-data from DUT
+            sm_testx_o_scanchain_reg <= {sm_testx_i_scan_out,   sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+          end
+        end else begin
+          // keep old value
+          sm_testx_o_scanchain_reg   <= sm_testx_o_scanchain_reg;
+        end
+      end else begin
+        // keep old value
+        sm_testx_o_scanchain_reg     <= sm_testx_o_scanchain_reg;
+      end
     end else if(test4_enable) begin
       // use data specific for test case test4
       sm_testx_o_scanchain_reg <= {sm_testx_o_scanchain_reg_width*{1'b0}};     // TODO
@@ -567,14 +618,19 @@ module fw_ip2 (
         end
       end else if(test2_enable) begin
         if(sm_test2!=IDLE_IP2_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
-          // inferred from state machine sm_test1 logic
+          // inferred from state machine sm_test2 logic
           error_w_execute_cfg <= 1'b1;
         end else begin
           error_w_execute_cfg <= 1'b0;
         end
       end else if(test3_enable) begin
         // use data specific for test case test3
-        error_w_execute_cfg <= 1'b0;     // TODO
+        if(sm_test3!=IDLE_IP2_T3 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+          // inferred from state machine sm_test3 logic
+          error_w_execute_cfg <= 1'b1;
+        end else begin
+          error_w_execute_cfg <= 1'b0;
+        end
       end else if(test4_enable) begin
         // use data specific for test case test4
         error_w_execute_cfg <= 1'b0;     // TODO

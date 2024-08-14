@@ -182,6 +182,17 @@ package cms_pix28_package;
     DONE_IP2_T2            = 3'b111
   } state_t_sm_ip2_test2;
   //
+  typedef enum logic [2:0] {
+    IDLE_IP2_T3            = 3'b000,
+    DELAY_TEST_IP2_T3      = 3'b001,
+    RESET_NOT_IP2_T3       = 3'b010,
+    SCANLOAD_HIGH_1_IP2_T3 = 3'b011,
+    SCANLOAD_HIGH_2_IP2_T3 = 3'b100,
+    SHIFT_IN_0_IP2_T3      = 3'b101,
+    SHIFT_IN_IP2_T3        = 3'b110,
+    DONE_IP2_T3            = 3'b111
+  } state_t_sm_ip2_test3;
+  //
   // Define enumerated type scan_chain_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
   typedef enum logic {
     SHIFT_REG_IP2 = 1'b0,
