@@ -696,7 +696,7 @@ module fw_ipx_wrap_tb ();
     w_cfg_static_fixed(.index(0));
     tb_number   = 702;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    tb_test_delay            = 6'h06;                      // on clock domain fw_axi_clk
+    tb_test_delay            = 6'h05;                      // on clock domain fw_axi_clk
     tb_test_sample           = 6'h06;                      // on clock domain fw_axi_clk
     tb_test_number           = test_number_3;              // on clock domain fw_axi_clk
     tb_test_loopback         = 1'b0;                       // on clock domain fw_axi_clk
@@ -704,7 +704,7 @@ module fw_ipx_wrap_tb ();
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
     tb_number   = 703;
-    #(40*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 32+1 BXCLK cycles; alternatively check when sm_test3_o_status_done;
+    #(5*tb_bxclk_period*fw_pl_clk1_period);                // execution: wait for at least 3 BXCLK cycles; alternatively check when sm_test3_o_status_done;
     if(sw_read32_1[status_index_test3_done]==1'b1) begin
       $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin

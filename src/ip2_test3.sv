@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-08-14  Cristian  Gingu        Created
+// 2024-08-15  Cristian  Gingu        Update state machine
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test3__
 `define __ip2_test3__
@@ -25,9 +26,6 @@ module ip2_test3 (
     input  logic [5:0] test_trig_out_phase,
     input  logic       test_mask_reset_not,
     input  logic       test2_enable_re,
-    input  logic       sm_testx_i_scanchain_reg_bit0,
-    input  logic [7:0] sm_testx_i_scanchain_reg_shift_cnt,
-    input  logic [7:0] sm_testx_i_scanchain_reg_shift_cnt_max,
     input  logic       sm_testx_i_dnn_output_0,
     input  logic       sm_testx_i_dnn_output_1,
     output logic       sm_test3_o_scanchain_reg_load,
@@ -42,18 +40,16 @@ module ip2_test3 (
     output logic       sm_test3_o_vin_test_trig_out,
     output logic       sm_test3_o_scan_in,
     output logic       sm_test3_o_scan_load,
-    output logic [31:0]sm_test3_o_dnn_output_0,
-    output logic [31:0]sm_test3_o_dnn_output_1
+    output logic [47:0]sm_test3_o_dnn_output_0,
+    output logic [47:0]sm_test3_o_dnn_output_1
   );
 
   import cms_pix28_package::state_t_sm_ip2_test3;
   import cms_pix28_package::IDLE_IP2_T3;
   import cms_pix28_package::DELAY_TEST_IP2_T3;
   import cms_pix28_package::RESET_NOT_IP2_T3;
-  import cms_pix28_package::SCANLOAD_HIGH_1_IP2_T3;
-  import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T3;
-  import cms_pix28_package::SHIFT_IN_0_IP2_T3;
-  import cms_pix28_package::SHIFT_IN_IP2_T3;
+  import cms_pix28_package::ACQUIRE_1_IP2_T3;
+  import cms_pix28_package::ACQUIRE_2_IP2_T3;
   import cms_pix28_package::DONE_IP2_T3;
   //
   import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
@@ -67,18 +63,25 @@ module ip2_test3 (
   state_t_sm_ip2_test3    sm_test3;
   assign sm_test3_state = sm_test3;
   //
+  logic [47:0] sm_test3_o_dnn_reg_0;   // 400MHz clock register storing 32 consecutive values of DUT output signal sm_testx_i_dnn_output_0
+  logic [47:0] sm_test3_o_dnn_reg_1;   // 400MHz clock register storing 32 consecutive values of DUT output signal sm_testx_i_dnn_output_1
+  //
   assign sm_test3_o_config_clk        = 1'b0;       // signal not used-in / diven-by sm_test3_proc
   assign sm_test3_o_config_in         = 1'b0;       // signal not used-in / diven-by sm_test3_proc
   assign sm_test3_o_config_load       = 1'b1;       // signal not used-in / diven-by sm_test3_proc
-  assign sm_test3_o_dnn_output_0      = sm_test3_i_dnn_reg_default_1;          // TODO output port signal should be driven by state machine sm_test3_proc
-  assign sm_test3_o_dnn_output_1      = sm_test3_i_dnn_reg_default_0;          // TODO output port signal should be driven by state machine sm_test3_proc
+  assign sm_test3_o_dnn_output_0        = sm_test3_o_dnn_reg_0;                // signal is driven by state machine sm_test3_proc
+  assign sm_test3_o_dnn_output_1        = sm_test3_o_dnn_reg_1;                // signal is driven by state machine sm_test3_proc
+  assign sm_test3_o_scan_in             = 1'b0;                                // signal not used-in / diven-by sm_test3_proc
+  assign sm_test3_o_scan_load           = SCAN_REG_MODE_LOAD_COMP;             // signal not used-in / diven-by sm_test3_proc
+  assign sm_test3_o_scanchain_reg_load  = 1'b0;                                // signal not used-in / diven-by sm_test3_proc
+  assign sm_test3_o_scanchain_reg_shift = 1'b0;                                // signal not used-in / diven-by sm_test3_proc
   always @(posedge clk) begin : vin_test_trig_out_proc
     if(~enable | reset) begin
       sm_test3_o_vin_test_trig_out     <= 1'b0;
     end else begin
-      if(sm_test3==SCANLOAD_HIGH_1_IP2_T3 && clk_counter==test_trig_out_phase) begin
+      if(sm_test3==ACQUIRE_1_IP2_T3 && clk_counter==test_trig_out_phase) begin
         sm_test3_o_vin_test_trig_out   <= 1'b1;
-      end else if(sm_test3==SCANLOAD_HIGH_2_IP2_T3 && clk_counter==test_trig_out_phase) begin
+      end else if(sm_test3==ACQUIRE_2_IP2_T3 && clk_counter==test_trig_out_phase) begin
         sm_test3_o_vin_test_trig_out   <= 1'b0;
       end
     end
@@ -97,13 +100,14 @@ module ip2_test3 (
           end
           // output state machine signal assignment
           sm_test3_o_reset_not                   <= 1'b1;                      // active  LOW signal; default is inactive
-          sm_test3_o_scan_in                     <= 1'b0;                      // arbitrary chosen default LOW
-          sm_test3_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;   // scan-chain-mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
-          sm_test3_o_scanchain_reg_load          <= 1'b0;                      //
-          sm_test3_o_scanchain_reg_shift         <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
           sm_test3_o_status_done                 <= sm_test3_o_status_done;    // state machine STATUS flag
-//          sm_testx_o_dnn_output_0                <= sm_test3_i_dnn_reg_default_0;
-//          sm_testx_o_dnn_output_1                <= sm_test3_i_dnn_reg_default_1;
+          if(test2_enable_re) begin
+            sm_test3_o_dnn_reg_0                   <= 48'h0;                   //
+            sm_test3_o_dnn_reg_1                   <= 48'h0;
+          end else begin
+            sm_test3_o_dnn_reg_0                   <= sm_test3_o_dnn_reg_0;
+            sm_test3_o_dnn_reg_1                   <= sm_test3_o_dnn_reg_1;
+          end
         end
         DELAY_TEST_IP2_T3 : begin
           // next state machine state logic
@@ -119,135 +123,69 @@ module ip2_test3 (
             end else begin
               sm_test3_o_reset_not               <= 1'b0;
             end
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
           end else begin
             sm_test3_o_reset_not                 <= 1'b1;
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
           end
-          sm_test3_o_scan_in                     <= 1'b0;
-          sm_test3_o_scanchain_reg_load          <= 1'b1;
-          sm_test3_o_scanchain_reg_shift         <= 1'b0;
           sm_test3_o_status_done                 <= 1'b0;
+          sm_test3_o_dnn_reg_0                   <= {sm_test3_o_dnn_reg_0[46:0], sm_testx_i_dnn_output_0};
+          sm_test3_o_dnn_reg_1                   <= {sm_test3_o_dnn_reg_1[46:0], sm_testx_i_dnn_output_1};
         end
         RESET_NOT_IP2_T3 : begin
           // next state machine state logic
           if(test_delay==clk_counter) begin
-            sm_test3 <= SCANLOAD_HIGH_1_IP2_T3;
+            sm_test3 <= ACQUIRE_1_IP2_T3;
           end else begin
             sm_test3 <= RESET_NOT_IP2_T3;
           end
           // output state machine signal assignment
           if(test_delay==clk_counter) begin
             sm_test3_o_reset_not                 <= 1'b1;
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
           end else begin
             if(test_mask_reset_not==1'b1) begin
               sm_test3_o_reset_not               <= 1'b1;
             end else begin
               sm_test3_o_reset_not               <= 1'b0;
             end
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
           end
-          sm_test3_o_scan_in                     <= 1'b0;
-          sm_test3_o_scanchain_reg_load          <= 1'b0;
-          sm_test3_o_scanchain_reg_shift         <= 1'b0;
           sm_test3_o_status_done                 <= 1'b0;
+          sm_test3_o_dnn_reg_0                   <= {sm_test3_o_dnn_reg_0[46:0], sm_testx_i_dnn_output_0};
+          sm_test3_o_dnn_reg_1                   <= {sm_test3_o_dnn_reg_1[46:0], sm_testx_i_dnn_output_1};
         end
         //
-        SCANLOAD_HIGH_1_IP2_T3 : begin
+        ACQUIRE_1_IP2_T3 : begin
           // next state machine state logic
           if(test_delay==clk_counter) begin
-            sm_test3 <= SCANLOAD_HIGH_2_IP2_T3;
+            sm_test3 <= ACQUIRE_2_IP2_T3;
           end else begin
-            sm_test3 <= SCANLOAD_HIGH_1_IP2_T3;
+            sm_test3 <= ACQUIRE_1_IP2_T3;
           end
           // output state machine signal assignment
           sm_test3_o_reset_not                   <= 1'b1;
-          sm_test3_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;
-          sm_test3_o_scan_in                     <= 1'b0;
-          sm_test3_o_scanchain_reg_load          <= 1'b0;
-          sm_test3_o_scanchain_reg_shift         <= 1'b0;
           sm_test3_o_status_done                 <= 1'b0;
+          sm_test3_o_dnn_reg_0                   <= {sm_test3_o_dnn_reg_0[46:0], sm_testx_i_dnn_output_0};
+          sm_test3_o_dnn_reg_1                   <= {sm_test3_o_dnn_reg_1[46:0], sm_testx_i_dnn_output_1};
         end
-        SCANLOAD_HIGH_2_IP2_T3 : begin
+        ACQUIRE_2_IP2_T3 : begin
           // next state machine state logic
           if(test_delay==clk_counter) begin
-            sm_test3 <= SHIFT_IN_0_IP2_T3;
-          end else begin
-            sm_test3 <= SCANLOAD_HIGH_2_IP2_T3;
-          end
-          if(test_delay==clk_counter) begin
-            sm_test3_o_scan_in                   <= sm_testx_i_scanchain_reg_bit0;
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-          end else begin
-            sm_test3_o_scan_in                   <= 1'b0;
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
-          end
-          // output state machine signal assignment
-          sm_test3_o_reset_not                   <= 1'b1;
-          sm_test3_o_scanchain_reg_load          <= 1'b0;
-          sm_test3_o_scanchain_reg_shift         <= 1'b0;
-          sm_test3_o_status_done                 <= 1'b0;
-        end
-        //
-        SHIFT_IN_0_IP2_T3 : begin
-          // next state machine state logic
-          if(test_delay==clk_counter) begin
-            sm_test3 <= SHIFT_IN_IP2_T3;
-          end else begin
-            sm_test3 <= SHIFT_IN_0_IP2_T3;
-          end
-          // output state machine signal assignment
-          if(test_delay-2==clk_counter) begin
-            // latency sm_test3_o_scanchain_reg_shift to sm_testx_i_scanchain_reg is TWO clk clocks:
-            // * one clk latency due to this process for asserting signal sm_test3_o_scanchain_reg_shift
-            // * one clk latency due to process sm_testx_i_scanchain_reg_proc to execute the shift-right
-            sm_test3_o_scanchain_reg_shift       <= 1'b1;
-          end else begin
-            sm_test3_o_scanchain_reg_shift       <= 1'b0;
-          end
-          sm_test3_o_reset_not                   <= 1'b1;
-          sm_test3_o_scan_in                     <= sm_testx_i_scanchain_reg_bit0;
-          sm_test3_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
-          sm_test3_o_scanchain_reg_load          <= 1'b0;
-          sm_test3_o_status_done                 <= 1'b0;
-        end
-        SHIFT_IN_IP2_T3 : begin
-          // next state machine state logic
-          if(sm_testx_i_scanchain_reg_shift_cnt==sm_testx_i_scanchain_reg_shift_cnt_max) begin
-            // done shifting all 768 bits;
             sm_test3 <= DONE_IP2_T3;
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
-            sm_test3_o_status_done               <= 1'b1;
           end else begin
-            // continue shifting
-            sm_test3 <= SHIFT_IN_IP2_T3;
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-            sm_test3_o_status_done               <= 1'b0;
+            sm_test3 <= ACQUIRE_2_IP2_T3;
           end
           // output state machine signal assignment
-          if(test_delay-2==clk_counter) begin
-            // latency sm_test3_o_scanchain_reg_shift to sm_testx_i_scanchain_reg is TWO clk clocks:
-            // * one clk latency due to this process for asserting signal sm_test3_o_scanchain_reg_shift
-            // * one clk latency due to process sm_testx_i_scanchain_reg_proc to execute the shift-right
-            sm_test3_o_scanchain_reg_shift       <= 1'b1;
-          end else begin
-            sm_test3_o_scanchain_reg_shift       <= 1'b0;
-          end
           sm_test3_o_reset_not                   <= 1'b1;
-          sm_test3_o_scan_in                     <= sm_testx_i_scanchain_reg_bit0;
-          sm_test3_o_scanchain_reg_load          <= 1'b0;
+          sm_test3_o_status_done                 <= 1'b0;
+          sm_test3_o_dnn_reg_0                   <= {sm_test3_o_dnn_reg_0[46:0], sm_testx_i_dnn_output_0};
+          sm_test3_o_dnn_reg_1                   <= {sm_test3_o_dnn_reg_1[46:0], sm_testx_i_dnn_output_1};
         end
         DONE_IP2_T3 : begin
           // next state machine state logic
           sm_test3 <= IDLE_IP2_T3;
           // output state machine signal assignment
           sm_test3_o_reset_not                   <= 1'b1;
-          sm_test3_o_scan_in                     <= 1'b0;
-          sm_test3_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;
-          sm_test3_o_scanchain_reg_load          <= 1'b0;
-          sm_test3_o_scanchain_reg_shift         <= 1'b0;
           sm_test3_o_status_done                 <= 1'b1;
+          sm_test3_o_dnn_reg_0                   <= sm_test3_o_dnn_reg_0;
+          sm_test3_o_dnn_reg_1                   <= sm_test3_o_dnn_reg_1;
         end
         default : begin
           sm_test3 <= IDLE_IP2_T3;

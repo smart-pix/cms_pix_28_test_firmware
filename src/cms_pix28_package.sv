@@ -182,18 +182,15 @@ package cms_pix28_package;
     DONE_IP2_T2            = 3'b111
   } state_t_sm_ip2_test2;
   // IP2 TEST3
-  parameter  logic [ 7:0] sm_test3_i_dnn_reg_cnt_max   = 8'h20;                // 32-bits storage dnn_reg
-  localparam logic [31:0] sm_test3_i_dnn_reg_default_0 = 32'h12345678;         // 32-bits storage dnn_reg
-  localparam logic [31:0] sm_test3_i_dnn_reg_default_1 = 32'h9ABCDEF0;         // 32-bits storage dnn_reg
+  localparam logic [47:0] sm_test3_i_dnn_reg_default_0 = 48'h123456789ABC;         // 48-bits storage dnn_reg
+  localparam logic [47:0] sm_test3_i_dnn_reg_default_1 = 48'hDEF012345678;         // 482-bits storage dnn_reg
   typedef enum logic [2:0] {
     IDLE_IP2_T3            = 3'b000,
     DELAY_TEST_IP2_T3      = 3'b001,
     RESET_NOT_IP2_T3       = 3'b010,
-    SCANLOAD_HIGH_1_IP2_T3 = 3'b011,
-    SCANLOAD_HIGH_2_IP2_T3 = 3'b100,
-    SHIFT_IN_0_IP2_T3      = 3'b101,
-    SHIFT_IN_IP2_T3        = 3'b110,
-    DONE_IP2_T3            = 3'b111
+    ACQUIRE_1_IP2_T3       = 3'b011,
+    ACQUIRE_2_IP2_T3       = 3'b100,
+    DONE_IP2_T3            = 3'b101
   } state_t_sm_ip2_test3;
   //
   // Define enumerated type scan_chain_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
