@@ -107,9 +107,8 @@ module fw_ip2 (
   import cms_pix28_package::SHIFT_IN_0_IP2_T2;
   import cms_pix28_package::SHIFT_IN_IP2_T2;
   //
-  import cms_pix28_package::sm_test3_i_dnn_reg_default_0;
-  import cms_pix28_package::sm_test3_i_dnn_reg_default_1;
-
+  import cms_pix28_package::dnn_reg_0_default;
+  import cms_pix28_package::dnn_reg_1_default;
   import cms_pix28_package::state_t_sm_ip2_test3;
   import cms_pix28_package::IDLE_IP2_T3;
   import cms_pix28_package::DONE_IP2_T3;
@@ -534,14 +533,14 @@ module fw_ip2 (
       if(sm_test3==DONE_IP2_T3) begin
         if(test_loopback) begin
           // overwrite with hard-coded default value - set it non-zero for debug purpose
-          sm_testx_o_scanchain_reg[47: 0]                                 <= sm_test3_i_dnn_reg_default_0;
-          sm_testx_o_scanchain_reg[95:48]                                 <= sm_test3_i_dnn_reg_default_1;
-          sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 64] <= {(sm_testx_i_scanchain_reg_width-64){1'b0}};
+          sm_testx_o_scanchain_reg[47: 0]                                 <= dnn_reg_0_default;
+          sm_testx_o_scanchain_reg[95:48]                                 <= dnn_reg_1_default;
+          sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 96] <= {(sm_testx_i_scanchain_reg_width-96){1'b0}};
         end else begin
           // overwrite with dnn_output_0/1 data coming from sm_test3
           sm_testx_o_scanchain_reg[47: 0]                                 <= sm_test3_o_dnn_output_0;
           sm_testx_o_scanchain_reg[95:48]                                 <= sm_test3_o_dnn_output_1;
-          sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 64] <= {(sm_testx_i_scanchain_reg_width-64){1'b0}};
+          sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 96] <= {(sm_testx_i_scanchain_reg_width-96){1'b0}};
         end
       end else begin
         // keep old value

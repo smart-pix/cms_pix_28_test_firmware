@@ -182,8 +182,8 @@ package cms_pix28_package;
     DONE_IP2_T2            = 3'b111
   } state_t_sm_ip2_test2;
   // IP2 TEST3
-  localparam logic [47:0] sm_test3_i_dnn_reg_default_0 = 48'h123456789ABC;         // 48-bits storage dnn_reg
-  localparam logic [47:0] sm_test3_i_dnn_reg_default_1 = 48'hDEF012345678;         // 482-bits storage dnn_reg
+  localparam logic [47:0] dnn_reg_0_default = 48'h123456789ABC;         // default value for 48-bits storage dnn_reg_0
+  localparam logic [47:0] dnn_reg_1_default = 48'hDEF0FEDCBA98;         // default value for 48-bits storage dnn_reg_1
   typedef enum logic [2:0] {
     IDLE_IP2_T3            = 3'b000,
     DELAY_TEST_IP2_T3      = 3'b001,

@@ -54,17 +54,14 @@ module ip2_test3 (
   //
   import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
   import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
-  //
-  import cms_pix28_package::sm_test3_i_dnn_reg_default_0;
-  import cms_pix28_package::sm_test3_i_dnn_reg_default_1;
 
   // ------------------------------------------------------------------------------------------------------------------
   // State Machine for "test1". Test SCAN-CHAIN-MODULE as a serial-in / serial-out shift-tegister.
   state_t_sm_ip2_test3    sm_test3;
   assign sm_test3_state = sm_test3;
   //
-  logic [47:0] sm_test3_o_dnn_reg_0;   // 400MHz clock register storing 32 consecutive values of DUT output signal sm_testx_i_dnn_output_0
-  logic [47:0] sm_test3_o_dnn_reg_1;   // 400MHz clock register storing 32 consecutive values of DUT output signal sm_testx_i_dnn_output_1
+  logic [47:0] sm_test3_o_dnn_reg_0;   // 400MHz clock register storing 48 consecutive values of DUT output signal sm_testx_i_dnn_output_0
+  logic [47:0] sm_test3_o_dnn_reg_1;   // 400MHz clock register storing 48 consecutive values of DUT output signal sm_testx_i_dnn_output_1
   //
   assign sm_test3_o_config_clk        = 1'b0;       // signal not used-in / diven-by sm_test3_proc
   assign sm_test3_o_config_in         = 1'b0;       // signal not used-in / diven-by sm_test3_proc
