@@ -242,6 +242,13 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/../src/ip2_test3.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/../submodules/spacely-caribou-common-blocks/axi4lite_interface/mem_regs.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
