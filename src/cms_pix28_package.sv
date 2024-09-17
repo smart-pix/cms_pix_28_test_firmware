@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-08-06  Cristian  Gingu        Created
+// 2024-09-17  Cristian  Gingu        add w_cfg_static_0_reg_scan_load_delay_index_min/max_IP2
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -147,8 +148,10 @@ package cms_pix28_package;
   // LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.            fw_bxclk_ana_ff
   // LL.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.      fw_bxclk_ff when bxclk_delay_sign==0 and bxclk_delay==2
   // LL.LL.LL.LL.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.                  fw_bxclk_ff when bxclk_delay_sign==1 and bxclk_delay==2
-  localparam w_cfg_static_0_reg_super_pix_sel_index_IP2              = 12;
-  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 13;     //
+  localparam w_cfg_static_0_reg_super_pix_sel_index_IP2              = 12;     //
+  localparam w_cfg_static_0_reg_scan_load_delay_index_min_IP2        = 13;     //
+  localparam w_cfg_static_0_reg_scan_load_delay_index_max_IP2        = 18;     //
+  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 19;     //
   localparam w_cfg_static_0_reg_spare_index_max_IP2                  = 23;     //
   //
   localparam w_execute_cfg_test_delay_index_min_IP2                  =  0;     //
@@ -171,15 +174,18 @@ package cms_pix28_package;
     DONE_IP2_T1        = 3'b101
   } state_t_sm_ip2_test1;
   // IP2 TEST2
-  typedef enum logic [2:0] {
-    IDLE_IP2_T2            = 3'b000,
-    DELAY_TEST_IP2_T2      = 3'b001,
-    RESET_NOT_IP2_T2       = 3'b010,
-    SCANLOAD_HIGH_1_IP2_T2 = 3'b011,
-    SCANLOAD_HIGH_2_IP2_T2 = 3'b100,
-    SHIFT_IN_0_IP2_T2      = 3'b101,
-    SHIFT_IN_IP2_T2        = 3'b110,
-    DONE_IP2_T2            = 3'b111
+  typedef enum logic [3:0] {
+    IDLE_IP2_T2            = 4'b0000,
+    DELAY_TEST_IP2_T2      = 4'b0001,
+    RESET_NOT_IP2_T2       = 4'b0010,
+    TRIGOUT_HIGH_1_IP2_T2  = 4'b0011,
+    TRIGOUT_HIGH_2_IP2_T2  = 4'b0100,
+    DELAY_SCANLOAD_IP2_T2  = 4'b0101,
+    SCANLOAD_HIGH_1_IP2_T2 = 4'b0110,
+    SCANLOAD_HIGH_2_IP2_T2 = 4'b0111,
+    SHIFT_IN_0_IP2_T2      = 4'b1000,
+    SHIFT_IN_IP2_T2        = 4'b1001,
+    DONE_IP2_T2            = 4'b1010
   } state_t_sm_ip2_test2;
   // IP2 TEST3
   localparam logic [47:0] dnn_reg_0_default = 48'h123456789ABC;         // default value for 48-bits storage dnn_reg_0

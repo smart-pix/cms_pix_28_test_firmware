@@ -13,6 +13,7 @@
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
 // 2024-08-08  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2024-09-17  Cristian Gingu         Change scan_load to delayed version; use in ip2_test2; add 6-bit w_cfg_static_0 scan_load_delay
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test2__
 `define __ip2_test2__
@@ -25,6 +26,7 @@ module ip2_test2 (
     input  logic       enable,                             // up to 15 FW can be connected
     // Control signals:
     input  logic [5:0] clk_counter,
+    input  logic [5:0] scan_load_delay,
     input  logic [5:0] test_delay,
     input  logic [5:0] test_trig_out_phase,
     input  logic       test_mask_reset_not,
@@ -50,6 +52,9 @@ module ip2_test2 (
   import cms_pix28_package::IDLE_IP2_T2;
   import cms_pix28_package::DELAY_TEST_IP2_T2;
   import cms_pix28_package::RESET_NOT_IP2_T2;
+  import cms_pix28_package::TRIGOUT_HIGH_1_IP2_T2;
+  import cms_pix28_package::TRIGOUT_HIGH_2_IP2_T2;
+  import cms_pix28_package::DELAY_SCANLOAD_IP2_T2;
   import cms_pix28_package::SCANLOAD_HIGH_1_IP2_T2;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T2;
   import cms_pix28_package::SHIFT_IN_0_IP2_T2;
@@ -60,7 +65,8 @@ module ip2_test2 (
   import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
 
   // ------------------------------------------------------------------------------------------------------------------
-  // State Machine for "test1". Test SCAN-CHAIN-MODULE as a serial-in / serial-out shift-tegister.
+  // State Machine for "test2". Test SCAN-CHAIN-MODULE as a serial-in / serial-out shift-tegister.
+  logic [5:0]             sm_scan_load_delay_cnt;
   state_t_sm_ip2_test2    sm_test2;
   assign sm_test2_state = sm_test2;
   //
@@ -71,13 +77,14 @@ module ip2_test2 (
     if(~enable | reset) begin
       sm_test2_o_vin_test_trig_out     <= 1'b0;
     end else begin
-      if(sm_test2==SCANLOAD_HIGH_1_IP2_T2 && clk_counter==test_trig_out_phase) begin
+      if(sm_test2==TRIGOUT_HIGH_1_IP2_T2 && clk_counter==test_trig_out_phase) begin
         sm_test2_o_vin_test_trig_out   <= 1'b1;
-      end else if(sm_test2==SCANLOAD_HIGH_2_IP2_T2 && clk_counter==test_trig_out_phase) begin
+      end else if(sm_test2==TRIGOUT_HIGH_2_IP2_T2 && clk_counter==test_trig_out_phase) begin
         sm_test2_o_vin_test_trig_out   <= 1'b0;
       end
     end
   end
+
   always @(posedge clk) begin : sm_test2_proc
     if(~enable | reset) begin
       sm_test2 <= IDLE_IP2_T2;
@@ -97,6 +104,8 @@ module ip2_test2 (
           sm_test2_o_scanchain_reg_load          <= 1'b0;                      //
           sm_test2_o_scanchain_reg_shift         <= 1'b0;                      // LOW==do-not-shift, HIGH==do-shift-right
           sm_test2_o_status_done                 <= sm_test2_o_status_done;    // state machine STATUS flag
+          // internal state machine signal assignment
+          sm_scan_load_delay_cnt                 <= 6'b0;
         end
         DELAY_TEST_IP2_T2 : begin
           // next state machine state logic
@@ -121,30 +130,105 @@ module ip2_test2 (
           sm_test2_o_scanchain_reg_load          <= 1'b1;
           sm_test2_o_scanchain_reg_shift         <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
+          // internal state machine signal assignment
+          sm_scan_load_delay_cnt                 <= 6'b0;
         end
         RESET_NOT_IP2_T2 : begin
           // next state machine state logic
           if(test_delay==clk_counter) begin
-            sm_test2 <= SCANLOAD_HIGH_1_IP2_T2;
+            sm_test2 <= TRIGOUT_HIGH_1_IP2_T2;
           end else begin
             sm_test2 <= RESET_NOT_IP2_T2;
           end
           // output state machine signal assignment
           if(test_delay==clk_counter) begin
             sm_test2_o_reset_not                 <= 1'b1;
-            sm_test2_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
           end else begin
             if(test_mask_reset_not==1'b1) begin
               sm_test2_o_reset_not               <= 1'b1;
             end else begin
               sm_test2_o_reset_not               <= 1'b0;
             end
-            sm_test2_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
           end
+          sm_test2_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
           sm_test2_o_scan_in                     <= 1'b0;
           sm_test2_o_scanchain_reg_load          <= 1'b0;
           sm_test2_o_scanchain_reg_shift         <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
+          // internal state machine signal assignment
+          sm_scan_load_delay_cnt                 <= 6'b0;
+        end
+        //
+        TRIGOUT_HIGH_1_IP2_T2 : begin
+          // next state machine state logic
+          if(test_delay==clk_counter) begin
+            sm_test2 <= TRIGOUT_HIGH_2_IP2_T2;
+          end else begin
+            sm_test2 <= TRIGOUT_HIGH_1_IP2_T2;
+          end
+          // output state machine signal assignment
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
+          sm_test2_o_scan_in                     <= 1'b0;
+          sm_test2_o_scanchain_reg_load          <= 1'b0;
+          sm_test2_o_scanchain_reg_shift         <= 1'b0;
+          sm_test2_o_status_done                 <= 1'b0;
+          // internal state machine signal assignment
+          sm_scan_load_delay_cnt                 <= 6'b0;
+        end
+        TRIGOUT_HIGH_2_IP2_T2 : begin
+          // next state machine state logic
+          if(test_delay==clk_counter) begin
+            if(scan_load_delay==0) begin
+              sm_test2 <= SCANLOAD_HIGH_1_IP2_T2;
+            end else begin
+              sm_test2 <= DELAY_SCANLOAD_IP2_T2;
+            end
+          end else begin
+            sm_test2 <= TRIGOUT_HIGH_2_IP2_T2;
+          end
+          // output state machine signal assignment
+          if((test_delay==clk_counter) && (scan_load_delay==0)) begin
+            sm_test2_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
+          end else begin
+            sm_test2_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
+          end
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_scan_in                     <= 1'b0;
+          sm_test2_o_scanchain_reg_load          <= 1'b0;
+          sm_test2_o_scanchain_reg_shift         <= 1'b0;
+          sm_test2_o_status_done                 <= 1'b0;
+          // internal state machine signal assignment
+          if(test_delay==clk_counter) begin
+            sm_scan_load_delay_cnt               <= sm_scan_load_delay_cnt + 1;
+          end else begin
+            sm_scan_load_delay_cnt               <= sm_scan_load_delay_cnt;
+          end
+        end
+        //
+        DELAY_SCANLOAD_IP2_T2 : begin
+          // next state machine state logic
+          if((test_delay==clk_counter) && (scan_load_delay==sm_scan_load_delay_cnt)) begin
+            sm_test2 <= SCANLOAD_HIGH_1_IP2_T2;
+          end else begin
+            sm_test2 <= DELAY_SCANLOAD_IP2_T2;
+          end
+          // output state machine signal assignment
+          if((test_delay==clk_counter) && (scan_load_delay==sm_scan_load_delay_cnt)) begin
+            sm_test2_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
+          end else begin
+            sm_test2_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
+          end
+          sm_test2_o_reset_not                   <= 1'b1;
+          sm_test2_o_scan_in                     <= 1'b0;
+          sm_test2_o_scanchain_reg_load          <= 1'b0;
+          sm_test2_o_scanchain_reg_shift         <= 1'b0;
+          sm_test2_o_status_done                 <= 1'b0;
+          if(test_delay==clk_counter) begin
+            sm_scan_load_delay_cnt               <= sm_scan_load_delay_cnt + 1;
+          end else begin
+            sm_scan_load_delay_cnt               <= sm_scan_load_delay_cnt;
+          end
         end
         //
         SCANLOAD_HIGH_1_IP2_T2 : begin
@@ -161,6 +245,8 @@ module ip2_test2 (
           sm_test2_o_scanchain_reg_load          <= 1'b0;
           sm_test2_o_scanchain_reg_shift         <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
+          // internal state machine signal assignment
+          sm_scan_load_delay_cnt                 <= 6'b0;
         end
         SCANLOAD_HIGH_2_IP2_T2 : begin
           // next state machine state logic
@@ -181,6 +267,8 @@ module ip2_test2 (
           sm_test2_o_scanchain_reg_load          <= 1'b0;
           sm_test2_o_scanchain_reg_shift         <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
+          // internal state machine signal assignment
+          sm_scan_load_delay_cnt                 <= 6'b0;
         end
         //
         SHIFT_IN_0_IP2_T2 : begin

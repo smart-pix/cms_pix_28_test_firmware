@@ -21,6 +21,7 @@
 // 2024-08-08  Cristian Gingu         Factorize common module com_status32_reg.sv
 // 2024-08-08  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-08-14  Cristian Gingu         Add instance of ip2_test3.sv
+// 2024-09-17  Cristian Gingu         Change scan_load to delayed version; use in ip2_test2; add 6-bit w_cfg_static_0 scan_load_delay
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -82,7 +83,9 @@ module fw_ip2 (
   // LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.            fw_bxclk_ana_ff
   // LL.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.      fw_bxclk_ff when bxclk_delay_sign==0 and bxclk_delay==2
   // LL.LL.LL.LL.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.                  fw_bxclk_ff when bxclk_delay_sign==1 and bxclk_delay==2
-  import cms_pix28_package::w_cfg_static_0_reg_super_pix_sel_index_IP2;
+  import cms_pix28_package::w_cfg_static_0_reg_super_pix_sel_index_IP2;        //
+  import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_index_min_IP2;  //
+  import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_index_max_IP2;  //
   import cms_pix28_package::w_cfg_static_0_reg_spare_index_min_IP2;            //
   import cms_pix28_package::w_cfg_static_0_reg_spare_index_max_IP2;            //
   //
@@ -278,10 +281,12 @@ module fw_ip2 (
   logic [4:0] bxclk_delay;                                 // on clock domain fw_axi_clk
   logic       bxclk_delay_sign;                            // on clock domain fw_axi_clk
   logic       super_pixel_sel;                             // on clock domain fw_axi_clk
-  assign bxclk_period     = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_period_index_max_IP2 : w_cfg_static_0_reg_bxclk_period_index_min_IP2];
-  assign bxclk_delay      = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_index_max_IP2  : w_cfg_static_0_reg_bxclk_delay_index_min_IP2 ];
-  assign bxclk_delay_sign = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_sign_index_IP2                                                ];
-  assign super_pixel_sel  = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index_IP2                                                   ];
+  logic [5:0] scan_load_delay;                             // on clock domain fw_axi_clk
+  assign bxclk_period       = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_period_index_max_IP2    : w_cfg_static_0_reg_bxclk_period_index_min_IP2   ];
+  assign bxclk_delay        = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_index_max_IP2     : w_cfg_static_0_reg_bxclk_delay_index_min_IP2    ];
+  assign bxclk_delay_sign   = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_sign_index_IP2                                                      ];
+  assign super_pixel_sel    = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index_IP2                                                         ];
+  assign scan_load_delay    = w_cfg_static_0_reg[w_cfg_static_0_reg_scan_load_delay_index_max_IP2 : w_cfg_static_0_reg_scan_load_delay_index_min_IP2];
 
   // Instantiate module bxclks_generators.sv
   logic [5:0] fw_pl_clk1_cnt;
@@ -436,6 +441,7 @@ module fw_ip2 (
     .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
     // Control signals:
     .clk_counter                             (fw_pl_clk1_cnt),
+    .scan_load_delay                         (scan_load_delay),
     .test_delay                              (test_delay),
     .test_trig_out_phase                     (test_trig_out_phase),
     .test_mask_reset_not                     (test_mask_reset_not),

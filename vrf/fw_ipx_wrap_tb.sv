@@ -165,6 +165,7 @@ module fw_ipx_wrap_tb ();
   logic [4:0]  tb_bxclk_delay;
   logic        tb_bxclk_delay_sign;
   logic        tb_super_pix_sel;                           // this signal is defined in both IP1 and IP2
+  logic [5:0]  tb_scan_load_delay;
   // IP2: Signals related with w_cfg_array_0/1_reg
   logic [255:0][15:0] tb_w_cfg_array_counter;
   logic [255:0][15:0] tb_w_cfg_array_random;
@@ -296,9 +297,11 @@ module fw_ipx_wrap_tb ();
     tb_bxclk_delay           = $urandom_range(tb_bxclk_period/2, 0) & 5'h1F;   //5'h2;
     tb_bxclk_delay_sign      = $urandom_range(1, 0)                 & 1'h1;
     tb_super_pix_sel         = $urandom_range(1, 0)                 & 1'h1;
-    sw_write32_0             = {tb_firmware_id, tb_function_id, 11'b0, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
+    tb_scan_load_delay       = $urandom_range(63, 0)                & 6'h3F;
+    sw_write32_0             = {tb_firmware_id, tb_function_id, 5'b0, tb_scan_load_delay, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
     #(1*fw_axi_clk_period);
-    $display("time=%06.2f tb_i_test=%02d tb_bxclk_period=%02d tb_bxclk_delay=%02d tb_bxclk_delay_sign=%01d tb_super_pix_sel=%01d", $realtime(), tb_i_test, tb_bxclk_period, tb_bxclk_delay, tb_bxclk_delay_sign, tb_super_pix_sel);
+    $display("time=%06.2f tb_i_test=%02d tb_bxclk_period=%02d tb_bxclk_delay=%02d tb_bxclk_delay_sign=%01d tb_super_pix_sel=%01d tb_scan_load_delay=%02d",
+      $realtime(), tb_i_test, tb_bxclk_period, tb_bxclk_delay, tb_bxclk_delay_sign, tb_super_pix_sel, tb_scan_load_delay);
     tb_function_id           = OP_CODE_NOOP;
     sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
   endtask
@@ -306,11 +309,12 @@ module fw_ipx_wrap_tb ();
   task w_cfg_static_fixed(integer index);
     @(negedge fw_axi_clk);             // ensure enter on FE of AXI CLK
     if(index%2==0) tb_function_id = OP_CODE_W_CFG_STATIC_0; else tb_function_id = OP_CODE_W_CFG_STATIC_1;
-    sw_write32_0             = {tb_firmware_id, tb_function_id, 11'b0, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
+    sw_write32_0             = {tb_firmware_id, tb_function_id, 5'b0, tb_scan_load_delay, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
     #(1*fw_axi_clk_period);
-    $display("time=%06.2f tb_bxclk_period=%02d tb_bxclk_delay=%02d tb_bxclk_delay_sign=%01d tb_super_pix_sel=%01d", $realtime(), tb_bxclk_period, tb_bxclk_delay, tb_bxclk_delay_sign, tb_super_pix_sel);
+    $display("time=%06.2f tb_bxclk_period=%02d tb_bxclk_delay=%02d tb_bxclk_delay_sign=%01d tb_super_pix_sel=%01d tb_scan_load_delay=%02d",
+      $realtime(), tb_bxclk_period, tb_bxclk_delay, tb_bxclk_delay_sign, tb_super_pix_sel, tb_scan_load_delay);
     tb_function_id           = OP_CODE_NOOP;
-    sw_write32_0             = {tb_firmware_id, tb_function_id, 11'b0, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
+    sw_write32_0             = {tb_firmware_id, tb_function_id, 5'b0, tb_scan_load_delay, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period};
   endtask
 
   task w_cfg_array_0_counter();
@@ -455,7 +459,7 @@ module fw_ipx_wrap_tb ();
     tb_sw_write24_0          = 24'h0;
     sw_write32_0             = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
     #(1*fw_axi_clk_period);
-    if(sw_read32_0 != {11'h0, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period}) begin
+    if(sw_read32_0 != {5'h0, tb_scan_load_delay, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period}) begin
       $display("time=%06.2f FAIL op_code_r_cfg_static_0 sw_read32_0=0x%08h expected 0x%08h", $realtime(), sw_read32_0, {11'h0, tb_super_pix_sel, tb_bxclk_delay_sign, tb_bxclk_delay, tb_bxclk_period});
       tb_err[tb_err_index_op_code_r_cfg_static_0]=1'b1;
     end
@@ -665,6 +669,7 @@ module fw_ipx_wrap_tb ();
     //tb_bxclk_delay           = 5'h2;                       // on clock domain fw_axi_clk
     //tb_bxclk_delay_sign      = 1'h0;                       // on clock domain fw_axi_clk
     //tb_super_pix_sel         = 1'h0;                       // on clock domain fw_axi_clk
+    //tb_scan_load_delay       = 6'h05;                      // on clock domain fw_axi_clk
     //w_cfg_static_fixed(0);
     //tb_number   = 502;                                     // BXCLK/ANA is programmed
     //#(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
@@ -735,6 +740,7 @@ module fw_ipx_wrap_tb ();
     tb_bxclk_delay           = 5'h2;                       // on clock domain fw_axi_clk
     tb_bxclk_delay_sign      = 1'h0;                       // on clock domain fw_axi_clk
     tb_super_pix_sel         = 1'h0;                       // on clock domain fw_axi_clk
+    tb_scan_load_delay       = 6'h05;                      // on clock domain fw_axi_clk
     w_cfg_static_fixed(.index(0));
     tb_number   = 502;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
@@ -774,6 +780,7 @@ module fw_ipx_wrap_tb ();
     tb_bxclk_delay           = 5'h3;                       // on clock domain fw_axi_clk
     tb_bxclk_delay_sign      = 1'h0;                       // on clock domain fw_axi_clk
     tb_super_pix_sel         = 1'h1;                       // on clock domain fw_axi_clk
+    tb_scan_load_delay       = 6'h10;                      // on clock domain fw_axi_clk
     w_cfg_static_fixed(.index(0));
     tb_number   = 602;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
@@ -785,7 +792,7 @@ module fw_ipx_wrap_tb ();
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
     tb_number   = 603;
-    #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test2_o_status_done is asserted
+    #(2*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);         // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test2_o_status_done is asserted
     if(sw_read32_1[status_index_test2_done]==1'b1) begin
       $display("time=%06.2f firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_firmware_id, tb_test_loopback);
     end else begin
@@ -813,6 +820,7 @@ module fw_ipx_wrap_tb ();
     tb_bxclk_delay           = 5'h4;                       // on clock domain fw_axi_clk
     tb_bxclk_delay_sign      = 1'h0;                       // on clock domain fw_axi_clk
     tb_super_pix_sel         = 1'h0;                       // on clock domain fw_axi_clk
+    tb_scan_load_delay       = 6'h07;                      // on clock domain fw_axi_clk
     w_cfg_static_fixed(.index(0));
     tb_number   = 702;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
