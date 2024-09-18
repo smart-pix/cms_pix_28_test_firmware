@@ -388,7 +388,7 @@ set id [waveform add -signals [subst  {
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
-	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.scan_load_delay_en}]}
+	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.scan_load_delay_disable}]}
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -cdivider divider]
@@ -663,4 +663,4 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.bxclks_generators_inst.bxclk_ana}]}
 	} ]]
 
-waveform xview limits 88153.993ns 88797.416ns
+waveform xview limits 0 129315ns

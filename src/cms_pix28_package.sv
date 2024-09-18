@@ -151,7 +151,8 @@ package cms_pix28_package;
   localparam w_cfg_static_0_reg_super_pix_sel_index_IP2              = 12;     //
   localparam w_cfg_static_0_reg_scan_load_delay_index_min_IP2        = 13;     //
   localparam w_cfg_static_0_reg_scan_load_delay_index_max_IP2        = 18;     //
-  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 19;     //
+  localparam w_cfg_static_0_reg_scan_load_delay_disable_index_IP2    = 19;     //
+  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 20;     //
   localparam w_cfg_static_0_reg_spare_index_max_IP2                  = 23;     //
   //
   localparam w_execute_cfg_test_delay_index_min_IP2                  =  0;     //
