@@ -102,9 +102,7 @@ module fw_top_v #(
     input  wire scan_out,
     input  wire scan_out_test,
     input  wire dnn_output_0,
-    input  wire dnn_output_1,
-    input  wire dn_event_toggle,
-    input  wire up_event_toggle
+    input  wire dnn_output_1
   );
 
   // Instantiate SystemVerilog module fw_top
@@ -155,8 +153,8 @@ module fw_top_v #(
     .scan_out_test      (scan_out_test),
     .dnn_output_0       (dnn_output_0),
     .dnn_output_1       (dnn_output_1),
-    .dn_event_toggle    (dn_event_toggle),
-    .up_event_toggle    (up_event_toggle)
+    .dn_event_toggle    (1'b0),
+    .up_event_toggle    (1'b0)
   );
 
 endmodule

@@ -1,4 +1,4 @@
-set_property PACKAGE_PIN Y4  [get_ports vin_test_trig_out]
+set_property PACKAGE_PIN T8  [get_ports vin_test_trig_out]
 set_property PACKAGE_PIN Y3  [get_ports bxclk]
 set_property PACKAGE_PIN AB4 [get_ports bxclk_ana]
 set_property PACKAGE_PIN AC4 [get_ports config_clk]
@@ -19,8 +19,8 @@ set_property PACKAGE_PIN V3  [get_ports dnn_output_1]
 # J1-pin-37 == FMC_LA_09_P == FPGA-pin-W2  is nou used
 # J1-pin-39 == FMC_LA_09_N == FPGA-pin-W1  is nou used
 # WARNING: input port dn_event_toggle is NOT connected to wirebonded DUT PCB J-26
-set_property PACKAGE_PIN T8  [get_ports dn_event_toggle]
-set_property PACKAGE_PIN R8  [get_ports up_event_toggle]
+# set_property PACKAGE_PIN T8  [get_ports dn_event_toggle] T8 pin now used by vin_test_trig_out
+# set_property PACKAGE_PIN R8  [get_ports up_event_toggle]
 
 set_property IOSTANDARD LVCMOS18 [get_ports vin_test_trig_out]
 set_property IOSTANDARD LVCMOS18 [get_ports bxclk]
@@ -37,5 +37,5 @@ set_property IOSTANDARD LVCMOS18 [get_ports scan_out]
 set_property IOSTANDARD LVCMOS18 [get_ports config_out]
 set_property IOSTANDARD LVCMOS18 [get_ports dnn_output_0]
 set_property IOSTANDARD LVCMOS18 [get_ports dnn_output_1]
-set_property IOSTANDARD LVCMOS18 [get_ports dn_event_toggle]
-set_property IOSTANDARD LVCMOS18 [get_ports up_event_toggle]
+# set_property IOSTANDARD LVCMOS18 [get_ports dn_event_toggle]
+# set_property IOSTANDARD LVCMOS18 [get_ports up_event_toggle]

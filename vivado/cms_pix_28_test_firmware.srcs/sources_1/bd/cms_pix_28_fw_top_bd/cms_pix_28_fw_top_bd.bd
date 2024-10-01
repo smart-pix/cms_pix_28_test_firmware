@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x289CC06485B02C0E",
+      "boundary_crc": "0x6ED0588EA8A0ADEC",
       "device": "xczu9eg-ffvb1156-2-e",
       "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd",
       "name": "cms_pix_28_fw_top_bd",
@@ -33,9 +33,6 @@
         "direction": "I"
       },
       "dnn_output_1": {
-        "direction": "I"
-      },
-      "dn_event_toggle": {
         "direction": "I"
       },
       "super_pixel_sel": {
@@ -75,9 +72,6 @@
       },
       "vin_test_trig_out": {
         "direction": "O"
-      },
-      "up_event_toggle": {
-        "direction": "I"
       },
       "scan_out_test": {
         "direction": "I"
@@ -931,12 +925,6 @@
           },
           "dnn_output_1": {
             "direction": "I"
-          },
-          "dn_event_toggle": {
-            "direction": "I"
-          },
-          "up_event_toggle": {
-            "direction": "I"
           }
         }
       }
@@ -973,12 +961,6 @@
         "ports": [
           "config_out",
           "fw_top_v_0/config_out"
-        ]
-      },
-      "dn_event_toggle_1": {
-        "ports": [
-          "dn_event_toggle",
-          "fw_top_v_0/dn_event_toggle"
         ]
       },
       "dnn_output_0_1": {
@@ -1070,12 +1052,6 @@
         "ports": [
           "scan_out_test",
           "fw_top_v_0/scan_out_test"
-        ]
-      },
-      "up_event_toggle_1": {
-        "ports": [
-          "up_event_toggle",
-          "fw_top_v_0/up_event_toggle"
         ]
       },
       "zynq_ultra_ps_e_0_pl_clk0": {

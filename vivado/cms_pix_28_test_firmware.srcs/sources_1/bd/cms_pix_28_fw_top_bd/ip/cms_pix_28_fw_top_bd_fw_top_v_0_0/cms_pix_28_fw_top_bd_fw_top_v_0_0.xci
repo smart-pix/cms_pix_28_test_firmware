@@ -172,9 +172,7 @@
                   &quot;scan_out&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
                   &quot;scan_out_test&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
                   &quot;dnn_output_0&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
-                  &quot;dnn_output_1&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
-                  &quot;dn_event_toggle&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
-                  &quot;up_event_toggle&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ]
+                  &quot;dnn_output_1&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ]
                 },
                 &quot;interfaces&quot;: {
                   &quot;S_AXI&quot;: {
