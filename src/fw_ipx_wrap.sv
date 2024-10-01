@@ -11,6 +11,7 @@
 // 2024-06-13  Cristian  Gingu        Created
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
+// 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap__
 `define __fw_ipx_wrap__
@@ -47,7 +48,8 @@ module fw_ipx_wrap (
     input  logic scan_out_test,
     input  logic dnn_output_0,
     input  logic dnn_output_1,
-    input  logic dn_event_toggle
+    input  logic dn_event_toggle,
+    input  logic up_event_toggle
   );
 
   // Instantiate com_sw_to_fw
@@ -116,6 +118,7 @@ module fw_ipx_wrap (
   logic [3:0] fw_dnn_output_0;
   logic [3:0] fw_dnn_output_1;
   logic [3:0] fw_dn_event_toggle;
+  logic [3:0] fw_up_event_toggle;
   com_fw_to_dut com_fw_to_dut_inst (
     .iob_clk                 (pl_clk1),                              // FM clock 400MHz       mapped to pl_clk1
     .fw_dev_id_enable        (fw_dev_id_enable),                     // up to 15 FWs can be connected;
@@ -138,6 +141,7 @@ module fw_ipx_wrap (
     .fw_dnn_output_0         (fw_dnn_output_0),
     .fw_dnn_output_1         (fw_dnn_output_1),
     .fw_dn_event_toggle      (fw_dn_event_toggle),
+    .fw_up_event_toggle      (fw_up_event_toggle),
     // DUT side ports == FPGA pins:
     // Output IOB FF
     .super_pixel_sel         (super_pixel_sel),
@@ -156,7 +160,8 @@ module fw_ipx_wrap (
     .scan_out_test           (scan_out_test),
     .dnn_output_0            (dnn_output_0),
     .dnn_output_1            (dnn_output_1),
-    .dn_event_toggle         (dn_event_toggle)
+    .dn_event_toggle         (dn_event_toggle),
+    .up_event_toggle         (up_event_toggle)
   );
 
   // Instantiate FW_IP1:                                             // up to 15 FWs can be connected;
@@ -201,7 +206,8 @@ module fw_ipx_wrap (
     .fw_scan_out_test          (fw_scan_out_test[0]),
     .fw_dnn_output_0           (fw_dnn_output_0[0]),
     .fw_dnn_output_1           (fw_dnn_output_1[0]),
-    .fw_dn_event_toggle        (fw_dn_event_toggle[0])
+    .fw_dn_event_toggle        (fw_dn_event_toggle[0]),
+    .fw_up_event_toggle        (fw_up_event_toggle[0])
   );
 
   // Instantiate FW_IP2:                                             // up to 15 FWs can be connected;
@@ -247,7 +253,8 @@ module fw_ipx_wrap (
     .fw_scan_out_test          (fw_scan_out_test[1]),
     .fw_dnn_output_0           (fw_dnn_output_0[1]),
     .fw_dnn_output_1           (fw_dnn_output_1[1]),
-    .fw_dn_event_toggle        (fw_dn_event_toggle[1])
+    .fw_dn_event_toggle        (fw_dn_event_toggle[1]),
+    .fw_up_event_toggle        (fw_up_event_toggle[1])
   );
 
   // Instantiate FW_IP3:                                             // up to 15 FWs can be connected;
@@ -292,7 +299,8 @@ module fw_ipx_wrap (
     .fw_scan_out_test          (fw_scan_out_test[2]),
     .fw_dnn_output_0           (fw_dnn_output_0[2]),
     .fw_dnn_output_1           (fw_dnn_output_1[2]),
-    .fw_dn_event_toggle        (fw_dn_event_toggle[2])
+    .fw_dn_event_toggle        (fw_dn_event_toggle[2]),
+    .fw_up_event_toggle        (fw_up_event_toggle[2])
   );
 
   // Instantiate FW_IP4:                                             // up to 15 FWs can be connected;
@@ -337,7 +345,8 @@ module fw_ipx_wrap (
     .fw_scan_out_test          (fw_scan_out_test[3]),
     .fw_dnn_output_0           (fw_dnn_output_0[3]),
     .fw_dnn_output_1           (fw_dnn_output_1[3]),
-    .fw_dn_event_toggle        (fw_dn_event_toggle[3])
+    .fw_dn_event_toggle        (fw_dn_event_toggle[3]),
+    .fw_up_event_toggle        (fw_up_event_toggle[3])
   );
 
 endmodule

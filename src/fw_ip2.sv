@@ -23,6 +23,7 @@
 // 2024-08-14  Cristian Gingu         Add instance of ip2_test3.sv
 // 2024-09-17  Cristian Gingu         Change scan_load to delayed version; use in ip2_test2; add 6-bit w_cfg_static_0 scan_load_delay
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
+// 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -71,7 +72,8 @@ module fw_ip2 (
     input  logic fw_scan_out_test,
     input  logic fw_dnn_output_0,
     input  logic fw_dnn_output_1,
-    input  logic fw_dn_event_toggle
+    input  logic fw_dn_event_toggle,
+    input  logic fw_up_event_toggle
   );
 
   import cms_pix28_package::scan_reg_bits_total;
@@ -395,6 +397,7 @@ module fw_ip2 (
   logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // input signal (output from DUT)     used in IP2 test 3
   logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // input signal (output from DUT)     used in IP2 test 3
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // TODO to be used in IP2 test x
+  logic           sm_testx_i_up_event_toggle;    assign sm_testx_i_up_event_toggle   = fw_up_event_toggle;   // TODO to be used in IP2 test x
   // State Machine Control signals from logic/configuration
   localparam logic [10 : 0]                      sm_testx_i_scanchain_reg_width = 2*scan_reg_bits_total;
   logic [sm_testx_i_scanchain_reg_width-1 : 0]   sm_testx_i_scanchain_reg;               // 2*768=1536-bits shift register; bit#0 drives DUT scan_in; used by all tests 1,2,3

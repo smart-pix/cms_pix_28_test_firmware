@@ -14,6 +14,7 @@
 // 2024-07-23  Cristian Gingu         Add task w_cfg_array_2_mixed() task check_r_cfg_array_2_mixed()
 // 2024-08-12  Cristian Gingu         Add references to src/cms_pix28_package.sv vrf/cms_pix28_package_vrf.sv
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
+// 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -48,6 +49,7 @@ module fw_ipx_wrap_tb ();
   logic dnn_output_0;
   logic dnn_output_1;
   logic dn_event_toggle;
+  logic up_event_toggle;
 
   fw_ipx_wrap DUT (
     //////////////////////////////
@@ -79,7 +81,8 @@ module fw_ipx_wrap_tb ();
     .scan_out_test           (scan_out_test),
     .dnn_output_0            (dnn_output_0),
     .dnn_output_1            (dnn_output_1),
-    .dn_event_toggle         (dn_event_toggle)
+    .dn_event_toggle         (dn_event_toggle),
+    .up_event_toggle         (up_event_toggle)
   );
 
   // Constants
@@ -258,6 +261,7 @@ module fw_ipx_wrap_tb ();
   assign dnn_output_0        = tb_dnn_reg_0[47];
   assign dnn_output_1        = tb_dnn_reg_1[47];
   assign dn_event_toggle     = 1'b0;
+  assign up_event_toggle     = 1'b0;
 
   function void initialize();
     // SW side signals

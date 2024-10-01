@@ -10,6 +10,7 @@
 // Date        Author                 Description
 // 2024-05-24  Cristian  Gingu        Created
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
+// 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top__
 `define __fw_top__
@@ -102,7 +103,8 @@ module fw_top #(
     input  logic scan_out_test,
     input  logic dnn_output_0,
     input  logic dnn_output_1,
-    input  logic dn_event_toggle
+    input  logic dn_event_toggle,
+    input  logic up_event_toggle
   );
 
   // Instantiate axi4lite_interface_top_for_pix28_fw
@@ -176,7 +178,8 @@ module fw_top #(
     .scan_out_test           (scan_out_test),
     .dnn_output_0            (dnn_output_0),
     .dnn_output_1            (dnn_output_1),
-    .dn_event_toggle         (dn_event_toggle)
+    .dn_event_toggle         (dn_event_toggle),
+    .up_event_toggle         (up_event_toggle)
   );
 
 endmodule

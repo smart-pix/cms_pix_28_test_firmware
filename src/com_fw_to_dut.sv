@@ -14,6 +14,7 @@
 // 2024-07-31  Cristian Gingu         Make outputs config_clk          driven only by index=0 (fw_ip1.sv)
 // 2024-08-12  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
+// 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __com_fw_to_dut__
 `define __com_fw_to_dut__
@@ -42,6 +43,7 @@ module com_fw_to_dut(
     output logic [3:0] fw_dnn_output_0,
     output logic [3:0] fw_dnn_output_1,
     output logic [3:0] fw_dn_event_toggle,
+    output logic [3:0] fw_up_event_toggle,
     // DUT side ports == FPGA pins:
     // Output IOB FF
     output logic super_pixel_sel,
@@ -60,7 +62,8 @@ module com_fw_to_dut(
     input  logic scan_out_test,
     input  logic dnn_output_0,
     input  logic dnn_output_1,
-    input  logic dn_event_toggle
+    input  logic dn_event_toggle,
+    input  logic up_event_toggle
   );
 
   import cms_pix28_package::firmware_id_1;
@@ -96,6 +99,7 @@ module com_fw_to_dut(
   logic dnn_output_0_iob;              // Input  IOB FF
   logic dnn_output_1_iob;              // Input  IOB FF
   logic dn_event_toggle_iob;           // Input  IOB FF
+  logic up_event_toggle_iob;           // Input  IOB FF
 
   // MUX and FANOUT combinatorial logic.
   // The following is assuming hot bit encoding for fw_dev_id_enable. If more than FOUR firmwares will be used, change the equations below.
@@ -117,24 +121,28 @@ module com_fw_to_dut(
       fw_dnn_output_0    [0] = dnn_output_0_iob;
       fw_dnn_output_1    [0] = dnn_output_1_iob;
       fw_dn_event_toggle [0] = dn_event_toggle_iob;
+      fw_up_event_toggle [0] = up_event_toggle_iob;
       fw_config_out      [1] = 1'b0;
       fw_scan_out        [1] = 1'b0;
       fw_scan_out_test   [1] = 1'b0;
       fw_dnn_output_0    [1] = 1'b0;
       fw_dnn_output_1    [1] = 1'b0;
       fw_dn_event_toggle [1] = 1'b0;
+      fw_up_event_toggle [1] = 1'b0;
       fw_config_out      [2] = 1'b0;
       fw_scan_out        [2] = 1'b0;
       fw_scan_out_test   [2] = 1'b0;
       fw_dnn_output_0    [2] = 1'b0;
       fw_dnn_output_1    [2] = 1'b0;
       fw_dn_event_toggle [2] = 1'b0;
+      fw_up_event_toggle [2] = 1'b0;
       fw_config_out      [3] = 1'b0;
       fw_scan_out        [3] = 1'b0;
       fw_scan_out_test   [3] = 1'b0;
       fw_dnn_output_0    [3] = 1'b0;
       fw_dnn_output_1    [3] = 1'b0;
       fw_dn_event_toggle [3] = 1'b0;
+      fw_up_event_toggle [3] = 1'b0;
     end else if(fw_dev_id_enable==firmware_id_2) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [1];
       reset_not_mux          = fw_reset_not        [1];
@@ -149,24 +157,28 @@ module com_fw_to_dut(
       fw_dnn_output_0    [1] = dnn_output_0_iob;
       fw_dnn_output_1    [1] = dnn_output_1_iob;
       fw_dn_event_toggle [1] = dn_event_toggle_iob;
+      fw_up_event_toggle [1] = up_event_toggle_iob;
       fw_config_out      [2] = 1'b0;
       fw_scan_out        [2] = 1'b0;
       fw_scan_out_test   [2] = 1'b0;
       fw_dnn_output_0    [2] = 1'b0;
       fw_dnn_output_1    [2] = 1'b0;
       fw_dn_event_toggle [2] = 1'b0;
+      fw_up_event_toggle [2] = 1'b0;
       fw_config_out      [3] = 1'b0;
       fw_scan_out        [3] = 1'b0;
       fw_scan_out_test   [3] = 1'b0;
       fw_dnn_output_0    [3] = 1'b0;
       fw_dnn_output_1    [3] = 1'b0;
       fw_dn_event_toggle [3] = 1'b0;
+      fw_up_event_toggle [3] = 1'b0;
       fw_config_out      [0] = 1'b0;
       fw_scan_out        [0] = 1'b0;
       fw_scan_out_test   [0] = 1'b0;
       fw_dnn_output_0    [0] = 1'b0;
       fw_dnn_output_1    [0] = 1'b0;
       fw_dn_event_toggle [0] = 1'b0;
+      fw_up_event_toggle [0] = 1'b0;
     end else if(fw_dev_id_enable==firmware_id_3) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [2];
       reset_not_mux          = fw_reset_not        [2];
@@ -181,24 +193,28 @@ module com_fw_to_dut(
       fw_dnn_output_0    [2] = dnn_output_0_iob;
       fw_dnn_output_1    [2] = dnn_output_1_iob;
       fw_dn_event_toggle [2] = dn_event_toggle_iob;
+      fw_up_event_toggle [2] = up_event_toggle_iob;
       fw_config_out      [3] = 1'b0;
       fw_scan_out        [3] = 1'b0;
       fw_scan_out_test   [3] = 1'b0;
       fw_dnn_output_0    [3] = 1'b0;
       fw_dnn_output_1    [3] = 1'b0;
       fw_dn_event_toggle [3] = 1'b0;
+      fw_up_event_toggle [3] = 1'b0;
       fw_config_out      [0] = 1'b0;
       fw_scan_out        [0] = 1'b0;
       fw_scan_out_test   [0] = 1'b0;
       fw_dnn_output_0    [0] = 1'b0;
       fw_dnn_output_1    [0] = 1'b0;
       fw_dn_event_toggle [0] = 1'b0;
+      fw_up_event_toggle [0] = 1'b0;
       fw_config_out      [1] = 1'b0;
       fw_scan_out        [1] = 1'b0;
       fw_scan_out_test   [1] = 1'b0;
       fw_dnn_output_0    [1] = 1'b0;
       fw_dnn_output_1    [1] = 1'b0;
       fw_dn_event_toggle [1] = 1'b0;
+      fw_up_event_toggle [1] = 1'b0;
     end else if(fw_dev_id_enable==firmware_id_4) begin
       super_pixel_sel_mux    = fw_super_pixel_sel  [3];
       reset_not_mux          = fw_reset_not        [3];
@@ -213,24 +229,28 @@ module com_fw_to_dut(
       fw_dnn_output_0    [3] = dnn_output_0_iob;
       fw_dnn_output_1    [3] = dnn_output_1_iob;
       fw_dn_event_toggle [3] = dn_event_toggle_iob;
+      fw_up_event_toggle [3] = up_event_toggle_iob;
       fw_config_out      [0] = 1'b0;
       fw_scan_out        [0] = 1'b0;
       fw_scan_out_test   [0] = 1'b0;
       fw_dnn_output_0    [0] = 1'b0;
       fw_dnn_output_1    [0] = 1'b0;
       fw_dn_event_toggle [0] = 1'b0;
+      fw_up_event_toggle [0] = 1'b0;
       fw_config_out      [1] = 1'b0;
       fw_scan_out        [1] = 1'b0;
       fw_scan_out_test   [1] = 1'b0;
       fw_dnn_output_0    [1] = 1'b0;
       fw_dnn_output_1    [1] = 1'b0;
       fw_dn_event_toggle [1] = 1'b0;
+      fw_up_event_toggle [1] = 1'b0;
       fw_config_out      [2] = 1'b0;
       fw_scan_out        [2] = 1'b0;
       fw_scan_out_test   [2] = 1'b0;
       fw_dnn_output_0    [2] = 1'b0;
       fw_dnn_output_1    [2] = 1'b0;
       fw_dn_event_toggle [2] = 1'b0;
+      fw_up_event_toggle [2] = 1'b0;
     end else begin
       super_pixel_sel_mux    = 1'b0;
       reset_not_mux          = 1'b1;
@@ -245,6 +265,7 @@ module com_fw_to_dut(
       fw_dnn_output_0        = 4'b0;
       fw_dnn_output_1        = 4'b0;
       fw_dn_event_toggle     = 4'b0;
+      fw_up_event_toggle     = 4'b0;
     end
   end
 
@@ -280,6 +301,7 @@ module com_fw_to_dut(
     dnn_output_0_iob         <= dnn_output_0;
     dnn_output_1_iob         <= dnn_output_1;
     dn_event_toggle_iob      <= dn_event_toggle;
+    up_event_toggle_iob      <= up_event_toggle;
   end
 
 endmodule

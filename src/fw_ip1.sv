@@ -24,6 +24,7 @@
 // 2024-08-06  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-08-08  Cristian Gingu         Factorize common module com_status32_reg.sv
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
+// 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -71,7 +72,8 @@ module fw_ip1 (
     input  logic fw_scan_out_test,
     input  logic fw_dnn_output_0,
     input  logic fw_dnn_output_1,
-    input  logic fw_dn_event_toggle
+    input  logic fw_dn_event_toggle,
+    input  logic fw_up_event_toggle
   );
 
   import cms_pix28_package::cfg_reg_bits_total;
@@ -390,6 +392,7 @@ module fw_ip1 (
   logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // input signal (output from DUT) not used in IP1
   logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // input signal (output from DUT) not used in IP1
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // input signal (output from DUT) not used in IP1
+  logic           sm_testx_i_up_event_toggle;    assign sm_testx_i_up_event_toggle   = fw_up_event_toggle;   // input signal (output from DUT) not used in IP1
   // State Machine Control signals from logic/configuration
   localparam logic [13 : 0]                      sm_testx_i_shift_reg_width    = 2*cfg_reg_bits_total;                                          // 2*5188 == 10376 ==0x2888
   localparam logic [13 : 0]                      sm_testx_i_shift_reg_width_sc = cfg_reg_bits_test;                                             // SLOW config clock related max counter == 24 bits
