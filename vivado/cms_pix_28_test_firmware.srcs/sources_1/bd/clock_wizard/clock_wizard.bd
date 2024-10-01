@@ -1836,6 +1836,9 @@
           "scan_out": {
             "direction": "I"
           },
+          "scan_out_test": {
+            "direction": "I"
+          },
           "dnn_output_0": {
             "direction": "I"
           },
@@ -1843,6 +1846,9 @@
             "direction": "I"
           },
           "dn_event_toggle": {
+            "direction": "I"
+          },
+          "up_event_toggle": {
             "direction": "I"
           }
         }

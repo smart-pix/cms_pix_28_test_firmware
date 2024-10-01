@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xB302199D1736D0AC",
+      "boundary_crc": "0x289CC06485B02C0E",
       "device": "xczu9eg-ffvb1156-2-e",
       "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd",
       "name": "cms_pix_28_fw_top_bd",
@@ -76,8 +76,13 @@
       "vin_test_trig_out": {
         "direction": "O"
       },
+      "up_event_toggle": {
+        "direction": "I"
+      },
+      "scan_out_test": {
+        "direction": "I"
+      },
       "config_clk": {
-        "type": "clk",
         "direction": "O",
         "parameters": {
           "CLK_DOMAIN": {
@@ -86,19 +91,11 @@
           },
           "FREQ_HZ": {
             "value": "100000000",
-            "value_src": "default"
-          },
-          "FREQ_TOLERANCE_HZ": {
-            "value": "0",
-            "value_src": "default"
-          },
-          "INSERT_VIP": {
-            "value": "0",
-            "value_src": "default"
+            "value_src": "default_prop"
           },
           "PHASE": {
             "value": "0.0",
-            "value_src": "default"
+            "value_src": "default_prop"
           }
         }
       }
@@ -926,6 +923,9 @@
           "scan_out": {
             "direction": "I"
           },
+          "scan_out_test": {
+            "direction": "I"
+          },
           "dnn_output_0": {
             "direction": "I"
           },
@@ -933,6 +933,9 @@
             "direction": "I"
           },
           "dn_event_toggle": {
+            "direction": "I"
+          },
+          "up_event_toggle": {
             "direction": "I"
           }
         }
@@ -1063,6 +1066,18 @@
           "fw_top_v_0/scan_out"
         ]
       },
+      "scan_out_test_1": {
+        "ports": [
+          "scan_out_test",
+          "fw_top_v_0/scan_out_test"
+        ]
+      },
+      "up_event_toggle_1": {
+        "ports": [
+          "up_event_toggle",
+          "fw_top_v_0/up_event_toggle"
+        ]
+      },
       "zynq_ultra_ps_e_0_pl_clk0": {
         "ports": [
           "zynq_ultra_ps_e_0/pl_clk0",
@@ -1089,7 +1104,7 @@
             "segments": {
               "SEG_fw_top_v_0_reg0": {
                 "address_block": "/fw_top_v_0/S_AXI/reg0",
-                "offset": "0x00A0000000",
+                "offset": "0x0400000000",
                 "range": "4K"
               }
             }
