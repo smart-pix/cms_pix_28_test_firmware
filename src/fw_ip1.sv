@@ -23,6 +23,7 @@
 // 2024-08-02  Cristian Gingu         Add coding for ip2_test2
 // 2024-08-06  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-08-08  Cristian Gingu         Factorize common module com_status32_reg.sv
+// 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -67,6 +68,7 @@ module fw_ip1 (
     // input signals to FW from DUT
     input  logic fw_config_out,
     input  logic fw_scan_out,
+    input  logic fw_scan_out_test,
     input  logic fw_dnn_output_0,
     input  logic fw_dnn_output_1,
     input  logic fw_dn_event_toggle
@@ -384,6 +386,7 @@ module fw_ip1 (
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT)     used in IP1 test 1,2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT) not used in IP1
+  logic           sm_testx_i_scan_out_test;      assign sm_testx_i_scan_out_test     = fw_scan_out_test;     // input signal (output from DUT) not used in IP1
   logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // input signal (output from DUT) not used in IP1
   logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // input signal (output from DUT) not used in IP1
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // input signal (output from DUT) not used in IP1

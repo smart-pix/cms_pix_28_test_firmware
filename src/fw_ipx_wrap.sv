@@ -10,6 +10,7 @@
 // Date        Author                 Description
 // 2024-06-13  Cristian  Gingu        Created
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
+// 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap__
 `define __fw_ipx_wrap__
@@ -43,6 +44,7 @@ module fw_ipx_wrap (
     // Inputs from DUT
     input  logic config_out,
     input  logic scan_out,
+    input  logic scan_out_test,
     input  logic dnn_output_0,
     input  logic dnn_output_1,
     input  logic dn_event_toggle
@@ -110,6 +112,7 @@ module fw_ipx_wrap (
   // input signals to FW
   logic [3:0] fw_config_out;
   logic [3:0] fw_scan_out;
+  logic [3:0] fw_scan_out_test;
   logic [3:0] fw_dnn_output_0;
   logic [3:0] fw_dnn_output_1;
   logic [3:0] fw_dn_event_toggle;
@@ -131,6 +134,7 @@ module fw_ipx_wrap (
     // input signals to FW
     .fw_config_out           (fw_config_out),
     .fw_scan_out             (fw_scan_out),
+    .fw_scan_out_test        (fw_scan_out_test),
     .fw_dnn_output_0         (fw_dnn_output_0),
     .fw_dnn_output_1         (fw_dnn_output_1),
     .fw_dn_event_toggle      (fw_dn_event_toggle),
@@ -149,6 +153,7 @@ module fw_ipx_wrap (
     // Input IOB FF
     .config_out              (config_out),
     .scan_out                (scan_out),
+    .scan_out_test           (scan_out_test),
     .dnn_output_0            (dnn_output_0),
     .dnn_output_1            (dnn_output_1),
     .dn_event_toggle         (dn_event_toggle)
@@ -193,6 +198,7 @@ module fw_ipx_wrap (
     // input signals to FW
     .fw_config_out             (fw_config_out[0]),
     .fw_scan_out               (fw_scan_out[0]),
+    .fw_scan_out_test          (fw_scan_out_test[0]),
     .fw_dnn_output_0           (fw_dnn_output_0[0]),
     .fw_dnn_output_1           (fw_dnn_output_1[0]),
     .fw_dn_event_toggle        (fw_dn_event_toggle[0])
@@ -238,6 +244,7 @@ module fw_ipx_wrap (
     // input signals to FW
     .fw_config_out             (fw_config_out[1]),
     .fw_scan_out               (fw_scan_out[1]),
+    .fw_scan_out_test          (fw_scan_out_test[1]),
     .fw_dnn_output_0           (fw_dnn_output_0[1]),
     .fw_dnn_output_1           (fw_dnn_output_1[1]),
     .fw_dn_event_toggle        (fw_dn_event_toggle[1])
@@ -282,6 +289,7 @@ module fw_ipx_wrap (
     // input signals to FW
     .fw_config_out             (fw_config_out[2]),
     .fw_scan_out               (fw_scan_out[2]),
+    .fw_scan_out_test          (fw_scan_out_test[2]),
     .fw_dnn_output_0           (fw_dnn_output_0[2]),
     .fw_dnn_output_1           (fw_dnn_output_1[2]),
     .fw_dn_event_toggle        (fw_dn_event_toggle[2])
@@ -326,6 +334,7 @@ module fw_ipx_wrap (
     // input signals to FW
     .fw_config_out             (fw_config_out[3]),
     .fw_scan_out               (fw_scan_out[3]),
+    .fw_scan_out_test          (fw_scan_out_test[3]),
     .fw_dnn_output_0           (fw_dnn_output_0[3]),
     .fw_dnn_output_1           (fw_dnn_output_1[3]),
     .fw_dn_event_toggle        (fw_dn_event_toggle[3])

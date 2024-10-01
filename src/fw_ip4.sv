@@ -11,6 +11,7 @@
 // 2024-05-24  Cristian  Gingu        Created template
 // 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
+// 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip4__
 `define __fw_ip4__
@@ -55,6 +56,7 @@ module fw_ip4 (
     // input signals to FW
     input  logic fw_config_out,
     input  logic fw_scan_out,
+    input  logic fw_scan_out_test,
     input  logic fw_dnn_output_0,
     input  logic fw_dnn_output_1,
     input  logic fw_dn_event_toggle

@@ -22,6 +22,7 @@
 // 2024-08-08  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-08-14  Cristian Gingu         Add instance of ip2_test3.sv
 // 2024-09-17  Cristian Gingu         Change scan_load to delayed version; use in ip2_test2; add 6-bit w_cfg_static_0 scan_load_delay
+// 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -67,6 +68,7 @@ module fw_ip2 (
     // input signals to FW from DUT
     input  logic fw_config_out,
     input  logic fw_scan_out,
+    input  logic fw_scan_out_test,
     input  logic fw_dnn_output_0,
     input  logic fw_dnn_output_1,
     input  logic fw_dn_event_toggle
@@ -204,6 +206,13 @@ module fw_ip2 (
   for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_reg_array32_gen
     assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg[(i+1)*32-1 : i*32];
   end
+  //
+  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;               // 2*768=1536-bits shift register; used by all tests 1,2,3,4
+  logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_test_reg_array32;       // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
+  for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_test_reg_array32_gen
+    assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg[(i+1)*32-1 : i*32];
+  end
+  //
   always_comb begin : fw_read_data32_comb_proc
     if(op_code_r_cfg_static_0) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_static_0_reg, which is 24-bits. Must pad with zero up to 32-bits.
@@ -232,8 +241,13 @@ module fw_ip2 (
         fw_read_data32_comb = 32'b0;                       // pad with ZERO
       end
     end else if(op_code_r_data_array_1) begin
-      // TODO update code here with readout data coming from DUT
-      fw_read_data32_comb = 32'b0;                         // incoming data on clock domain fw_pl_clk1
+      // AXI SW will readout sm_testx_o_scanchain_test_reg signal which is 2*768-bits for the requested address sw_write24_0[23:16].
+      // CAUTION: SW must take care not to OVERFLOW addresses: valid range is 0-to-47 (2*768/32=2*24=48 words, 32-bits each)
+      if(sw_write24_0[23:16]<48) begin
+        fw_read_data32_comb = sm_testx_o_scanchain_test_reg_array32[sw_write24_0[23:16]];
+      end else begin
+        fw_read_data32_comb = 32'b0;                       // pad with ZERO
+      end
     end else begin
       fw_read_data32_comb = 32'b0;
     end
@@ -377,6 +391,7 @@ module fw_ip2 (
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT) not used in IP2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT)     used in IP2 test 1,2
+  logic           sm_testx_i_scan_out_test;      assign sm_testx_i_scan_out_test     = fw_scan_out_test;     // input signal (output from DUT)     used in IP2 test 1,2
   logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // input signal (output from DUT)     used in IP2 test 3
   logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // input signal (output from DUT)     used in IP2 test 3
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // TODO to be used in IP2 test x
@@ -506,18 +521,22 @@ module fw_ip2 (
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_scanchain_reg <= {sm_test1_o_scan_in,    sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= { sm_test1_o_scan_in,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= {~sm_test1_o_scan_in,      sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_scanchain_reg <= {sm_testx_i_scan_out,   sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= {sm_testx_i_scan_out,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= {sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
-          sm_testx_o_scanchain_reg   <= sm_testx_o_scanchain_reg;
+          sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
+          sm_testx_o_scanchain_test_reg   <= sm_testx_o_scanchain_test_reg;
         end
       end else begin
         // keep old value
-        sm_testx_o_scanchain_reg     <= sm_testx_o_scanchain_reg;
+        sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
+        sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
       end
     end else if(test2_enable) begin
       // use data specific for test case test2
@@ -525,18 +544,22 @@ module fw_ip2 (
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_scanchain_reg <= {sm_test2_o_scan_in,    sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= { sm_test2_o_scan_in,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= {~sm_test2_o_scan_in,      sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_scanchain_reg <= {sm_testx_i_scan_out,   sm_testx_o_scanchain_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= {sm_testx_i_scan_out,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= {sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
-          sm_testx_o_scanchain_reg   <= sm_testx_o_scanchain_reg;
+          sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
+          sm_testx_o_scanchain_test_reg   <= sm_testx_o_scanchain_test_reg;
         end
       end else begin
         // keep old value
-        sm_testx_o_scanchain_reg     <= sm_testx_o_scanchain_reg;
+        sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
+        sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
       end
     end else if(test3_enable) begin
       // use data specific for test case test3
@@ -554,15 +577,19 @@ module fw_ip2 (
         end
       end else begin
         // keep old value
-        sm_testx_o_scanchain_reg     <= sm_testx_o_scanchain_reg;
+        sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
+      // keep old value
+      sm_testx_o_scanchain_test_reg       <= sm_testx_o_scanchain_test_reg;
     end else if(test4_enable) begin
       // use data specific for test case test4
-      sm_testx_o_scanchain_reg <= {sm_testx_o_scanchain_reg_width*{1'b0}};     // TODO
+      sm_testx_o_scanchain_reg            <= {sm_testx_o_scanchain_reg_width*{1'b0}};     // TODO
+      sm_testx_o_scanchain_test_reg       <= {sm_testx_o_scanchain_reg_width*{1'b0}};     // TODO
     end else begin
-      // keep old value; need to do this way to preserve sm_testx_o_scanchain_reg after any of test1,2,3,4 are done
-      // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" for the purpose of AXI readout
-      sm_testx_o_scanchain_reg <= sm_testx_o_scanchain_reg;
+      // keep old value; need to do this way to preserve sm_testx_o_scanchain_reg/sm_testx_o_scanchain_test_reg after any of test1,2,3,4 are done
+      // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" "op_code_r_data_array_1" for the purpose of AXI readout
+      sm_testx_o_scanchain_reg            <= sm_testx_o_scanchain_reg;
+      sm_testx_o_scanchain_test_reg       <= sm_testx_o_scanchain_test_reg;
     end
   end
 

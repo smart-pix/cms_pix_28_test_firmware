@@ -13,6 +13,7 @@
 // 2024-07-10  Cristian Gingu         Make outputs bxclk and bxclk_ana driven only by index=1 (fw_ip2.sv)
 // 2024-07-31  Cristian Gingu         Make outputs config_clk          driven only by index=0 (fw_ip1.sv)
 // 2024-08-12  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // ------------------------------------------------------------------------------------
 `ifndef __com_fw_to_dut__
 `define __com_fw_to_dut__
@@ -37,6 +38,7 @@ module com_fw_to_dut(
     // input signals to FW
     output logic [3:0] fw_config_out,
     output logic [3:0] fw_scan_out,
+    output logic [3:0] fw_scan_out_test,
     output logic [3:0] fw_dnn_output_0,
     output logic [3:0] fw_dnn_output_1,
     output logic [3:0] fw_dn_event_toggle,
@@ -55,6 +57,7 @@ module com_fw_to_dut(
     // Input  IOB FF
     input  logic config_out,
     input  logic scan_out,
+    input  logic scan_out_test,
     input  logic dnn_output_0,
     input  logic dnn_output_1,
     input  logic dn_event_toggle
@@ -89,6 +92,7 @@ module com_fw_to_dut(
   //
   logic config_out_iob;                // Input  IOB FF
   logic scan_out_iob;                  // Input  IOB FF
+  logic scan_out_test_iob;             // Input  IOB FF
   logic dnn_output_0_iob;              // Input  IOB FF
   logic dnn_output_1_iob;              // Input  IOB FF
   logic dn_event_toggle_iob;           // Input  IOB FF
@@ -109,21 +113,25 @@ module com_fw_to_dut(
       scan_load_mux          = fw_scan_load        [0];
       fw_config_out      [0] = config_out_iob;
       fw_scan_out        [0] = scan_out_iob;
+      fw_scan_out_test   [0] = scan_out_test_iob;
       fw_dnn_output_0    [0] = dnn_output_0_iob;
       fw_dnn_output_1    [0] = dnn_output_1_iob;
       fw_dn_event_toggle [0] = dn_event_toggle_iob;
       fw_config_out      [1] = 1'b0;
       fw_scan_out        [1] = 1'b0;
+      fw_scan_out_test   [1] = 1'b0;
       fw_dnn_output_0    [1] = 1'b0;
       fw_dnn_output_1    [1] = 1'b0;
       fw_dn_event_toggle [1] = 1'b0;
       fw_config_out      [2] = 1'b0;
       fw_scan_out        [2] = 1'b0;
+      fw_scan_out_test   [2] = 1'b0;
       fw_dnn_output_0    [2] = 1'b0;
       fw_dnn_output_1    [2] = 1'b0;
       fw_dn_event_toggle [2] = 1'b0;
       fw_config_out      [3] = 1'b0;
       fw_scan_out        [3] = 1'b0;
+      fw_scan_out_test   [3] = 1'b0;
       fw_dnn_output_0    [3] = 1'b0;
       fw_dnn_output_1    [3] = 1'b0;
       fw_dn_event_toggle [3] = 1'b0;
@@ -137,21 +145,25 @@ module com_fw_to_dut(
       scan_load_mux          = fw_scan_load        [1];
       fw_config_out      [1] = config_out_iob;
       fw_scan_out        [1] = scan_out_iob;
+      fw_scan_out_test   [1] = scan_out_test_iob;
       fw_dnn_output_0    [1] = dnn_output_0_iob;
       fw_dnn_output_1    [1] = dnn_output_1_iob;
       fw_dn_event_toggle [1] = dn_event_toggle_iob;
       fw_config_out      [2] = 1'b0;
       fw_scan_out        [2] = 1'b0;
+      fw_scan_out_test   [2] = 1'b0;
       fw_dnn_output_0    [2] = 1'b0;
       fw_dnn_output_1    [2] = 1'b0;
       fw_dn_event_toggle [2] = 1'b0;
       fw_config_out      [3] = 1'b0;
       fw_scan_out        [3] = 1'b0;
+      fw_scan_out_test   [3] = 1'b0;
       fw_dnn_output_0    [3] = 1'b0;
       fw_dnn_output_1    [3] = 1'b0;
       fw_dn_event_toggle [3] = 1'b0;
       fw_config_out      [0] = 1'b0;
       fw_scan_out        [0] = 1'b0;
+      fw_scan_out_test   [0] = 1'b0;
       fw_dnn_output_0    [0] = 1'b0;
       fw_dnn_output_1    [0] = 1'b0;
       fw_dn_event_toggle [0] = 1'b0;
@@ -165,21 +177,25 @@ module com_fw_to_dut(
       scan_load_mux          = fw_scan_load        [2];
       fw_config_out      [2] = config_out_iob;
       fw_scan_out        [2] = scan_out_iob;
+      fw_scan_out_test   [2] = scan_out_test_iob;
       fw_dnn_output_0    [2] = dnn_output_0_iob;
       fw_dnn_output_1    [2] = dnn_output_1_iob;
       fw_dn_event_toggle [2] = dn_event_toggle_iob;
       fw_config_out      [3] = 1'b0;
       fw_scan_out        [3] = 1'b0;
+      fw_scan_out_test   [3] = 1'b0;
       fw_dnn_output_0    [3] = 1'b0;
       fw_dnn_output_1    [3] = 1'b0;
       fw_dn_event_toggle [3] = 1'b0;
       fw_config_out      [0] = 1'b0;
       fw_scan_out        [0] = 1'b0;
+      fw_scan_out_test   [0] = 1'b0;
       fw_dnn_output_0    [0] = 1'b0;
       fw_dnn_output_1    [0] = 1'b0;
       fw_dn_event_toggle [0] = 1'b0;
       fw_config_out      [1] = 1'b0;
       fw_scan_out        [1] = 1'b0;
+      fw_scan_out_test   [1] = 1'b0;
       fw_dnn_output_0    [1] = 1'b0;
       fw_dnn_output_1    [1] = 1'b0;
       fw_dn_event_toggle [1] = 1'b0;
@@ -193,21 +209,25 @@ module com_fw_to_dut(
       scan_load_mux          = fw_scan_load        [3];
       fw_config_out      [3] = config_out_iob;
       fw_scan_out        [3] = scan_out_iob;
+      fw_scan_out_test   [3] = scan_out_test_iob;
       fw_dnn_output_0    [3] = dnn_output_0_iob;
       fw_dnn_output_1    [3] = dnn_output_1_iob;
       fw_dn_event_toggle [3] = dn_event_toggle_iob;
       fw_config_out      [0] = 1'b0;
       fw_scan_out        [0] = 1'b0;
+      fw_scan_out_test   [0] = 1'b0;
       fw_dnn_output_0    [0] = 1'b0;
       fw_dnn_output_1    [0] = 1'b0;
       fw_dn_event_toggle [0] = 1'b0;
       fw_config_out      [1] = 1'b0;
       fw_scan_out        [1] = 1'b0;
+      fw_scan_out_test   [1] = 1'b0;
       fw_dnn_output_0    [1] = 1'b0;
       fw_dnn_output_1    [1] = 1'b0;
       fw_dn_event_toggle [1] = 1'b0;
       fw_config_out      [2] = 1'b0;
       fw_scan_out        [2] = 1'b0;
+      fw_scan_out_test   [2] = 1'b0;
       fw_dnn_output_0    [2] = 1'b0;
       fw_dnn_output_1    [2] = 1'b0;
       fw_dn_event_toggle [2] = 1'b0;
@@ -221,6 +241,7 @@ module com_fw_to_dut(
       scan_load_mux          = 1'b0;
       fw_config_out          = 4'b0;
       fw_scan_out            = 4'b0;
+      fw_scan_out_test       = 4'b0;
       fw_dnn_output_0        = 4'b0;
       fw_dnn_output_1        = 4'b0;
       fw_dn_event_toggle     = 4'b0;
@@ -255,6 +276,7 @@ module com_fw_to_dut(
   always_ff @(posedge iob_clk) begin
     config_out_iob           <= config_out;
     scan_out_iob             <= scan_out;
+    scan_out_test_iob        <= scan_out_test;
     dnn_output_0_iob         <= dnn_output_0;
     dnn_output_1_iob         <= dnn_output_1;
     dn_event_toggle_iob      <= dn_event_toggle;

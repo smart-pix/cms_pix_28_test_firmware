@@ -13,6 +13,7 @@
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-07-23  Cristian Gingu         Add task w_cfg_array_2_mixed() task check_r_cfg_array_2_mixed()
 // 2024-08-12  Cristian Gingu         Add references to src/cms_pix28_package.sv vrf/cms_pix28_package_vrf.sv
+// 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -43,6 +44,7 @@ module fw_ipx_wrap_tb ();
   // Inputs from DUT
   logic config_out;
   logic scan_out;
+  logic scan_out_test;
   logic dnn_output_0;
   logic dnn_output_1;
   logic dn_event_toggle;
@@ -74,6 +76,7 @@ module fw_ipx_wrap_tb ();
     // Inputs from DUT
     .config_out              (config_out),
     .scan_out                (scan_out),
+    .scan_out_test           (scan_out_test),
     .dnn_output_0            (dnn_output_0),
     .dnn_output_1            (dnn_output_1),
     .dn_event_toggle         (dn_event_toggle)
@@ -214,7 +217,8 @@ module fw_ipx_wrap_tb ();
   assign config_out          = 1'b0;
   always @(posedge fw_pl_clk1) begin
     // arbitrary one clock delay
-    scan_out <= scan_in;
+    scan_out      <=  scan_in;
+    scan_out_test <= ~scan_in;
   end
 
   always @(posedge fw_pl_clk1) begin : dnn_proc
@@ -555,6 +559,29 @@ module fw_ipx_wrap_tb ();
     sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
   endtask
 
+  task check_r_data_array_1_counter_b(
+      integer read_n_32bit_words
+    );
+    @(negedge fw_axi_clk);             // ensure enter on FE of AXI CLK
+    tb_function_id           = OP_CODE_R_DATA_ARRAY_1;
+    tb_sw_write24_0          = 24'h0;
+    sw_write32_0             = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
+    #(5*fw_axi_clk_period);
+    for(int i_addr=0; i_addr<read_n_32bit_words; i_addr++) begin
+      tb_sw_write24_0[23:16] = i_addr & 8'hFF;
+      tb_sw_write24_0[15: 0] = 16'hFFFF;
+      sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
+      @(posedge fw_axi_clk);
+      if(sw_read32_0 != {~tb_w_cfg_array_counter[2*i_addr+1], ~tb_w_cfg_array_counter[2*i_addr]}) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_0 (counter) i_addr=%03d sw_read32_0=0x%08h expected {0x%04h 0x%04h}", $realtime(), i_addr, sw_read32_0, ~tb_w_cfg_array_counter[2*i_addr+1], ~tb_w_cfg_array_counter[2*i_addr]);
+        tb_err[tb_err_index_op_code_r_data_array_1]=1'b1;
+      end
+      @(negedge fw_axi_clk);
+    end
+    tb_function_id           = OP_CODE_NOOP;
+    sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
+  endtask
+
   task check_r_data_array_0_dnn();
     @(negedge fw_axi_clk);             // ensure enter on FE of AXI CLK
     tb_function_id           = OP_CODE_R_DATA_ARRAY_0;
@@ -751,7 +778,7 @@ module fw_ipx_wrap_tb ();
     tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
     tb_test_sample           = 6'h04;                      // on clock domain fw_axi_clk
     tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
-    tb_test_loopback         = 1'b0;                       // on clock domain fw_axi_clk
+    tb_test_loopback         = $urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
     tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
@@ -768,6 +795,10 @@ module fw_ipx_wrap_tb ();
     // READ fw_op_code_r_data_array_0
     check_r_data_array_0_counter(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for tb_test_number==1 and tb_test_loopback==HIGH
     #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
+    tb_number   = 505;
+    // READ fw_op_code_r_data_array_1
+    check_r_data_array_1_counter_b(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for tb_test_number==1 and tb_test_loopback==HIGH
+    #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
@@ -792,7 +823,7 @@ module fw_ipx_wrap_tb ();
     tb_test_delay            = 6'h07;                      // on clock domain fw_axi_clk
     tb_test_sample           = 6'h05;                      // on clock domain fw_axi_clk
     tb_test_number           = test_number_2;              // on clock domain fw_axi_clk
-    tb_test_loopback         = 1'b1;                       // on clock domain fw_axi_clk
+    tb_test_loopback         = $urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
     tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     w_execute();
@@ -809,6 +840,10 @@ module fw_ipx_wrap_tb ();
     // READ fw_op_code_r_data_array_0
     check_r_data_array_0_counter(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for tb_test_number==1 and tb_test_loopback==HIGH
     #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
+    tb_number   = 605;
+    // READ fw_op_code_r_data_array_1
+    check_r_data_array_1_counter_b(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for tb_test_number==1 and tb_test_loopback==HIGH
+    #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
