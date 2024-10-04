@@ -24,6 +24,7 @@
 // 2024-09-17  Cristian Gingu         Change scan_load to delayed version; use in ip2_test2; add 6-bit w_cfg_static_0 scan_load_delay
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2024-10-04  Cristian Gingu         Add condition test_sample==fw_pl_clk1_cnt for sm_testx_o_scanchain_reg code Case sm_test3
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -567,21 +568,28 @@ module fw_ip2 (
     end else if(test3_enable) begin
       // use data specific for test case test3
       if(sm_test3==DONE_IP2_T3) begin
-        if(test_loopback) begin
-          // overwrite with hard-coded default value - set it non-zero for debug purpose
-          sm_testx_o_scanchain_reg[47: 0]                                 <= dnn_reg_0_default;
-          sm_testx_o_scanchain_reg[95:48]                                 <= dnn_reg_1_default;
-          sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 96] <= {(sm_testx_i_scanchain_reg_width-96){1'b0}};
+        if(test_sample==fw_pl_clk1_cnt) begin
+          if(test_loopback) begin
+            // overwrite with hard-coded default value - set it non-zero for debug purpose
+            sm_testx_o_scanchain_reg[47: 0]                                 <= dnn_reg_0_default;
+            sm_testx_o_scanchain_reg[95:48]                                 <= dnn_reg_1_default;
+            sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 96] <= {(sm_testx_i_scanchain_reg_width-96){1'b0}};
+          end else begin
+            // overwrite with dnn_output_0/1 data coming from sm_test3
+            sm_testx_o_scanchain_reg[47: 0]                                 <= sm_test3_o_dnn_output_0;
+            sm_testx_o_scanchain_reg[95:48]                                 <= sm_test3_o_dnn_output_1;
+            sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 96] <= {(sm_testx_i_scanchain_reg_width-96){1'b0}};
+          end
         end else begin
-          // overwrite with dnn_output_0/1 data coming from sm_test3
-          sm_testx_o_scanchain_reg[47: 0]                                 <= sm_test3_o_dnn_output_0;
-          sm_testx_o_scanchain_reg[95:48]                                 <= sm_test3_o_dnn_output_1;
-          sm_testx_o_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 96] <= {(sm_testx_i_scanchain_reg_width-96){1'b0}};
+          // keep old value
+          sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
         end
       end else begin
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
+      // one case only for sm_testx_o_scanchain_test_reg, regardless of (nested) conditions:
+      // if(sm_test3==DONE_IP2_T3), if(test_sample==fw_pl_clk1_cnt), if(test_loopback
       // keep old value
       sm_testx_o_scanchain_test_reg       <= sm_testx_o_scanchain_test_reg;
     end else if(test4_enable) begin

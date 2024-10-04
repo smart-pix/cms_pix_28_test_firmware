@@ -430,6 +430,10 @@ set id [waveform add -signals [subst  {
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.DUT.bxclk_ana}]}
+	} ]]
+waveform format $id -color #ff9900 -namecolor #ff9900
+set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.scan_in}]}
 	} ]]
 set id [waveform add -signals [subst  {
@@ -439,6 +443,9 @@ set id [waveform add -label fw_ipx_wrap_tb.DUT.fw_ip2_inst -comment {}]
 waveform format $id -namecolor #ff0000
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.fw_pl_clk1}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.fw_pl_clk1_cnt[5:0]}]}
 	} ]]
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.fw_scan_out}]}
@@ -663,4 +670,4 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.bxclks_generators_inst.bxclk_ana}]}
 	} ]]
 
-waveform xview limits 0 129315ns
+waveform xview limits 87473.069ns 88084.669ns
