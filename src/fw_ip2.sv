@@ -545,7 +545,7 @@ module fw_ip2 (
       end
     end else if(test2_enable) begin
       // use data specific for test case test2
-      if(sm_test2==SCANLOAD_HIGH_2_IP2_T2 | SHIFT_IN_0_IP2_T2 | sm_test2==SHIFT_IN_IP2_T2) begin
+      if(sm_test2==SHIFT_IN_0_IP2_T2 | sm_test2==SHIFT_IN_IP2_T2) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
