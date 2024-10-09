@@ -25,6 +25,7 @@
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2024-10-04  Cristian Gingu         Add condition test_sample==fw_pl_clk1_cnt for sm_testx_o_scanchain_reg code Case sm_test3
+// 2024-10-09  Cristian Gingu         Fix missing ASIC scan-out-first-bit. Add condition sm_test2==SCANLOAD_HIGH_2_IP2_T2 or sm_test2==TRIGOUT_HIGH_2_IP2_T2 to sm_testx_o_scanchain_reg code Case test2_enable
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -113,6 +114,7 @@ module fw_ip2 (
   //
   import cms_pix28_package::state_t_sm_ip2_test2;
   import cms_pix28_package::IDLE_IP2_T2;
+  import cms_pix28_package::TRIGOUT_HIGH_2_IP2_T2;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T2;
   import cms_pix28_package::SHIFT_IN_0_IP2_T2;
   import cms_pix28_package::SHIFT_IN_IP2_T2;
@@ -522,7 +524,7 @@ module fw_ip2 (
   always @(posedge fw_pl_clk1) begin : sm_testx_o_scanchain_reg_proc
     if(test1_enable) begin
       // use data specific for test case test1
-      if(sm_test1==SHIFT_IN_0_IP2_T1 | sm_test1==SHIFT_IN_IP2_T1) begin
+      if(sm_test1==SHIFT_IN_0_IP2_T1 || sm_test1==SHIFT_IN_IP2_T1) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
@@ -545,7 +547,8 @@ module fw_ip2 (
       end
     end else if(test2_enable) begin
       // use data specific for test case test2
-      if(sm_test2==SHIFT_IN_0_IP2_T2 | sm_test2==SHIFT_IN_IP2_T2) begin
+      if(sm_test2==SHIFT_IN_0_IP2_T2 || sm_test2==SHIFT_IN_IP2_T2 ||
+          (sm_test2==SCANLOAD_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b0) || (sm_test2==TRIGOUT_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b1)) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
