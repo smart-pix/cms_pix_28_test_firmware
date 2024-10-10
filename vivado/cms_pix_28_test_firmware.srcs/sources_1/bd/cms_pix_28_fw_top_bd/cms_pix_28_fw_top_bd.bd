@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x6ED0588EA8A0ADEC",
+      "boundary_crc": "0xFE0D1831CBF6F797",
       "device": "xczu9eg-ffvb1156-2-e",
       "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd",
       "name": "cms_pix_28_fw_top_bd",
@@ -20,7 +20,8 @@
         }
       },
       "clk_wiz_0": "",
-      "fw_top_v_0": ""
+      "fw_top_v_0": "",
+      "util_ds_buf_vin_test_trig_out": ""
     },
     "ports": {
       "config_out": {
@@ -90,6 +91,30 @@
           "PHASE": {
             "value": "0.0",
             "value_src": "default_prop"
+          }
+        }
+      },
+      "vin_test_trig_out_OBUF_DS_P": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "vin_test_trig_out_OBUF_DS_N": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
           }
         }
       }
@@ -927,6 +952,20 @@
             "direction": "I"
           }
         }
+      },
+      "util_ds_buf_vin_test_trig_out": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "cms_pix_28_fw_top_bd_util_ds_buf_0_0",
+        "xci_path": "ip/cms_pix_28_fw_top_bd_util_ds_buf_0_0/cms_pix_28_fw_top_bd_util_ds_buf_0_0.xci",
+        "inst_hier_path": "util_ds_buf_vin_test_trig_out",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          },
+          "C_SIZE": {
+            "value": "1"
+          }
+        }
       }
     },
     "interface_nets": {
@@ -1032,7 +1071,8 @@
       "fw_top_v_0_vin_test_trig_out": {
         "ports": [
           "fw_top_v_0/vin_test_trig_out",
-          "vin_test_trig_out"
+          "vin_test_trig_out",
+          "util_ds_buf_vin_test_trig_out/OBUF_IN"
         ]
       },
       "proc_sys_reset_0_interconnect_aresetn": {
@@ -1052,6 +1092,18 @@
         "ports": [
           "scan_out_test",
           "fw_top_v_0/scan_out_test"
+        ]
+      },
+      "util_ds_buf_vin_test_trig_out_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_vin_test_trig_out/OBUF_DS_N",
+          "vin_test_trig_out_OBUF_DS_N"
+        ]
+      },
+      "util_ds_buf_vin_test_trig_out_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_vin_test_trig_out/OBUF_DS_P",
+          "vin_test_trig_out_OBUF_DS_P"
         ]
       },
       "zynq_ultra_ps_e_0_pl_clk0": {

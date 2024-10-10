@@ -39,3 +39,8 @@ set_property IOSTANDARD LVCMOS18 [get_ports dnn_output_0]
 set_property IOSTANDARD LVCMOS18 [get_ports dnn_output_1]
 # set_property IOSTANDARD LVCMOS18 [get_ports dn_event_toggle]
 # set_property IOSTANDARD LVCMOS18 [get_ports up_event_toggle]
+
+# Differential signals
+set_property PACKAGE_PIN AC12 [get_ports vin_test_trig_out_OBUF_DS_P[0]]
+set_property PACKAGE_PIN AC11 [get_ports vin_test_trig_out_OBUF_DS_N[0]]
+set_property IOSTANDARD LVDS [get_ports vin_test_trig_out_OBUF_DS_*]
