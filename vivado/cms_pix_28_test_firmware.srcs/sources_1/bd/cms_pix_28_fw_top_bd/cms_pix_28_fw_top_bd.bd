@@ -20,8 +20,8 @@
         }
       },
       "clk_wiz_0": "",
-      "fw_top_v_0": "",
-      "util_ds_buf_vin_test_trig_out": ""
+      "util_ds_buf_vin_test_trig_out": "",
+      "fw_top_v_0": ""
     },
     "ports": {
       "config_out": {
@@ -630,6 +630,20 @@
           }
         }
       },
+      "util_ds_buf_vin_test_trig_out": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "cms_pix_28_fw_top_bd_util_ds_buf_0_0",
+        "xci_path": "ip/cms_pix_28_fw_top_bd_util_ds_buf_0_0/cms_pix_28_fw_top_bd_util_ds_buf_0_0.xci",
+        "inst_hier_path": "util_ds_buf_vin_test_trig_out",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          },
+          "C_SIZE": {
+            "value": "1"
+          }
+        }
+      },
       "fw_top_v_0": {
         "vlnv": "xilinx.com:module_ref:fw_top_v:1.0",
         "xci_name": "cms_pix_28_fw_top_bd_fw_top_v_0_0",
@@ -950,20 +964,6 @@
           },
           "dnn_output_1": {
             "direction": "I"
-          }
-        }
-      },
-      "util_ds_buf_vin_test_trig_out": {
-        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
-        "xci_name": "cms_pix_28_fw_top_bd_util_ds_buf_0_0",
-        "xci_path": "ip/cms_pix_28_fw_top_bd_util_ds_buf_0_0/cms_pix_28_fw_top_bd_util_ds_buf_0_0.xci",
-        "inst_hier_path": "util_ds_buf_vin_test_trig_out",
-        "parameters": {
-          "C_BUF_TYPE": {
-            "value": "OBUFDS"
-          },
-          "C_SIZE": {
-            "value": "1"
           }
         }
       }
