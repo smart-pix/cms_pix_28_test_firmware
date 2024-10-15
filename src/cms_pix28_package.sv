@@ -10,6 +10,7 @@
 // Date        Author                 Description
 // 2024-08-06  Cristian  Gingu        Created
 // 2024-09-17  Cristian  Gingu        add w_cfg_static_0_reg_scan_load_delay_index_min/max_IP2
+// 2024-10-11  Cristian  Gingu        add w_cfg_static_0_reg_pack_data_array_0_IP2
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -152,7 +153,8 @@ package cms_pix28_package;
   localparam w_cfg_static_0_reg_scan_load_delay_index_min_IP2        = 13;     //
   localparam w_cfg_static_0_reg_scan_load_delay_index_max_IP2        = 18;     //
   localparam w_cfg_static_0_reg_scan_load_delay_disable_index_IP2    = 19;     //
-  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 20;     //
+  localparam w_cfg_static_0_reg_pack_data_array_0_IP2                = 20;     //
+  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 21;     //
   localparam w_cfg_static_0_reg_spare_index_max_IP2                  = 23;     //
   //
   localparam w_execute_cfg_test_delay_index_min_IP2                  =  0;     //
@@ -207,6 +209,7 @@ package cms_pix28_package;
   } scan_chain_reg_mode_ip2;
   parameter SCAN_REG_MODE_SHIFT_IN  = SHIFT_REG_IP2;
   parameter SCAN_REG_MODE_LOAD_COMP = LOAD_COMP_IP2;
+  parameter logic [3:0] PACK_DATA_ARRAY_REPEAT_MAX = 4'h4;
   //
   //---------------------------------------------------------------------------
 endpackage
