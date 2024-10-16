@@ -27,6 +27,7 @@
 // 2024-10-04  Cristian Gingu         Add condition test_sample==fw_pl_clk1_cnt for sm_testx_o_scanchain_reg code Case sm_test3
 // 2024-10-09  Cristian Gingu         Fix missing ASIC scan-out-first-bit. Add condition sm_test2==SCANLOAD_HIGH_2_IP2_T2 or sm_test2==TRIGOUT_HIGH_2_IP2_T2 to sm_testx_o_scanchain_reg code Case test2_enable
 // 2024-10-11  Cristian Gingu         Add pack_data_array_0 (w_cfg_static_0_reg_pack_data_array_0_IP2), sm_testx_o_scanchain_reg_0/1/2/3/4, sm_testx_o_scanchain_reg_array32_0/1/2/3/4
+// 2024-10-16  Cristian  Gingu        Increase packing PACK_DATA_ARRAY_REPEAT_MAX from 0-4 to 0-9; ip2_test2 mapped to .sm_testx_i_scanchain_reg_shift_cnt_max  (scan_reg_bits_total),
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -494,7 +495,7 @@ module fw_ip2 (
     .test2_enable_re                         (test2_enable_re),
     .sm_testx_i_scanchain_reg_bit0           (sm_testx_i_scanchain_reg[0]),
     .sm_testx_i_scanchain_reg_shift_cnt      (sm_testx_i_scanchain_reg_shift_cnt),
-    .sm_testx_i_scanchain_reg_shift_cnt_max  (sm_testx_i_scanchain_reg_width),
+    .sm_testx_i_scanchain_reg_shift_cnt_max  (scan_reg_bits_total),
     .sm_test2_o_scanchain_reg_load           (sm_test2_o_scanchain_reg_load),
     .sm_test2_o_scanchain_reg_shift          (sm_test2_o_scanchain_reg_shift_right),
     .sm_test2_o_status_done                  (sm_test2_o_status_done),
@@ -577,20 +578,32 @@ module fw_ip2 (
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            if(sm_pack_data_array_0_cnt==4'h0) begin sm_testx_o_scanchain_reg_0 <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_0   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_0 <= sm_testx_o_scanchain_reg_0; end
-            if(sm_pack_data_array_0_cnt==4'h1) begin sm_testx_o_scanchain_reg_1 <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_1   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_1 <= sm_testx_o_scanchain_reg_1; end
-            if(sm_pack_data_array_0_cnt==4'h2) begin sm_testx_o_scanchain_reg_2 <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_2   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_2 <= sm_testx_o_scanchain_reg_2; end
-            if(sm_pack_data_array_0_cnt==4'h3) begin sm_testx_o_scanchain_reg_3 <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_3   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_3 <= sm_testx_o_scanchain_reg_3; end
-            if(sm_pack_data_array_0_cnt==4'h4) begin sm_testx_o_scanchain_reg_4 <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_4   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_4 <= sm_testx_o_scanchain_reg_4; end
-            sm_testx_o_scanchain_test_reg                                       <= {~sm_test2_o_scan_in,       sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]}; // arbitrary inversion
+            if  (sm_pack_data_array_0_cnt==4'h0) begin sm_testx_o_scanchain_reg_0[1*768-1 : 0*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_0   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h5) begin sm_testx_o_scanchain_reg_0[2*768-1 : 1*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_0   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_0 <= sm_testx_o_scanchain_reg_0; end
+            if  (sm_pack_data_array_0_cnt==4'h1) begin sm_testx_o_scanchain_reg_1[1*768-1 : 0*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_1   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h6) begin sm_testx_o_scanchain_reg_1[2*768-1 : 1*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_1   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_1 <= sm_testx_o_scanchain_reg_1; end
+            if  (sm_pack_data_array_0_cnt==4'h2) begin sm_testx_o_scanchain_reg_2[1*768-1 : 0*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_2   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h7) begin sm_testx_o_scanchain_reg_2[2*768-1 : 1*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_2   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_2 <= sm_testx_o_scanchain_reg_2; end
+            if  (sm_pack_data_array_0_cnt==4'h3) begin sm_testx_o_scanchain_reg_3[1*768-1 : 0*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_3   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h8) begin sm_testx_o_scanchain_reg_3[2*768-1 : 1*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_3   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_3 <= sm_testx_o_scanchain_reg_3; end
+            if  (sm_pack_data_array_0_cnt==4'h4) begin sm_testx_o_scanchain_reg_4[1*768-1 : 0*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_4   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h9) begin sm_testx_o_scanchain_reg_4[2*768-1 : 1*768] <= { sm_test2_o_scan_in,       sm_testx_o_scanchain_reg_4   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_4 <= sm_testx_o_scanchain_reg_4; end
+            //
+            sm_testx_o_scanchain_test_reg                                                          <= {~sm_test2_o_scan_in,       sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]}; // arbitrary inversion
           end else begin
             // shift-in new bit using readout-data from DUT
-            if(sm_pack_data_array_0_cnt==4'h0) begin sm_testx_o_scanchain_reg_0 <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_0   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_0 <= sm_testx_o_scanchain_reg_0; end
-            if(sm_pack_data_array_0_cnt==4'h1) begin sm_testx_o_scanchain_reg_1 <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_1   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_1 <= sm_testx_o_scanchain_reg_1; end
-            if(sm_pack_data_array_0_cnt==4'h2) begin sm_testx_o_scanchain_reg_2 <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_2   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_2 <= sm_testx_o_scanchain_reg_2; end
-            if(sm_pack_data_array_0_cnt==4'h3) begin sm_testx_o_scanchain_reg_3 <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_3   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_3 <= sm_testx_o_scanchain_reg_3; end
-            if(sm_pack_data_array_0_cnt==4'h4) begin sm_testx_o_scanchain_reg_4 <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_4   [sm_testx_o_scanchain_reg_width-1 : 1]}; end else begin sm_testx_o_scanchain_reg_4 <= sm_testx_o_scanchain_reg_4; end
-            sm_testx_o_scanchain_test_reg                                       <= { sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            if  (sm_pack_data_array_0_cnt==4'h0) begin sm_testx_o_scanchain_reg_0[1*768-1 : 0*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_0   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h5) begin sm_testx_o_scanchain_reg_0[2*768-1 : 1*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_0   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_0 <= sm_testx_o_scanchain_reg_0; end
+            if  (sm_pack_data_array_0_cnt==4'h1) begin sm_testx_o_scanchain_reg_1[1*768-1 : 0*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_1   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h6) begin sm_testx_o_scanchain_reg_1[2*768-1 : 1*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_1   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_1 <= sm_testx_o_scanchain_reg_1; end
+            if  (sm_pack_data_array_0_cnt==4'h2) begin sm_testx_o_scanchain_reg_2[1*768-1 : 0*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_2   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h7) begin sm_testx_o_scanchain_reg_2[2*768-1 : 1*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_2   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_2 <= sm_testx_o_scanchain_reg_2; end
+            if  (sm_pack_data_array_0_cnt==4'h3) begin sm_testx_o_scanchain_reg_3[1*768-1 : 0*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_3   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h8) begin sm_testx_o_scanchain_reg_3[2*768-1 : 1*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_3   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_3 <= sm_testx_o_scanchain_reg_3; end
+            if  (sm_pack_data_array_0_cnt==4'h4) begin sm_testx_o_scanchain_reg_4[1*768-1 : 0*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_4   [1*768-1 : 0*768+1]}; end else
+              if(sm_pack_data_array_0_cnt==4'h9) begin sm_testx_o_scanchain_reg_4[2*768-1 : 1*768] <= { sm_testx_i_scan_out,      sm_testx_o_scanchain_reg_4   [2*768-1 : 1*768+1]}; end else begin sm_testx_o_scanchain_reg_4 <= sm_testx_o_scanchain_reg_4; end
+            //
+            sm_testx_o_scanchain_test_reg                                                          <= { sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value

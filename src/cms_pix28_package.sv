@@ -10,7 +10,8 @@
 // Date        Author                 Description
 // 2024-08-06  Cristian  Gingu        Created
 // 2024-09-17  Cristian  Gingu        add w_cfg_static_0_reg_scan_load_delay_index_min/max_IP2
-// 2024-10-11  Cristian  Gingu        add w_cfg_static_0_reg_pack_data_array_0_IP2
+// 2024-10-11  Cristian  Gingu        add w_cfg_static_0_reg_pack_data_array_0_IP2, PACK_DATA_ARRAY_REPEAT_MAX
+// 2024-10-16  Cristian  Gingu        Increase packing PACK_DATA_ARRAY_REPEAT_MAX from 0-4 to 0-9
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -209,7 +210,7 @@ package cms_pix28_package;
   } scan_chain_reg_mode_ip2;
   parameter SCAN_REG_MODE_SHIFT_IN  = SHIFT_REG_IP2;
   parameter SCAN_REG_MODE_LOAD_COMP = LOAD_COMP_IP2;
-  parameter logic [3:0] PACK_DATA_ARRAY_REPEAT_MAX = 4'h4;
+  parameter logic [3:0] PACK_DATA_ARRAY_REPEAT_MAX = 4'h9;
   //
   //---------------------------------------------------------------------------
 endpackage
