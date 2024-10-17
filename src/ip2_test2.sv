@@ -15,6 +15,7 @@
 // 2024-08-08  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-09-17  Cristian Gingu         Change scan_load to delayed version; use in ip2_test2; add 6-bit w_cfg_static_0 scan_load_delay
 // 2024-10-09  Cristian Gingu         Fix missing ASIC scan-out-first-bit. Add condition push scan-in while sm_test2==SCANLOAD_HIGH_2_IP2_T2 OR sm_test2==TRIGOUT_HIGH_2_IP2_T2
+// 2024-10-17  Cristian  Gingu        Add delayed vin_test_trig_out in ip2_tes3.sv
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test2__
 `define __ip2_test2__

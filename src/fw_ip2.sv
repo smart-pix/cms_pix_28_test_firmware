@@ -497,6 +497,8 @@ module fw_ip2 (
     .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
     // Control signals:
     .clk_counter                             (fw_pl_clk1_cnt),
+    .scan_load_delay                         (scan_load_delay),
+    .scan_load_delay_disable                 (scan_load_delay_disable),
     .test_delay                              (test_delay),
     .test_trig_out_phase                     (test_trig_out_phase),
     .test_mask_reset_not                     (test_mask_reset_not),

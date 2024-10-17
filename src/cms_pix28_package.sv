@@ -9,7 +9,8 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-08-06  Cristian  Gingu        Created
-// 2024-09-17  Cristian  Gingu        add w_cfg_static_0_reg_scan_load_delay_index_min/max_IP2
+// 2024-09-17  Cristian  Gingu        Add w_cfg_static_0_reg_scan_load_delay_index_min/max_IP2
+// 2024-10-17  Cristian  Gingu        Add delayed vin_test_trig_out in ip2_tes3.sv
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -191,13 +192,16 @@ package cms_pix28_package;
   // IP2 TEST3
   localparam logic [47:0] dnn_reg_0_default = 48'h123456789ABC;         // default value for 48-bits storage dnn_reg_0
   localparam logic [47:0] dnn_reg_1_default = 48'hDEF0FEDCBA98;         // default value for 48-bits storage dnn_reg_1
-  typedef enum logic [2:0] {
-    IDLE_IP2_T3            = 3'b000,
-    DELAY_TEST_IP2_T3      = 3'b001,
-    RESET_NOT_IP2_T3       = 3'b010,
-    ACQUIRE_1_IP2_T3       = 3'b011,
-    ACQUIRE_2_IP2_T3       = 3'b100,
-    DONE_IP2_T3            = 3'b101
+  typedef enum logic [3:0] {
+    IDLE_IP2_T3            = 4'b0000,
+    DELAY_TEST_IP2_T3      = 4'b0001,
+    RESET_NOT_IP2_T3       = 4'b0010,
+    TRIGOUT_HIGH_1_IP2_T3  = 4'b0011,
+    TRIGOUT_HIGH_2_IP2_T3  = 4'b0100,
+    DELAY_SCANLOAD_IP2_T3  = 4'b0101,
+    SCANLOAD_HIGH_1_IP2_T3 = 4'b0110,
+    SCANLOAD_HIGH_2_IP2_T3 = 4'b0111,
+    DONE_IP2_T3            = 4'b1000
   } state_t_sm_ip2_test3;
   //
   // Define enumerated type scan_chain_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
