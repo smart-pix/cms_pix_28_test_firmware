@@ -621,6 +621,18 @@ set id [waveform add -signals [subst  {
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
+	{[format {worklib.cms_pix28_package::dnn_reg_0_default[47:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {worklib.cms_pix28_package::dnn_reg_1_default[47:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.tb_dnn_reg_0_random[47:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.tb_dnn_reg_1_random[47:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.ip2_test3_inst.test_delay[5:0]}]}
 	} ]]
 set id [waveform add -signals [subst  {
@@ -699,4 +711,4 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.bxclks_generators_inst.bxclk_ana}]}
 	} ]]
 
-waveform xview limits 0 132275ns
+waveform xview limits 0 153785ns
