@@ -434,7 +434,7 @@
                 "inst_hier_path": "axi_interconnect_0/s00_couplers/auto_ds",
                 "parameters": {
                   "MI_DATA_WIDTH": {
-                    "value": "32"
+                    "value": "64"
                   },
                   "SI_DATA_WIDTH": {
                     "value": "128"
@@ -661,7 +661,7 @@
             "vlnv": "xilinx.com:interface:aximm_rtl:1.0",
             "parameters": {
               "DATA_WIDTH": {
-                "value": "32",
+                "value": "64",
                 "value_src": "auto"
               },
               "PROTOCOL": {
@@ -794,13 +794,13 @@
               "WDATA": {
                 "physical_name": "S_AXI_WDATA",
                 "direction": "I",
-                "left": "31",
+                "left": "63",
                 "right": "0"
               },
               "WSTRB": {
                 "physical_name": "S_AXI_WSTRB",
                 "direction": "I",
-                "left": "3",
+                "left": "7",
                 "right": "0"
               },
               "WVALID": {
@@ -848,7 +848,7 @@
               "RDATA": {
                 "physical_name": "S_AXI_RDATA",
                 "direction": "O",
-                "left": "31",
+                "left": "63",
                 "right": "0"
               },
               "RRESP": {

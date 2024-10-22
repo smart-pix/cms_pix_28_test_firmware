@@ -24,7 +24,7 @@
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.AWUSER_WIDTH">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.BUSER_WIDTH">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.CLK_DOMAIN">cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.DATA_WIDTH">32</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.DATA_WIDTH">64</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.FREQ_HZ">99999001</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.HAS_BRESP">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="BUSIFPARAM_VALUE.M_AXI.HAS_BURST">1</spirit:configurableElementValue>
@@ -101,7 +101,7 @@
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_FIFO_MODE">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_MAX_SPLIT_BEATS">256</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_M_AXI_ACLK_RATIO">2</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_M_AXI_DATA_WIDTH">32</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_M_AXI_DATA_WIDTH">64</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_PACKING_LEVEL">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_SUPPORTS_ID">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="MODELPARAM_VALUE.C_SYNCHRONIZER_STAGE">3</spirit:configurableElementValue>
@@ -114,7 +114,7 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Component_Name">cms_pix_28_fw_top_bd_auto_ds_0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.FIFO_MODE">0</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.MAX_SPLIT_BEATS">256</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.MI_DATA_WIDTH">32</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.MI_DATA_WIDTH">64</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PACKING_LEVEL">1</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PROTOCOL">AXI4</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.READ_WRITE_MODE">READ_WRITE</spirit:configurableElementValue>
@@ -280,8 +280,8 @@
                   &quot;m_axi_awqos&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;3&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
                   &quot;m_axi_awvalid&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;m_axi_awready&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;driver_value&quot;: &quot;0x0&quot; } ],
-                  &quot;m_axi_wdata&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;31&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
-                  &quot;m_axi_wstrb&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;3&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
+                  &quot;m_axi_wdata&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;63&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
+                  &quot;m_axi_wstrb&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;7&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
                   &quot;m_axi_wlast&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;m_axi_wvalid&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;m_axi_wready&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;driver_value&quot;: &quot;0x0&quot; } ],
@@ -299,7 +299,7 @@
                   &quot;m_axi_arqos&quot;: [ { &quot;direction&quot;: &quot;out&quot;, &quot;size_left&quot;: &quot;3&quot;, &quot;size_right&quot;: &quot;0&quot; } ],
                   &quot;m_axi_arvalid&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;m_axi_arready&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;driver_value&quot;: &quot;0x0&quot; } ],
-                  &quot;m_axi_rdata&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;size_left&quot;: &quot;31&quot;, &quot;size_right&quot;: &quot;0&quot;, &quot;driver_value&quot;: &quot;0x00000000&quot; } ],
+                  &quot;m_axi_rdata&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;size_left&quot;: &quot;63&quot;, &quot;size_right&quot;: &quot;0&quot;, &quot;driver_value&quot;: &quot;0x0000000000000000&quot; } ],
                   &quot;m_axi_rresp&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;size_left&quot;: &quot;1&quot;, &quot;size_right&quot;: &quot;0&quot;, &quot;driver_value&quot;: &quot;0x0&quot; } ],
                   &quot;m_axi_rlast&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;driver_value&quot;: &quot;0x1&quot; } ],
                   &quot;m_axi_rvalid&quot;: [ { &quot;direction&quot;: &quot;in&quot;, &quot;driver_value&quot;: &quot;0x0&quot; } ],
@@ -390,7 +390,7 @@
                     &quot;abstraction_type&quot;: &quot;xilinx.com:interface:aximm_rtl:1.0&quot;,
                     &quot;mode&quot;: &quot;master&quot;,
                     &quot;parameters&quot;: {
-                      &quot;DATA_WIDTH&quot;: [ { &quot;value&quot;: &quot;32&quot;, &quot;value_src&quot;: &quot;user_prop&quot;, &quot;value_permission&quot;: &quot;bd&quot;, &quot;resolve_type&quot;: &quot;generated&quot;, &quot;format&quot;: &quot;long&quot;, &quot;usage&quot;: &quot;simulation.tlm&quot;, &quot;is_ips_inferred&quot;: true, &quot;is_static_object&quot;: false } ],
+                      &quot;DATA_WIDTH&quot;: [ { &quot;value&quot;: &quot;64&quot;, &quot;value_src&quot;: &quot;user_prop&quot;, &quot;value_permission&quot;: &quot;bd&quot;, &quot;resolve_type&quot;: &quot;generated&quot;, &quot;format&quot;: &quot;long&quot;, &quot;usage&quot;: &quot;simulation.tlm&quot;, &quot;is_ips_inferred&quot;: true, &quot;is_static_object&quot;: false } ],
                       &quot;PROTOCOL&quot;: [ { &quot;value&quot;: &quot;AXI4&quot;, &quot;value_src&quot;: &quot;user_prop&quot;, &quot;value_permission&quot;: &quot;bd&quot;, &quot;resolve_type&quot;: &quot;generated&quot;, &quot;usage&quot;: &quot;simulation.tlm&quot;, &quot;is_ips_inferred&quot;: true, &quot;is_static_object&quot;: false } ],
                       &quot;FREQ_HZ&quot;: [ { &quot;value&quot;: &quot;99999001&quot;, &quot;value_src&quot;: &quot;user_prop&quot;, &quot;value_permission&quot;: &quot;bd&quot;, &quot;resolve_type&quot;: &quot;generated&quot;, &quot;format&quot;: &quot;long&quot;, &quot;usage&quot;: &quot;simulation.tlm&quot;, &quot;is_ips_inferred&quot;: true, &quot;is_static_object&quot;: false } ],
                       &quot;ID_WIDTH&quot;: [ { &quot;value&quot;: &quot;0&quot;, &quot;value_src&quot;: &quot;constant&quot;, &quot;value_permission&quot;: &quot;bd&quot;, &quot;resolve_type&quot;: &quot;generated&quot;, &quot;format&quot;: &quot;long&quot;, &quot;usage&quot;: &quot;simulation.tlm&quot;, &quot;is_ips_inferred&quot;: true, &quot;is_static_object&quot;: false } ],
