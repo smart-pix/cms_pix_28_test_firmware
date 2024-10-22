@@ -11,6 +11,7 @@
 // 2024-05-24  Cristian  Gingu        Created
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2024-10-22  Cristian Gingu         Change C_S_AXI_DATA_WIDTH from 32 to 64
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top__
 `define __fw_top__
@@ -18,7 +19,7 @@
 `timescale 1 ns/ 1 ps
 
 module fw_top #(
-    parameter integer C_S_AXI_DATA_WIDTH  = 32,            // Width of S_AXI data bus
+    parameter integer C_S_AXI_DATA_WIDTH  = 64,            // Width of S_AXI data bus
     parameter integer C_S_AXI_ADDR_WIDTH  = 11             // Width of S_AXI address bus
   )(
     //////////////////////////////
@@ -146,7 +147,8 @@ module fw_top #(
     .sw_read32_0(sw_read32_0),                                       // register#0 32-bit read  from FW to SW
     .sw_read32_1(sw_read32_1)                                        // register#1 32-bit read  from FW to SW
   );
-
+  assign sw_read32_0[63:32] = 32'hFF00FF00;
+  assign sw_read32_1[63:32] = 32'hF0F0F0F0;
   // Instantiate fw_ipx_wrap
   fw_ipx_wrap fw_ipx_wrap_inst (
     //////////////////////////////
@@ -154,9 +156,9 @@ module fw_top #(
     //////////////////////////////
     .S_AXI_ACLK              (S_AXI_ACLK),
     .S_AXI_ARESETN           (S_AXI_ARESETN),
-    .sw_write32_0            (sw_write32_0),                                // register#0 32-bit write from SW to FW
-    .sw_read32_0             (sw_read32_0),                                 // register#0 32-bit read  from FW to SW
-    .sw_read32_1             (sw_read32_1),                                 // register#1 32-bit read  from FW to SW
+    .sw_write32_0            (sw_write32_0[31:0]),                                // register#0 32-bit write from SW to FW
+    .sw_read32_0             (sw_read32_0[31:0]),                                 // register#0 32-bit read  from FW to SW
+    .sw_read32_1             (sw_read32_1[31:0]),                                 // register#1 32-bit read  from FW to SW
     //////////////////////////////////
     // DUT side ports == FPGA pins: //
     //////////////////////////////////

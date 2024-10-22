@@ -1,4 +1,4 @@
 *BASE 0x0400000000
-sw_write32_0,0x0,0xFFFFFFFF,True,True
-sw_read32_0,0x4,0xFFFFFFFF,True,False
-sw_read32_1,0x8,0xFFFFFFFF,True,False
+sw_write32_0,0x0,0xFFFFFFFFFFFFFFFF,True,True
+sw_read32_0,0x8,0xFFFFFFFFFFFFFFFF,True,False
+sw_read32_1,0x10,0xFFFFFFFFFFFFFFFF,True,False

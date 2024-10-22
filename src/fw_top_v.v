@@ -11,6 +11,7 @@
 // 2024-05-29  Cristian  Gingu        Created; Verilog wrapper for usage in Board Diagram IP
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2024-10-22  Cristian Gingu         Change C_S_AXI_DATA_WIDTH from 32 to 64
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top_v__
 `define __fw_top_v__
@@ -18,7 +19,7 @@
 `timescale 1 ns/ 1 ps
 
 module fw_top_v #(
-    parameter integer C_S_AXI_DATA_WIDTH  = 32,            // Width of S_AXI data bus
+    parameter integer C_S_AXI_DATA_WIDTH  = 64,            // Width of S_AXI data bus
     parameter integer C_S_AXI_ADDR_WIDTH  = 11             // Width of S_AXI address bus
   )(
     //////////////////////////////

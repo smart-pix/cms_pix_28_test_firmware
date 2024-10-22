@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-23  Cristian  Gingu        Created; based on https://github.com/SpacelyProject/spacely-caribou-common-blocks/blob/main/ExampleBlock/ExampleBlock.sv
+// 2024-10-22  Cristian Gingu         Change C_S_AXI_DATA_WIDTH from 32 to 64
 // ------------------------------------------------------------------------------------
 `ifndef __axi4lite_interface_top_for_pix28_fw__
 `define __axi4lite_interface_top_for_pix28_fw__
@@ -16,7 +17,7 @@
 `timescale 1 ns/ 1 ps
 
 module axi4lite_interface_top_for_pix28_fw #(
-    parameter integer C_S_AXI_DATA_WIDTH  = 32,            // Width of S_AXI data bus
+    parameter integer C_S_AXI_DATA_WIDTH  = 64,            // Width of S_AXI data bus
     parameter integer C_S_AXI_ADDR_WIDTH  = 11             // Width of S_AXI address bus
   )(
     //////////////////////////////
@@ -139,13 +140,17 @@ module axi4lite_interface_top_for_pix28_fw #(
   // 1. WRITE registers interface
   always_ff @(posedge S_AXI_ACLK) begin
     if (~S_AXI_ARESETN) begin
-      sw_write32_0 <= 32'h0;                                                   // register#0 32-bit write from SW to FW
+      sw_write32_0 <= 64'h0;                                                   // register#0 32-bit write from SW to FW
     end else begin
       // AXI output 32-bit reg_wrdout is transferred to FW input 32-bit sw_write32_0
       if(reg_wrByteStrobe[0][0] == 1) sw_write32_0[7:0]   <= reg_wrdout[7:0];
       if(reg_wrByteStrobe[0][1] == 1) sw_write32_0[15:8]  <= reg_wrdout[15:8];
       if(reg_wrByteStrobe[0][2] == 1) sw_write32_0[23:16] <= reg_wrdout[23:16];
       if(reg_wrByteStrobe[0][3] == 1) sw_write32_0[31:24] <= reg_wrdout[31:24];
+      if(reg_wrByteStrobe[0][4] == 1) sw_write32_0[39:32] <= reg_wrdout[39:32];
+      if(reg_wrByteStrobe[0][5] == 1) sw_write32_0[47:40] <= reg_wrdout[47:40];
+      if(reg_wrByteStrobe[0][6] == 1) sw_write32_0[55:48] <= reg_wrdout[55:48];
+      if(reg_wrByteStrobe[0][7] == 1) sw_write32_0[63:56] <= reg_wrdout[63:56];
     end
   end
   // 2. READ registers interface                                               // TODO CG this is new logic w.r.t. ExampleBlock.sv
