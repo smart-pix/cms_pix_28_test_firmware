@@ -22,12 +22,12 @@ preplace port port-id_scan_out_test -pg 1 -lvl 0 -x 0 -y 260 -defaultsOSRD
 preplace port port-id_config_clk -pg 1 -lvl 4 -x 1700 -y 150 -defaultsOSRD
 preplace portBus vin_test_trig_out_OBUF_DS_P -pg 1 -lvl 4 -x 1700 -y 480 -defaultsOSRD
 preplace portBus vin_test_trig_out_OBUF_DS_N -pg 1 -lvl 4 -x 1700 -y 500 -defaultsOSRD
-preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x 660 -y 0 -defaultsOSRD
 preplace inst proc_sys_reset_0 -pg 1 -lvl 1 -x 660 -y -180 -defaultsOSRD
 preplace inst axi_interconnect_0 -pg 1 -lvl 2 -x 1160 -y 40 -defaultsOSRD
 preplace inst clk_wiz_0 -pg 1 -lvl 2 -x 1160 -y 380 -defaultsOSRD
 preplace inst util_ds_buf_vin_test_trig_out -pg 1 -lvl 3 -x 1520 -y 480 -defaultsOSRD
 preplace inst fw_top_v_0 -pg 1 -lvl 3 -x 1520 -y 220 -defaultsOSRD
+preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x 660 -y 0 -defaultsOSRD
 preplace netloc ARESETN_1 1 1 2 990 -80 1320
 preplace netloc clk_wiz_0_clk_out1 1 2 1 1310 200n
 preplace netloc config_out_1 1 0 3 NJ 220 NJ 220 N
