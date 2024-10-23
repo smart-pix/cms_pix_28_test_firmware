@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x873A8437873A8437",
+      "boundary_crc": "0x2F8E9D842F8E9D84",
       "device": "xczu9eg-ffvb1156-2-e",
       "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd",
       "name": "cms_pix_28_fw_top_bd",
@@ -336,6 +336,16 @@
         "direction": "O",
         "left": "0",
         "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "vin_test_trig_out": {
+        "type": "data",
+        "direction": "O",
         "parameters": {
           "LAYERED_METADATA": {
             "value": "undef",
@@ -4594,7 +4604,8 @@
       "fw_top_v_0_vin_test_trig_out": {
         "ports": [
           "fw_top_v_0/vin_test_trig_out",
-          "obuf_ds_0/vin_test_trig_out"
+          "obuf_ds_0/vin_test_trig_out",
+          "vin_test_trig_out"
         ]
       },
       "ibuf_ds_0_config_out": {
