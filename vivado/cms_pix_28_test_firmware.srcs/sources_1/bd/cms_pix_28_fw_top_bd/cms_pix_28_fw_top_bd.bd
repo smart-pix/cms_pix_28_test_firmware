@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xFE0D1831CBF6F797",
+      "boundary_crc": "0x873A8437873A8437",
       "device": "xczu9eg-ffvb1156-2-e",
       "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd",
       "name": "cms_pix_28_fw_top_bd",
@@ -19,82 +19,115 @@
         }
       },
       "clk_wiz_0": "",
-      "util_ds_buf_vin_test_trig_out": "",
-      "fw_top_v_0": "",
-      "zynq_ultra_ps_e_0": ""
+      "zynq_ultra_ps_e_0": "",
+      "ibuf_ds_0": "",
+      "obuf_ds_0": "",
+      "fw_top_v_0": ""
     },
     "ports": {
-      "config_out": {
-        "direction": "I"
-      },
-      "scan_out": {
-        "direction": "I"
-      },
-      "dnn_output_0": {
-        "direction": "I"
-      },
-      "dnn_output_1": {
-        "direction": "I"
-      },
       "super_pixel_sel": {
-        "direction": "O"
-      },
-      "scan_load": {
-        "direction": "O"
-      },
-      "scan_in": {
-        "direction": "O"
-      },
-      "reset_not": {
-        "type": "rst",
-        "direction": "O",
-        "parameters": {
-          "INSERT_VIP": {
-            "value": "0",
-            "value_src": "default"
-          },
-          "POLARITY": {
-            "value": "ACTIVE_LOW",
-            "value_src": "default"
-          }
-        }
-      },
-      "config_in": {
-        "direction": "O"
-      },
-      "config_load": {
-        "direction": "O"
-      },
-      "bxclk_ana": {
-        "direction": "O"
-      },
-      "bxclk": {
-        "direction": "O"
-      },
-      "vin_test_trig_out": {
         "direction": "O"
       },
       "scan_out_test": {
         "direction": "I"
       },
-      "config_clk": {
-        "direction": "O",
+      "config_out_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
         "parameters": {
-          "CLK_DOMAIN": {
-            "value": "cms_pix_28_fw_top_bd_fw_top_v_0_0_config_clk",
-            "value_src": "default_prop"
-          },
-          "FREQ_HZ": {
-            "value": "100000000",
-            "value_src": "default_prop"
-          },
-          "PHASE": {
-            "value": "0.0",
-            "value_src": "default_prop"
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
           }
         }
       },
-      "vin_test_trig_out_OBUF_DS_P": {
+      "config_out_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_out_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_out_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_0_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_0_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_1_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_1_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_load_n": {
         "type": "data",
         "direction": "O",
         "left": "0",
@@ -106,7 +139,199 @@
           }
         }
       },
-      "vin_test_trig_out_OBUF_DS_N": {
+      "scan_load_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_in_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_in_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "vin_test_trig_out_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "vin_test_trig_out_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_ana_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_ana_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_load_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_load_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_in_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_in_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_clk_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_clk_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "reset_not_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "reset_not_n": {
         "type": "data",
         "direction": "O",
         "left": "0",
@@ -444,343 +669,6 @@
           },
           "USE_RESET": {
             "value": "false"
-          }
-        }
-      },
-      "util_ds_buf_vin_test_trig_out": {
-        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
-        "xci_name": "cms_pix_28_fw_top_bd_util_ds_buf_0_0",
-        "xci_path": "ip/cms_pix_28_fw_top_bd_util_ds_buf_0_0/cms_pix_28_fw_top_bd_util_ds_buf_0_0.xci",
-        "inst_hier_path": "util_ds_buf_vin_test_trig_out",
-        "parameters": {
-          "C_BUF_TYPE": {
-            "value": "OBUFDS"
-          },
-          "C_SIZE": {
-            "value": "1"
-          }
-        }
-      },
-      "fw_top_v_0": {
-        "vlnv": "xilinx.com:module_ref:fw_top_v:1.0",
-        "xci_name": "cms_pix_28_fw_top_bd_fw_top_v_0_0",
-        "xci_path": "ip/cms_pix_28_fw_top_bd_fw_top_v_0_0/cms_pix_28_fw_top_bd_fw_top_v_0_0.xci",
-        "inst_hier_path": "fw_top_v_0",
-        "reference_info": {
-          "ref_type": "hdl",
-          "ref_name": "fw_top_v",
-          "boundary_crc": "0x0"
-        },
-        "interface_ports": {
-          "S_AXI": {
-            "mode": "Slave",
-            "vlnv_bus_definition": "xilinx.com:interface:aximm:1.0",
-            "vlnv": "xilinx.com:interface:aximm_rtl:1.0",
-            "parameters": {
-              "DATA_WIDTH": {
-                "value": "32",
-                "value_src": "auto"
-              },
-              "PROTOCOL": {
-                "value": "AXI4LITE",
-                "value_src": "constant"
-              },
-              "FREQ_HZ": {
-                "value": "99999001",
-                "value_src": "user_prop"
-              },
-              "ID_WIDTH": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "ADDR_WIDTH": {
-                "value": "11",
-                "value_src": "auto"
-              },
-              "AWUSER_WIDTH": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "ARUSER_WIDTH": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "WUSER_WIDTH": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "RUSER_WIDTH": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "BUSER_WIDTH": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "READ_WRITE_MODE": {
-                "value": "READ_WRITE",
-                "value_src": "constant"
-              },
-              "HAS_BURST": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "HAS_LOCK": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "HAS_PROT": {
-                "value": "1",
-                "value_src": "constant"
-              },
-              "HAS_CACHE": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "HAS_QOS": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "HAS_REGION": {
-                "value": "0",
-                "value_src": "constant"
-              },
-              "HAS_WSTRB": {
-                "value": "1",
-                "value_src": "constant"
-              },
-              "HAS_BRESP": {
-                "value": "1",
-                "value_src": "constant"
-              },
-              "HAS_RRESP": {
-                "value": "1",
-                "value_src": "constant"
-              },
-              "SUPPORTS_NARROW_BURST": {
-                "value": "0",
-                "value_src": "auto"
-              },
-              "NUM_READ_OUTSTANDING": {
-                "value": "1",
-                "value_src": "auto"
-              },
-              "NUM_WRITE_OUTSTANDING": {
-                "value": "1",
-                "value_src": "auto"
-              },
-              "MAX_BURST_LENGTH": {
-                "value": "1",
-                "value_src": "auto"
-              },
-              "CLK_DOMAIN": {
-                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
-                "value_src": "default_prop"
-              },
-              "NUM_READ_THREADS": {
-                "value": "4",
-                "value_src": "const_prop"
-              },
-              "NUM_WRITE_THREADS": {
-                "value": "4",
-                "value_src": "const_prop"
-              }
-            },
-            "memory_map_ref": "S_AXI",
-            "port_maps": {
-              "AWADDR": {
-                "physical_name": "S_AXI_AWADDR",
-                "direction": "I",
-                "left": "10",
-                "right": "0"
-              },
-              "AWPROT": {
-                "physical_name": "S_AXI_AWPROT",
-                "direction": "I",
-                "left": "2",
-                "right": "0"
-              },
-              "AWVALID": {
-                "physical_name": "S_AXI_AWVALID",
-                "direction": "I"
-              },
-              "AWREADY": {
-                "physical_name": "S_AXI_AWREADY",
-                "direction": "O"
-              },
-              "WDATA": {
-                "physical_name": "S_AXI_WDATA",
-                "direction": "I",
-                "left": "31",
-                "right": "0"
-              },
-              "WSTRB": {
-                "physical_name": "S_AXI_WSTRB",
-                "direction": "I",
-                "left": "3",
-                "right": "0"
-              },
-              "WVALID": {
-                "physical_name": "S_AXI_WVALID",
-                "direction": "I"
-              },
-              "WREADY": {
-                "physical_name": "S_AXI_WREADY",
-                "direction": "O"
-              },
-              "BRESP": {
-                "physical_name": "S_AXI_BRESP",
-                "direction": "O",
-                "left": "1",
-                "right": "0"
-              },
-              "BVALID": {
-                "physical_name": "S_AXI_BVALID",
-                "direction": "O"
-              },
-              "BREADY": {
-                "physical_name": "S_AXI_BREADY",
-                "direction": "I"
-              },
-              "ARADDR": {
-                "physical_name": "S_AXI_ARADDR",
-                "direction": "I",
-                "left": "10",
-                "right": "0"
-              },
-              "ARPROT": {
-                "physical_name": "S_AXI_ARPROT",
-                "direction": "I",
-                "left": "2",
-                "right": "0"
-              },
-              "ARVALID": {
-                "physical_name": "S_AXI_ARVALID",
-                "direction": "I"
-              },
-              "ARREADY": {
-                "physical_name": "S_AXI_ARREADY",
-                "direction": "O"
-              },
-              "RDATA": {
-                "physical_name": "S_AXI_RDATA",
-                "direction": "O",
-                "left": "31",
-                "right": "0"
-              },
-              "RRESP": {
-                "physical_name": "S_AXI_RRESP",
-                "direction": "O",
-                "left": "1",
-                "right": "0"
-              },
-              "RVALID": {
-                "physical_name": "S_AXI_RVALID",
-                "direction": "O"
-              },
-              "RREADY": {
-                "physical_name": "S_AXI_RREADY",
-                "direction": "I"
-              }
-            }
-          }
-        },
-        "ports": {
-          "S_AXI_ACLK": {
-            "type": "clk",
-            "direction": "I",
-            "parameters": {
-              "ASSOCIATED_BUSIF": {
-                "value": "S_AXI",
-                "value_src": "constant"
-              },
-              "ASSOCIATED_RESET": {
-                "value": "S_AXI_ARESETN",
-                "value_src": "constant"
-              },
-              "FREQ_HZ": {
-                "value": "99999001",
-                "value_src": "user_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
-                "value_src": "default_prop"
-              }
-            }
-          },
-          "S_AXI_ARESETN": {
-            "type": "rst",
-            "direction": "I",
-            "parameters": {
-              "POLARITY": {
-                "value": "ACTIVE_LOW",
-                "value_src": "constant"
-              }
-            }
-          },
-          "pl_clk1": {
-            "direction": "I",
-            "parameters": {
-              "FREQ_HZ": {
-                "value": "399996000",
-                "value_src": "ip_prop"
-              },
-              "PHASE": {
-                "value": "0.0",
-                "value_src": "ip_prop"
-              },
-              "CLK_DOMAIN": {
-                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
-                "value_src": "ip_prop"
-              }
-            }
-          },
-          "super_pixel_sel": {
-            "direction": "O"
-          },
-          "config_clk": {
-            "type": "clk",
-            "direction": "O"
-          },
-          "reset_not": {
-            "type": "rst",
-            "direction": "O"
-          },
-          "config_in": {
-            "direction": "O"
-          },
-          "config_load": {
-            "direction": "O"
-          },
-          "bxclk_ana": {
-            "direction": "O"
-          },
-          "bxclk": {
-            "direction": "O"
-          },
-          "vin_test_trig_out": {
-            "direction": "O"
-          },
-          "scan_in": {
-            "direction": "O"
-          },
-          "scan_load": {
-            "direction": "O"
-          },
-          "config_out": {
-            "direction": "I"
-          },
-          "scan_out": {
-            "direction": "I"
-          },
-          "scan_out_test": {
-            "direction": "I"
-          },
-          "dnn_output_0": {
-            "direction": "I"
-          },
-          "dnn_output_1": {
-            "direction": "I"
           }
         }
       },
@@ -3621,6 +3509,974 @@
             }
           }
         }
+      },
+      "ibuf_ds_0": {
+        "parameters": {
+          "ACTIVE_SIM_BD": {
+            "value": "ibuf_ds.bd"
+          },
+          "ACTIVE_SYNTH_BD": {
+            "value": "ibuf_ds.bd"
+          },
+          "ENABLE_DFX": {
+            "value": "0"
+          },
+          "LIST_SIM_BD": {
+            "value": "ibuf_ds.bd"
+          },
+          "LIST_SYNTH_BD": {
+            "value": "ibuf_ds.bd"
+          },
+          "LOCK_PROPAGATE": {
+            "value": "0"
+          }
+        },
+        "ports": {
+          "config_out_p": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "config_out_n": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "config_out": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "CLK_DOMAIN": {
+                "value": "ibuf_ds_inst_0_util_ds_buf_0_0_IBUF_OUT",
+                "value_src": "default"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "default"
+              },
+              "FREQ_TOLERANCE_HZ": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "INSERT_VIP": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "default"
+              }
+            }
+          },
+          "scan_out_p": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "scan_out_n": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "scan_out": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "CLK_DOMAIN": {
+                "value": "ibuf_ds_inst_0_util_ds_buf_1_0_IBUF_OUT",
+                "value_src": "default"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "default"
+              },
+              "FREQ_TOLERANCE_HZ": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "INSERT_VIP": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "default"
+              }
+            }
+          },
+          "dnn_out_0_p": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "dnn_out_0_n": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "dnn_out_0": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "CLK_DOMAIN": {
+                "value": "ibuf_ds_inst_0_util_ds_buf_2_0_IBUF_OUT",
+                "value_src": "default"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "default"
+              },
+              "FREQ_TOLERANCE_HZ": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "INSERT_VIP": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "default"
+              }
+            }
+          },
+          "dnn_out_1_p": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "dnn_out_1_n": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "dnn_out_1": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "CLK_DOMAIN": {
+                "value": "ibuf_ds_inst_0_util_ds_buf_3_0_IBUF_OUT",
+                "value_src": "default"
+              },
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "default"
+              },
+              "FREQ_TOLERANCE_HZ": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "INSERT_VIP": {
+                "value": "0",
+                "value_src": "default"
+              },
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "default"
+              }
+            }
+          }
+        },
+        "post_compiled_compname": "ibuf_ds_inst_0",
+        "architecture": "zynquplus",
+        "variant_info": {
+          "ibuf_ds.bd": {
+            "scoped_diagram": "ibuf_ds_inst_0.bd",
+            "design_checksum": "0x9CA976D1",
+            "ref_name": "ibuf_ds",
+            "ref_subinst_path": "cms_pix_28_fw_top_bd_ibuf_ds_0",
+            "ref_type": "Block Design",
+            "source_type": "all",
+            "active": "all"
+          }
+        }
+      },
+      "obuf_ds_0": {
+        "parameters": {
+          "ACTIVE_SIM_BD": {
+            "value": "obuf_ds.bd"
+          },
+          "ACTIVE_SYNTH_BD": {
+            "value": "obuf_ds.bd"
+          },
+          "ENABLE_DFX": {
+            "value": "0"
+          },
+          "LIST_SIM_BD": {
+            "value": "obuf_ds.bd"
+          },
+          "LIST_SYNTH_BD": {
+            "value": "obuf_ds.bd"
+          },
+          "LOCK_PROPAGATE": {
+            "value": "0"
+          }
+        },
+        "ports": {
+          "config_clk": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "config_clk_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "config_clk_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "config_in": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "config_in_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "config_in_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "config_load": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "config_load_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "config_load_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "bxclk_ana_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "bxclk_ana_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "bxclk_ana": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "bxclk": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "bxclk_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "bxclk_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "vin_test_trig_out": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "vin_test_trig_out_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "vin_test_trig_out_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "scan_in_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "scan_in_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "scan_in": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "scan_load": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          },
+          "scan_load_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "scan_load_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "reset_not_p": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "reset_not_n": {
+            "type": "data",
+            "direction": "O",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default"
+              }
+            }
+          },
+          "reset_not": {
+            "type": "data",
+            "direction": "I",
+            "left": "0",
+            "right": "0",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "strong"
+              }
+            }
+          }
+        },
+        "post_compiled_compname": "obuf_ds_inst_0",
+        "architecture": "zynquplus",
+        "variant_info": {
+          "obuf_ds.bd": {
+            "scoped_diagram": "obuf_ds_inst_0.bd",
+            "design_checksum": "0x9A63F2B3",
+            "ref_name": "obuf_ds",
+            "ref_subinst_path": "cms_pix_28_fw_top_bd_obuf_ds_0",
+            "ref_type": "Block Design",
+            "source_type": "all",
+            "active": "all"
+          }
+        }
+      },
+      "fw_top_v_0": {
+        "vlnv": "xilinx.com:module_ref:fw_top_v:1.0",
+        "xci_name": "cms_pix_28_fw_top_bd_fw_top_v_0_0",
+        "xci_path": "ip/cms_pix_28_fw_top_bd_fw_top_v_0_0/cms_pix_28_fw_top_bd_fw_top_v_0_0.xci",
+        "inst_hier_path": "fw_top_v_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "fw_top_v",
+          "boundary_crc": "0x0"
+        },
+        "interface_ports": {
+          "S_AXI": {
+            "mode": "Slave",
+            "vlnv_bus_definition": "xilinx.com:interface:aximm:1.0",
+            "vlnv": "xilinx.com:interface:aximm_rtl:1.0",
+            "parameters": {
+              "DATA_WIDTH": {
+                "value": "32",
+                "value_src": "auto"
+              },
+              "PROTOCOL": {
+                "value": "AXI4LITE",
+                "value_src": "constant"
+              },
+              "FREQ_HZ": {
+                "value": "99999001",
+                "value_src": "user_prop"
+              },
+              "ID_WIDTH": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "ADDR_WIDTH": {
+                "value": "11",
+                "value_src": "auto"
+              },
+              "AWUSER_WIDTH": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "ARUSER_WIDTH": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "WUSER_WIDTH": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "RUSER_WIDTH": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "BUSER_WIDTH": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "READ_WRITE_MODE": {
+                "value": "READ_WRITE",
+                "value_src": "constant"
+              },
+              "HAS_BURST": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "HAS_LOCK": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "HAS_PROT": {
+                "value": "1",
+                "value_src": "constant"
+              },
+              "HAS_CACHE": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "HAS_QOS": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "HAS_REGION": {
+                "value": "0",
+                "value_src": "constant"
+              },
+              "HAS_WSTRB": {
+                "value": "1",
+                "value_src": "constant"
+              },
+              "HAS_BRESP": {
+                "value": "1",
+                "value_src": "constant"
+              },
+              "HAS_RRESP": {
+                "value": "1",
+                "value_src": "constant"
+              },
+              "SUPPORTS_NARROW_BURST": {
+                "value": "0",
+                "value_src": "auto"
+              },
+              "NUM_READ_OUTSTANDING": {
+                "value": "1",
+                "value_src": "auto"
+              },
+              "NUM_WRITE_OUTSTANDING": {
+                "value": "1",
+                "value_src": "auto"
+              },
+              "MAX_BURST_LENGTH": {
+                "value": "1",
+                "value_src": "auto"
+              },
+              "CLK_DOMAIN": {
+                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
+                "value_src": "default_prop"
+              },
+              "NUM_READ_THREADS": {
+                "value": "4",
+                "value_src": "const_prop"
+              },
+              "NUM_WRITE_THREADS": {
+                "value": "4",
+                "value_src": "const_prop"
+              }
+            },
+            "memory_map_ref": "S_AXI",
+            "port_maps": {
+              "AWADDR": {
+                "physical_name": "S_AXI_AWADDR",
+                "direction": "I",
+                "left": "10",
+                "right": "0"
+              },
+              "AWPROT": {
+                "physical_name": "S_AXI_AWPROT",
+                "direction": "I",
+                "left": "2",
+                "right": "0"
+              },
+              "AWVALID": {
+                "physical_name": "S_AXI_AWVALID",
+                "direction": "I"
+              },
+              "AWREADY": {
+                "physical_name": "S_AXI_AWREADY",
+                "direction": "O"
+              },
+              "WDATA": {
+                "physical_name": "S_AXI_WDATA",
+                "direction": "I",
+                "left": "31",
+                "right": "0"
+              },
+              "WSTRB": {
+                "physical_name": "S_AXI_WSTRB",
+                "direction": "I",
+                "left": "3",
+                "right": "0"
+              },
+              "WVALID": {
+                "physical_name": "S_AXI_WVALID",
+                "direction": "I"
+              },
+              "WREADY": {
+                "physical_name": "S_AXI_WREADY",
+                "direction": "O"
+              },
+              "BRESP": {
+                "physical_name": "S_AXI_BRESP",
+                "direction": "O",
+                "left": "1",
+                "right": "0"
+              },
+              "BVALID": {
+                "physical_name": "S_AXI_BVALID",
+                "direction": "O"
+              },
+              "BREADY": {
+                "physical_name": "S_AXI_BREADY",
+                "direction": "I"
+              },
+              "ARADDR": {
+                "physical_name": "S_AXI_ARADDR",
+                "direction": "I",
+                "left": "10",
+                "right": "0"
+              },
+              "ARPROT": {
+                "physical_name": "S_AXI_ARPROT",
+                "direction": "I",
+                "left": "2",
+                "right": "0"
+              },
+              "ARVALID": {
+                "physical_name": "S_AXI_ARVALID",
+                "direction": "I"
+              },
+              "ARREADY": {
+                "physical_name": "S_AXI_ARREADY",
+                "direction": "O"
+              },
+              "RDATA": {
+                "physical_name": "S_AXI_RDATA",
+                "direction": "O",
+                "left": "31",
+                "right": "0"
+              },
+              "RRESP": {
+                "physical_name": "S_AXI_RRESP",
+                "direction": "O",
+                "left": "1",
+                "right": "0"
+              },
+              "RVALID": {
+                "physical_name": "S_AXI_RVALID",
+                "direction": "O"
+              },
+              "RREADY": {
+                "physical_name": "S_AXI_RREADY",
+                "direction": "I"
+              }
+            }
+          }
+        },
+        "ports": {
+          "S_AXI_ACLK": {
+            "type": "clk",
+            "direction": "I",
+            "parameters": {
+              "ASSOCIATED_BUSIF": {
+                "value": "S_AXI",
+                "value_src": "constant"
+              },
+              "ASSOCIATED_RESET": {
+                "value": "S_AXI_ARESETN",
+                "value_src": "constant"
+              },
+              "FREQ_HZ": {
+                "value": "99999001",
+                "value_src": "user_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "S_AXI_ARESETN": {
+            "type": "rst",
+            "direction": "I",
+            "parameters": {
+              "POLARITY": {
+                "value": "ACTIVE_LOW",
+                "value_src": "constant"
+              }
+            }
+          },
+          "pl_clk1": {
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "399996000",
+                "value_src": "ip_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
+                "value_src": "ip_prop"
+              }
+            }
+          },
+          "super_pixel_sel": {
+            "direction": "O"
+          },
+          "config_clk": {
+            "type": "clk",
+            "direction": "O"
+          },
+          "dut_rst_port": {
+            "direction": "O"
+          },
+          "config_in": {
+            "direction": "O"
+          },
+          "config_load": {
+            "direction": "O"
+          },
+          "bxclk_ana": {
+            "direction": "O"
+          },
+          "bxclk": {
+            "direction": "O"
+          },
+          "vin_test_trig_out": {
+            "direction": "O"
+          },
+          "scan_in": {
+            "direction": "O"
+          },
+          "scan_load": {
+            "direction": "O"
+          },
+          "config_out": {
+            "direction": "I",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "scan_out": {
+            "direction": "I",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "scan_out_test": {
+            "direction": "I"
+          },
+          "dnn_output_0": {
+            "direction": "I",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "dnn_output_1": {
+            "direction": "I",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          }
+        }
       }
     },
     "interface_nets": {
@@ -3651,70 +4507,82 @@
           "fw_top_v_0/pl_clk1"
         ]
       },
-      "config_out_1": {
+      "config_out_n_1": {
         "ports": [
-          "config_out",
-          "fw_top_v_0/config_out"
+          "config_out_n",
+          "ibuf_ds_0/config_out_n"
         ]
       },
-      "dnn_output_0_1": {
+      "config_out_p_1": {
         "ports": [
-          "dnn_output_0",
-          "fw_top_v_0/dnn_output_0"
+          "config_out_p",
+          "ibuf_ds_0/config_out_p"
         ]
       },
-      "dnn_output_1_1": {
+      "dnn_out_0_n_1": {
         "ports": [
-          "dnn_output_1",
-          "fw_top_v_0/dnn_output_1"
+          "dnn_out_0_n",
+          "ibuf_ds_0/dnn_out_0_n"
+        ]
+      },
+      "dnn_out_0_p_1": {
+        "ports": [
+          "dnn_out_0_p",
+          "ibuf_ds_0/dnn_out_0_p"
+        ]
+      },
+      "dnn_out_1_n_1": {
+        "ports": [
+          "dnn_out_1_n",
+          "ibuf_ds_0/dnn_out_1_n"
+        ]
+      },
+      "dnn_out_1_p_1": {
+        "ports": [
+          "dnn_out_1_p",
+          "ibuf_ds_0/dnn_out_1_p"
         ]
       },
       "fw_top_v_0_bxclk": {
         "ports": [
           "fw_top_v_0/bxclk",
-          "bxclk"
+          "obuf_ds_0/bxclk"
         ]
       },
       "fw_top_v_0_bxclk_ana": {
         "ports": [
           "fw_top_v_0/bxclk_ana",
-          "bxclk_ana"
+          "obuf_ds_0/bxclk_ana"
         ]
       },
       "fw_top_v_0_config_clk": {
         "ports": [
           "fw_top_v_0/config_clk",
-          "config_clk"
+          "obuf_ds_0/config_clk"
         ]
       },
       "fw_top_v_0_config_in": {
         "ports": [
           "fw_top_v_0/config_in",
-          "config_in"
+          "obuf_ds_0/config_in"
         ]
       },
       "fw_top_v_0_config_load": {
         "ports": [
           "fw_top_v_0/config_load",
-          "config_load"
-        ]
-      },
-      "fw_top_v_0_reset_not": {
-        "ports": [
-          "fw_top_v_0/reset_not",
-          "reset_not"
+          "obuf_ds_0/config_load"
         ]
       },
       "fw_top_v_0_scan_in": {
         "ports": [
           "fw_top_v_0/scan_in",
-          "scan_in"
+          "obuf_ds_0/scan_in"
         ]
       },
       "fw_top_v_0_scan_load": {
         "ports": [
           "fw_top_v_0/scan_load",
-          "scan_load"
+          "obuf_ds_0/scan_load"
         ]
       },
       "fw_top_v_0_super_pixel_sel": {
@@ -3726,8 +4594,139 @@
       "fw_top_v_0_vin_test_trig_out": {
         "ports": [
           "fw_top_v_0/vin_test_trig_out",
-          "vin_test_trig_out",
-          "util_ds_buf_vin_test_trig_out/OBUF_IN"
+          "obuf_ds_0/vin_test_trig_out"
+        ]
+      },
+      "ibuf_ds_0_config_out": {
+        "ports": [
+          "ibuf_ds_0/config_out",
+          "fw_top_v_0/config_out"
+        ]
+      },
+      "ibuf_ds_0_dnn_out_0": {
+        "ports": [
+          "ibuf_ds_0/dnn_out_0",
+          "fw_top_v_0/dnn_output_0"
+        ]
+      },
+      "ibuf_ds_0_dnn_out_1": {
+        "ports": [
+          "ibuf_ds_0/dnn_out_1",
+          "fw_top_v_0/dnn_output_1"
+        ]
+      },
+      "ibuf_ds_0_scan_out": {
+        "ports": [
+          "ibuf_ds_0/scan_out",
+          "fw_top_v_0/scan_out"
+        ]
+      },
+      "obuf_ds_0_bxclk_ana_n": {
+        "ports": [
+          "obuf_ds_0/bxclk_ana_n",
+          "bxclk_ana_n"
+        ]
+      },
+      "obuf_ds_0_bxclk_ana_p": {
+        "ports": [
+          "obuf_ds_0/bxclk_ana_p",
+          "bxclk_ana_p"
+        ]
+      },
+      "obuf_ds_0_bxclk_n": {
+        "ports": [
+          "obuf_ds_0/bxclk_n",
+          "bxclk_n"
+        ]
+      },
+      "obuf_ds_0_bxclk_p": {
+        "ports": [
+          "obuf_ds_0/bxclk_p",
+          "bxclk_p"
+        ]
+      },
+      "obuf_ds_0_config_clk_n": {
+        "ports": [
+          "obuf_ds_0/config_clk_n",
+          "config_clk_n"
+        ]
+      },
+      "obuf_ds_0_config_clk_p": {
+        "ports": [
+          "obuf_ds_0/config_clk_p",
+          "config_clk_p"
+        ]
+      },
+      "obuf_ds_0_config_in_n": {
+        "ports": [
+          "obuf_ds_0/config_in_n",
+          "config_in_n"
+        ]
+      },
+      "obuf_ds_0_config_in_p": {
+        "ports": [
+          "obuf_ds_0/config_in_p",
+          "config_in_p"
+        ]
+      },
+      "obuf_ds_0_config_load_n": {
+        "ports": [
+          "obuf_ds_0/config_load_n",
+          "config_load_n"
+        ]
+      },
+      "obuf_ds_0_config_load_p": {
+        "ports": [
+          "obuf_ds_0/config_load_p",
+          "config_load_p"
+        ]
+      },
+      "obuf_ds_0_reset_not_n": {
+        "ports": [
+          "obuf_ds_0/reset_not_n",
+          "reset_not_n"
+        ]
+      },
+      "obuf_ds_0_reset_not_p": {
+        "ports": [
+          "obuf_ds_0/reset_not_p",
+          "reset_not_p"
+        ]
+      },
+      "obuf_ds_0_scan_in_n": {
+        "ports": [
+          "obuf_ds_0/scan_in_n",
+          "scan_in_n"
+        ]
+      },
+      "obuf_ds_0_scan_in_p": {
+        "ports": [
+          "obuf_ds_0/scan_in_p",
+          "scan_in_p"
+        ]
+      },
+      "obuf_ds_0_scan_load_n": {
+        "ports": [
+          "obuf_ds_0/scan_load_n",
+          "scan_load_n"
+        ]
+      },
+      "obuf_ds_0_scan_load_p": {
+        "ports": [
+          "obuf_ds_0/scan_load_p",
+          "scan_load_p"
+        ]
+      },
+      "obuf_ds_0_vin_test_trig_out_n": {
+        "ports": [
+          "obuf_ds_0/vin_test_trig_out_n",
+          "vin_test_trig_out_n"
+        ]
+      },
+      "obuf_ds_0_vin_test_trig_out_p": {
+        "ports": [
+          "obuf_ds_0/vin_test_trig_out_p",
+          "vin_test_trig_out_p"
         ]
       },
       "proc_sys_reset_0_interconnect_aresetn": {
@@ -3737,28 +4736,28 @@
           "axi_interconnect_0/M00_ARESETN"
         ]
       },
-      "scan_out_1": {
+      "reset_not_1": {
         "ports": [
-          "scan_out",
-          "fw_top_v_0/scan_out"
+          "fw_top_v_0/dut_rst_port",
+          "obuf_ds_0/reset_not"
+        ]
+      },
+      "scan_out_n_1": {
+        "ports": [
+          "scan_out_n",
+          "ibuf_ds_0/scan_out_n"
+        ]
+      },
+      "scan_out_p_1": {
+        "ports": [
+          "scan_out_p",
+          "ibuf_ds_0/scan_out_p"
         ]
       },
       "scan_out_test_1": {
         "ports": [
           "scan_out_test",
           "fw_top_v_0/scan_out_test"
-        ]
-      },
-      "util_ds_buf_vin_test_trig_out_OBUF_DS_N": {
-        "ports": [
-          "util_ds_buf_vin_test_trig_out/OBUF_DS_N",
-          "vin_test_trig_out_OBUF_DS_N"
-        ]
-      },
-      "util_ds_buf_vin_test_trig_out_OBUF_DS_P": {
-        "ports": [
-          "util_ds_buf_vin_test_trig_out/OBUF_DS_P",
-          "vin_test_trig_out_OBUF_DS_P"
         ]
       },
       "zynq_ultra_ps_e_0_pl_clk0": {
@@ -3769,8 +4768,8 @@
           "axi_interconnect_0/S00_ACLK",
           "axi_interconnect_0/M00_ACLK",
           "clk_wiz_0/clk_in1",
-          "fw_top_v_0/S_AXI_ACLK",
-          "zynq_ultra_ps_e_0/maxihpm0_fpd_aclk"
+          "zynq_ultra_ps_e_0/maxihpm0_fpd_aclk",
+          "fw_top_v_0/S_AXI_ACLK"
         ]
       },
       "zynq_ultra_ps_e_0_pl_resetn0": {
