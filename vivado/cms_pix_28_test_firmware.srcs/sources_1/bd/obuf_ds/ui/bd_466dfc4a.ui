@@ -1,0 +1,75 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"0.710938",
+   "Default View_TopLeft":"-1101,-380",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace portBus config_clk -pg 1 -lvl 0 -x 0 -y -300 -defaultsOSRD
+preplace portBus config_clk_p -pg 1 -lvl 2 -x 350 -y -300 -defaultsOSRD
+preplace portBus config_clk_n -pg 1 -lvl 2 -x 350 -y -280 -defaultsOSRD
+preplace portBus config_in -pg 1 -lvl 0 -x 0 -y -20 -defaultsOSRD
+preplace portBus config_in_p -pg 1 -lvl 2 -x 350 -y -20 -defaultsOSRD
+preplace portBus config_in_n -pg 1 -lvl 2 -x 350 -y 0 -defaultsOSRD
+preplace portBus config_load -pg 1 -lvl 0 -x 0 -y 120 -defaultsOSRD
+preplace portBus config_load_p -pg 1 -lvl 2 -x 350 -y 120 -defaultsOSRD
+preplace portBus config_load_n -pg 1 -lvl 2 -x 350 -y 140 -defaultsOSRD
+preplace portBus bxclk_ana_p -pg 1 -lvl 2 -x 350 -y 260 -defaultsOSRD
+preplace portBus bxclk_ana_n -pg 1 -lvl 2 -x 350 -y 280 -defaultsOSRD
+preplace portBus bxclk_ana -pg 1 -lvl 0 -x 0 -y 260 -defaultsOSRD
+preplace portBus bxclk -pg 1 -lvl 0 -x 0 -y 400 -defaultsOSRD
+preplace portBus bxclk_p -pg 1 -lvl 2 -x 350 -y 400 -defaultsOSRD
+preplace portBus bxclk_n -pg 1 -lvl 2 -x 350 -y 420 -defaultsOSRD
+preplace portBus vin_test_trig_out -pg 1 -lvl 0 -x 0 -y 540 -defaultsOSRD
+preplace portBus vin_test_trig_out_p -pg 1 -lvl 2 -x 350 -y 540 -defaultsOSRD
+preplace portBus vin_test_trig_out_n -pg 1 -lvl 2 -x 350 -y 560 -defaultsOSRD
+preplace portBus scan_in_p -pg 1 -lvl 2 -x 350 -y 680 -defaultsOSRD
+preplace portBus scan_in_n -pg 1 -lvl 2 -x 350 -y 700 -defaultsOSRD
+preplace portBus scan_in -pg 1 -lvl 0 -x 0 -y 680 -defaultsOSRD
+preplace portBus scan_load -pg 1 -lvl 0 -x 0 -y 820 -defaultsOSRD
+preplace portBus scan_load_p -pg 1 -lvl 2 -x 350 -y 820 -defaultsOSRD
+preplace portBus scan_load_n -pg 1 -lvl 2 -x 350 -y 840 -defaultsOSRD
+preplace portBus reset_not_p -pg 1 -lvl 2 -x 350 -y -160 -defaultsOSRD
+preplace portBus reset_not_n -pg 1 -lvl 2 -x 350 -y -140 -defaultsOSRD
+preplace portBus reset_not -pg 1 -lvl 0 -x 0 -y -160 -defaultsOSRD
+preplace inst util_ds_buf_0 -pg 1 -lvl 1 -x 170 -y -300 -defaultsOSRD
+preplace inst util_ds_buf_2 -pg 1 -lvl 1 -x 170 -y -20 -defaultsOSRD
+preplace inst util_ds_buf_3 -pg 1 -lvl 1 -x 170 -y 120 -defaultsOSRD
+preplace inst util_ds_buf_4 -pg 1 -lvl 1 -x 170 -y 260 -defaultsOSRD
+preplace inst util_ds_buf_5 -pg 1 -lvl 1 -x 170 -y 400 -defaultsOSRD
+preplace inst util_ds_buf_6 -pg 1 -lvl 1 -x 170 -y 540 -defaultsOSRD
+preplace inst util_ds_buf_7 -pg 1 -lvl 1 -x 170 -y 680 -defaultsOSRD
+preplace inst util_ds_buf_8 -pg 1 -lvl 1 -x 170 -y 820 -defaultsOSRD
+preplace inst util_ds_buf_1 -pg 1 -lvl 1 -x 170 -y -160 -defaultsOSRD
+preplace netloc bxclk_1 1 0 1 N 400
+preplace netloc bxclk_ana_1 1 0 1 N 260
+preplace netloc config_clk_1 1 0 1 N -300
+preplace netloc config_in_1 1 0 1 N -20
+preplace netloc config_load_1 1 0 1 N 120
+preplace netloc scan_in_1 1 0 1 N 680
+preplace netloc scan_load_1 1 0 1 N 820
+preplace netloc util_ds_buf_0_OBUF_DS_N 1 1 1 N -280
+preplace netloc util_ds_buf_0_OBUF_DS_P 1 1 1 N -300
+preplace netloc util_ds_buf_2_OBUF_DS_N 1 1 1 N 0
+preplace netloc util_ds_buf_2_OBUF_DS_P 1 1 1 N -20
+preplace netloc util_ds_buf_3_OBUF_DS_N 1 1 1 N 140
+preplace netloc util_ds_buf_3_OBUF_DS_P 1 1 1 N 120
+preplace netloc util_ds_buf_4_OBUF_DS_N 1 1 1 N 280
+preplace netloc util_ds_buf_4_OBUF_DS_P 1 1 1 N 260
+preplace netloc util_ds_buf_5_OBUF_DS_N 1 1 1 N 420
+preplace netloc util_ds_buf_5_OBUF_DS_P 1 1 1 N 400
+preplace netloc util_ds_buf_6_OBUF_DS_N 1 1 1 N 560
+preplace netloc util_ds_buf_6_OBUF_DS_P 1 1 1 N 540
+preplace netloc util_ds_buf_7_OBUF_DS_N 1 1 1 N 700
+preplace netloc util_ds_buf_7_OBUF_DS_P 1 1 1 N 680
+preplace netloc util_ds_buf_8_OBUF_DS_N 1 1 1 N 840
+preplace netloc util_ds_buf_8_OBUF_DS_P 1 1 1 N 820
+preplace netloc vin_test_trig_out_1 1 0 1 N 540
+preplace netloc util_ds_buf_1_OBUF_DS_P 1 1 1 N -160
+preplace netloc util_ds_buf_1_OBUF_DS_N 1 1 1 N -140
+preplace netloc reset_not_1 1 0 1 N -160
+levelinfo -pg 1 0 170 350
+pagesize -pg 1 -db -bbox -sgen -210 -490 570 1010
+"
+}
+0

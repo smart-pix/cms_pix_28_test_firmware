@@ -1,0 +1,616 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0x63EC833D43B2E3B0",
+      "device": "xczu9eg-ffvb1156-2-e",
+      "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/obuf_ds",
+      "name": "obuf_ds",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2022.1",
+      "validated": "true"
+    },
+    "design_tree": {
+      "util_ds_buf_0": "",
+      "util_ds_buf_2": "",
+      "util_ds_buf_3": "",
+      "util_ds_buf_4": "",
+      "util_ds_buf_5": "",
+      "util_ds_buf_6": "",
+      "util_ds_buf_7": "",
+      "util_ds_buf_8": "",
+      "util_ds_buf_1": ""
+    },
+    "ports": {
+      "config_clk": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_clk_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_clk_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_in": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_in_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_in_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_load": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_load_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_load_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_ana_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_ana_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_ana": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "bxclk_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "vin_test_trig_out": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "vin_test_trig_out_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "vin_test_trig_out_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_in_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_in_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_in": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_load": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_load_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_load_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "reset_not_p": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "reset_not_n": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "reset_not": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      }
+    },
+    "components": {
+      "util_ds_buf_0": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_0_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_0_0/obuf_ds_util_ds_buf_0_0.xci",
+        "inst_hier_path": "util_ds_buf_0",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_2": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_2_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_2_0/obuf_ds_util_ds_buf_2_0.xci",
+        "inst_hier_path": "util_ds_buf_2",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_3": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_3_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_3_0/obuf_ds_util_ds_buf_3_0.xci",
+        "inst_hier_path": "util_ds_buf_3",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_4": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_4_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_4_0/obuf_ds_util_ds_buf_4_0.xci",
+        "inst_hier_path": "util_ds_buf_4",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_5": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_5_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_5_0/obuf_ds_util_ds_buf_5_0.xci",
+        "inst_hier_path": "util_ds_buf_5",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_6": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_6_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_6_0/obuf_ds_util_ds_buf_6_0.xci",
+        "inst_hier_path": "util_ds_buf_6",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_7": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_7_1",
+        "xci_path": "ip/obuf_ds_util_ds_buf_7_1/obuf_ds_util_ds_buf_7_1.xci",
+        "inst_hier_path": "util_ds_buf_7",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_8": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_8_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_8_0/obuf_ds_util_ds_buf_8_0.xci",
+        "inst_hier_path": "util_ds_buf_8",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      },
+      "util_ds_buf_1": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "obuf_ds_util_ds_buf_1_0",
+        "xci_path": "ip/obuf_ds_util_ds_buf_1_0/obuf_ds_util_ds_buf_1_0.xci",
+        "inst_hier_path": "util_ds_buf_1",
+        "parameters": {
+          "C_BUF_TYPE": {
+            "value": "OBUFDS"
+          }
+        }
+      }
+    },
+    "nets": {
+      "bxclk_1": {
+        "ports": [
+          "bxclk",
+          "util_ds_buf_5/OBUF_IN"
+        ]
+      },
+      "bxclk_ana_1": {
+        "ports": [
+          "bxclk_ana",
+          "util_ds_buf_4/OBUF_IN"
+        ]
+      },
+      "config_clk_1": {
+        "ports": [
+          "config_clk",
+          "util_ds_buf_0/OBUF_IN"
+        ]
+      },
+      "config_in_1": {
+        "ports": [
+          "config_in",
+          "util_ds_buf_2/OBUF_IN"
+        ]
+      },
+      "config_load_1": {
+        "ports": [
+          "config_load",
+          "util_ds_buf_3/OBUF_IN"
+        ]
+      },
+      "reset_not_1": {
+        "ports": [
+          "reset_not",
+          "util_ds_buf_1/OBUF_IN"
+        ]
+      },
+      "scan_in_1": {
+        "ports": [
+          "scan_in",
+          "util_ds_buf_7/OBUF_IN"
+        ]
+      },
+      "scan_load_1": {
+        "ports": [
+          "scan_load",
+          "util_ds_buf_8/OBUF_IN"
+        ]
+      },
+      "util_ds_buf_0_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_0/OBUF_DS_N",
+          "config_clk_n"
+        ]
+      },
+      "util_ds_buf_0_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_0/OBUF_DS_P",
+          "config_clk_p"
+        ]
+      },
+      "util_ds_buf_1_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_1/OBUF_DS_N",
+          "reset_not_n"
+        ]
+      },
+      "util_ds_buf_1_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_1/OBUF_DS_P",
+          "reset_not_p"
+        ]
+      },
+      "util_ds_buf_2_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_2/OBUF_DS_N",
+          "config_in_n"
+        ]
+      },
+      "util_ds_buf_2_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_2/OBUF_DS_P",
+          "config_in_p"
+        ]
+      },
+      "util_ds_buf_3_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_3/OBUF_DS_N",
+          "config_load_n"
+        ]
+      },
+      "util_ds_buf_3_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_3/OBUF_DS_P",
+          "config_load_p"
+        ]
+      },
+      "util_ds_buf_4_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_4/OBUF_DS_N",
+          "bxclk_ana_n"
+        ]
+      },
+      "util_ds_buf_4_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_4/OBUF_DS_P",
+          "bxclk_ana_p"
+        ]
+      },
+      "util_ds_buf_5_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_5/OBUF_DS_N",
+          "bxclk_n"
+        ]
+      },
+      "util_ds_buf_5_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_5/OBUF_DS_P",
+          "bxclk_p"
+        ]
+      },
+      "util_ds_buf_6_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_6/OBUF_DS_N",
+          "vin_test_trig_out_n"
+        ]
+      },
+      "util_ds_buf_6_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_6/OBUF_DS_P",
+          "vin_test_trig_out_p"
+        ]
+      },
+      "util_ds_buf_7_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_7/OBUF_DS_N",
+          "scan_in_n"
+        ]
+      },
+      "util_ds_buf_7_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_7/OBUF_DS_P",
+          "scan_in_p"
+        ]
+      },
+      "util_ds_buf_8_OBUF_DS_N": {
+        "ports": [
+          "util_ds_buf_8/OBUF_DS_N",
+          "scan_load_n"
+        ]
+      },
+      "util_ds_buf_8_OBUF_DS_P": {
+        "ports": [
+          "util_ds_buf_8/OBUF_DS_P",
+          "scan_load_p"
+        ]
+      },
+      "vin_test_trig_out_1": {
+        "ports": [
+          "vin_test_trig_out",
+          "util_ds_buf_6/OBUF_IN"
+        ]
+      }
+    }
+  }
+}
