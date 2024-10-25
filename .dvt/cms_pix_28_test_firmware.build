@@ -129,6 +129,7 @@
 ./src/ip2_test1.sv
 ./src/ip2_test2.sv
 ./src/ip2_test3.sv
+./src/ip2_test4.sv
 ./src/fw_ip2.sv
 ./src/fw_ip3.sv
 ./src/fw_ip4.sv

@@ -81,9 +81,3 @@ set_property IOSTANDARD LVDS [get_ports config_out_*]
 set_property IOSTANDARD LVDS [get_ports dnn_out_0_*]
 set_property IOSTANDARD LVDS [get_ports dnn_out_1_*]
 #
-#set_property IOB TRUE [get_ports scan_out_test]
-#set_property IOB TRUE [get_ports scan_out]
-#set_property IOB TRUE [get_ports config_out]
-#set_property IOB TRUE [get_ports dnn_out_0]
-#set_property IOB TRUE [get_ports dnn_out_1]
-
