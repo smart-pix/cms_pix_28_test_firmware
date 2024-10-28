@@ -133,7 +133,7 @@ module fw_ip2 (
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T4;
   import cms_pix28_package::SHIFT_IN_0_IP2_T4;
   import cms_pix28_package::SHIFT_IN_IP2_T4;
-//  import cms_pix28_package::DONE_IP2_T4;
+  import cms_pix28_package::DONE_IP2_T4;
   //
   import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
   import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
@@ -395,8 +395,8 @@ module fw_ip2 (
   logic           sm_test3_o_vin_test_trig_out;
   logic           sm_test3_o_scan_in;
   logic           sm_test3_o_scan_load;
-  logic [47:0]    sm_test3_o_dnn_output_0;
-  logic [47:0]    sm_test3_o_dnn_output_1;
+  logic [dnn_reg_width-1:0] sm_test3_o_dnn_output_0;
+  logic [dnn_reg_width-1:0] sm_test3_o_dnn_output_1;
   logic           sm_test4_o_config_clk;
   logic           sm_test4_o_reset_not;
   logic           sm_test4_o_config_in;
@@ -404,6 +404,8 @@ module fw_ip2 (
   logic           sm_test4_o_vin_test_trig_out;
   logic           sm_test4_o_scan_in;
   logic           sm_test4_o_scan_load;
+  logic [dnn_reg_width-1:0] sm_test4_o_dnn_output_0;
+  logic [dnn_reg_width-1:0] sm_test4_o_dnn_output_1;
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT) not used in IP2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT)     used in IP2 test 1,2
@@ -512,7 +514,7 @@ module fw_ip2 (
     .test_delay                              (test_delay),
     .test_trig_out_phase                     (test_trig_out_phase),
     .test_mask_reset_not                     (test_mask_reset_not),
-    .test2_enable_re                         (test3_enable_re),
+    .test3_enable_re                         (test3_enable_re),
     .sm_testx_i_dnn_output_0                 (sm_testx_i_dnn_output_0),
     .sm_testx_i_dnn_output_1                 (sm_testx_i_dnn_output_1),
     .sm_test3_o_scanchain_reg_load           (sm_test3_o_scanchain_reg_load),
@@ -548,6 +550,8 @@ module fw_ip2 (
     .sm_testx_i_scanchain_reg_bit0           (sm_testx_i_scanchain_reg[0]),
     .sm_testx_i_scanchain_reg_shift_cnt      (sm_testx_i_scanchain_reg_shift_cnt),
     .sm_testx_i_scanchain_reg_shift_cnt_max  (sm_testx_i_scanchain_reg_width),
+    .sm_testx_i_dnn_output_0                 (sm_testx_i_dnn_output_0),
+    .sm_testx_i_dnn_output_1                 (sm_testx_i_dnn_output_1),
     .sm_test4_o_scanchain_reg_load           (sm_test4_o_scanchain_reg_load),
     .sm_test4_o_scanchain_reg_shift          (sm_test4_o_scanchain_reg_shift_right),
     .sm_test4_o_status_done                  (sm_test4_o_status_done),
@@ -559,7 +563,9 @@ module fw_ip2 (
     .sm_test4_o_config_load                  (sm_test4_o_config_load),
     .sm_test4_o_vin_test_trig_out            (sm_test4_o_vin_test_trig_out),
     .sm_test4_o_scan_in                      (sm_test4_o_scan_in),
-    .sm_test4_o_scan_load                    (sm_test4_o_scan_load)
+    .sm_test4_o_scan_load                    (sm_test4_o_scan_load),
+    .sm_test4_o_dnn_output_0                 (sm_test4_o_dnn_output_0),
+    .sm_test4_o_dnn_output_1                 (sm_test4_o_dnn_output_1)
   );
 
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
@@ -638,7 +644,7 @@ module fw_ip2 (
       // one case only for sm_testx_o_scanchain_test_reg, regardless of (nested) conditions:
       // if(sm_test3==DONE_IP2_T3), if(test_sample==fw_pl_clk1_cnt), if(test_loopback
       // keep old value
-      sm_testx_o_scanchain_test_reg       <= sm_testx_o_scanchain_test_reg;
+      sm_testx_o_scanchain_test_reg       <= {sm_testx_i_scanchain_reg_width{1'b0}};
     end else if(test4_enable) begin
       // use data specific for test case test4
       if(sm_test4==SHIFT_IN_0_IP2_T4 || sm_test4==SHIFT_IN_IP2_T4 ||
@@ -647,20 +653,38 @@ module fw_ip2 (
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
             sm_testx_o_scanchain_reg      <= { sm_test4_o_scan_in,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
-            sm_testx_o_scanchain_test_reg <= {~sm_test4_o_scan_in,      sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
             sm_testx_o_scanchain_reg      <= {sm_testx_i_scan_out,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
-            sm_testx_o_scanchain_test_reg <= {sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
           sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
-          sm_testx_o_scanchain_test_reg   <= sm_testx_o_scanchain_test_reg;
         end
       end else begin
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
+      end
+      // use data specific for test case test4
+      if(sm_test4==DONE_IP2_T4) begin
+        //if(test_sample==fw_pl_clk1_cnt) begin
+        if(test_loopback) begin
+          // overwrite with hard-coded default value - set it non-zero for debug purpose
+          sm_testx_o_scanchain_test_reg[1*dnn_reg_width               -1 : 0*dnn_reg_width] <= dnn_reg_0_default;
+          sm_testx_o_scanchain_test_reg[2*dnn_reg_width               -1 : 1*dnn_reg_width] <= dnn_reg_1_default;
+          sm_testx_o_scanchain_test_reg[sm_testx_i_scanchain_reg_width-1 : 2*dnn_reg_width] <= {(sm_testx_i_scanchain_reg_width-2*dnn_reg_width){1'b0}};
+        end else begin
+          // overwrite with dnn_output_0/1 data coming from sm_test3
+          sm_testx_o_scanchain_test_reg[1*dnn_reg_width               -1 : 0*dnn_reg_width] <= sm_test4_o_dnn_output_0;
+          sm_testx_o_scanchain_test_reg[2*dnn_reg_width               -1 : 1*dnn_reg_width] <= sm_test4_o_dnn_output_1;
+          sm_testx_o_scanchain_test_reg[sm_testx_i_scanchain_reg_width-1 : 2*dnn_reg_width] <= {(sm_testx_i_scanchain_reg_width-2*dnn_reg_width){1'b0}};
+        end
+        //end else begin
+        //  // keep old value
+        //  sm_testx_o_scanchain_test_reg   <= sm_testx_o_scanchain_test_reg;
+        //end
+      end else begin
+        // keep old value
         sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
       end
     end else begin

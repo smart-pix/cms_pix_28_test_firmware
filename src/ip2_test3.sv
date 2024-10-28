@@ -29,7 +29,7 @@ module ip2_test3 (
     input  logic [5:0] test_delay,
     input  logic [5:0] test_trig_out_phase,
     input  logic       test_mask_reset_not,
-    input  logic       test2_enable_re,
+    input  logic       test3_enable_re,
     input  logic       sm_testx_i_dnn_output_0,
     input  logic       sm_testx_i_dnn_output_1,
     output logic       sm_test3_o_scanchain_reg_load,
@@ -97,13 +97,13 @@ module ip2_test3 (
       case(sm_test3)
         IDLE_IP2_T3 : begin
           // next state machine state logic
-          if(test2_enable_re) begin
+          if(test3_enable_re) begin
             sm_test3 <= DELAY_TEST_IP2_T3;
           end else begin
             sm_test3 <= IDLE_IP2_T3;
           end
           // output state machine signal assignment
-          if(test2_enable_re) begin
+          if(test3_enable_re) begin
             sm_test3_o_dnn_reg_0                 <= 48'h0;
             sm_test3_o_dnn_reg_1                 <= 48'h0;
           end else begin
