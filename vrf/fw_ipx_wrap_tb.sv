@@ -86,7 +86,7 @@ module fw_ipx_wrap_tb ();
   );
 
   // Constants
-  localparam fw_pl_clk1_period =  2.5;           // FM clock 400MHz       mapped to pl_clk1
+  localparam fw_pl_clk1_period =  5.0;           // FM clock 400MHz       mapped to pl_clk1
   localparam fw_axi_clk_period = 10.0;           // FW clock 100MHz       mapped to S_AXI_ACLK
   //
   import cms_pix28_package::firmware_id_1;

@@ -11,6 +11,7 @@
 // 2024-05-29  Cristian  Gingu        Created; Verilog wrapper for usage in Board Diagram IP
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2024-11-01  Cristian Gingu         Remove all IOB attributes from fw_top_v; moved into com_fw_to_dut.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top_v__
 `define __fw_top_v__
@@ -88,16 +89,16 @@ module fw_top_v #(
     // DUT side ports == FPGA pins: //
     //////////////////////////////////
     input  wire pl_clk1,
-    (* IOB = "TRUE" *) output wire super_pixel_sel,
-    (* IOB = "TRUE" *) output wire config_clk,
-    (* IOB = "TRUE" *) output wire dut_rst_port,
-    (* IOB = "TRUE" *) output wire config_in,
-    (* IOB = "TRUE" *) output wire config_load,
-    (* IOB = "TRUE" *) output wire bxclk_ana,
-    (* IOB = "TRUE" *) output wire bxclk,
-    (* IOB = "TRUE" *) output wire vin_test_trig_out,
-    (* IOB = "TRUE" *) output wire scan_in,
-    (* IOB = "TRUE" *) output wire scan_load,
+    output wire super_pixel_sel,
+    output wire config_clk,
+    output wire dut_rst_port,
+    output wire config_in,
+    output wire config_load,
+    output wire bxclk_ana,
+    output wire bxclk,
+    output wire vin_test_trig_out,
+    output wire scan_in,
+    output wire scan_load,
     input  wire config_out,
     input  wire scan_out,
     input  wire scan_out_test,

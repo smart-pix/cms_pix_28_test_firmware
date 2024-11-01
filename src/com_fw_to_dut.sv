@@ -15,6 +15,7 @@
 // 2024-08-12  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2024-11-01  Cristian Gingu         Remove all IOB attributes from fw_top_v; moved into com_fw_to_dut.sv
 // ------------------------------------------------------------------------------------
 `ifndef __com_fw_to_dut__
 `define __com_fw_to_dut__
@@ -82,24 +83,24 @@ module com_fw_to_dut(
   logic scan_in_mux;
   logic scan_load_mux;
   //
-  logic super_pixel_sel_iob;           // Output IOB FF/
-  logic config_clk_iob;                // Output IOB FF
-  logic reset_not_iob;                 // Output IOB FF
-  logic config_in_iob;                 // Output IOB FF
-  logic config_load_iob;               // Output IOB FF
-  logic bxclk_ana_iob;                 // Output IOB FF
-  logic bxclk_iob;                     // Output IOB FF
-  logic vin_test_trig_out_iob;         // Output IOB FF
-  logic scan_in_iob;                   // Output IOB FF
-  logic scan_load_iob;                 // Output IOB FF
+  (* IOB = "TRUE" *) logic super_pixel_sel_iob;           // Output IOB FF/
+  (* IOB = "TRUE" *) logic config_clk_iob;                // Output IOB FF
+  (* IOB = "TRUE" *) logic reset_not_iob;                 // Output IOB FF
+  (* IOB = "TRUE" *) logic config_in_iob;                 // Output IOB FF
+  (* IOB = "TRUE" *) logic config_load_iob;               // Output IOB FF
+  (* IOB = "TRUE" *) logic bxclk_ana_iob;                 // Output IOB FF
+  (* IOB = "TRUE" *) logic bxclk_iob;                     // Output IOB FF
+  (* IOB = "TRUE" *) logic vin_test_trig_out_iob;         // Output IOB FF
+  (* IOB = "TRUE" *) logic scan_in_iob;                   // Output IOB FF
+  (* IOB = "TRUE" *) logic scan_load_iob;                 // Output IOB FF
   //
-  logic config_out_iob;                // Input  IOB FF
-  logic scan_out_iob;                  // Input  IOB FF
-  logic scan_out_test_iob;             // Input  IOB FF
-  logic dnn_output_0_iob;              // Input  IOB FF
-  logic dnn_output_1_iob;              // Input  IOB FF
-  logic dn_event_toggle_iob;           // Input  IOB FF
-  logic up_event_toggle_iob;           // Input  IOB FF
+  (* IOB = "TRUE" *) logic config_out_iob;                // Input  IOB FF
+  (* IOB = "TRUE" *) logic scan_out_iob;                  // Input  IOB FF
+  (* IOB = "TRUE" *) logic scan_out_test_iob;             // Input  IOB FF
+  (* IOB = "TRUE" *) logic dnn_output_0_iob;              // Input  IOB FF
+  (* IOB = "TRUE" *) logic dnn_output_1_iob;              // Input  IOB FF
+  (* IOB = "TRUE" *) logic dn_event_toggle_iob;           // Input  IOB FF
+  (* IOB = "TRUE" *) logic up_event_toggle_iob;           // Input  IOB FF
 
   // MUX and FANOUT combinatorial logic.
   // The following is assuming hot bit encoding for fw_dev_id_enable. If more than FOUR firmwares will be used, change the equations below.
