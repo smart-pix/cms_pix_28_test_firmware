@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x2F8E9D842F8E9D84",
+      "boundary_crc": "0x873A8437873A8437",
       "device": "xczu9eg-ffvb1156-2-e",
       "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd",
       "name": "cms_pix_28_fw_top_bd",
@@ -18,11 +18,11 @@
           "auto_pc": ""
         }
       },
-      "clk_wiz_0": "",
       "zynq_ultra_ps_e_0": "",
       "ibuf_ds_0": "",
       "obuf_ds_0": "",
-      "fw_top_v_0": ""
+      "fw_top_v_0": "",
+      "clk_wiz_0": ""
     },
     "ports": {
       "super_pixel_sel": {
@@ -342,16 +342,6 @@
             "value_src": "default"
           }
         }
-      },
-      "vin_test_trig_out": {
-        "type": "data",
-        "direction": "O",
-        "parameters": {
-          "LAYERED_METADATA": {
-            "value": "undef",
-            "value_src": "default"
-          }
-        }
       }
     },
     "components": {
@@ -602,83 +592,6 @@
               "M00_ARESETN",
               "s00_couplers/M_ARESETN"
             ]
-          }
-        }
-      },
-      "clk_wiz_0": {
-        "vlnv": "xilinx.com:ip:clk_wiz:6.0",
-        "xci_name": "cms_pix_28_fw_top_bd_clk_wiz_0_0",
-        "xci_path": "ip/cms_pix_28_fw_top_bd_clk_wiz_0_0/cms_pix_28_fw_top_bd_clk_wiz_0_0.xci",
-        "inst_hier_path": "clk_wiz_0",
-        "parameters": {
-          "AUTO_PRIMITIVE": {
-            "value": "MMCM"
-          },
-          "CLKOUT1_DRIVES": {
-            "value": "Buffer"
-          },
-          "CLKOUT1_JITTER": {
-            "value": "90.075"
-          },
-          "CLKOUT1_PHASE_ERROR": {
-            "value": "87.181"
-          },
-          "CLKOUT1_REQUESTED_OUT_FREQ": {
-            "value": "399.99600"
-          },
-          "CLKOUT2_DRIVES": {
-            "value": "Buffer"
-          },
-          "CLKOUT3_DRIVES": {
-            "value": "Buffer"
-          },
-          "CLKOUT4_DRIVES": {
-            "value": "Buffer"
-          },
-          "CLKOUT5_DRIVES": {
-            "value": "Buffer"
-          },
-          "CLKOUT6_DRIVES": {
-            "value": "Buffer"
-          },
-          "CLKOUT7_DRIVES": {
-            "value": "Buffer"
-          },
-          "FEEDBACK_SOURCE": {
-            "value": "FDBK_AUTO"
-          },
-          "MMCM_BANDWIDTH": {
-            "value": "OPTIMIZED"
-          },
-          "MMCM_CLKFBOUT_MULT_F": {
-            "value": "12.000"
-          },
-          "MMCM_CLKOUT0_DIVIDE_F": {
-            "value": "3.000"
-          },
-          "MMCM_COMPENSATION": {
-            "value": "AUTO"
-          },
-          "OPTIMIZE_CLOCKING_STRUCTURE_EN": {
-            "value": "true"
-          },
-          "PRIMITIVE": {
-            "value": "Auto"
-          },
-          "PRIM_SOURCE": {
-            "value": "No_buffer"
-          },
-          "SECONDARY_SOURCE": {
-            "value": "Single_ended_clock_capable_pin"
-          },
-          "USE_LOCKED": {
-            "value": "false"
-          },
-          "USE_PHASE_ALIGNMENT": {
-            "value": "true"
-          },
-          "USE_RESET": {
-            "value": "false"
           }
         }
       },
@@ -4487,6 +4400,83 @@
             }
           }
         }
+      },
+      "clk_wiz_0": {
+        "vlnv": "xilinx.com:ip:clk_wiz:6.0",
+        "xci_name": "cms_pix_28_fw_top_bd_clk_wiz_0_0",
+        "xci_path": "ip/cms_pix_28_fw_top_bd_clk_wiz_0_0/cms_pix_28_fw_top_bd_clk_wiz_0_0.xci",
+        "inst_hier_path": "clk_wiz_0",
+        "parameters": {
+          "AUTO_PRIMITIVE": {
+            "value": "MMCM"
+          },
+          "CLKOUT1_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT1_JITTER": {
+            "value": "90.075"
+          },
+          "CLKOUT1_PHASE_ERROR": {
+            "value": "87.181"
+          },
+          "CLKOUT1_REQUESTED_OUT_FREQ": {
+            "value": "399.99600"
+          },
+          "CLKOUT2_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT3_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT4_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT5_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT6_DRIVES": {
+            "value": "Buffer"
+          },
+          "CLKOUT7_DRIVES": {
+            "value": "Buffer"
+          },
+          "FEEDBACK_SOURCE": {
+            "value": "FDBK_AUTO"
+          },
+          "MMCM_BANDWIDTH": {
+            "value": "OPTIMIZED"
+          },
+          "MMCM_CLKFBOUT_MULT_F": {
+            "value": "12.000"
+          },
+          "MMCM_CLKOUT0_DIVIDE_F": {
+            "value": "3.000"
+          },
+          "MMCM_COMPENSATION": {
+            "value": "AUTO"
+          },
+          "OPTIMIZE_CLOCKING_STRUCTURE_EN": {
+            "value": "true"
+          },
+          "PRIMITIVE": {
+            "value": "Auto"
+          },
+          "PRIM_SOURCE": {
+            "value": "No_buffer"
+          },
+          "SECONDARY_SOURCE": {
+            "value": "Single_ended_clock_capable_pin"
+          },
+          "USE_LOCKED": {
+            "value": "false"
+          },
+          "USE_PHASE_ALIGNMENT": {
+            "value": "true"
+          },
+          "USE_RESET": {
+            "value": "false"
+          }
+        }
       }
     },
     "interface_nets": {
@@ -4604,8 +4594,7 @@
       "fw_top_v_0_vin_test_trig_out": {
         "ports": [
           "fw_top_v_0/vin_test_trig_out",
-          "obuf_ds_0/vin_test_trig_out",
-          "vin_test_trig_out"
+          "obuf_ds_0/vin_test_trig_out"
         ]
       },
       "ibuf_ds_0_config_out": {
@@ -4778,9 +4767,9 @@
           "axi_interconnect_0/ACLK",
           "axi_interconnect_0/S00_ACLK",
           "axi_interconnect_0/M00_ACLK",
-          "clk_wiz_0/clk_in1",
           "zynq_ultra_ps_e_0/maxihpm0_fpd_aclk",
-          "fw_top_v_0/S_AXI_ACLK"
+          "fw_top_v_0/S_AXI_ACLK",
+          "clk_wiz_0/clk_in1"
         ]
       },
       "zynq_ultra_ps_e_0_pl_resetn0": {
