@@ -38,8 +38,8 @@ preplace inst axi_interconnect_0 -pg 1 -lvl 2 -x 1240 -y 40 -defaultsOSRD
 preplace inst zynq_ultra_ps_e_0 -pg 1 -lvl 1 -x 730 -y 0 -defaultsOSRD
 preplace inst ibuf_ds_0 -pg 1 -lvl 1 -x 730 -y 270 -defaultsOSRD
 preplace inst obuf_ds_0 -pg 1 -lvl 4 -x 2040 -y 250 -defaultsOSRD
-preplace inst fw_top_v_0 -pg 1 -lvl 3 -x 1590 -y 220 -defaultsOSRD
 preplace inst clk_wiz_0 -pg 1 -lvl 2 -x 1240 -y 380 -defaultsOSRD
+preplace inst fw_top_v_0 -pg 1 -lvl 3 -x 1590 -y 220 -defaultsOSRD
 preplace netloc ARESETN_1 1 1 2 1070 -80 1400
 preplace netloc clk_wiz_0_clk_out1 1 2 1 1400 200n
 preplace netloc config_out_n_1 1 0 1 N 220
