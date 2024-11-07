@@ -1,4 +1,4 @@
-set_property PACKAGE_PIN P10  [get_ports vin_test_trig_out]
+#set_property PACKAGE_PIN P10  [get_ports vin_test_trig_out]
 set_property PACKAGE_PIN P12  [get_ports vin_test_trig_out_p]
 set_property PACKAGE_PIN N12  [get_ports vin_test_trig_out_n]
 ###set_property PACKAGE_PIN Y3   [get_ports bxclk]
@@ -48,7 +48,7 @@ set_property PACKAGE_PIN V7  [get_ports dnn_out_1_n]
 # set_property PACKAGE_PIN T8  [get_ports dn_event_toggle] T8 pin now used by vin_test_trig_out
 # set_property PACKAGE_PIN R8  [get_ports up_event_toggle]
 
-set_property IOSTANDARD LVCMOS18 [get_ports vin_test_trig_out]
+###set_property IOSTANDARD LVCMOS18 [get_ports vin_test_trig_out]
 ###set_property IOSTANDARD LVCMOS18 [get_ports bxclk]
 ###set_property IOSTANDARD LVCMOS18 [get_ports bxclk_ana]
 ###set_property IOSTANDARD LVCMOS18 [get_ports config_clk]
