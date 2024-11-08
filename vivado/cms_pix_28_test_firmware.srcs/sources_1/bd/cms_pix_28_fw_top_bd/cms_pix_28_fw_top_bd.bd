@@ -22,7 +22,8 @@
       "ibuf_ds_0": "",
       "obuf_ds_0": "",
       "clk_wiz_0": "",
-      "fw_top_v_0": ""
+      "fw_top_v_0": "",
+      "iob_iddr_0": ""
     },
     "ports": {
       "super_pixel_sel": {
@@ -4438,27 +4439,51 @@
             "direction": "O"
           },
           "config_out": {
-            "direction": "I",
-            "parameters": {
-              "LAYERED_METADATA": {
-                "value": "undef",
-                "value_src": "default_prop"
-              }
-            }
+            "direction": "I"
           },
           "scan_out": {
-            "direction": "I",
-            "parameters": {
-              "LAYERED_METADATA": {
-                "value": "undef",
-                "value_src": "default_prop"
-              }
-            }
+            "direction": "I"
           },
           "scan_out_test": {
             "direction": "I"
           },
           "dnn_output_0": {
+            "direction": "I"
+          },
+          "dnn_output_1": {
+            "direction": "I"
+          }
+        }
+      },
+      "iob_iddr_0": {
+        "vlnv": "xilinx.com:module_ref:iob_iddr:1.0",
+        "xci_name": "cms_pix_28_fw_top_bd_iob_iddr_0_0",
+        "xci_path": "ip/cms_pix_28_fw_top_bd_iob_iddr_0_0/cms_pix_28_fw_top_bd_iob_iddr_0_0.xci",
+        "inst_hier_path": "iob_iddr_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "iob_iddr",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "pl_clk1": {
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "399996000",
+                "value_src": "ip_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
+                "value_src": "ip_prop"
+              }
+            }
+          },
+          "config_out_i": {
             "direction": "I",
             "parameters": {
               "LAYERED_METADATA": {
@@ -4467,7 +4492,7 @@
               }
             }
           },
-          "dnn_output_1": {
+          "scan_out_i": {
             "direction": "I",
             "parameters": {
               "LAYERED_METADATA": {
@@ -4475,6 +4500,42 @@
                 "value_src": "default_prop"
               }
             }
+          },
+          "scan_out_test_i": {
+            "direction": "I"
+          },
+          "dnn_output_0_i": {
+            "direction": "I",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "dnn_output_1_i": {
+            "direction": "I",
+            "parameters": {
+              "LAYERED_METADATA": {
+                "value": "undef",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "config_out_o": {
+            "direction": "O"
+          },
+          "scan_out_o": {
+            "direction": "O"
+          },
+          "scan_out_test_o": {
+            "direction": "O"
+          },
+          "dnn_output_0_o": {
+            "direction": "O"
+          },
+          "dnn_output_1_o": {
+            "direction": "O"
           }
         }
       }
@@ -4504,7 +4565,8 @@
       "clk_wiz_0_clk_out1": {
         "ports": [
           "clk_wiz_0/clk_out1",
-          "fw_top_v_0/pl_clk1"
+          "fw_top_v_0/pl_clk1",
+          "iob_iddr_0/pl_clk1"
         ]
       },
       "config_out_n_1": {
@@ -4600,25 +4662,55 @@
       "ibuf_ds_0_config_out": {
         "ports": [
           "ibuf_ds_0/config_out",
-          "fw_top_v_0/config_out"
+          "iob_iddr_0/config_out_i"
         ]
       },
       "ibuf_ds_0_dnn_out_0": {
         "ports": [
           "ibuf_ds_0/dnn_out_0",
-          "fw_top_v_0/dnn_output_0"
+          "iob_iddr_0/dnn_output_0_i"
         ]
       },
       "ibuf_ds_0_dnn_out_1": {
         "ports": [
           "ibuf_ds_0/dnn_out_1",
-          "fw_top_v_0/dnn_output_1"
+          "iob_iddr_0/dnn_output_1_i"
         ]
       },
       "ibuf_ds_0_scan_out": {
         "ports": [
           "ibuf_ds_0/scan_out",
+          "iob_iddr_0/scan_out_i"
+        ]
+      },
+      "iob_iddr_0_config_out_o": {
+        "ports": [
+          "iob_iddr_0/config_out_o",
+          "fw_top_v_0/config_out"
+        ]
+      },
+      "iob_iddr_0_dnn_output_0_o": {
+        "ports": [
+          "iob_iddr_0/dnn_output_0_o",
+          "fw_top_v_0/dnn_output_0"
+        ]
+      },
+      "iob_iddr_0_dnn_output_1_o": {
+        "ports": [
+          "iob_iddr_0/dnn_output_1_o",
+          "fw_top_v_0/dnn_output_1"
+        ]
+      },
+      "iob_iddr_0_scan_out_o": {
+        "ports": [
+          "iob_iddr_0/scan_out_o",
           "fw_top_v_0/scan_out"
+        ]
+      },
+      "iob_iddr_0_scan_out_test_o": {
+        "ports": [
+          "iob_iddr_0/scan_out_test_o",
+          "fw_top_v_0/scan_out_test"
         ]
       },
       "obuf_ds_0_bxclk_ana_n": {
@@ -4757,7 +4849,7 @@
       "scan_out_test_1": {
         "ports": [
           "scan_out_test",
-          "fw_top_v_0/scan_out_test"
+          "iob_iddr_0/scan_out_test_i"
         ]
       },
       "zynq_ultra_ps_e_0_pl_clk0": {
