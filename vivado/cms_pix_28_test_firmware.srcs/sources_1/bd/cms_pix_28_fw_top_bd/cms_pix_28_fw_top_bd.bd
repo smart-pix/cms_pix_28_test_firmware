@@ -23,7 +23,8 @@
       "obuf_ds_0": "",
       "clk_wiz_0": "",
       "fw_top_v_0": "",
-      "iob_iddr_0": ""
+      "iob_iddr_0": "",
+      "iob_oddr_0": ""
     },
     "ports": {
       "super_pixel_sel": {
@@ -4538,6 +4539,110 @@
             "direction": "O"
           }
         }
+      },
+      "iob_oddr_0": {
+        "vlnv": "xilinx.com:module_ref:iob_oddr:1.0",
+        "xci_name": "cms_pix_28_fw_top_bd_iob_oddr_0_0",
+        "xci_path": "ip/cms_pix_28_fw_top_bd_iob_oddr_0_0/cms_pix_28_fw_top_bd_iob_oddr_0_0.xci",
+        "inst_hier_path": "iob_oddr_0",
+        "reference_info": {
+          "ref_type": "hdl",
+          "ref_name": "iob_oddr",
+          "boundary_crc": "0x0"
+        },
+        "ports": {
+          "pl_clk1": {
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "399996000",
+                "value_src": "ip_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "ip_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_pl_clk0",
+                "value_src": "ip_prop"
+              }
+            }
+          },
+          "super_pixel_sel_i": {
+            "direction": "I"
+          },
+          "config_clk_i": {
+            "direction": "I",
+            "parameters": {
+              "FREQ_HZ": {
+                "value": "100000000",
+                "value_src": "default_prop"
+              },
+              "PHASE": {
+                "value": "0.0",
+                "value_src": "default_prop"
+              },
+              "CLK_DOMAIN": {
+                "value": "cms_pix_28_fw_top_bd_fw_top_v_0_0_config_clk",
+                "value_src": "default_prop"
+              }
+            }
+          },
+          "dut_rst_port_i": {
+            "direction": "I"
+          },
+          "config_in_i": {
+            "direction": "I"
+          },
+          "config_load_i": {
+            "direction": "I"
+          },
+          "bxclk_ana_i": {
+            "direction": "I"
+          },
+          "bxclk_i": {
+            "direction": "I"
+          },
+          "vin_test_trig_out_i": {
+            "direction": "I"
+          },
+          "scan_in_i": {
+            "direction": "I"
+          },
+          "scan_load_i": {
+            "direction": "I"
+          },
+          "super_pixel_sel_o": {
+            "direction": "O"
+          },
+          "config_clk_o": {
+            "direction": "O"
+          },
+          "dut_rst_port_o": {
+            "direction": "O"
+          },
+          "config_in_o": {
+            "direction": "O"
+          },
+          "config_load_o": {
+            "direction": "O"
+          },
+          "bxclk_ana_o": {
+            "direction": "O"
+          },
+          "bxclk_o": {
+            "direction": "O"
+          },
+          "vin_test_trig_out_o": {
+            "direction": "O"
+          },
+          "scan_in_o": {
+            "direction": "O"
+          },
+          "scan_load_o": {
+            "direction": "O"
+          }
+        }
       }
     },
     "interface_nets": {
@@ -4566,7 +4671,8 @@
         "ports": [
           "clk_wiz_0/clk_out1",
           "fw_top_v_0/pl_clk1",
-          "iob_iddr_0/pl_clk1"
+          "iob_iddr_0/pl_clk1",
+          "iob_oddr_0/pl_clk1"
         ]
       },
       "config_out_n_1": {
@@ -4608,55 +4714,61 @@
       "fw_top_v_0_bxclk": {
         "ports": [
           "fw_top_v_0/bxclk",
-          "obuf_ds_0/bxclk"
+          "iob_oddr_0/bxclk_i"
         ]
       },
       "fw_top_v_0_bxclk_ana": {
         "ports": [
           "fw_top_v_0/bxclk_ana",
-          "obuf_ds_0/bxclk_ana"
+          "iob_oddr_0/bxclk_ana_i"
         ]
       },
       "fw_top_v_0_config_clk": {
         "ports": [
           "fw_top_v_0/config_clk",
-          "obuf_ds_0/config_clk"
+          "iob_oddr_0/config_clk_i"
         ]
       },
       "fw_top_v_0_config_in": {
         "ports": [
           "fw_top_v_0/config_in",
-          "obuf_ds_0/config_in"
+          "iob_oddr_0/config_in_i"
         ]
       },
       "fw_top_v_0_config_load": {
         "ports": [
           "fw_top_v_0/config_load",
-          "obuf_ds_0/config_load"
+          "iob_oddr_0/config_load_i"
+        ]
+      },
+      "fw_top_v_0_dut_rst_port": {
+        "ports": [
+          "fw_top_v_0/dut_rst_port",
+          "iob_oddr_0/dut_rst_port_i"
         ]
       },
       "fw_top_v_0_scan_in": {
         "ports": [
           "fw_top_v_0/scan_in",
-          "obuf_ds_0/scan_in"
+          "iob_oddr_0/scan_in_i"
         ]
       },
       "fw_top_v_0_scan_load": {
         "ports": [
           "fw_top_v_0/scan_load",
-          "obuf_ds_0/scan_load"
+          "iob_oddr_0/scan_load_i"
         ]
       },
       "fw_top_v_0_super_pixel_sel": {
         "ports": [
           "fw_top_v_0/super_pixel_sel",
-          "super_pixel_sel"
+          "iob_oddr_0/super_pixel_sel_i"
         ]
       },
       "fw_top_v_0_vin_test_trig_out": {
         "ports": [
           "fw_top_v_0/vin_test_trig_out",
-          "obuf_ds_0/vin_test_trig_out"
+          "iob_oddr_0/vin_test_trig_out_i"
         ]
       },
       "ibuf_ds_0_config_out": {
@@ -4711,6 +4823,66 @@
         "ports": [
           "iob_iddr_0/scan_out_test_o",
           "fw_top_v_0/scan_out_test"
+        ]
+      },
+      "iob_oddr_0_bxclk_ana_o": {
+        "ports": [
+          "iob_oddr_0/bxclk_ana_o",
+          "obuf_ds_0/bxclk_ana"
+        ]
+      },
+      "iob_oddr_0_bxclk_o": {
+        "ports": [
+          "iob_oddr_0/bxclk_o",
+          "obuf_ds_0/bxclk"
+        ]
+      },
+      "iob_oddr_0_config_clk_o": {
+        "ports": [
+          "iob_oddr_0/config_clk_o",
+          "obuf_ds_0/config_clk"
+        ]
+      },
+      "iob_oddr_0_config_in_o": {
+        "ports": [
+          "iob_oddr_0/config_in_o",
+          "obuf_ds_0/config_in"
+        ]
+      },
+      "iob_oddr_0_config_load_o": {
+        "ports": [
+          "iob_oddr_0/config_load_o",
+          "obuf_ds_0/config_load"
+        ]
+      },
+      "iob_oddr_0_dut_rst_port_o": {
+        "ports": [
+          "iob_oddr_0/dut_rst_port_o",
+          "obuf_ds_0/reset_not"
+        ]
+      },
+      "iob_oddr_0_scan_in_o": {
+        "ports": [
+          "iob_oddr_0/scan_in_o",
+          "obuf_ds_0/scan_in"
+        ]
+      },
+      "iob_oddr_0_scan_load_o": {
+        "ports": [
+          "iob_oddr_0/scan_load_o",
+          "obuf_ds_0/scan_load"
+        ]
+      },
+      "iob_oddr_0_super_pixel_sel_o": {
+        "ports": [
+          "iob_oddr_0/super_pixel_sel_o",
+          "super_pixel_sel"
+        ]
+      },
+      "iob_oddr_0_vin_test_trig_out_o": {
+        "ports": [
+          "iob_oddr_0/vin_test_trig_out_o",
+          "obuf_ds_0/vin_test_trig_out"
         ]
       },
       "obuf_ds_0_bxclk_ana_n": {
@@ -4826,12 +4998,6 @@
           "proc_sys_reset_0/interconnect_aresetn",
           "axi_interconnect_0/S00_ARESETN",
           "axi_interconnect_0/M00_ARESETN"
-        ]
-      },
-      "reset_not_1": {
-        "ports": [
-          "fw_top_v_0/dut_rst_port",
-          "obuf_ds_0/reset_not"
         ]
       },
       "scan_out_n_1": {

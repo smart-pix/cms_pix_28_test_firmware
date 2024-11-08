@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spirit:design xmlns:xilinx="http://www.xilinx.com" xmlns:spirit="http://www.spiritconsortium.org/XMLSchema/SPIRIT/1685-2009" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <spirit:vendor>xilinx.com</spirit:vendor>
+  <spirit:library>xci</spirit:library>
+  <spirit:name>unknown</spirit:name>
+  <spirit:version>1.0</spirit:version>
+  <spirit:componentInstances>
+    <spirit:componentInstance>
+      <spirit:instanceName>cms_pix_28_fw_top_bd_iob_oddr_0_0</spirit:instanceName>
+      <spirit:componentRef spirit:vendor="xilinx.com" spirit:library="module_ref" spirit:name="iob_oddr" spirit:version="1.0"/>
+      <spirit:configurableElementValues>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.Component_Name">cms_pix_28_fw_top_bd_iob_oddr_0_0</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.ARCHITECTURE">zynquplus</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.BASE_BOARD_PART">xilinx.com:zcu102:part0:3.4</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.BOARD_CONNECTIONS"/>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.DEVICE">xczu9eg</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.PACKAGE">ffvb1156</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.PREFHDL">VERILOG</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.SILICON_REVISION"/>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.SIMULATOR_LANGUAGE">MIXED</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.SPEEDGRADE">-2</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.STATIC_POWER"/>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.TEMPERATURE_GRADE">E</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.USE_RDI_CUSTOMIZATION">TRUE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PROJECT_PARAM.USE_RDI_GENERATION">TRUE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.IPCONTEXT">IP_Integrator</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.IPREVISION">1</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.MANAGED">TRUE</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.OUTPUTDIR">../../../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd/ip/cms_pix_28_fw_top_bd_iob_oddr_0_0</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SELECTEDSIMMODEL"/>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SHAREDDIR">../../ipshared</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SWVERSION">2022.1</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="RUNTIME_PARAM.SYNTHESISFLOW">OOC_HIERARCHICAL</spirit:configurableElementValue>
+      </spirit:configurableElementValues>
+      <spirit:vendorExtensions>
+        <xilinx:componentInstanceExtensions>
+          <xilinx:boundaryDescriptionInfo>
+            <xilinx:boundaryDescription xilinx:boundaryDescriptionJSON="{
+              &quot;schema&quot;: &quot;xilinx.com:schema:json_boundary:1.0&quot;,
+              &quot;boundary&quot;: {
+                &quot;ports&quot;: {
+                  &quot;pl_clk1&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;super_pixel_sel_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;config_clk_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;dut_rst_port_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;config_in_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;config_load_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;bxclk_ana_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;bxclk_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;vin_test_trig_out_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;scan_in_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;scan_load_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;super_pixel_sel_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;config_clk_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;dut_rst_port_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;config_in_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;config_load_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;bxclk_ana_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;bxclk_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;vin_test_trig_out_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;scan_in_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;scan_load_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ]
+                }
+              }
+            }"/>
+          </xilinx:boundaryDescriptionInfo>
+        </xilinx:componentInstanceExtensions>
+      </spirit:vendorExtensions>
+    </spirit:componentInstance>
+  </spirit:componentInstances>
+</spirit:design>
