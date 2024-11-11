@@ -17,6 +17,7 @@
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // 2024-08-02  Cristian Gingu         Add Test 7: Test CONFIG-CLK-MODULE as a serial-in / serial-out shift-tegister. TEST_NUMBER==2
 // 2024-08-12  Cristian Gingu         Add references to src/cms_pix28_package.sv vrf/cms_pix28_package_vrf.sv
+// 2024-11-11  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb_ip1__
 `define __fw_ipx_wrap_tb_ip1__
@@ -47,9 +48,11 @@ module fw_ipx_wrap_tb_ip1 ();
   // Inputs from DUT
   logic config_out;
   logic scan_out;
+  logic scan_out_test;
   logic dnn_output_0;
   logic dnn_output_1;
   logic dn_event_toggle;
+  logic up_event_toggle;
 
   fw_ipx_wrap DUT (
     //////////////////////////////
@@ -78,9 +81,11 @@ module fw_ipx_wrap_tb_ip1 ();
     // Inputs from DUT
     .config_out              (config_out),
     .scan_out                (scan_out),
+    .scan_out_test           (scan_out_test),
     .dnn_output_0            (dnn_output_0),
     .dnn_output_1            (dnn_output_1),
-    .dn_event_toggle         (dn_event_toggle)
+    .dn_event_toggle         (dn_event_toggle),
+    .up_event_toggle         (up_event_toggle)
   );
 
   // Constants
@@ -197,11 +202,17 @@ module fw_ipx_wrap_tb_ip1 ();
     end
   endtask
 
-  //assign config_out <= config_in;
+  // Inputs from DUT
   always @(posedge fw_axi_clk) begin
     // arbitrary one clock delay
-    config_out <= config_in;
+    config_out    <= config_in;
+    scan_out      <=  scan_in;
+    scan_out_test <= ~scan_in;
   end
+  assign dnn_output_0        = 1'b0;
+  assign dnn_output_1        = 1'b0;
+  assign dn_event_toggle     = 1'b0;
+  assign up_event_toggle     = 1'b0;
 
   function void initialize();
     // SW side signals
