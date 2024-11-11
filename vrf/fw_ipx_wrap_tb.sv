@@ -994,6 +994,12 @@ module fw_ipx_wrap_tb ();
 
   end
 
+  initial begin
+    $dumpfile("/asic/projects/C/CMS_PIX_28/gingu/cms_pix_28_test_firmware/vivado_runs/dump.vcd");
+    $dumpvars(1, bxclk, tb_dnn_reg_0);
+    //$dumpvars(levels, list_of_modules_or_variables);
+  end
+
 endmodule
 
 `endif

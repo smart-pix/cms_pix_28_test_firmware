@@ -80,4 +80,8 @@ set_property IOSTANDARD LVDS [get_ports scan_out_n]
 set_property IOSTANDARD LVDS [get_ports config_out_*]
 set_property IOSTANDARD LVDS [get_ports dnn_out_0_*]
 set_property IOSTANDARD LVDS [get_ports dnn_out_1_*]
+set_property DIFF_TERM_ADV TERM_100 [get_ports scan_out_p]
+set_property DIFF_TERM_ADV TERM_100 [get_ports config_out_p]
+set_property DIFF_TERM_ADV TERM_100 [get_ports dnn_out_0_p]
+set_property DIFF_TERM_ADV TERM_100 [get_ports dnn_out_1_p]
 #
