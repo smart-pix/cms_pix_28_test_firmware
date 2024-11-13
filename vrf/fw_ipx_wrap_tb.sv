@@ -136,6 +136,8 @@ module fw_ipx_wrap_tb ();
   //
   import cms_pix28_package::dnn_reg_0_default;
   import cms_pix28_package::dnn_reg_1_default;
+  import cms_pix28_package::bxclk_ana_default;
+  import cms_pix28_package::bxclk_default;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T3;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T4;
   //
@@ -192,6 +194,8 @@ module fw_ipx_wrap_tb ();
   logic [47:0] tb_dnn_reg_1_predicted;                     // 400MHz clock register with  predicted IP2_T3 state machine output signal sm_test3_o_dnn_output_1
   logic [47:0] tb_dnn_reg_0_random;
   logic [47:0] tb_dnn_reg_1_random;
+  logic [47:0] tb_bxclk_ana_predicted;                     // 400MHz clock register with  predicted IP2_T3 state machine output signal sm_test3_o_dnn_output_0
+  logic [47:0] tb_bxclk_predicted;                         // 400MHz clock register with  predicted IP2_T3 state machine output signal sm_test3_o_dnn_output_1
 
   // Generate free running fw_pl_clk1;           // FM clock 400MHz       mapped to pl_clk1
   always begin: gen_fw_pl_clk1
@@ -230,11 +234,11 @@ module fw_ipx_wrap_tb ();
 
   always @(posedge fw_pl_clk1) begin : dnn_proc
     if((DUT.fw_ip2_inst.test3_enable===1'b1) || (DUT.fw_ip2_inst.test4_enable===1'b1)) begin
-      // when test3 is active
+      // when test3 is active OR test4 is active do:
       if(
           ((DUT.fw_ip2_inst.test3_enable===1'b1) && (DUT.fw_ip2_inst.test3_enable_re===1'b1)) ||
           ((DUT.fw_ip2_inst.test4_enable===1'b1) && (DUT.fw_ip2_inst.test4_enable_re===1'b1))    )  begin
-        // at test3 rising edge load with default value
+        // at test3 rising edge or test3 rising edge do:
         if(tb_test_loopback==1'b1) begin
           tb_dnn_reg_0            <= dnn_reg_0_default;
           tb_dnn_reg_1            <= dnn_reg_1_default;
@@ -246,6 +250,8 @@ module fw_ipx_wrap_tb ();
           tb_dnn_reg_0_predicted  <= {47'h0, tb_dnn_reg_0_random[47]};
           tb_dnn_reg_1_predicted  <= {47'h0, tb_dnn_reg_1_random[47]};
         end
+        tb_bxclk_ana_predicted    <= 48'h0;
+        tb_bxclk_predicted        <= 48'h0;
       end else begin
         if(
             ((DUT.fw_ip2_inst.test3_enable===1'b1) && (DUT.fw_ip2_inst.sm_test3==SCANLOAD_HIGH_2_IP2_T3)) ||
@@ -255,20 +261,26 @@ module fw_ipx_wrap_tb ();
           tb_dnn_reg_1            <= {tb_dnn_reg_1[46:0], tb_dnn_reg_1[47]};
           tb_dnn_reg_0_predicted  <= {tb_dnn_reg_0_predicted[46:0], tb_dnn_reg_0[47]};
           tb_dnn_reg_1_predicted  <= {tb_dnn_reg_1_predicted[46:0], tb_dnn_reg_1[47]};
+          tb_bxclk_ana_predicted  <= {tb_bxclk_ana_predicted[46:0], DUT.com_fw_to_dut_inst.bxclk_ana_mux};
+          tb_bxclk_predicted      <= {tb_bxclk_predicted    [46:0], DUT.com_fw_to_dut_inst.bxclk_mux    };
         end else begin
           // do NOT rotate, just keep/preserve values
           tb_dnn_reg_0            <= tb_dnn_reg_0;
           tb_dnn_reg_1            <= tb_dnn_reg_1;
           tb_dnn_reg_0_predicted  <= tb_dnn_reg_0_predicted;
           tb_dnn_reg_1_predicted  <= tb_dnn_reg_1_predicted;
+          tb_bxclk_ana_predicted  <= tb_bxclk_ana_predicted;
+          tb_bxclk_predicted      <= tb_bxclk_predicted;
         end
       end
     end else begin
-      // when test3 is not active
+      // when test3 is not active AND test4 is not active
       tb_dnn_reg_0                <= 48'h0;
       tb_dnn_reg_1                <= 48'h0;
       tb_dnn_reg_0_predicted      <= tb_dnn_reg_0_predicted;
       tb_dnn_reg_1_predicted      <= tb_dnn_reg_1_predicted;
+      tb_bxclk_ana_predicted      <= tb_bxclk_ana_predicted;
+      tb_bxclk_predicted          <= tb_bxclk_predicted;
     end
   end
   // NOTE: The above signals tb_dnn_reg_0/1_predicted are one clock ahead (shifted left one more bit)
@@ -626,17 +638,18 @@ module fw_ipx_wrap_tb ();
     @(posedge fw_axi_clk);
     if(tb_test_loopback===1'b0) begin
       if(sw_read32_0 !== tb_dnn_reg_0_predicted[32:1]) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected tb_dnn_reg_0_predicted[32:1]=0x%08h", $realtime(), r_data_array_n, 0, sw_read32_0, tb_dnn_reg_0_predicted[32:1]);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected tb_dnn_reg_0_predicted[32:1]=0x%08h", $realtime(), r_data_array_n, 0, sw_read32_0, tb_dnn_reg_0_predicted[32:1]);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end else begin
       if(sw_read32_0 !== dnn_reg_0_default[31:0]) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn+loopback) i_addr=%03d sw_read32_0=0x%08h expected dnn_reg_0_default[31:0]]=0x%08h", $realtime(), r_data_array_n, 0, sw_read32_0, dnn_reg_0_default[31:0]);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn+loopback) i_addr=%03d sw_read32_0=0x%08h expected dnn_reg_0_default[31:0]]=0x%08h", $realtime(), r_data_array_n, 0, sw_read32_0, dnn_reg_0_default[31:0]);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end
+    //
     @(negedge fw_axi_clk)
       // i_addr==1
       tb_sw_write24_0[23:16] = 1 & 8'hFF;
@@ -645,17 +658,18 @@ module fw_ipx_wrap_tb ();
     @(posedge fw_axi_clk);
     if(tb_test_loopback===1'b0) begin
       if(sw_read32_0 !== {tb_dnn_reg_1_predicted[16:1], 1'b0, tb_dnn_reg_0_predicted[47:33]}) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected {tb_dnn_reg_1_predicted[16:1]=0x%04h, 1'b0, tb_dnn_reg_0_predicted[47:33]=0x%04h}", $realtime(), r_data_array_n, 1, sw_read32_0, tb_dnn_reg_1_predicted[16:1], tb_dnn_reg_0_predicted[47:33]);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected {tb_dnn_reg_1_predicted[16:1]=0x%04h, 1'b0, tb_dnn_reg_0_predicted[47:33]=0x%04h}", $realtime(), r_data_array_n, 1, sw_read32_0, tb_dnn_reg_1_predicted[16:1], tb_dnn_reg_0_predicted[47:33]);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end else begin
       if(sw_read32_0 !== {dnn_reg_1_default[15:0], dnn_reg_0_default[47:32]}) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn+loopback) i_addr=%03d sw_read32_0=0x%08h expected {dnn_reg_1_default[15:0]]=0x%04h, dnn_reg_0_default[47:32]]=0x%04h}", $realtime(), r_data_array_n, 1, sw_read32_0, dnn_reg_1_default[15:0], dnn_reg_0_default[47:32]);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn+loopback) i_addr=%03d sw_read32_0=0x%08h expected {dnn_reg_1_default[15:0]]=0x%04h, dnn_reg_0_default[47:32]]=0x%04h}", $realtime(), r_data_array_n, 1, sw_read32_0, dnn_reg_1_default[15:0], dnn_reg_0_default[47:32]);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end
+    //
     @(negedge fw_axi_clk)
       // i_addr==2
       tb_sw_write24_0[23:16] = 2 & 8'hFF;
@@ -665,17 +679,18 @@ module fw_ipx_wrap_tb ();
     if(tb_test_loopback===1'b0) begin
       @(posedge fw_axi_clk);
       if(sw_read32_0 !== {1'b0, tb_dnn_reg_1_predicted[47:17]}) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected {1'b0, tb_dnn_reg_1_predicted[47:17]=0x%08h", $realtime(), r_data_array_n, 2, sw_read32_0, tb_dnn_reg_1_predicted[47:17]);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected {1'b0, tb_dnn_reg_1_predicted[47:17]=0x%08h", $realtime(), r_data_array_n, 2, sw_read32_0, tb_dnn_reg_1_predicted[47:17]);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end else begin
       if(sw_read32_0 !== {dnn_reg_1_default[47:16]}) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn+loopback) i_addr=%03d sw_read32_0=0x%08h expected dnn_reg_1_default[47:16]=0x%08h", $realtime(), r_data_array_n, 2, sw_read32_0, dnn_reg_1_default[47:16]);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn+loopback) i_addr=%03d sw_read32_0=0x%08h expected dnn_reg_1_default[47:16]=0x%08h", $realtime(), r_data_array_n, 2, sw_read32_0, dnn_reg_1_default[47:16]);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end
+    //
     @(negedge fw_axi_clk)
       // i_addr==3
       tb_sw_write24_0[23:16] = 3 & 8'hFF;
@@ -683,18 +698,79 @@ module fw_ipx_wrap_tb ();
     sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
     @(posedge fw_axi_clk);
     if(tb_test_loopback===1'b0) begin
+      if(sw_read32_0 !== tb_bxclk_ana_predicted[31:0]) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 3, sw_read32_0, 32'h0);
+        if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
+        if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
+      end
+    end else begin
+      if(sw_read32_0 !== bxclk_ana_default[31:0]) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 3, sw_read32_0, bxclk_ana_default[31:0]);
+        if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
+        if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
+      end
+    end
+    //
+    @(negedge fw_axi_clk)
+      // i_addr==4
+      tb_sw_write24_0[23:16] = 4 & 8'hFF;
+    tb_sw_write24_0[15: 0] = 16'hFFFF;
+    sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
+    @(posedge fw_axi_clk);
+    if(tb_test_loopback===1'b0) begin
+      if(sw_read32_0 !== {tb_bxclk_predicted[15:0], tb_bxclk_ana_predicted[47:32]}) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 4, sw_read32_0, 32'h0);
+        if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
+        if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
+      end
+    end else begin
+      if(sw_read32_0 !== {bxclk_default[15:0], bxclk_ana_default[47:32]}) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected {bxclk_default[15:0]]=0x%04h, bxclk_ana_default[47:32]]=0x%04h}", $realtime(), r_data_array_n, 4, sw_read32_0, bxclk_default[15:0], bxclk_ana_default[47:32]);
+        if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
+        if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
+      end
+    end
+    //
+    @(negedge fw_axi_clk)
+      // i_addr==5
+      tb_sw_write24_0[23:16] = 5 & 8'hFF;
+    tb_sw_write24_0[15: 0] = 16'hFFFF;
+    sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
+    @(posedge fw_axi_clk);
+    if(tb_test_loopback===1'b0) begin
+      if(sw_read32_0 !== tb_bxclk_predicted[47:16]) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 5, sw_read32_0, 32'h0);
+        if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
+        if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
+      end
+    end else begin
+      if(sw_read32_0 !== bxclk_default[47:16]) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 5, sw_read32_0, bxclk_default[47:16]);
+        if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
+        if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
+      end
+    end
+    //
+    @(negedge fw_axi_clk)
+      // i_addr==6
+      tb_sw_write24_0[23:16] = 6 & 8'hFF;
+    tb_sw_write24_0[15: 0] = 16'hFFFF;
+    sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
+    @(posedge fw_axi_clk);
+    if(tb_test_loopback===1'b0) begin
       if(sw_read32_0 !== 32'h0) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 3, sw_read32_0, 32'h0);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 6, sw_read32_0, 32'h0);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end else begin
       if(sw_read32_0 !== 32'h0) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_n=#01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 3, sw_read32_0, 32'h0);
+        $display("time=%06.2f FAIL op_code_r_data_array_n=%01d (dnn) i_addr=%03d sw_read32_0=0x%08h expected 0x%08h", $realtime(), r_data_array_n, 6, sw_read32_0, 32'h0);
         if(r_data_array_n==0) begin tb_err[tb_err_index_op_code_r_data_array_0]=1'b1; end
         if(r_data_array_n==1) begin tb_err[tb_err_index_op_code_r_data_array_1]=1'b1; end
       end
     end
+    //
     @(negedge fw_axi_clk)
       tb_function_id           = OP_CODE_NOOP;
     sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
@@ -927,7 +1003,7 @@ module fw_ipx_wrap_tb ();
     #(10*fw_axi_clk_period);
     tb_number   = 704;
     // READ fw_op_code_r_data_array_0
-    check_r_data_array_n_dnn(.r_data_array_n(0));          // readout: number of 32-bit words is 2 for tb_test_number==3 and tb_test_loopback==HIGH
+    check_r_data_array_n_dnn(.r_data_array_n(0));          // readout: R_DATA_ARRAY_0 for test_number_3;
     #(10*fw_axi_clk_period);                               // readout: wait for at least 4 AXI clock cycles
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);
@@ -978,7 +1054,7 @@ module fw_ipx_wrap_tb ();
     #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
     tb_number   = 805;
     // READ fw_op_code_r_data_array_1
-    check_r_data_array_n_dnn(.r_data_array_n(1));          // readout: number of 32-bit words is 2 for tb_test_number==3 and tb_test_loopback==HIGH
+    check_r_data_array_n_dnn(.r_data_array_n(1));          // readout: R_DATA_ARRAY_1 for test_number_3;
     #(5*fw_axi_clk_period);                                // readout: wait for at least 4 AXI clock cycles
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);

@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-10-25  Cristian  Gingu        Created; merge ip2_test2 and ip2_test3 into one test, ip2_test4
+// 2024-11-12  Cristian  Gingu        Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test4_o_bxclk_ana, sm_test4_o_bxclk)
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test4__
 `define __ip2_test4__
@@ -32,6 +33,8 @@ module ip2_test4 (
     input  logic [10:0]sm_testx_i_scanchain_reg_shift_cnt_max,       // ip2_test2 related
     input  logic       sm_testx_i_dnn_output_0,                      // ip2_test3 related
     input  logic       sm_testx_i_dnn_output_1,                      // ip2_test3 related
+    input  logic       sm_testx_i_bxclk_ana,                         // ip2_test3 specific
+    input  logic       sm_testx_i_bxclk,                             // ip2_test3 specific
     output logic       sm_test4_o_scanchain_reg_load,
     output logic       sm_test4_o_scanchain_reg_shift,
     output logic       sm_test4_o_status_done,
@@ -45,7 +48,9 @@ module ip2_test4 (
     output logic       sm_test4_o_scan_in,
     output logic       sm_test4_o_scan_load,
     output logic [cms_pix28_package::dnn_reg_width-1:0] sm_test4_o_dnn_output_0,         // ip2_test3 related
-    output logic [cms_pix28_package::dnn_reg_width-1:0] sm_test4_o_dnn_output_1          // ip2_test3 related
+    output logic [cms_pix28_package::dnn_reg_width-1:0] sm_test4_o_dnn_output_1,         // ip2_test3 related
+    output logic [cms_pix28_package::dnn_reg_width-1:0] sm_test4_o_bxclk_ana,            // ip2_test3 specific
+    output logic [cms_pix28_package::dnn_reg_width-1:0] sm_test4_o_bxclk                 // ip2_test3 specific
   );
 
   import cms_pix28_package::state_t_sm_ip2_test4;
@@ -107,9 +112,13 @@ module ip2_test4 (
           if(test4_enable_re) begin
             sm_test4_o_dnn_reg_0                 <= {dnn_reg_width{1'b0}};
             sm_test4_o_dnn_reg_1                 <= {dnn_reg_width{1'b0}};
+            sm_test4_o_bxclk_ana                 <= {dnn_reg_width{1'b0}};
+            sm_test4_o_bxclk                     <= {dnn_reg_width{1'b0}};
           end else begin
             sm_test4_o_dnn_reg_0                 <= sm_test4_o_dnn_reg_0;
             sm_test4_o_dnn_reg_1                 <= sm_test4_o_dnn_reg_1;
+            sm_test4_o_bxclk_ana                 <= sm_test4_o_bxclk_ana;
+            sm_test4_o_bxclk                     <= sm_test4_o_bxclk;
           end
           sm_test4_o_reset_not                   <= 1'b1;                      // active  LOW signal; default is inactive
           sm_test4_o_scan_in                     <= 1'b0;                      // arbitrary chosen default LOW
@@ -145,6 +154,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
           sm_test4_o_dnn_reg_1                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk_ana                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk                       <= {dnn_reg_width{1'b0}};
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end
@@ -180,6 +191,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
           sm_test4_o_dnn_reg_1                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk_ana                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk                       <= {dnn_reg_width{1'b0}};
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end
@@ -212,6 +225,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
           sm_test4_o_dnn_reg_1                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk_ana                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk                       <= {dnn_reg_width{1'b0}};
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end
@@ -252,6 +267,8 @@ module ip2_test4 (
             end
             sm_test4_o_dnn_reg_0                 <= {sm_test4_o_dnn_reg_0[dnn_reg_width-2:0], sm_testx_i_dnn_output_0};
             sm_test4_o_dnn_reg_1                 <= {sm_test4_o_dnn_reg_1[dnn_reg_width-2:0], sm_testx_i_dnn_output_1};
+            sm_test4_o_bxclk_ana                 <= {sm_test4_o_bxclk_ana[dnn_reg_width-2:0], sm_testx_i_bxclk_ana};
+            sm_test4_o_bxclk                     <= {sm_test4_o_bxclk    [dnn_reg_width-2:0], sm_testx_i_bxclk    };
           end else begin
             if((test_delay==clk_counter) && (scan_load_delay==0)) begin
               sm_test4_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
@@ -262,6 +279,8 @@ module ip2_test4 (
             sm_test4_o_scanchain_reg_shift       <= 1'b0;
             sm_test4_o_dnn_reg_0                 <= {dnn_reg_width{1'b0}};
             sm_test4_o_dnn_reg_1                 <= {dnn_reg_width{1'b0}};
+            sm_test4_o_bxclk_ana                 <= {dnn_reg_width{1'b0}};
+            sm_test4_o_bxclk                     <= {dnn_reg_width{1'b0}};
           end
           sm_test4_o_reset_not                   <= 1'b1;
           sm_test4_o_scanchain_reg_load          <= 1'b0;
@@ -298,6 +317,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
           sm_test4_o_dnn_reg_1                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk_ana                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk                       <= {dnn_reg_width{1'b0}};
           // internal state machine signal assignment
           if(test_delay==clk_counter) begin
             sm_scan_load_delay_cnt               <= sm_scan_load_delay_cnt + 1;
@@ -326,6 +347,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
           sm_test4_o_dnn_reg_1                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk_ana                   <= {dnn_reg_width{1'b0}};
+          sm_test4_o_bxclk                       <= {dnn_reg_width{1'b0}};
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end
@@ -356,6 +379,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= {sm_test4_o_dnn_reg_0[dnn_reg_width-2:0], sm_testx_i_dnn_output_0};
           sm_test4_o_dnn_reg_1                   <= {sm_test4_o_dnn_reg_1[dnn_reg_width-2:0], sm_testx_i_dnn_output_1};
+          sm_test4_o_bxclk_ana                   <= {sm_test4_o_bxclk_ana[dnn_reg_width-2:0], sm_testx_i_bxclk_ana};
+          sm_test4_o_bxclk                       <= {sm_test4_o_bxclk    [dnn_reg_width-2:0], sm_testx_i_bxclk    };
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end
@@ -383,6 +408,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= sm_test4_o_dnn_reg_0;
           sm_test4_o_dnn_reg_1                   <= sm_test4_o_dnn_reg_1;
+          sm_test4_o_bxclk_ana                   <= sm_test4_o_bxclk_ana;
+          sm_test4_o_bxclk                       <= sm_test4_o_bxclk;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end
@@ -414,6 +441,8 @@ module ip2_test4 (
           sm_test4_o_scanchain_reg_load          <= 1'b0;
           sm_test4_o_dnn_reg_0                   <= sm_test4_o_dnn_reg_0;
           sm_test4_o_dnn_reg_1                   <= sm_test4_o_dnn_reg_1;
+          sm_test4_o_bxclk_ana                   <= sm_test4_o_bxclk_ana;
+          sm_test4_o_bxclk                       <= sm_test4_o_bxclk;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end
@@ -429,6 +458,8 @@ module ip2_test4 (
           sm_test4_o_status_done                 <= 1'b1;
           sm_test4_o_dnn_reg_0                   <= sm_test4_o_dnn_reg_0;
           sm_test4_o_dnn_reg_1                   <= sm_test4_o_dnn_reg_1;
+          sm_test4_o_bxclk_ana                   <= sm_test4_o_bxclk_ana;
+          sm_test4_o_bxclk                       <= sm_test4_o_bxclk;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
         end

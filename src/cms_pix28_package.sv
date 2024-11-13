@@ -194,6 +194,8 @@ package cms_pix28_package;
   localparam                           dnn_reg_width     = 48;
   localparam logic [dnn_reg_width-1:0] dnn_reg_0_default = 48'h123456789ABC;   // default value for 48-bits storage dnn_reg_0
   localparam logic [dnn_reg_width-1:0] dnn_reg_1_default = 48'hDEF0FEDCBA98;   // default value for 48-bits storage dnn_reg_1
+  localparam logic [dnn_reg_width-1:0] bxclk_ana_default = 48'h555555555555;   // default value for 48-bits storage bxclk_ana
+  localparam logic [dnn_reg_width-1:0] bxclk_default     = 48'hAAAAAAAAAAAA;   // default value for 48-bits storage bxclk
   typedef enum logic [3:0] {
     IDLE_IP2_T3            = 4'b0000,
     DELAY_TEST_IP2_T3      = 4'b0001,
