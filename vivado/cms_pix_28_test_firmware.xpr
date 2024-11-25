@@ -88,6 +88,20 @@
   <FileSets Version="1" Minor="31">
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
+      <File Path="$PPRDIR/../src/iob_iddr.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../src/iob_oddr.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PPRDIR/../submodules/spacely-caribou-common-blocks/axi4lite_interface/axi4lite_interface_top.sv">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -270,31 +284,17 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../src/iob_iddr.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PPRDIR/../src/iob_oddr.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/bd/cms_pix_28_fw_top_bd/cms_pix_28_fw_top_bd.bd">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_fw_top_v_0_0/cms_pix_28_fw_top_bd_fw_top_v_0_0.xci">
-          <Proxy FileSetName="cms_pix_28_fw_top_bd_fw_top_v_0_0"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_iob_oddr_0_0/cms_pix_28_fw_top_bd_iob_oddr_0_0.xci">
           <Proxy FileSetName="cms_pix_28_fw_top_bd_iob_oddr_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_fw_top_v_0_0/cms_pix_28_fw_top_bd_fw_top_v_0_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_fw_top_v_0_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/hdl/cms_pix_28_fw_top_bd_wrapper.v">
