@@ -16,6 +16,7 @@
 // 2024-08-02  Cristian Gingu         Add new information for state machine with new input port slow_configclk_period
 // 2024-08-05  Cristian Gingu         Add new information for state machine with new input port fast_configclk_period
 // 2024-08-07  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2024-11-25  Cristian Gingu         Move sm_test2_o_config_load FE after RESET_NOT_IP1_T2; branch cg_ipx_testx_fix_cfg_scan_load
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test2__
 `define __ip1_test2__
@@ -125,12 +126,11 @@ module ip1_test2 (
             end else begin
               sm_test2_o_reset_not               <= 1'b0;
             end
-            sm_test2_o_config_load               <= CONFIG_REG_MODE_SHIFT_IN;
           end else begin
             sm_test2_o_reset_not                 <= 1'b1;
-            sm_test2_o_config_load               <= CONFIG_REG_MODE_PARALLEL_OUT;
           end
           sm_test2_o_config_in                   <= 1'b0;
+          sm_test2_o_config_load                 <= CONFIG_REG_MODE_PARALLEL_OUT;
           sm_test2_o_shift_reg_load              <= 1'b1;
           sm_test2_o_shift_reg_shift             <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;
@@ -147,6 +147,7 @@ module ip1_test2 (
           if(test_delay==clk_counter_fc) begin
             sm_test2_o_reset_not                 <= 1'b1;
             sm_test2_o_config_in                 <= sm_testx_i_shift_reg_bit0;
+            sm_test2_o_config_load                 <= CONFIG_REG_MODE_SHIFT_IN;
           end else begin
             if(test_mask_reset_not==1'b1) begin
               sm_test2_o_reset_not               <= 1'b1;
@@ -154,8 +155,8 @@ module ip1_test2 (
               sm_test2_o_reset_not               <= 1'b0;
             end
             sm_test2_o_config_in                 <= 1'b0;
+            sm_test2_o_config_load               <= CONFIG_REG_MODE_PARALLEL_OUT;
           end
-          sm_test2_o_config_load                 <= CONFIG_REG_MODE_SHIFT_IN;
           sm_test2_o_shift_reg_load              <= 1'b0;
           sm_test2_o_shift_reg_shift             <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;

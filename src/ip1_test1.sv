@@ -14,6 +14,7 @@
 // 2024-07-23  Cristian Gingu         Change tests length from 5188 config_clk cycles to 2*5188=10376 config_clk cycles
 // 2024-07-30  Cristian Gingu         Add sm_test1_o_* assignments when reset=HIGH
 // 2024-08-07  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2024-11-25  Cristian Gingu         Move sm_test1_o_config_load FE after RESET_NOT_IP1_T1; branch cg_ipx_testx_fix_cfg_scan_load
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test1__
 `define __ip1_test1__
@@ -111,12 +112,11 @@ module ip1_test1 (
             end else begin
               sm_test1_o_reset_not               <= 1'b0;
             end
-            sm_test1_o_config_load               <= CONFIG_REG_MODE_SHIFT_IN;
           end else begin
             sm_test1_o_reset_not                 <= 1'b1;
-            sm_test1_o_config_load               <= CONFIG_REG_MODE_PARALLEL_OUT;
           end
           sm_test1_o_config_in                   <= 1'b0;
+          sm_test1_o_config_load                 <= CONFIG_REG_MODE_PARALLEL_OUT;
           sm_test1_o_shift_reg_load              <= 1'b1;
           sm_test1_o_shift_reg_shift             <= 1'b0;
           sm_test1_o_status_done                 <= 1'b0;
@@ -132,6 +132,7 @@ module ip1_test1 (
           if(test_delay==clk_counter) begin
             sm_test1_o_reset_not                 <= 1'b1;
             sm_test1_o_config_in                 <= sm_testx_i_shift_reg_bit0;
+            sm_test1_o_config_load               <= CONFIG_REG_MODE_SHIFT_IN;
           end else begin
             if(test_mask_reset_not==1'b1) begin
               sm_test1_o_reset_not               <= 1'b1;
@@ -139,8 +140,8 @@ module ip1_test1 (
               sm_test1_o_reset_not               <= 1'b0;
             end
             sm_test1_o_config_in                 <= 1'b0;
+            sm_test1_o_config_load               <= CONFIG_REG_MODE_PARALLEL_OUT;
           end
-          sm_test1_o_config_load                 <= CONFIG_REG_MODE_SHIFT_IN;
           sm_test1_o_shift_reg_load              <= 1'b0;
           sm_test1_o_shift_reg_shift             <= 1'b0;
           sm_test1_o_status_done                 <= 1'b0;

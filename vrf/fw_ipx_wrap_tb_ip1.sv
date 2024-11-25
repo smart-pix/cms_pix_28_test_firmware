@@ -97,6 +97,8 @@ module fw_ipx_wrap_tb_ip1 ();
   import cms_pix28_package::firmware_id_3;
   import cms_pix28_package::firmware_id_4;
   import cms_pix28_package::firmware_id_none;
+  import cms_pix28_package::test_number_1;
+  import cms_pix28_package::test_number_2;
   //
   import cms_pix28_package::op_code;
   import cms_pix28_package::OP_CODE_NOOP;
@@ -591,7 +593,7 @@ module fw_ipx_wrap_tb_ip1 ();
           $display("time=%06.2f FAIL op_code_r_data_array_1 (mixed) i_addr=%03d sw_read32_0=0x%08h expected {0x%04h 0x%02h 0x%02h}", $realtime(), i_addr, sw_read32_0, 16'h0000, 8'h00, tb_w_cfg_array_counter[2*i_addr][7:0]);
           tb_err[tb_err_index_op_code_r_data_array_1]=1'b1;
         end
-      end else if(i_addr>67) begin
+      end else if(i_addr>68) begin
         if(sw_read32_0 != {16'h0000, 16'h0000}) begin
           $display("time=%06.2f FAIL op_code_r_data_array_1 (mixed) i_addr=%03d sw_read32_0=0x%08h expected {0x%04h 0x%04h}", $realtime(), i_addr, sw_read32_0, 16'h0000, 16'h0000);
           tb_err[tb_err_index_op_code_r_data_array_1]=1'b1;
@@ -759,7 +761,7 @@ module fw_ipx_wrap_tb_ip1 ();
     #(500*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
     //---------------------------------------------------------------------------------------------
-    // Test 5: cfg_array_0/1 write/read counter/random
+    // Test 5: cfg_array_0/1/2 write/read counter/random
     tb_testcase = "T5. cfg_array_0/1/2 write/read counter/random";
     tb_number   = 5;
     tb_w_cfg_array_counter = counter_cfg_array();
@@ -801,65 +803,67 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_i_test                = 0;
     tb_fast_configclk_period = ('d100) & 7'h7F;            // 100MHz/100  => 1MHz
     tb_super_pix_sel         = 1'b1;
-    tb_slow_configclk_period = ('d1000) & 27'h7FFFFFF;     // 100MHz/1000 => 100KHz; basically NOT USED in TEST_NUMBER==1
-    w_cfg_static_0_and_1_fixed();
-    tb_number   = 601;
-    #(5*fw_axi_clk_period);
-    check_r_cfg_static_0_and_1();
-    tb_number   = 602;
-    #(5*fw_axi_clk_period);
-    check_fast_slow_configclk_period();
-    tb_number   = 603;
-    #(5*fw_axi_clk_period);
-    w_cfg_array_0_counter();
-    tb_number   = 604;
-    #(5*fw_axi_clk_period);
-    w_cfg_array_1_random();
-    tb_number   = 605;
-    w_cfg_array_2_mixed();
-    tb_number   = 606;
-    // Dummy wait before w_execute();
-    #(5*tb_slow_configclk_period);
-    // Use following defined tb_test_* parameters for IP1 test1, configure w_execute() bits:
-    tb_test_delay            = {1'b0, tb_fast_configclk_period[6:1]};          // on clock domain fw_axi_clk, make it half tb_fast_configclk_period such as to align serial-data-out with FE of config-clk
-    tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
-    tb_test_number           = 4'h1;                       // use test_number==test_number==4'h1 to enable test1_enable
-    tb_test_loopback         = 1'b1;                       // on clock domain fw_axi_clk
-    tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
-    w_execute();
-    $display("time=%06.2f w_execute() completed", $realtime());
-    tb_number   = 607;
-    #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#14 test1_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
-    $display("time=%06.2f ... done waiting cfg_array_0 256*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
-    tb_number   = 608;
-    #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#14 test1_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
-    $display("time=%06.2f ... done waiting cfg_array_1 256*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
-    tb_number   = 609;
-    #(150*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 138 fast_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#14 test1_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
-    $display("time=%06.2f ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
-    tb_number   = 610;
-    // Check sm_test1_o_status_done bit is set in fw_read_status32_reg[14]:
-    if(sw_read32_1[status_index_test1_done]==1'b1) begin
-      $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d DONE; starting to check readout data:", $realtime(), firmware_id_1, 1, tb_test_loopback);
-    end else begin
-      $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d mode NOT DONE", $realtime(), firmware_id_1, 1, tb_test_loopback);
-      tb_err[tb_err_index_test1] = 1'b1;
+    tb_slow_configclk_period = ('d1000) & 27'h7FFFFFF;     // 100MHz/1000 => 100KHz; NOT USED in TEST_NUMBER==1
+    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+      w_cfg_static_0_and_1_fixed();
+      tb_number   = 601;
+      #(5*fw_axi_clk_period);
+      check_r_cfg_static_0_and_1();
+      tb_number   = 602;
+      #(5*fw_axi_clk_period);
+      check_fast_slow_configclk_period();
+      tb_number   = 603;
+      #(5*fw_axi_clk_period);
+      w_cfg_array_0_counter();
+      tb_number   = 604;
+      #(5*fw_axi_clk_period);
+      w_cfg_array_1_random();
+      tb_number   = 605;
+      w_cfg_array_2_mixed();
+      tb_number   = 606;
+      // Dummy wait before w_execute();
+      #(5*tb_slow_configclk_period);
+      // Use following defined tb_test_* parameters for IP1 test1, configure w_execute() bits:
+      tb_test_delay            = {1'b0, (tb_fast_configclk_period[6:1]+6'h1)};          // on clock domain fw_axi_clk, make it half tb_fast_configclk_period such as to align serial-data-out with FE of config-clk
+      tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
+      tb_test_number           = test_number_1;              // use test_number==4'h1 to enable test1_enable
+      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
+      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+      w_execute();
+      $display("time=%06.2f tb_i_test=%01d w_execute() completed", $realtime(), tb_i_test);
+      tb_number   = 607;
+      #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#14 test1_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_0 256*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
+      tb_number   = 608;
+      #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#14 test1_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_1 256*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
+      tb_number   = 609;
+      #(150*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 138 fast_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#14 test1_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
+      tb_number   = 610;
+      // Check sm_test1_o_status_done bit is set in fw_read_status32_reg[14]:
+      if(sw_read32_1[status_index_test1_done]==1'b1) begin
+        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test%1d in loopback=%01d DONE; starting to check readout data:", $realtime(), tb_i_test, firmware_id_1, 1, tb_test_loopback);
+      end else begin
+        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test%1d in loopback=%01d mode NOT DONE", $realtime(), tb_i_test, firmware_id_1, 1, tb_test_loopback);
+        tb_err[tb_err_index_test1] = 1'b1;
+      end
+      #(5*fw_axi_clk_period);
+      tb_number   = 611;
+      // READ DATA: done in two STEPS: first execute fw_op_code_r_data_array_0 and then execute fw_op_code_r_data_array_1.
+      // The readout number of 32-bit words is (256+68)/2==324/2==162 plus one more word {28'h0, 4-bit-real-data} => 163 32-bit words; Case is for tb_test_number==1 and tb_test_loopback==HIGH/LOW
+      // Step1: execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words 000-127 associated with task w_cfg_array_0_counter() OP_CODE_W_CFG_ARRAY_0
+      //      : execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words 128-255 associated with task w_cfg_array_1_random()  OP_CODE_W_CFG_ARRAY_1
+      $display("time=%06.2f tb_i_test=%01d starting to check readout data: calling check_r_data_array_0()...", $realtime(), tb_i_test);
+      check_r_data_array_0(.read_n_32bit_words(256));
+      tb_number   = 612;
+      #(5*fw_axi_clk_period);
+      // Step2: execute check_r_data_array_1 and readout all ONLY 138 (may read also ALL 256) 16-bit words === 69 32-bit words associated with task w_cfg_array_2_mixed() OP_CODE_W_CFG_ARRAY_2
+      $display("time=%06.2f tb_i_test=%01d starting to check readout data: calling check_r_data_array_1()...", $realtime(), tb_i_test);
+      check_r_data_array_1(.read_n_32bit_words(256));
+      tb_number   = 613;
+      #(5*fw_axi_clk_period);
     end
-    #(5*fw_axi_clk_period);
-    tb_number   = 611;
-    // READ DATA: done in two STEPS: first execute fw_op_code_r_data_array_0 and then execute fw_op_code_r_data_array_1.
-    // The readout number of 32-bit words is (256+68)/2==324/2==162 plus one more word {28'h0, 4-bit-real-data} => 163 32-bit words; Case is for tb_test_number==1 and tb_test_loopback==HIGH
-    // Step1: execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words associated with task w_cfg_array_0_counter() OP_CODE_W_CFG_ARRAY_0
-    //      : execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words associated with task w_cfg_array_1_random()  OP_CODE_W_CFG_ARRAY_1
-    $display("time=%06.2f starting to check readout data: calling check_r_data_array_0()...", $realtime());
-    check_r_data_array_0(.read_n_32bit_words(256));
-    tb_number   = 612;
-    #(5*fw_axi_clk_period);
-    // Step2: execute check_r_data_array_1 and readout all ONLY 138 (may read also ALL 256) 16-bit words === 69  32-bit words associated with task w_cfg_array_2_mixed() OP_CODE_W_CFG_ARRAY_2
-    $display("time=%06.2f starting to check readout data: calling check_r_data_array_1()...", $realtime());
-    check_r_data_array_1(.read_n_32bit_words(256));
-    tb_number   = 613;
-    #(5*fw_axi_clk_period);
     //tb_firmware_id = firmware_id_none;
     //#(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
@@ -876,68 +880,70 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_i_test                = 0;
     tb_fast_configclk_period = ('d12) & 7'h7F;             // 100MHz/10 => 10MHz
     tb_super_pix_sel         = 1'b1;
-    tb_slow_configclk_period = ('d55) & 27'h7FFFFFF;       // 100MHz/50 => 2MHz; basically USED in TEST_NUMBER==2
-    w_cfg_static_0_and_1_fixed();
-    tb_number   = 701;
-    #(5*fw_axi_clk_period);
-    check_r_cfg_static_0_and_1();
-    tb_number   = 702;
-    #(5*fw_axi_clk_period);
-    check_fast_slow_configclk_period();
-    tb_number   = 703;
-    #(5*fw_axi_clk_period);
-    w_cfg_array_0_counter();
-    tb_number   = 704;
-    #(5*fw_axi_clk_period);
-    w_cfg_array_1_random();
-    tb_number   = 705;
-    w_cfg_array_2_mixed();
-    tb_number   = 706;
-    // Dummy wait before w_execute();
-    #(5*tb_slow_configclk_period);
-    // Use following defined tb_test_* parameters for IP1 test1, configure w_execute() bits:
-    tb_test_delay            = {1'b0, tb_fast_configclk_period[6:1]};          // on clock domain fw_axi_clk, make it half tb_fast_configclk_period such as to align serial-data-out with FE of config-clk
-    tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
-    tb_test_number           = 4'h2;                       // use test_number==test_number==4'h2 to enable test2_enable
-    tb_test_loopback         = 1'b1;                       // on clock domain fw_axi_clk
-    tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
-    w_execute();
-    $display("time=%06.2f w_execute() completed", $realtime());
-    tb_number   = 707;
-    #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
-    $display("time=%06.2f ... done waiting cfg_array_0 256*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
-    tb_number   = 708;
-    #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
-    $display("time=%06.2f ... done waiting cfg_array_1 256*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
-    tb_number   = 709;
-    #(140*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 138 fast_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
-    $display("time=%06.2f ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
-    tb_number   = 710;
-    #(25*16*tb_slow_configclk_period*fw_axi_clk_period);      // execution: wait for  25 slow_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
-    $display("time=%06.2f ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_fast_configclk_period, fw_axi_clk_period);
-    tb_number   = 711;
-    // Check sm_test1_o_status_done bit is set in fw_read_status32_reg[14]:
-    if(sw_read32_1[status_index_test2_done]==1'b1) begin
-      $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d DONE; starting to check readout data:", $realtime(), firmware_id_1, 2, tb_test_loopback);
-    end else begin
-      $display("time=%06.2f firmware_id=%01d test%1d in loopback=%01d mode NOT DONE", $realtime(), firmware_id_1, 2, tb_test_loopback);
-      tb_err[tb_err_index_test2] = 1'b1;
+    tb_slow_configclk_period = ('d55) & 27'h7FFFFFF;       // 100MHz/50 => 2MHz; USED in TEST_NUMBER==2
+    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+      w_cfg_static_0_and_1_fixed();
+      tb_number   = 701;
+      #(5*fw_axi_clk_period);
+      check_r_cfg_static_0_and_1();
+      tb_number   = 702;
+      #(5*fw_axi_clk_period);
+      check_fast_slow_configclk_period();
+      tb_number   = 703;
+      #(5*fw_axi_clk_period);
+      w_cfg_array_0_counter();
+      tb_number   = 704;
+      #(5*fw_axi_clk_period);
+      w_cfg_array_1_random();
+      tb_number   = 705;
+      w_cfg_array_2_mixed();
+      tb_number   = 706;
+      // Dummy wait before w_execute();
+      #(5*tb_slow_configclk_period);
+      // Use following defined tb_test_* parameters for IP1 test1, configure w_execute() bits:
+      tb_test_delay            = {1'b0,( tb_fast_configclk_period[6:1]+6'h1)};          // on clock domain fw_axi_clk, make it half tb_fast_configclk_period such as to align serial-data-out with FE of config-clk
+      tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
+      tb_test_number           = test_number_2;              // use test_number==4'h2 to enable test2_enable
+      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
+      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+      w_execute();
+      $display("time=%06.2f tb_i_test=%01d w_execute() completed", $realtime(), tb_i_test);
+      tb_number   = 707;
+      #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_0 256*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
+      tb_number   = 708;
+      #(256*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 256 fast_configclk cycles 256*16==4096;                          alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_1 256*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
+      tb_number   = 709;
+      #(140*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 138 fast_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
+      tb_number   = 710;
+      #(25*16*tb_slow_configclk_period*fw_axi_clk_period);      // execution: wait for  25 slow_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
+      tb_number   = 711;
+      // Check sm_test1_o_status_done bit is set in fw_read_status32_reg[14]:
+      if(sw_read32_1[status_index_test2_done]==1'b1) begin
+        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test%1d in loopback=%01d DONE; starting to check readout data:", $realtime(), tb_i_test, firmware_id_1, 2, tb_test_loopback);
+      end else begin
+        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test%1d in loopback=%01d mode NOT DONE", $realtime(), tb_i_test, firmware_id_1, 2, tb_test_loopback);
+        tb_err[tb_err_index_test2] = 1'b1;
+      end
+      #(5*fw_axi_clk_period);
+      tb_number   = 712;
+      // READ DATA: done in two STEPS: first execute fw_op_code_r_data_array_0 and then execute fw_op_code_r_data_array_1.
+      // The readout number of 32-bit words is (256+68)/2==324/2==162 plus one more word {28'h0, 4-bit-real-data} => 163 32-bit words; Case is for tb_test_number==2 and tb_test_loopback==HIGH/LOW
+      // Step1: execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words 000-127 associated with task w_cfg_array_0_counter() OP_CODE_W_CFG_ARRAY_0
+      //      : execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words 128-255 associated with task w_cfg_array_1_random()  OP_CODE_W_CFG_ARRAY_1
+      $display("time=%06.2f tb_i_test=%01d starting to check readout data: calling check_r_data_array_0()...", $realtime(), tb_i_test);
+      check_r_data_array_0(.read_n_32bit_words(256));
+      tb_number   = 713;
+      #(5*fw_axi_clk_period);
+      // Step2: execute check_r_data_array_1 and readout all ONLY 138 (may read also ALL 256) 16-bit words === 69 32-bit words associated with task w_cfg_array_2_mixed() OP_CODE_W_CFG_ARRAY_2
+      $display("time=%06.2f tb_i_test=%01d starting to check readout data: calling check_r_data_array_1()...", $realtime(), tb_i_test);
+      check_r_data_array_1(.read_n_32bit_words(256));
+      tb_number   = 714;
+      #(5*fw_axi_clk_period);
     end
-    #(5*fw_axi_clk_period);
-    tb_number   = 712;
-    // READ DATA: done in two STEPS: first execute fw_op_code_r_data_array_0 and then execute fw_op_code_r_data_array_1.
-    // The readout number of 32-bit words is (256+68)/2==324/2==162 plus one more word {28'h0, 4-bit-real-data} => 163 32-bit words; Case is for tb_test_number==1 and tb_test_loopback==HIGH
-    // Step1: execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words associated with task w_cfg_array_0_counter() OP_CODE_W_CFG_ARRAY_0
-    //      : execute fw_op_code_r_data_array_0 and readout ALL 256 16-bit words === 128 32-bit words associated with task w_cfg_array_1_random()  OP_CODE_W_CFG_ARRAY_1
-    $display("time=%06.2f starting to check readout data: calling check_r_data_array_0()...", $realtime());
-    check_r_data_array_0(.read_n_32bit_words(256));
-    tb_number   = 713;
-    #(5*fw_axi_clk_period);
-    // Step2: execute check_r_data_array_1 and readout all ONLY 138 (may read also ALL 256) 16-bit words === 69  32-bit words associated with task w_cfg_array_2_mixed() OP_CODE_W_CFG_ARRAY_2
-    $display("time=%06.2f starting to check readout data: calling check_r_data_array_1()...", $realtime());
-    check_r_data_array_1(.read_n_32bit_words(256));
-    tb_number   = 714;
-    #(5*fw_axi_clk_period);
     //tb_firmware_id = firmware_id_none;
     //#(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
