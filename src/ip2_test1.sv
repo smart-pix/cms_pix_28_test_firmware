@@ -13,6 +13,7 @@
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
 // 2024-07-11  Cristian Gingu         Change tests length from 768 bxclk cycles to 2*768=1536 bxclk cycles
 // 2024-08-08  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2024-11-25  Cristian Gingu         Move sm_test1_o_scan_load FE after RESET_NOT_IP2_T1; branch cg_ipx_testx_fix_cfg_scan_load
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test1__
 `define __ip2_test1__
@@ -67,7 +68,7 @@ module ip2_test1 (
   assign sm_test1_o_vin_test_trig_out = 1'b0;       // signal not used-in / diven-by sm_test1_proc
   always @(posedge clk) begin : sm_test1_proc
     if(~enable | reset) begin
-      sm_test1 <= IDLE_IP2_T1;
+      sm_test1       <= IDLE_IP2_T1;
     end else begin
       case(sm_test1)
         IDLE_IP2_T1 : begin
@@ -99,12 +100,11 @@ module ip2_test1 (
             end else begin
               sm_test1_o_reset_not               <= 1'b0;
             end
-            sm_test1_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
           end else begin
             sm_test1_o_reset_not                 <= 1'b1;
-            sm_test1_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
           end
           sm_test1_o_scan_in                     <= 1'b0;
+          sm_test1_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;
           sm_test1_o_scanchain_reg_load          <= 1'b1;
           sm_test1_o_scanchain_reg_shift         <= 1'b0;
           sm_test1_o_status_done                 <= 1'b0;
@@ -120,6 +120,7 @@ module ip2_test1 (
           if(test_delay==clk_counter) begin
             sm_test1_o_reset_not                 <= 1'b1;
             sm_test1_o_scan_in                   <= sm_testx_i_scanchain_reg_bit0;
+            sm_test1_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
           end else begin
             if(test_mask_reset_not==1'b1) begin
               sm_test1_o_reset_not               <= 1'b1;
@@ -127,8 +128,8 @@ module ip2_test1 (
               sm_test1_o_reset_not               <= 1'b0;
             end
             sm_test1_o_scan_in                   <= 1'b0;
+            sm_test1_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
           end
-          sm_test1_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
           sm_test1_o_scanchain_reg_load          <= 1'b0;
           sm_test1_o_scanchain_reg_shift         <= 1'b0;
           sm_test1_o_status_done                 <= 1'b0;
