@@ -12,6 +12,7 @@
 // 2024-09-17  Cristian  Gingu        Add w_cfg_static_0_reg_scan_load_delay_index_min/max_IP2
 // 2024-10-17  Cristian  Gingu        Add delayed vin_test_trig_out in ip2_tes3.sv
 // 2024-10-25  Cristian  Gingu        Add state_t_sm_ip2_test4; merging state_t_sm_ip2_test2 and state_t_sm_ip2_test3. Add localparam dnn_reg_width
+// 2024-11-26  Cristian Gingu         Add localparam w_execute_cfg_test_gate_config_clk_IP1
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -102,7 +103,8 @@ package cms_pix28_package;
   parameter w_execute_cfg_test_number_index_min_IP1                  = 14;     //
   parameter w_execute_cfg_test_number_index_max_IP1                  = 17;     //
   parameter w_execute_cfg_test_loopback_IP1                          = 18;     //
-  parameter w_execute_cfg_test_spare_index_min_IP1                   = 19;     //
+  parameter w_execute_cfg_test_gate_config_clk_IP1                   = 19;     //
+  parameter w_execute_cfg_test_spare_index_min_IP1                   = 20;     //
   parameter w_execute_cfg_test_spare_index_max_IP1                   = 22;     //
   parameter w_execute_cfg_test_mask_reset_not_index_IP1              = 23;     //
   // IP1 TEST1

@@ -738,6 +738,10 @@ set id [waveform add -signals [subst  {
 	} ]]
 set id [waveform add -cdivider divider]
 set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb_ip1.tb_test_gate_config_clk}]}
+	} ]]
+waveform format $id -color #ff9900 -namecolor #ff9900
+set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.fw_ip1_inst.fw_config_clk}]}
 	} ]]
 set id [waveform add -signals [subst  {
@@ -763,4 +767,4 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb_ip1.DUT.pl_clk1}]}
 	} ]]
 
-waveform xview limits 0 48641120ns
+waveform xview limits 0 48593240ns

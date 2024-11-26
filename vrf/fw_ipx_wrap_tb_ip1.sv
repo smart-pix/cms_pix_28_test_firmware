@@ -18,6 +18,7 @@
 // 2024-08-02  Cristian Gingu         Add Test 7: Test CONFIG-CLK-MODULE as a serial-in / serial-out shift-tegister. TEST_NUMBER==2
 // 2024-08-12  Cristian Gingu         Add references to src/cms_pix28_package.sv vrf/cms_pix28_package_vrf.sv
 // 2024-11-11  Cristian Gingu         Add IOB input port up_event_toggle
+// 2024-11-26  Cristian Gingu         Add signal and logic for cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb_ip1__
 `define __fw_ipx_wrap_tb_ip1__
@@ -125,6 +126,7 @@ module fw_ipx_wrap_tb_ip1 ();
   import cms_pix28_package::w_execute_cfg_test_number_index_min_IP1;
   import cms_pix28_package::w_execute_cfg_test_number_index_max_IP1;
   import cms_pix28_package::w_execute_cfg_test_loopback_IP1;
+  import cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1;
   import cms_pix28_package::w_execute_cfg_test_spare_index_min_IP1;
   import cms_pix28_package::w_execute_cfg_test_spare_index_max_IP1;
   import cms_pix28_package::w_execute_cfg_test_mask_reset_not_index_IP1;
@@ -175,6 +177,7 @@ module fw_ipx_wrap_tb_ip1 ();
   logic [6:0]  tb_test_sample;                             // on clock domain fw_axi_clk
   logic [3:0]  tb_test_number;                             // on clock domain fw_axi_clk
   logic        tb_test_loopback;                           // on clock domain fw_axi_clk
+  logic        tb_test_gate_config_clk;                    // on clock domain fw_axi_clk
   logic        tb_test_mask_reset_not;                     // on clock domain fw_axi_clk
 
   // Generate free running fw_pl_clk1;           // FM clock 400MHz       mapped to pl_clk1
@@ -389,12 +392,13 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_sw_write24_0[w_execute_cfg_test_sample_index_max_IP1        : w_execute_cfg_test_sample_index_min_IP1        ] = tb_test_sample;
     tb_sw_write24_0[w_execute_cfg_test_number_index_max_IP1        : w_execute_cfg_test_number_index_min_IP1        ] = tb_test_number;
     tb_sw_write24_0[w_execute_cfg_test_loopback_IP1                                                                 ] = tb_test_loopback;
-    tb_sw_write24_0[w_execute_cfg_test_spare_index_max_IP1         : w_execute_cfg_test_spare_index_min_IP1         ] = 4'h0;
+    tb_sw_write24_0[w_execute_cfg_test_gate_config_clk_IP1                                                          ] = tb_test_gate_config_clk;
+    tb_sw_write24_0[w_execute_cfg_test_spare_index_max_IP1         : w_execute_cfg_test_spare_index_min_IP1         ] = 3'h0;
     tb_sw_write24_0[w_execute_cfg_test_mask_reset_not_index_IP1                                                     ] = tb_test_mask_reset_not;
     sw_write32_0             = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
     #(1*fw_axi_clk_period);
-    $display("time=%06.2f tb_test_number=%01d tb_test_delay=%03d tb_test_sample=%03d tb_test_loopback=%01d tb_test_mask_reset_not=%01d",
-      $realtime(), tb_test_number, tb_test_delay, tb_test_sample, tb_test_loopback, tb_test_mask_reset_not);
+    $display("time=%06.2f tb_test_number=%01d tb_test_delay=%03d tb_test_sample=%03d tb_test_loopback=%01d tb_test_gate_config_clk=%01d tb_test_mask_reset_not=%01d",
+      $realtime(), tb_test_number, tb_test_delay, tb_test_sample, tb_test_loopback, tb_test_gate_config_clk, tb_test_mask_reset_not);
     //fw_op_code_w_execute     = 1'b0;
     //sw_write24_0             = 24'h0;
   endtask
@@ -694,6 +698,7 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
     tb_test_number           = 4'h4;                       // use test_number==test_number==4'h4 to enable test3_enable
     tb_test_loopback         = 1'b1;                       // on clock domain fw_axi_clk
+    tb_test_gate_config_clk  = 1'b0;                       // on clock domain fw_axi_clk
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     //
     for (tb_i_test = 1; tb_i_test <= 3; tb_i_test++) begin           // use maximum tb_i_test <= 8; to test all tb_slow_configclk_period; CAUTION: test-run-time very long....
@@ -734,6 +739,7 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_test_sample           = 7'h05;                      // on clock domain fw_axi_clk
     tb_test_number           = 4'h8;                       // use test_number==test_number==4'h4 to enable test3_enable
     tb_test_loopback         = 1'b1;                       // on clock domain fw_axi_clk
+    tb_test_gate_config_clk  = 1'b0;                       // on clock domain fw_axi_clk
     tb_test_mask_reset_not   = 1'b0;                       // on clock domain fw_axi_clk
     //
     for (tb_i_test = 1; tb_i_test <= 3; tb_i_test++) begin           // use maximum tb_i_test <= 8; to test all tb_slow_configclk_period; CAUTION: test-run-time very long....
@@ -829,6 +835,7 @@ module fw_ipx_wrap_tb_ip1 ();
       tb_test_number           = test_number_1;              // use test_number==4'h1 to enable test1_enable
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
       tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+      tb_test_gate_config_clk  = $urandom_range(1, 0) & 1'b1;// on clock domain fw_axi_clk
       w_execute();
       $display("time=%06.2f tb_i_test=%01d w_execute() completed", $realtime(), tb_i_test);
       tb_number   = 607;
@@ -880,7 +887,7 @@ module fw_ipx_wrap_tb_ip1 ();
     tb_i_test                = 0;
     tb_fast_configclk_period = ('d12) & 7'h7F;             // 100MHz/10 => 10MHz
     tb_super_pix_sel         = 1'b1;
-    tb_slow_configclk_period = ('d55) & 27'h7FFFFFF;       // 100MHz/50 => 2MHz; USED in TEST_NUMBER==2
+    tb_slow_configclk_period = ('d52) & 27'h7FFFFFF;       // 100MHz/50 => 2MHz; USED in TEST_NUMBER==2
     for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
       w_cfg_static_0_and_1_fixed();
       tb_number   = 701;
@@ -906,6 +913,7 @@ module fw_ipx_wrap_tb_ip1 ();
       tb_test_number           = test_number_2;              // use test_number==4'h2 to enable test2_enable
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
       tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+      tb_test_gate_config_clk  = $urandom_range(1, 0) & 1'b1;// on clock domain fw_axi_clk
       w_execute();
       $display("time=%06.2f tb_i_test=%01d w_execute() completed", $realtime(), tb_i_test);
       tb_number   = 707;

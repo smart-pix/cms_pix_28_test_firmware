@@ -26,6 +26,7 @@
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2024-11-26  Cristian Gingu         Add signals and logic for sm_test1/2_o_gate_config_clk
+// 2024-11-26  Cristian Gingu         Add signal and logic for cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -97,6 +98,7 @@ module fw_ip1 (
   import cms_pix28_package::w_execute_cfg_test_number_index_min_IP1;                     //
   import cms_pix28_package::w_execute_cfg_test_number_index_max_IP1;                     //
   import cms_pix28_package::w_execute_cfg_test_loopback_IP1;                             //
+  import cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1;                      //
   import cms_pix28_package::w_execute_cfg_test_spare_index_min_IP1;                      //
   import cms_pix28_package::w_execute_cfg_test_spare_index_max_IP1;                      //
   import cms_pix28_package::w_execute_cfg_test_mask_reset_not_index_IP1;                 //
@@ -330,12 +332,14 @@ module fw_ip1 (
   logic [6:0] test_sample;                                 // on clock domain fw_axi_clk
   logic [3:0] test_number;                                 // on clock domain fw_axi_clk
   logic       test_loopback;                               // on clock domain fw_axi_clk
+  logic       test_gate_config_clk;                        // on clock domain fw_axi_clk
   logic       test_mask_reset_not;                         // on clock domain fw_axi_clk
-  assign test_delay          = sw_write24_0[w_execute_cfg_test_delay_index_max_IP1  : w_execute_cfg_test_delay_index_min_IP1 ];
-  assign test_sample         = sw_write24_0[w_execute_cfg_test_sample_index_max_IP1 : w_execute_cfg_test_sample_index_min_IP1];
-  assign test_number         = sw_write24_0[w_execute_cfg_test_number_index_max_IP1 : w_execute_cfg_test_number_index_min_IP1];
-  assign test_loopback       = sw_write24_0[w_execute_cfg_test_loopback_IP1                                              ];
-  assign test_mask_reset_not = sw_write24_0[w_execute_cfg_test_mask_reset_not_index_IP1                                  ];
+  assign test_delay           = sw_write24_0[w_execute_cfg_test_delay_index_max_IP1  : w_execute_cfg_test_delay_index_min_IP1 ];
+  assign test_sample          = sw_write24_0[w_execute_cfg_test_sample_index_max_IP1 : w_execute_cfg_test_sample_index_min_IP1];
+  assign test_number          = sw_write24_0[w_execute_cfg_test_number_index_max_IP1 : w_execute_cfg_test_number_index_min_IP1];
+  assign test_loopback        = sw_write24_0[w_execute_cfg_test_loopback_IP1                                              ];
+  assign test_gate_config_clk = sw_write24_0[w_execute_cfg_test_gate_config_clk_IP1                                       ];
+  assign test_mask_reset_not  = sw_write24_0[w_execute_cfg_test_mask_reset_not_index_IP1                                  ];
   //
   // Instantiate module com_testx_decoder.sv
   logic test1_enable; logic test1_enable_re;
@@ -567,7 +571,7 @@ module fw_ip1 (
   always_comb begin
     if(test1_enable) begin
       fw_super_pixel_sel     = super_pixel_sel;
-      fw_config_clk          = sm_test1_o_config_clk & sm_test1_o_gate_config_clk;
+      fw_config_clk          = sm_test1_o_config_clk & ( (test_gate_config_clk & sm_test1_o_gate_config_clk) | (~test_gate_config_clk) );
       fw_reset_not           = sm_test1_o_reset_not;
       fw_config_in           = sm_test1_o_config_in;
       fw_config_load         = sm_test1_o_config_load;
@@ -576,7 +580,7 @@ module fw_ip1 (
       fw_scan_load           = sm_test1_o_scan_load;            // signal not used-in / diven-by sm_test1_proc
     end else if(test2_enable) begin
       fw_super_pixel_sel     = super_pixel_sel;
-      fw_config_clk          = sm_test2_o_config_clk & sm_test2_o_gate_config_clk;
+      fw_config_clk          = sm_test2_o_config_clk & ( (test_gate_config_clk & sm_test2_o_gate_config_clk) | (~test_gate_config_clk) );
       fw_reset_not           = sm_test2_o_reset_not;
       fw_config_in           = sm_test2_o_config_in;
       fw_config_load         = sm_test2_o_config_load;
