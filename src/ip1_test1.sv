@@ -15,6 +15,7 @@
 // 2024-07-30  Cristian Gingu         Add sm_test1_o_* assignments when reset=HIGH
 // 2024-08-07  Cristian Gingu         Add references to cms_pix28_package.sv
 // 2024-11-25  Cristian Gingu         Move sm_test1_o_config_load FE after RESET_NOT_IP1_T1; branch cg_ipx_testx_fix_cfg_scan_load
+// 2024-11-26  Cristian Gingu         Add output port sm_test1_o_gate_config_clk
 // ------------------------------------------------------------------------------------
 `ifndef __ip1_test1__
 `define __ip1_test1__
@@ -45,7 +46,8 @@ module ip1_test1 (
     output logic       sm_test1_o_config_load,
     output logic       sm_test1_o_vin_test_trig_out,
     output logic       sm_test1_o_scan_in,
-    output logic       sm_test1_o_scan_load
+    output logic       sm_test1_o_scan_load,
+    output logic       sm_test1_o_gate_config_clk
   );
 
   import cms_pix28_package::state_t_sm_ip1_test1;
@@ -80,6 +82,7 @@ module ip1_test1 (
         sm_test1_o_shift_reg_load                <= 1'b0;                           //
         sm_test1_o_shift_reg_shift               <= 1'b0;                           // LOW==do-not-shift, HIGH==do-shift-right
         sm_test1_o_status_done                   <= 1'b0;                           // reset state machine STATUS flag
+        sm_test1_o_gate_config_clk               <= 1'b0;
       end
     end else begin
       case(sm_test1)
@@ -97,6 +100,7 @@ module ip1_test1 (
           sm_test1_o_shift_reg_load              <= 1'b0;                           //
           sm_test1_o_shift_reg_shift             <= 1'b0;                           // LOW==do-not-shift, HIGH==do-shift-right
           sm_test1_o_status_done                 <= sm_test1_o_status_done;         // keep state machine STATUS flag
+          sm_test1_o_gate_config_clk             <= 1'b0;
         end
         DELAY_TEST_IP1_T1 : begin
           // next state machine state logic
@@ -112,8 +116,10 @@ module ip1_test1 (
             end else begin
               sm_test1_o_reset_not               <= 1'b0;
             end
+            sm_test1_o_gate_config_clk           <= 1'b1;
           end else begin
             sm_test1_o_reset_not                 <= 1'b1;
+            sm_test1_o_gate_config_clk           <= 1'b0;
           end
           sm_test1_o_config_in                   <= 1'b0;
           sm_test1_o_config_load                 <= CONFIG_REG_MODE_PARALLEL_OUT;
@@ -145,6 +151,7 @@ module ip1_test1 (
           sm_test1_o_shift_reg_load              <= 1'b0;
           sm_test1_o_shift_reg_shift             <= 1'b0;
           sm_test1_o_status_done                 <= 1'b0;
+          sm_test1_o_gate_config_clk             <= 1'b1;
         end
         SHIFT_IN_0_IP1_T1 : begin
           // next state machine state logic
@@ -167,6 +174,7 @@ module ip1_test1 (
           sm_test1_o_config_load                 <= CONFIG_REG_MODE_SHIFT_IN;
           sm_test1_o_shift_reg_load              <= 1'b0;
           sm_test1_o_status_done                 <= 1'b0;
+          sm_test1_o_gate_config_clk             <= 1'b1;
         end
         SHIFT_IN_IP1_T1 : begin
           // next state machine state logic
@@ -175,11 +183,13 @@ module ip1_test1 (
             sm_test1 <= DONE_IP1_T1;
             sm_test1_o_config_load               <= CONFIG_REG_MODE_PARALLEL_OUT;
             sm_test1_o_status_done               <= 1'b1;
+            sm_test1_o_gate_config_clk           <= 1'b0;
           end else begin
             // continue shifting
             sm_test1 <= SHIFT_IN_IP1_T1;
             sm_test1_o_config_load               <= CONFIG_REG_MODE_SHIFT_IN;
             sm_test1_o_status_done               <= 1'b0;
+            sm_test1_o_gate_config_clk           <= 1'b1;
           end
           // output state machine signal assignment
           if(test_delay-2==clk_counter) begin
@@ -204,6 +214,7 @@ module ip1_test1 (
           sm_test1_o_shift_reg_load              <= 1'b0;
           sm_test1_o_shift_reg_shift             <= 1'b0;
           sm_test1_o_status_done                 <= 1'b1;
+          sm_test1_o_gate_config_clk             <= 1'b0;
         end
         default : begin
           sm_test1 <= IDLE_IP1_T1;

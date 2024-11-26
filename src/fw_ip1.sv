@@ -25,6 +25,7 @@
 // 2024-08-08  Cristian Gingu         Factorize common module com_status32_reg.sv
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2024-11-26  Cristian Gingu         Add signals and logic for sm_test1/2_o_gate_config_clk
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -364,6 +365,7 @@ module fw_ip1 (
   logic           sm_test1_o_vin_test_trig_out;
   logic           sm_test1_o_scan_in;
   logic           sm_test1_o_scan_load;
+  logic           sm_test1_o_gate_config_clk;
   logic           sm_test2_o_config_clk;
   logic           sm_test2_o_reset_not;
   logic           sm_test2_o_config_in;
@@ -371,6 +373,7 @@ module fw_ip1 (
   logic           sm_test2_o_vin_test_trig_out;
   logic           sm_test2_o_scan_in;
   logic           sm_test2_o_scan_load;
+  logic           sm_test2_o_gate_config_clk;
   logic           sm_test3_o_config_clk;         assign sm_test3_o_config_clk        = fast_configclk;                 // Debug assignment; sm_test3 is not defined
   logic           sm_test3_o_reset_not;          assign sm_test3_o_reset_not         = 1'b0;                           // TODO to be driven by sm_test3
   logic           sm_test3_o_config_in;          assign sm_test3_o_config_in         = 1'b0;                           // TODO to be driven by sm_test3
@@ -378,6 +381,7 @@ module fw_ip1 (
   logic           sm_test3_o_vin_test_trig_out;  assign sm_test3_o_vin_test_trig_out = 1'b0;                           // TODO to be driven by sm_test3
   logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;                           // TODO to be driven by sm_test3
   logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = 1'b0;                           // TODO to be driven by sm_test3
+  logic           sm_test3_o_gate_config_clk;    assign sm_test3_o_gate_config_clk   = 1'b0;                           // TODO to be driven by sm_test3
   logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = slow_configclk;                 // Debug assignment; sm_test3 is not defined
   logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;                           // TODO to be driven by sm_test4
   logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;                           // TODO to be driven by sm_test4
@@ -385,6 +389,7 @@ module fw_ip1 (
   logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;                           // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;                           // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = 1'b0;                           // TODO to be driven by sm_test4
+  logic           sm_test4_o_gate_config_clk;    assign sm_test4_o_gate_config_clk   = 1'b0;                           // TODO to be driven by sm_test3
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT)     used in IP1 test 1,2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT) not used in IP1
@@ -449,7 +454,8 @@ module fw_ip1 (
     .sm_test1_o_config_load                  (sm_test1_o_config_load),
     .sm_test1_o_vin_test_trig_out            (sm_test1_o_vin_test_trig_out),
     .sm_test1_o_scan_in                      (sm_test1_o_scan_in),
-    .sm_test1_o_scan_load                    (sm_test1_o_scan_load)
+    .sm_test1_o_scan_load                    (sm_test1_o_scan_load),
+    .sm_test1_o_gate_config_clk              (sm_test1_o_gate_config_clk)
   );
 
   // State Machine for "test2": instantiate module ip1_test2.sv
@@ -483,7 +489,8 @@ module fw_ip1 (
     .sm_test2_o_config_load                  (sm_test2_o_config_load),
     .sm_test2_o_vin_test_trig_out            (sm_test2_o_vin_test_trig_out),
     .sm_test2_o_scan_in                      (sm_test2_o_scan_in),
-    .sm_test2_o_scan_load                    (sm_test2_o_scan_load)
+    .sm_test2_o_scan_load                    (sm_test2_o_scan_load),
+    .sm_test2_o_gate_config_clk              (sm_test2_o_gate_config_clk)
   );
 
   // Logic related with readout data from DUT: sm_testx_o_shift_reg
@@ -560,7 +567,7 @@ module fw_ip1 (
   always_comb begin
     if(test1_enable) begin
       fw_super_pixel_sel     = super_pixel_sel;
-      fw_config_clk          = sm_test1_o_config_clk;
+      fw_config_clk          = sm_test1_o_config_clk & sm_test1_o_gate_config_clk;
       fw_reset_not           = sm_test1_o_reset_not;
       fw_config_in           = sm_test1_o_config_in;
       fw_config_load         = sm_test1_o_config_load;
@@ -569,7 +576,7 @@ module fw_ip1 (
       fw_scan_load           = sm_test1_o_scan_load;            // signal not used-in / diven-by sm_test1_proc
     end else if(test2_enable) begin
       fw_super_pixel_sel     = super_pixel_sel;
-      fw_config_clk          = sm_test2_o_config_clk;
+      fw_config_clk          = sm_test2_o_config_clk & sm_test2_o_gate_config_clk;
       fw_reset_not           = sm_test2_o_reset_not;
       fw_config_in           = sm_test2_o_config_in;
       fw_config_load         = sm_test2_o_config_load;
@@ -596,7 +603,7 @@ module fw_ip1 (
       fw_scan_load           = sm_test4_o_scan_load;
     end else begin
       fw_super_pixel_sel     = 1'b0;
-      fw_config_clk          = sm_test1_o_config_clk;      // Make outputs config_clk default driven by test1 output sm_test1_o_config_clk
+      fw_config_clk          = 1'b0;
       fw_reset_not           = 1'b1;
       fw_config_in           = 1'b0;
       fw_config_load         = 1'b1;

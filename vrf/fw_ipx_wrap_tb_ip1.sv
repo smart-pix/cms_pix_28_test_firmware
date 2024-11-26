@@ -918,7 +918,7 @@ module fw_ipx_wrap_tb_ip1 ();
       #(140*16*tb_fast_configclk_period*fw_axi_clk_period);     // execution: wait for 138 fast_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
       $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
       tb_number   = 710;
-      #(25*16*tb_slow_configclk_period*fw_axi_clk_period);      // execution: wait for  25 slow_configclk cycles 138*16==2208; (4096+4096+2208==10400); alternatively check when bit#15 test2_done is set in fw_read_status32_reg[14] <= sm_test1_o_status_done;
+      #(25*16*tb_slow_configclk_period*fw_axi_clk_period);      // execution: wait for  25 slow_configclk cycles
       $display("time=%06.2f tb_i_test=%01d ... done waiting cfg_array_2 150*16*%03d*%03.1f ns ", $realtime(), tb_i_test, tb_fast_configclk_period, fw_axi_clk_period);
       tb_number   = 711;
       // Check sm_test1_o_status_done bit is set in fw_read_status32_reg[14]:
