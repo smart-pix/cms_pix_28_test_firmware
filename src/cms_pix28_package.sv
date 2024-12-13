@@ -14,7 +14,7 @@
 // 2024-10-25  Cristian  Gingu        Add state_t_sm_ip2_test4; merging state_t_sm_ip2_test2 and state_t_sm_ip2_test3. Add localparam dnn_reg_width
 // 2024-11-26  Cristian  Gingu        Add localparam w_execute_cfg_test_gate_config_clk_IP1
 // 2024-11-27  Cristian  Gingu        Increase dnn_reg_width from 48-bits to 64-bits
-// 2024-12-13  Cristian  Gingu        Add output logic test5_enable,  output logic test5_enable_re
+// 2024-12-13  Cristian  Gingu        Add test_number_5, status_index_test5_done
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -82,7 +82,8 @@ package cms_pix28_package;
   parameter status_index_test2_done              = 15;
   parameter status_index_test3_done              = 16;
   parameter status_index_test4_done              = 17;
-  parameter status_index_spare_min               = 18;
+  parameter status_index_test5_done              = 18;
+  parameter status_index_spare_min               = 19;
   parameter status_index_spare_max               = 30;
   parameter status_index_error_w_execute_cfg     = 31;
   //

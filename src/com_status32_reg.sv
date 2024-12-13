@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-08-08  Cristian  Gingu        Created
+// 2024-12-13  Cristian  Gingu        Add sm_test5_o_status_done
 // ------------------------------------------------------------------------------------
 `ifndef __com_status32_reg__
 `define __com_status32_reg__
@@ -38,6 +39,7 @@ module com_status32_reg (
     input  logic        sm_test2_o_status_done,
     input  logic        sm_test3_o_status_done,
     input  logic        sm_test4_o_status_done,
+    input  logic        sm_test5_o_status_done,
     input  logic        error_w_execute_cfg,
     //
     output logic [31:0] fw_read_status32_reg
@@ -61,6 +63,7 @@ module com_status32_reg (
   import cms_pix28_package::status_index_test2_done;
   import cms_pix28_package::status_index_test3_done;
   import cms_pix28_package::status_index_test4_done;
+  import cms_pix28_package::status_index_test5_done;
   import cms_pix28_package::status_index_spare_min;
   import cms_pix28_package::status_index_spare_max;
   import cms_pix28_package::status_index_error_w_execute_cfg;
@@ -87,7 +90,8 @@ module com_status32_reg (
       fw_read_status32_reg[                           status_index_test2_done            ] <= sm_test2_o_status_done;
       fw_read_status32_reg[                           status_index_test3_done            ] <= sm_test3_o_status_done;
       fw_read_status32_reg[                           status_index_test4_done            ] <= sm_test4_o_status_done;
-      fw_read_status32_reg[               status_index_spare_max : status_index_spare_min] <= 13'b0;
+      fw_read_status32_reg[                           status_index_test5_done            ] <= sm_test5_o_status_done;
+      fw_read_status32_reg[               status_index_spare_max : status_index_spare_min] <= 12'b0;
       fw_read_status32_reg[                              status_index_error_w_execute_cfg] <= error_w_execute_cfg;
     end
   end
