@@ -14,6 +14,7 @@
 // 2024-10-25  Cristian  Gingu        Add state_t_sm_ip2_test4; merging state_t_sm_ip2_test2 and state_t_sm_ip2_test3. Add localparam dnn_reg_width
 // 2024-11-26  Cristian  Gingu        Add localparam w_execute_cfg_test_gate_config_clk_IP1
 // 2024-11-27  Cristian  Gingu        Increase dnn_reg_width from 48-bits to 64-bits
+// 2024-12-13  Cristian  Gingu        Add output logic test5_enable,  output logic test5_enable_re
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -42,6 +43,7 @@ package cms_pix28_package;
   parameter logic [3:0] test_number_2            = 4'h2;
   parameter logic [3:0] test_number_3            = 4'h4;
   parameter logic [3:0] test_number_4            = 4'h8;
+  parameter logic [3:0] test_number_5            = 4'h3;
   //
   typedef enum logic [3:0] {                               // operation_code enumerated type
     OP_CODE_NOOP                       = 4'h0,
