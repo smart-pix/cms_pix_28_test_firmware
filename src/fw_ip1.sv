@@ -27,6 +27,7 @@
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2024-11-26  Cristian Gingu         Add signals and logic for sm_test1/2_o_gate_config_clk
 // 2024-11-26  Cristian Gingu         Add signal and logic for cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1
+// 2024-12-13  Cristian  Gingu        Add test5 related signals and default logic; sm_test5 is not defined in IP1
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -248,6 +249,7 @@ module fw_ip1 (
   logic sm_test2_o_status_done;
   logic sm_test3_o_status_done; assign sm_test3_o_status_done = 1'b0;          // TODO to be driven by sm_test3
   logic sm_test4_o_status_done; assign sm_test4_o_status_done = 1'b0;          // TODO to be driven by sm_test4
+  logic sm_test5_o_status_done; assign sm_test5_o_status_done = 1'b0;          // TODO to be driven by sm_test5
   logic error_w_execute_cfg;
   // Instantiate module com_status32_reg.sv
   com_status32_reg com_status32_reg_inst (
@@ -273,6 +275,7 @@ module fw_ip1 (
     .sm_test2_o_status_done  (sm_test2_o_status_done),
     .sm_test3_o_status_done  (sm_test3_o_status_done),
     .sm_test4_o_status_done  (sm_test4_o_status_done),
+    .sm_test5_o_status_done  (sm_test5_o_status_done),
     .error_w_execute_cfg     (error_w_execute_cfg),
     //
     .fw_read_status32_reg    (fw_read_status32_reg)
@@ -346,6 +349,7 @@ module fw_ip1 (
   logic test2_enable; logic test2_enable_re;
   logic test3_enable; logic test3_enable_re;                                   // TODO to be used by sm_test3
   logic test4_enable; logic test4_enable_re;                                   // TODO to be used by sm_test4
+  logic test5_enable; logic test5_enable_re;                                   // TODO to be used by sm_test5
   com_testx_decoder com_testx_decoder_inst (
     .clk                     (fw_axi_clk),                 // mapped to appropriate clock: S_AXI_ACLK or pl_clk1
     .op_code_w_reset         (op_code_w_reset),
@@ -355,10 +359,12 @@ module fw_ip1 (
     .test2_enable            (test2_enable),
     .test3_enable            (test3_enable),
     .test4_enable            (test4_enable),
+    .test5_enable            (test5_enable),
     .test1_enable_re         (test1_enable_re),
     .test2_enable_re         (test2_enable_re),
     .test3_enable_re         (test3_enable_re),
-    .test4_enable_re         (test4_enable_re)
+    .test4_enable_re         (test4_enable_re),
+    .test5_enable_re         (test5_enable_re)
   );
   //
   // State Machine Output signals to DUT
@@ -386,14 +392,23 @@ module fw_ip1 (
   logic           sm_test3_o_scan_in;            assign sm_test3_o_scan_in           = 1'b0;                           // TODO to be driven by sm_test3
   logic           sm_test3_o_scan_load;          assign sm_test3_o_scan_load         = 1'b0;                           // TODO to be driven by sm_test3
   logic           sm_test3_o_gate_config_clk;    assign sm_test3_o_gate_config_clk   = 1'b0;                           // TODO to be driven by sm_test3
-  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = slow_configclk;                 // Debug assignment; sm_test3 is not defined
+  logic           sm_test4_o_config_clk;         assign sm_test4_o_config_clk        = slow_configclk;                 // Debug assignment; sm_test4 is not defined
   logic           sm_test4_o_reset_not;          assign sm_test4_o_reset_not         = 1'b0;                           // TODO to be driven by sm_test4
   logic           sm_test4_o_config_in;          assign sm_test4_o_config_in         = 1'b0;                           // TODO to be driven by sm_test4
   logic           sm_test4_o_config_load;        assign sm_test4_o_config_load       = CONFIG_REG_MODE_PARALLEL_OUT;   // TODO to be driven by sm_test4
   logic           sm_test4_o_vin_test_trig_out;  assign sm_test4_o_vin_test_trig_out = 1'b0;                           // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_in;            assign sm_test4_o_scan_in           = 1'b0;                           // TODO to be driven by sm_test4
   logic           sm_test4_o_scan_load;          assign sm_test4_o_scan_load         = 1'b0;                           // TODO to be driven by sm_test4
-  logic           sm_test4_o_gate_config_clk;    assign sm_test4_o_gate_config_clk   = 1'b0;                           // TODO to be driven by sm_test3
+  logic           sm_test4_o_gate_config_clk;    assign sm_test4_o_gate_config_clk   = 1'b0;                           // TODO to be driven by sm_test4
+  logic           sm_test5_o_config_clk;         assign sm_test5_o_config_clk        = fast_configclk;                 // Debug assignment; sm_test5 is not defined
+  logic           sm_test5_o_reset_not;          assign sm_test5_o_reset_not         = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_config_in;          assign sm_test5_o_config_in         = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_config_load;        assign sm_test5_o_config_load       = CONFIG_REG_MODE_PARALLEL_OUT;   // TODO to be driven by sm_test5
+  logic           sm_test5_o_vin_test_trig_out;  assign sm_test5_o_vin_test_trig_out = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_scan_in;            assign sm_test5_o_scan_in           = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_scan_load;          assign sm_test5_o_scan_load         = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_gate_config_clk;    assign sm_test5_o_gate_config_clk   = 1'b0;                           // TODO to be driven by sm_test5
+
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT)     used in IP1 test 1,2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT) not used in IP1
@@ -416,16 +431,18 @@ module fw_ip1 (
   logic                                          sm_test3_o_shift_reg_shift_right;   assign sm_test3_o_shift_reg_shift_right = 1'b0;    // TODO to be driven by sm_test3
   logic                                          sm_test4_o_shift_reg_load;          assign sm_test4_o_shift_reg_load        = 1'b0;    // TODO to be driven by sm_test4
   logic                                          sm_test4_o_shift_reg_shift_right;   assign sm_test4_o_shift_reg_shift_right = 1'b0;    // TODO to be driven by sm_test4
+  logic                                          sm_test5_o_shift_reg_load;          assign sm_test5_o_shift_reg_load        = 1'b0;    // TODO to be driven by sm_test5
+  logic                                          sm_test5_o_shift_reg_shift_right;   assign sm_test5_o_shift_reg_shift_right = 1'b0;    // TODO to be driven by sm_test5
   //
   always @(posedge fw_axi_clk or negedge fw_rst_n) begin : sm_testx_i_shift_reg_proc
     if(~fw_rst_n) begin
       sm_testx_i_shift_reg             <= {sm_testx_i_shift_reg_width{1'b0}};
       sm_testx_i_shift_reg_shift_cnt   <= 14'h0;
     end else begin
-      if(sm_test1_o_shift_reg_load | sm_test2_o_shift_reg_load | sm_test3_o_shift_reg_load | sm_test4_o_shift_reg_load) begin
+      if(sm_test1_o_shift_reg_load | sm_test2_o_shift_reg_load | sm_test3_o_shift_reg_load | sm_test4_o_shift_reg_load | sm_test5_o_shift_reg_load) begin
         sm_testx_i_shift_reg           <= {w_cfg_array_2_reg[136][7:0], w_cfg_array_2_reg[135:0], w_cfg_array_1_reg, w_cfg_array_0_reg};  // all 256-addresses of 16-bit words from w_cfg_array_0_reg and w_cfg_array_1_reg; then 137-addresses from w_cfg_array_2_reg : 136full + 8-bits from 137th.
         sm_testx_i_shift_reg_shift_cnt <= 14'h0;
-      end else if(sm_test1_o_shift_reg_shift_right | sm_test2_o_shift_reg_shift_right | sm_test3_o_shift_reg_shift_right | sm_test4_o_shift_reg_shift_right) begin
+      end else if(sm_test1_o_shift_reg_shift_right | sm_test2_o_shift_reg_shift_right | sm_test3_o_shift_reg_shift_right | sm_test4_o_shift_reg_shift_right | sm_test5_o_shift_reg_shift_right) begin
         sm_testx_i_shift_reg           <= {1'b0, sm_testx_i_shift_reg[sm_testx_i_shift_reg_width-1 : 1]};
         sm_testx_i_shift_reg_shift_cnt <= sm_testx_i_shift_reg_shift_cnt + 1'b1;
       end
@@ -498,7 +515,7 @@ module fw_ip1 (
   );
 
   // Logic related with readout data from DUT: sm_testx_o_shift_reg
-  // This is State Machine for test dependent: sm_test1, sm_test2, sm_test3, sm_test4
+  // This is State Machine for test dependent: sm_test1, sm_test2, sm_test3, sm_test4, sm_test5
   always @(posedge fw_axi_clk) begin : sm_testx_o_shift_reg_proc
     if(test1_enable) begin
       // use data specific for test case test1
@@ -557,6 +574,9 @@ module fw_ip1 (
     end else if(test4_enable) begin
       // use data specific for test case test4
       sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width*{1'b0}};     // TODO
+    end else if(test5_enable) begin
+      // use data specific for test case test5
+      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width*{1'b0}};     // TODO
     end else begin
       // keep old value; need to do this way to preserve sm_testx_o_shift_reg after any of test1,2,3,4 are done
       // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" for the purpose of AXI readout
@@ -565,7 +585,7 @@ module fw_ip1 (
   end
 
   // Assign module output signals:
-  // They may be or may be not dependent of State Machine sm_test1, sm_test2, sm_test3, sm_test4
+  // They may be or may be not dependent of State Machine sm_test1, sm_test2, sm_test3, sm_test4, sm_test5
   assign fw_bxclk_ana        = 1'b0;
   assign fw_bxclk            = 1'b0;
   always_comb begin
@@ -605,6 +625,15 @@ module fw_ip1 (
       fw_vin_test_trig_out   = sm_test4_o_vin_test_trig_out;
       fw_scan_in             = sm_test4_o_scan_in;
       fw_scan_load           = sm_test4_o_scan_load;
+    end else if(test5_enable) begin
+      fw_super_pixel_sel     = super_pixel_sel;
+      fw_config_clk          = sm_test5_o_config_clk;
+      fw_reset_not           = sm_test5_o_reset_not;
+      fw_config_in           = sm_test5_o_config_in;
+      fw_config_load         = sm_test5_o_config_load;
+      fw_vin_test_trig_out   = sm_test5_o_vin_test_trig_out;
+      fw_scan_in             = sm_test5_o_scan_in;
+      fw_scan_load           = sm_test5_o_scan_load;
     end else begin
       fw_super_pixel_sel     = 1'b0;
       fw_config_clk          = 1'b0;
@@ -640,6 +669,9 @@ module fw_ip1 (
         // use data specific for test case test3
         error_w_execute_cfg <= 1'b0;     // TODO
       end else if(test4_enable) begin
+        // use data specific for test case test4
+        error_w_execute_cfg <= 1'b0;     // TODO
+      end else if(test5_enable) begin
         // use data specific for test case test4
         error_w_execute_cfg <= 1'b0;     // TODO
       end else begin
