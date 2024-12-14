@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------------------
 // Revisions  :
 // Date        Author                 Description
-// 2024-05-24  Cristian  Gingu        Created template
+// 2024-05-24  Cristian Gingu         Created template
 // 2024-06-xx  Cristian Gingu         Write RTL code; implement ip2_test1 ip2_test1_inst
 // 2024-07-xx  Cristian Gingu         Write RTL code; implement ip2_test2 ip2_test2_inst
 // 2024-07-09  Cristian Gingu         Clean header file Description and Author
@@ -26,9 +26,10 @@
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2024-10-04  Cristian Gingu         Add condition test_sample==fw_pl_clk1_cnt for sm_testx_o_scanchain_reg code Case sm_test3
 // 2024-10-09  Cristian Gingu         Fix missing ASIC scan-out-first-bit. Add condition sm_test2==SCANLOAD_HIGH_2_IP2_T2 or sm_test2==TRIGOUT_HIGH_2_IP2_T2 to sm_testx_o_scanchain_reg code Case test2_enable
-// 2024-10-25  Cristian  Gingu        Add test ip2_test4; add dnn_reg_width
-// 2024-11-12  Cristian  Gingu        Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test4_o_bxclk_ana, sm_test4_o_bxclk) to ip2_test4.sv
-// 2024-11-13  Cristian  Gingu        Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test3_o_bxclk_ana, sm_test3_o_bxclk) to ip2_test3.sv
+// 2024-10-25  Cristian Gingu         Add test ip2_test4; add dnn_reg_width
+// 2024-11-12  Cristian Gingu         Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test4_o_bxclk_ana, sm_test4_o_bxclk) to ip2_test4.sv
+// 2024-11-13  Cristian Gingu         Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test3_o_bxclk_ana, sm_test3_o_bxclk) to ip2_test3.sv
+// 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is NOT YET defined in IP2
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -280,6 +281,7 @@ module fw_ip2 (
   logic sm_test2_o_status_done;
   logic sm_test3_o_status_done;
   logic sm_test4_o_status_done;
+  logic sm_test5_o_status_done; assign sm_test5_o_status_done = 1'b0;          // TODO to be driven by sm_test5
   logic error_w_execute_cfg;
   // Instantiate module com_status32_reg.sv
   com_status32_reg com_status32_reg_inst (
@@ -305,6 +307,7 @@ module fw_ip2 (
     .sm_test2_o_status_done  (sm_test2_o_status_done),
     .sm_test3_o_status_done  (sm_test3_o_status_done),
     .sm_test4_o_status_done  (sm_test4_o_status_done),
+    .sm_test5_o_status_done  (sm_test5_o_status_done),
     .error_w_execute_cfg     (error_w_execute_cfg),
     //
     .fw_read_status32_reg    (fw_read_status32_reg)
@@ -362,6 +365,7 @@ module fw_ip2 (
   logic test2_enable; logic test2_enable_re;
   logic test3_enable; logic test3_enable_re;
   logic test4_enable; logic test4_enable_re;
+  logic test5_enable; logic test5_enable_re;
   com_testx_decoder com_testx_decoder_inst (
     .clk                     (fw_pl_clk1),                 // mapped to appropriate clock: S_AXI_ACLK or pl_clk1
     .op_code_w_reset         (op_code_w_reset),
@@ -371,10 +375,12 @@ module fw_ip2 (
     .test2_enable            (test2_enable),
     .test3_enable            (test3_enable),
     .test4_enable            (test4_enable),
+    .test5_enable            (test5_enable),
     .test1_enable_re         (test1_enable_re),
     .test2_enable_re         (test2_enable_re),
     .test3_enable_re         (test3_enable_re),
-    .test4_enable_re         (test4_enable_re)
+    .test4_enable_re         (test4_enable_re),
+    .test5_enable_re         (test5_enable_re)
   );
   //
   // State Machine Output signals to DUT
@@ -414,16 +420,23 @@ module fw_ip2 (
   logic [dnn_reg_width-1:0] sm_test4_o_dnn_output_1;
   logic [dnn_reg_width-1:0] sm_test4_o_bxclk_ana;
   logic [dnn_reg_width-1:0] sm_test4_o_bxclk;
+  logic           sm_test5_o_config_clk;         assign sm_test5_o_config_clk        = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_reset_not;          assign sm_test5_o_reset_not         = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_config_in;          assign sm_test5_o_config_in         = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_config_load;        assign sm_test5_o_config_load       = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_vin_test_trig_out;  assign sm_test5_o_vin_test_trig_out = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_scan_in;            assign sm_test5_o_scan_in           = 1'b0;                           // TODO to be driven by sm_test5
+  logic           sm_test5_o_scan_load;          assign sm_test5_o_scan_load         = 1'b0;                           // TODO to be driven by sm_test5
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT) not used in IP2
-  logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT)     used in IP2 test 1,2,4
-  logic           sm_testx_i_scan_out_test;      assign sm_testx_i_scan_out_test     = fw_scan_out_test;     // input signal (output from DUT)     used in IP2 test 1,2,4
+  logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT)     used in IP2 test 1,2,4,5
+  logic           sm_testx_i_scan_out_test;      assign sm_testx_i_scan_out_test     = fw_scan_out_test;     // input signal (output from DUT)     used in IP2 test 1,2,4,5
   logic           sm_testx_i_dnn_output_0;       assign sm_testx_i_dnn_output_0      = fw_dnn_output_0;      // input signal (output from DUT)     used in IP2 test 3,4
   logic           sm_testx_i_dnn_output_1;       assign sm_testx_i_dnn_output_1      = fw_dnn_output_1;      // input signal (output from DUT)     used in IP2 test 3,4
   logic           sm_testx_i_dn_event_toggle;    assign sm_testx_i_dn_event_toggle   = fw_dn_event_toggle;   // TODO to be used in IP2 test x
   logic           sm_testx_i_up_event_toggle;    assign sm_testx_i_up_event_toggle   = fw_up_event_toggle;   // TODO to be used in IP2 test x
-  logic           sm_testx_i_bxclk_ana;          assign sm_testx_i_bxclk_ana         = fw_bxclk_ana;         // input signal (internal)            used in IP2 test 3,4
-  logic           sm_testx_i_bxclk;              assign sm_testx_i_bxclk             = fw_bxclk;             // input signal (internal)            used in IP2 test 3,4
+  logic           sm_testx_i_bxclk_ana;          assign sm_testx_i_bxclk_ana         = fw_bxclk_ana;         // input signal (internal)            used in IP2 test 3,4,5
+  logic           sm_testx_i_bxclk;              assign sm_testx_i_bxclk             = fw_bxclk;             // input signal (internal)            used in IP2 test 3,4,5
   // State Machine Control signals from logic/configuration
   localparam logic [10 : 0]                      sm_testx_i_scanchain_reg_width = 2*scan_reg_bits_total;
   logic [sm_testx_i_scanchain_reg_width-1 : 0]   sm_testx_i_scanchain_reg;               // 2*768=1536-bits shift register; bit#0 drives DUT scan_in; used by all tests 1,2,4
@@ -436,16 +449,18 @@ module fw_ip2 (
   logic                                          sm_test3_o_scanchain_reg_shift_right;
   logic                                          sm_test4_o_scanchain_reg_load;
   logic                                          sm_test4_o_scanchain_reg_shift_right;
+  logic                                          sm_test5_o_scanchain_reg_load;          assign sm_test5_o_scanchain_reg_load        = 1'b0;    // TODO to be driven by sm_test5
+  logic                                          sm_test5_o_scanchain_reg_shift_right;   assign sm_test5_o_scanchain_reg_shift_right = 1'b0;    // TODO to be driven by sm_test5
   //
   always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_testx_i_scanchain_reg_proc
     if(~fw_rst_n) begin
       sm_testx_i_scanchain_reg             <= {sm_testx_i_scanchain_reg_width{1'b0}};
       sm_testx_i_scanchain_reg_shift_cnt   <= 11'h0;
     end else begin
-      if(sm_test1_o_scanchain_reg_load | sm_test2_o_scanchain_reg_load | sm_test3_o_scanchain_reg_load | sm_test4_o_scanchain_reg_load) begin
+      if(sm_test1_o_scanchain_reg_load | sm_test2_o_scanchain_reg_load | sm_test3_o_scanchain_reg_load | sm_test4_o_scanchain_reg_load | sm_test5_o_scanchain_reg_load) begin
         sm_testx_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
         sm_testx_i_scanchain_reg_shift_cnt <= 11'h0;
-      end else if(sm_test1_o_scanchain_reg_shift_right | sm_test2_o_scanchain_reg_shift_right | sm_test3_o_scanchain_reg_shift_right | sm_test4_o_scanchain_reg_shift_right) begin
+      end else if(sm_test1_o_scanchain_reg_shift_right | sm_test2_o_scanchain_reg_shift_right | sm_test3_o_scanchain_reg_shift_right | sm_test4_o_scanchain_reg_shift_right | sm_test5_o_scanchain_reg_shift_right) begin
         sm_testx_i_scanchain_reg           <= {1'b0, sm_testx_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
         sm_testx_i_scanchain_reg_shift_cnt <= sm_testx_i_scanchain_reg_shift_cnt + 1'b1;
       end
@@ -587,7 +602,7 @@ module fw_ip2 (
   );
 
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
-  // This is State Machine test dependent: sm_test1, sm_test2, sm_test3, sm_test4
+  // This is State Machine test dependent: sm_test1, sm_test2, sm_test3, sm_test4, sm_test5
   always @(posedge fw_pl_clk1) begin : sm_testx_o_scanchain_reg_proc
     if(test1_enable) begin
       // use data specific for test case test1
@@ -713,6 +728,10 @@ module fw_ip2 (
         // keep old value
         sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
       end
+    end else if(test5_enable) begin
+      // use data specific for test case test5
+      sm_testx_o_scanchain_reg            <= {sm_testx_o_scanchain_reg_width*{1'b0}};    // TODO to be updated based on sm_test5 logic
+      sm_testx_o_scanchain_test_reg       <= {sm_testx_o_scanchain_reg_width*{1'b0}};    // TODO to be updated based on sm_test5 logic
     end else begin
       // keep old value; need to do this way to preserve sm_testx_o_scanchain_reg/sm_testx_o_scanchain_test_reg after any of test1,2,3,4 are done
       // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" "op_code_r_data_array_1" for the purpose of AXI readout
@@ -722,7 +741,7 @@ module fw_ip2 (
   end
 
   // Assign module output signals:
-  // They may be or may be not dependent of State Machine sm_test1, sm_test2, sm_test3, sm_test4
+  // They may be or may be not dependent of State Machine sm_test1, sm_test2, sm_test3, sm_test4, sm_test5
   always_comb begin
     if(test1_enable) begin
       fw_super_pixel_sel     = super_pixel_sel;
@@ -738,7 +757,7 @@ module fw_ip2 (
       fw_config_clk          = sm_test2_o_config_clk;           // signal not used-in / diven-by sm_test2_proc
       fw_reset_not           = sm_test2_o_reset_not;
       fw_config_in           = sm_test2_o_config_in;            // signal not used-in / diven-by sm_test2_proc
-      fw_config_load         = sm_test2_o_config_load;          // signal not used-in / diven-by sm_test_proc
+      fw_config_load         = sm_test2_o_config_load;          // signal not used-in / diven-by sm_test2_proc
       fw_vin_test_trig_out   = sm_test2_o_vin_test_trig_out;
       fw_scan_in             = sm_test2_o_scan_in;
       fw_scan_load           = sm_test2_o_scan_load;
@@ -760,6 +779,15 @@ module fw_ip2 (
       fw_vin_test_trig_out   = sm_test4_o_vin_test_trig_out;
       fw_scan_in             = sm_test4_o_scan_in;
       fw_scan_load           = sm_test4_o_scan_load;
+    end else if(test5_enable) begin
+      fw_super_pixel_sel     = super_pixel_sel;
+      fw_config_clk          = sm_test5_o_config_clk;           // signal not used-in / diven-by sm_test5_proc
+      fw_reset_not           = sm_test5_o_reset_not;
+      fw_config_in           = sm_test5_o_config_in;            // signal not used-in / diven-by sm_test5_proc
+      fw_config_load         = sm_test5_o_config_load;          // signal not used-in / diven-by sm_test5_proc
+      fw_vin_test_trig_out   = sm_test5_o_vin_test_trig_out;
+      fw_scan_in             = sm_test5_o_scan_in;
+      fw_scan_load           = sm_test5_o_scan_load;
     end else begin
       fw_super_pixel_sel     = 1'b0;
       fw_config_clk          = 1'b0;
@@ -807,6 +835,9 @@ module fw_ip2 (
         end else begin
           error_w_execute_cfg <= 1'b0;
         end
+      end else if(test5_enable) begin
+        // use data specific for test case test5
+        error_w_execute_cfg <= 1'b0;     // TODO to be updated based on sm_test5 logic
       end else begin
         // keep old value;
         error_w_execute_cfg <= error_w_execute_cfg;

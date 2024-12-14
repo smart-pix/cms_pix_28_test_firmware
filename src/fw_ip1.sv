@@ -27,7 +27,7 @@
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2024-11-26  Cristian Gingu         Add signals and logic for sm_test1/2_o_gate_config_clk
 // 2024-11-26  Cristian Gingu         Add signal and logic for cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1
-// 2024-12-13  Cristian  Gingu        Add test5 related signals and default logic; sm_test5 is not defined in IP1
+// 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is not defined in IP1
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -408,7 +408,6 @@ module fw_ip1 (
   logic           sm_test5_o_scan_in;            assign sm_test5_o_scan_in           = 1'b0;                           // TODO to be driven by sm_test5
   logic           sm_test5_o_scan_load;          assign sm_test5_o_scan_load         = 1'b0;                           // TODO to be driven by sm_test5
   logic           sm_test5_o_gate_config_clk;    assign sm_test5_o_gate_config_clk   = 1'b0;                           // TODO to be driven by sm_test5
-
   // Input signals to FW from DUT; assign to State Machine Input signals:
   logic           sm_testx_i_config_out;         assign sm_testx_i_config_out        = fw_config_out;        // input signal (output from DUT)     used in IP1 test 1,2
   logic           sm_testx_i_scan_out;           assign sm_testx_i_scan_out          = fw_scan_out;          // input signal (output from DUT) not used in IP1
