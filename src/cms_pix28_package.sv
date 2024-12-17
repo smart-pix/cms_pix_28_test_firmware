@@ -15,6 +15,7 @@
 // 2024-11-26  Cristian  Gingu        Add localparam w_execute_cfg_test_gate_config_clk_IP1
 // 2024-11-27  Cristian  Gingu        Increase dnn_reg_width from 48-bits to 64-bits
 // 2024-12-13  Cristian  Gingu        Add test_number_5, status_index_test5_done
+// 2024-12-16  Cristian  Gingu        Add localparam w_cfg_static_1_reg_* for ip2_test5
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -162,6 +163,13 @@ package cms_pix28_package;
   localparam w_cfg_static_0_reg_scan_load_delay_disable_index_IP2    = 19;     //
   localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 20;     //
   localparam w_cfg_static_0_reg_spare_index_max_IP2                  = 23;     //
+  //
+  localparam w_cfg_static_1_reg_select_pixel_index_min_IP2           =  0;     // selected pixel for ip2_test5: 0-to-255
+  localparam w_cfg_static_1_reg_select_pixel_index_max_IP2           =  7;     // selected pixel for ip2_test5: 0-to-255
+  localparam w_cfg_static_1_reg_repeat_pixel_index_min_IP2           =  8;     // loop iterations in ip2_test5: 0-to-1023
+  localparam w_cfg_static_1_reg_repeat_pixel_index_max_IP2           = 17;     // loop iterations in ip2_test5: 0-to-1023
+  localparam w_cfg_static_1_reg_spare_index_min_IP2                  = 18;     //
+  localparam w_cfg_static_1_reg_spare_index_max_IP2                  = 23;     //
   //
   localparam w_execute_cfg_test_delay_index_min_IP2                  =  0;     //
   localparam w_execute_cfg_test_delay_index_max_IP2                  =  5;     //

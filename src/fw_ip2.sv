@@ -30,6 +30,7 @@
 // 2024-11-12  Cristian Gingu         Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test4_o_bxclk_ana, sm_test4_o_bxclk) to ip2_test4.sv
 // 2024-11-13  Cristian Gingu         Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test3_o_bxclk_ana, sm_test3_o_bxclk) to ip2_test3.sv
 // 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is NOT YET defined in IP2
+// 2024-12-16  Cristian  Gingu        Add localparam w_cfg_static_1_reg_* for ip2_test5
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -99,6 +100,13 @@ module fw_ip2 (
   import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_disable_index_IP2;   //
   import cms_pix28_package::w_cfg_static_0_reg_spare_index_min_IP2;            //
   import cms_pix28_package::w_cfg_static_0_reg_spare_index_max_IP2;            //
+  //
+  import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_min_IP2;     // selected pixel for ip2_test5: 0-to-255
+  import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_max_IP2;     // selected pixel for ip2_test5: 0-to-255
+  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_min_IP2;     // loop iterations in ip2_test5: 0-to-1023
+  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_max_IP2;     // loop iterations in ip2_test5: 0-to-1023
+  import cms_pix28_package::w_cfg_static_1_reg_spare_index_min_IP2;            //
+  import cms_pix28_package::w_cfg_static_1_reg_spare_index_max_IP2;            //
   //
   import cms_pix28_package::w_execute_cfg_test_delay_index_min_IP2;            //
   import cms_pix28_package::w_execute_cfg_test_delay_index_max_IP2;            //
@@ -321,12 +329,16 @@ module fw_ip2 (
   logic       super_pixel_sel;                             // on clock domain fw_axi_clk
   logic [5:0] scan_load_delay;                             // on clock domain fw_axi_clk
   logic       scan_load_delay_disable;                     // on clock domain fw_axi_clk
+  logic [7:0] select_pixel;                                // on clock domain fw_axi_clk
+  logic [9:0] repeat_pixel;                                // on clock domain fw_axi_clk
   assign bxclk_period            = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_period_index_max_IP2    : w_cfg_static_0_reg_bxclk_period_index_min_IP2   ];
   assign bxclk_delay             = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_index_max_IP2     : w_cfg_static_0_reg_bxclk_delay_index_min_IP2    ];
   assign bxclk_delay_sign        = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_sign_index_IP2                                                      ];
   assign super_pixel_sel         = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index_IP2                                                         ];
   assign scan_load_delay         = w_cfg_static_0_reg[w_cfg_static_0_reg_scan_load_delay_index_max_IP2 : w_cfg_static_0_reg_scan_load_delay_index_min_IP2];
   assign scan_load_delay_disable = w_cfg_static_0_reg[w_cfg_static_0_reg_scan_load_delay_disable_index_IP2                                               ];
+  assign select_pixel            = w_cfg_static_1_reg[w_cfg_static_1_reg_select_pixel_index_max_IP2    : w_cfg_static_1_reg_select_pixel_index_min_IP2   ];
+  assign repeat_pixel            = w_cfg_static_1_reg[w_cfg_static_1_reg_repeat_pixel_index_max_IP2    : w_cfg_static_1_reg_repeat_pixel_index_min_IP2   ];
 
   // Instantiate module bxclks_generators.sv
   logic [5:0] fw_pl_clk1_cnt;
