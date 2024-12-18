@@ -122,6 +122,7 @@
 ./src/com_testx_decoder.sv
 #./src/com_cdc_synch.sv
 ./src/configclk_generator.sv
+./src/map_scanchain_to_pixels.sv
 ./src/ip1_test1.sv
 ./src/ip1_test2.sv
 ./src/fw_ip1.sv
@@ -130,6 +131,7 @@
 ./src/ip2_test2.sv
 ./src/ip2_test3.sv
 ./src/ip2_test4.sv
+./src/ip2_test5.sv
 ./src/fw_ip2.sv
 ./src/fw_ip3.sv
 ./src/fw_ip4.sv

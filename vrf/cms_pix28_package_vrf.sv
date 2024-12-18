@@ -34,6 +34,7 @@ package cms_pix28_package_vrf;
   localparam tb_err_index_test2                            = 17;
   localparam tb_err_index_test3                            = 18;
   localparam tb_err_index_test4                            = 19;
+  localparam tb_err_index_test5                            = 20;
   //
 endpackage
 
