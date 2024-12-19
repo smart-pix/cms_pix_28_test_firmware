@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------------------
 // Revisions  :
 // Date        Author                 Description
-// 2024-12-17  Cristian  Gingu        Created, base on ip2_test2
+// 2024-12-17  Cristian  Gingu        Created, based on ip2_test2
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test5__
 `define __ip2_test5__
@@ -27,12 +27,17 @@ module ip2_test5 (
     input  logic [5:0] test_trig_out_phase,
     input  logic       test_mask_reset_not,
     input  logic       test5_enable_re,
+    input  logic [7:0] select_pixel,                                                          // ip2_test5 specific
+    input  logic [9:0] repeat_pixel,                                                          // ip2_test5 specific
     input  logic       sm_testx_i_scanchain_reg_bit0,                // ip2_test2 related
     input  logic [10:0]sm_testx_i_scanchain_reg_shift_cnt,           // ip2_test2 related
     input  logic [10:0]sm_testx_i_scanchain_reg_shift_cnt_max,       // ip2_test2 related
     output logic       sm_test5_o_scanchain_reg_load,
     output logic       sm_test5_o_scanchain_reg_shift,
     output logic       sm_test5_o_status_done,
+    output logic       sm_test5_o_repeat_status_done,                                         // ip2_test5 specific
+    input  logic [cms_pix28_package::scan_reg_bits_total-1:0] sm_test5_i_scanchain_reg,       // ip2_test5 specific
+    output logic [cms_pix28_package::scan_reg_bits_total-1:0] sm_test5_o_repeat_pixel_reg,    // ip2_test5 specific
     // output ports
     output cms_pix28_package::state_t_sm_ip2_test5 sm_test5_state,
     output logic       sm_test5_o_config_clk,

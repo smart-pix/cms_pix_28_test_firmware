@@ -299,6 +299,7 @@ module fw_ip2 (
   logic sm_test3_o_status_done;
   logic sm_test4_o_status_done;
   logic sm_test5_o_status_done;
+  logic sm_test5_o_repeat_status_done;                     // ip2_test5 specific
   logic error_w_execute_cfg;
   // Instantiate module com_status32_reg.sv
   com_status32_reg com_status32_reg_inst (
@@ -325,6 +326,13 @@ module fw_ip2 (
     .sm_test3_o_status_done  (sm_test3_o_status_done),
     .sm_test4_o_status_done  (sm_test4_o_status_done),
     .sm_test5_o_status_done  (sm_test5_o_status_done),
+
+
+
+//    .sm_test5_o_status_done  (sm_test5_o_repeat_status_done),
+
+
+
     .error_w_execute_cfg     (error_w_execute_cfg),
     //
     .fw_read_status32_reg    (fw_read_status32_reg)
@@ -472,6 +480,8 @@ module fw_ip2 (
   logic                                          sm_test4_o_scanchain_reg_shift_right;
   logic                                          sm_test5_o_scanchain_reg_load;
   logic                                          sm_test5_o_scanchain_reg_shift_right;
+  localparam logic [10 : 0]                      sm_test5_i_scanchain_reg_width = 1*scan_reg_bits_total;     // ip2_test5 specific
+  logic [scan_reg_bits_total-1:0]                sm_test5_o_repeat_pixel_reg;                                // ip2_test5 specific
   //
   always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_testx_i_scanchain_reg_proc
     if(~fw_rst_n) begin
@@ -636,12 +646,17 @@ module fw_ip2 (
     .test_trig_out_phase                     (test_trig_out_phase),
     .test_mask_reset_not                     (test_mask_reset_not),
     .test5_enable_re                         (test5_enable_re),
+    .select_pixel                            (select_pixel),                                       // ip2_test5 specific
+    .repeat_pixel                            (repeat_pixel),                                       // ip2_test5 specific
     .sm_testx_i_scanchain_reg_bit0           (sm_testx_i_scanchain_reg[0]),
     .sm_testx_i_scanchain_reg_shift_cnt      (sm_testx_i_scanchain_reg_shift_cnt),
-    .sm_testx_i_scanchain_reg_shift_cnt_max  (scan_reg_bits_total),
+    .sm_testx_i_scanchain_reg_shift_cnt_max  (sm_test5_i_scanchain_reg_width),
     .sm_test5_o_scanchain_reg_load           (sm_test5_o_scanchain_reg_load),
     .sm_test5_o_scanchain_reg_shift          (sm_test5_o_scanchain_reg_shift_right),
     .sm_test5_o_status_done                  (sm_test5_o_status_done),
+    .sm_test5_o_repeat_status_done           (sm_test5_o_repeat_status_done),                      // ip2_test5 specific
+    .sm_test5_i_scanchain_reg                (sm_testx_o_scanchain_reg[scan_reg_bits_total-1:0]),  // ip2_test5 specific
+    .sm_test5_o_repeat_pixel_reg             (sm_test5_o_repeat_pixel_reg),                        // ip2_test5 specific
     // output ports
     .sm_test5_state                          (sm_test5),
     .sm_test5_o_config_clk                   (sm_test5_o_config_clk),
