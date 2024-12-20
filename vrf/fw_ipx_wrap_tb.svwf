@@ -81,6 +81,7 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.sw_read32_1[31:0]}]}
 	} ]]
 waveform format $id -namecolor #ff9900
+waveform hierarchy expand $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.vin_test_trig_out}]}
 	} ]]
@@ -742,13 +743,12 @@ set id [waveform add -signals [subst  {
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.tb_w_cfg_pixels_256x16[255:0]}]}
 	} ]]
-waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.tb_select_pixel[7:0]}]}
 	} ]]
 waveform format $id -radix %d
 set id [waveform add -signals [subst  {
-	{[format {fw_ipx_wrap_tb.tb_repeat_pixel[9:0]}]}
+	{[format {fw_ipx_wrap_tb.tb_repeat_pixel[10:0]}]}
 	} ]]
 waveform format $id -radix %d
 set id [waveform add -signals [subst  {
@@ -774,6 +774,10 @@ set id [waveform add -signals [subst  {
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.sm_test5_o_repeat_status_done}]}
+	} ]]
+waveform format $id -color #ff9900 -namecolor #ff9900
+set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.sm_test5_o_vin_test_trig_out}]}
 	} ]]
 set id [waveform add -signals [subst  {
@@ -787,6 +791,15 @@ set id [waveform add -signals [subst  {
 	} ]]
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.ip2_test5_inst.scan_load_delay_disable}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.ip2_test5_inst.sm_test5_i_scanchain_reg[767:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.ip2_test5_inst.sm_test5_o_repeat_pixel_reg[4095:0]}]}
+	} ]]
+set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.ip2_test5_inst.sm_repeat_pixel_cnt[10:0]}]}
 	} ]]
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.sm_testx_i_config_out}]}
@@ -851,4 +864,4 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.bxclks_generators_inst.bxclk_ana}]}
 	} ]]
 
-waveform xview limits 0 1347810ns
+waveform xview limits 0 1255390ns

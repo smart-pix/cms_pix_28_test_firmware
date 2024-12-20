@@ -166,9 +166,9 @@ package cms_pix28_package;
   //
   localparam w_cfg_static_1_reg_select_pixel_index_min_IP2           =  0;     // selected pixel for ip2_test5: 0-to-255
   localparam w_cfg_static_1_reg_select_pixel_index_max_IP2           =  7;     // selected pixel for ip2_test5: 0-to-255
-  localparam w_cfg_static_1_reg_repeat_pixel_index_min_IP2           =  8;     // loop iterations in ip2_test5: 0-to-1023
-  localparam w_cfg_static_1_reg_repeat_pixel_index_max_IP2           = 17;     // loop iterations in ip2_test5: 0-to-1023
-  localparam w_cfg_static_1_reg_spare_index_min_IP2                  = 18;     //
+  localparam w_cfg_static_1_reg_repeat_pixel_index_min_IP2           =  8;     // loop iterations in ip2_test5: 0-to-2047
+  localparam w_cfg_static_1_reg_repeat_pixel_index_max_IP2           = 18;     // loop iterations in ip2_test5: 0-to-2047
+  localparam w_cfg_static_1_reg_spare_index_min_IP2                  = 19;     //
   localparam w_cfg_static_1_reg_spare_index_max_IP2                  = 23;     //
   //
   localparam w_execute_cfg_test_delay_index_min_IP2                  =  0;     //
@@ -247,7 +247,9 @@ package cms_pix28_package;
     SCANLOAD_HIGH_2_IP2_T5 = 4'b0111,
     SHIFT_IN_0_IP2_T5      = 4'b1000,
     SHIFT_IN_IP2_T5        = 4'b1001,
-    DONE_IP2_T5            = 4'b1010
+    DONE_IP2_T5            = 4'b1010,
+    SAVE_PIXEL_IP2_T5      = 4'b1011,
+    REPEAT_DONE_IP2_T5     = 4'b1100
   } state_t_sm_ip2_test5;
   //
   // Define enumerated type scan_chain_mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH

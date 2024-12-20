@@ -104,8 +104,8 @@ module fw_ip2 (
   //
   import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_min_IP2;     // selected pixel for ip2_test5: 0-to-255
   import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_max_IP2;     // selected pixel for ip2_test5: 0-to-255
-  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_min_IP2;     // loop iterations in ip2_test5: 0-to-1023
-  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_max_IP2;     // loop iterations in ip2_test5: 0-to-1023
+  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_min_IP2;     // loop iterations in ip2_test5: 0-to-2047
+  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_max_IP2;     // loop iterations in ip2_test5: 0-to-2047
   import cms_pix28_package::w_cfg_static_1_reg_spare_index_min_IP2;            //
   import cms_pix28_package::w_cfg_static_1_reg_spare_index_max_IP2;            //
   //
@@ -347,7 +347,7 @@ module fw_ip2 (
   logic [5:0] scan_load_delay;                             // on clock domain fw_axi_clk
   logic       scan_load_delay_disable;                     // on clock domain fw_axi_clk
   logic [7:0] select_pixel;                                // on clock domain fw_axi_clk
-  logic [9:0] repeat_pixel;                                // on clock domain fw_axi_clk
+  logic [10:0]repeat_pixel;                                // on clock domain fw_axi_clk
   assign bxclk_period            = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_period_index_max_IP2    : w_cfg_static_0_reg_bxclk_period_index_min_IP2   ];
   assign bxclk_delay             = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_index_max_IP2     : w_cfg_static_0_reg_bxclk_delay_index_min_IP2    ];
   assign bxclk_delay_sign        = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_delay_sign_index_IP2                                                      ];
@@ -481,7 +481,7 @@ module fw_ip2 (
   logic                                          sm_test5_o_scanchain_reg_load;
   logic                                          sm_test5_o_scanchain_reg_shift_right;
   localparam logic [10 : 0]                      sm_test5_i_scanchain_reg_width = 1*scan_reg_bits_total;     // ip2_test5 specific
-  logic [scan_reg_bits_total-1:0]                sm_test5_o_repeat_pixel_reg;                                // ip2_test5 specific
+  logic [4096-1 : 0]                             sm_test5_o_repeat_pixel_reg;                                // ip2_test5 specific
   //
   always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_testx_i_scanchain_reg_proc
     if(~fw_rst_n) begin

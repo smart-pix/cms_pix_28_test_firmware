@@ -185,7 +185,7 @@ module fw_ipx_wrap_tb ();
   logic        tb_scan_load_delay_disable;
   // IP2: Signals related with w_cfg_static_1_reg          // test_number_5:
   logic [7:0]  tb_select_pixel;                            // test_number_5: selected pixel for ip2_test5: 0-to-255
-  logic [9:0]  tb_repeat_pixel;                            // test_number_5: loop iterations in ip2_test5: 0-to-1023
+  logic [10:0] tb_repeat_pixel;                            // test_number_5: loop iterations in ip2_test5: 0-to-2047
   // IP2: Signals related with w_cfg_array_0/1/2_reg
   logic [255:0][15:0] tb_w_cfg_array_counter;
   logic [255:0][15:0] tb_w_cfg_array_random;
@@ -390,7 +390,7 @@ module fw_ipx_wrap_tb ();
         $realtime(), tb_bxclk_period, tb_bxclk_delay, tb_bxclk_delay_sign, tb_super_pix_sel, tb_scan_load_delay, tb_scan_load_delay_disable);
     end else begin
       tb_function_id         = OP_CODE_W_CFG_STATIC_1;
-      sw_write32_0           = {tb_firmware_id, tb_function_id, 6'b0, tb_repeat_pixel, tb_select_pixel};
+      sw_write32_0           = {tb_firmware_id, tb_function_id, 5'b0, tb_repeat_pixel, tb_select_pixel};
       #(1*fw_axi_clk_period);
       $display("time=%06.2f OP_CODE_W_CFG_STATIC_1 tb_select_pixel=%03d tb_repeat_pixel=%04d",
         $realtime(), tb_select_pixel, tb_repeat_pixel);
@@ -1224,7 +1224,28 @@ module fw_ipx_wrap_tb ();
     for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
       tb_w_cfg_pixels_256x3  = pixel_cfg_array();
       #(5*fw_axi_clk_period);
-      $display("time=%06.2f test5; PIX[0/1/2..255] = %03b %03b %03b ... %03b", $realtime(), tb_w_cfg_pixels_256x3[0], tb_w_cfg_pixels_256x3[1], tb_w_cfg_pixels_256x3[2], tb_w_cfg_pixels_256x3[255]);
+      $display("time=%06.2f test5; PIX[000..015] = %03b %03b %03b %03b %03b %03b %03b %03b %03b %03b %03b %03b %03b %03b %03b %03b", $realtime(),
+        tb_w_cfg_pixels_256x3[  0], tb_w_cfg_pixels_256x3[  1], tb_w_cfg_pixels_256x3[  2], tb_w_cfg_pixels_256x3[  3], tb_w_cfg_pixels_256x3[  4], tb_w_cfg_pixels_256x3[  5], tb_w_cfg_pixels_256x3[  6], tb_w_cfg_pixels_256x3[  7],
+        tb_w_cfg_pixels_256x3[  8], tb_w_cfg_pixels_256x3[  9], tb_w_cfg_pixels_256x3[ 10], tb_w_cfg_pixels_256x3[ 11], tb_w_cfg_pixels_256x3[ 12], tb_w_cfg_pixels_256x3[ 13], tb_w_cfg_pixels_256x3[ 14], tb_w_cfg_pixels_256x3[ 15]);
+      $display("time=%06.2f test5; PIX[015...000] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 15:  0]);
+      $display("time=%06.2f test5; PIX[031...016] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 31: 16]);
+      $display("time=%06.2f test5; PIX[047...032] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 47: 32]);
+      $display("time=%06.2f test5; PIX[063...048] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 63: 48]);
+      $display("time=%06.2f test5; PIX[079...064] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 79: 64]);
+      $display("time=%06.2f test5; PIX[095...080] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 95: 80]);
+      $display("time=%06.2f test5; PIX[111...096] = %b", $realtime(), tb_w_cfg_pixels_256x3[111: 96]);
+      $display("time=%06.2f test5; PIX[127...112] = %b", $realtime(), tb_w_cfg_pixels_256x3[127:112]);
+      $display("time=%06.2f test5; PIX[143...128] = %b", $realtime(), tb_w_cfg_pixels_256x3[143:128]);
+      $display("time=%06.2f test5; PIX[159...144] = %b", $realtime(), tb_w_cfg_pixels_256x3[159:144]);
+      $display("time=%06.2f test5; PIX[175...160] = %b", $realtime(), tb_w_cfg_pixels_256x3[175:160]);
+      $display("time=%06.2f test5; PIX[191...176] = %b", $realtime(), tb_w_cfg_pixels_256x3[191:176]);
+      $display("time=%06.2f test5; PIX[207...192] = %b", $realtime(), tb_w_cfg_pixels_256x3[207:192]);
+      $display("time=%06.2f test5; PIX[223...208] = %b", $realtime(), tb_w_cfg_pixels_256x3[223:208]);
+      $display("time=%06.2f test5; PIX[239...224] = %b", $realtime(), tb_w_cfg_pixels_256x3[239:224]);
+      $display("time=%06.2f test5; PIX[255...240] = %b", $realtime(), tb_w_cfg_pixels_256x3[255:240]);
+//      for(int i=0; i<16; i++)begin
+//        $display("time=%06.2f test5; PIX[%03d..%03d] = %b", $realtime(), i*16, (i+1)*16-1, tb_w_cfg_pixels_256x3[i*16+15 : i*16]);
+//      end
       tb_number   = 901;
       // WRITE fw_op_code_w_cfg_array_0
       w_cfg_array_0_pixel();
@@ -1245,7 +1266,7 @@ module fw_ipx_wrap_tb ();
       #(5*fw_axi_clk_period);
       tb_number   = 904;
       tb_select_pixel            = $urandom_range(2**8-1, 0) & 82'hFF;
-      tb_repeat_pixel            = 10'h00A;
+      tb_repeat_pixel            = 11'h003;
       w_cfg_static_fixed(.index(1));
       tb_number   = 905;                                     // BXCLK/ANA is programmed
       #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
@@ -1257,7 +1278,7 @@ module fw_ipx_wrap_tb ();
       tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
       w_execute();
       tb_number   = 906;
-      #(1*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period+25*fw_axi_clk_period);         // execution: wait for at least 1*768+1 BXCLK cycles; alternatively check when sm_test5_o_status_done is asserted
+      #(tb_repeat_pixel*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period+25*fw_axi_clk_period);         // execution: wait for at least 1*768+1 BXCLK cycles; alternatively check when sm_test5_o_status_done is asserted
       if(sw_read32_1[status_index_test5_done]===1'b1) begin
         $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test5 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_pixel() PIX[%03d]=%03b", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_select_pixel, tb_w_cfg_pixels_256x3[tb_select_pixel]);
       end else begin
@@ -1275,6 +1296,7 @@ module fw_ipx_wrap_tb ();
     #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
     //---------------------------------------------------------------------------------------------
+    #(500*fw_axi_clk_period);
 
     $display("%s", {80{"-"}});
     $display("simulation done: time %06.2f tb_err = %024b", $realtime, tb_err);
