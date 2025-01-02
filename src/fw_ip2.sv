@@ -32,6 +32,7 @@
 // 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is NOT YET defined in IP2
 // 2024-12-16  Cristian  Gingu        Add localparam w_cfg_static_1_reg_* for ip2_test5
 // 2024-12-17  Cristian  Gingu        Add test ip2_test5
+// 2025-01-02  Cristian  Gingu        Update sm_testx_o_scanchain_test_reg width for ip2_test5 compatibility: from 2*768-bits to 1365*3+1=4096-bits
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -85,6 +86,7 @@ module fw_ip2 (
   );
 
   import cms_pix28_package::scan_reg_bits_total;
+  import cms_pix28_package::repeat_pixel_bits_total;
   //
   import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_min_IP2;     // USAGE of first 6-bits: bit#0-to-5. USE to set clock PERIOD
   import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_max_IP2;     // example for setting bxclk==40MHz derived from fw_pl_clk1==400MHz: write 6'h0A => 10*2.5ns=25ns;
@@ -245,9 +247,12 @@ module fw_ip2 (
     assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg[(i+1)*32-1 : i*32];
   end
   //
-  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;               // 2*768=1536-bits shift register; used by all tests 1,2,3,4
-  logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_test_reg_array32;       // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
-  for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_test_reg_array32_gen
+  //logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;               // 2*768=1536-bits shift register; used by all tests 1,2,3,4
+  //logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_test_reg_array32;       // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
+  localparam                                               sm_testx_o_scanchain_test_reg_width = repeat_pixel_bits_total;   // new parameter for test5, compatible with tests 1,2,3,4
+  logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;                                   // changed from 2*768=1536-bits to 4096-bits shift register; used by all tests 1,2,3,4,5
+  logic [sm_testx_o_scanchain_test_reg_width/32-1:0][31:0] sm_testx_o_scanchain_test_reg_array32;                           // remap 4096-bits shift register into one array of 32-bits; array depth is 4096/32=128 32-bit words
+  for(genvar i = 0; i < sm_testx_o_scanchain_test_reg_width/32; i++) begin: sm_testx_o_scanchain_test_reg_array32_gen
     assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg[(i+1)*32-1 : i*32];
   end
   //
@@ -279,9 +284,9 @@ module fw_ip2 (
         fw_read_data32_comb = 32'b0;                       // pad with ZERO
       end
     end else if(op_code_r_data_array_1) begin
-      // AXI SW will readout sm_testx_o_scanchain_test_reg signal which is 2*768-bits for the requested address sw_write24_0[23:16].
-      // CAUTION: SW must take care not to OVERFLOW addresses: valid range is 0-to-47 (2*768/32=2*24=48 words, 32-bits each)
-      if(sw_write24_0[23:16]<48) begin
+      // AXI SW will readout sm_testx_o_scanchain_test_reg signal which is 4096-bits for the requested address sw_write24_0[23:16].        // modified for test5, compatible with tests 1,2,3,4
+      // CAUTION: SW must take care not to OVERFLOW addresses: valid range is 0-to-127 (4096/32=128 words, 32-bits each)                   // modified for test5, compatible with tests 1,2,3,4
+      if(sw_write24_0[23:16]<128) begin                                                                                                    // modified for test5, compatible with tests 1,2,3,4
         fw_read_data32_comb = sm_testx_o_scanchain_test_reg_array32[sw_write24_0[23:16]];
       end else begin
         fw_read_data32_comb = 32'b0;                       // pad with ZERO
@@ -481,7 +486,7 @@ module fw_ip2 (
   logic                                          sm_test5_o_scanchain_reg_load;
   logic                                          sm_test5_o_scanchain_reg_shift_right;
   localparam logic [10 : 0]                      sm_test5_i_scanchain_reg_width = 1*scan_reg_bits_total;     // ip2_test5 specific
-  logic [4096-1 : 0]                             sm_test5_o_repeat_pixel_reg;                                // ip2_test5 specific
+  logic [sm_testx_o_scanchain_test_reg_width-1:0]sm_test5_o_repeat_pixel_reg;                                // ip2_test5 specific
   //
   always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_testx_i_scanchain_reg_proc
     if(~fw_rst_n) begin
@@ -677,12 +682,12 @@ module fw_ip2 (
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_scanchain_reg      <= { sm_test1_o_scan_in,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
-            sm_testx_o_scanchain_test_reg <= {~sm_test1_o_scan_in,      sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= {                                                                                sm_test1_o_scan_in,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= { {(sm_testx_o_scanchain_test_reg_width-sm_testx_i_scanchain_reg_width){1'b0}}, ~sm_test1_o_scan_in,      sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_scanchain_reg      <= {sm_testx_i_scan_out,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
-            sm_testx_o_scanchain_test_reg <= {sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= {                                                                                sm_testx_i_scan_out,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= { {(sm_testx_o_scanchain_test_reg_width-sm_testx_i_scanchain_reg_width){1'b0}},  sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
@@ -701,12 +706,12 @@ module fw_ip2 (
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
             // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_scanchain_reg      <= { sm_test2_o_scan_in,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
-            sm_testx_o_scanchain_test_reg <= {~sm_test2_o_scan_in,      sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= {                                                                                sm_test2_o_scan_in,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= { {(sm_testx_o_scanchain_test_reg_width-sm_testx_i_scanchain_reg_width){1'b0}}, ~sm_test2_o_scan_in,      sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end else begin
             // shift-in new bit using readout-data from DUT
-            sm_testx_o_scanchain_reg      <= {sm_testx_i_scan_out,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
-            sm_testx_o_scanchain_test_reg <= {sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_reg      <= {                                                                                sm_testx_i_scan_out,      sm_testx_o_scanchain_reg     [sm_testx_o_scanchain_reg_width-1 : 1]};
+            sm_testx_o_scanchain_test_reg <= { {(sm_testx_o_scanchain_test_reg_width-sm_testx_i_scanchain_reg_width){1'b0}},  sm_testx_i_scan_out_test, sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_reg_width-1 : 1]};
           end
         end else begin
           // keep old value
@@ -748,7 +753,7 @@ module fw_ip2 (
       // one case only for sm_testx_o_scanchain_test_reg, regardless of (nested) conditions:
       // if(sm_test3==DONE_IP2_T3), if(test_sample==fw_pl_clk1_cnt), if(test_loopback
       // keep old value
-      sm_testx_o_scanchain_test_reg       <= {sm_testx_i_scanchain_reg_width{1'b0}};
+      sm_testx_o_scanchain_test_reg       <= {sm_testx_o_scanchain_test_reg_width{1'b0}};
     end else if(test4_enable) begin
       // use data specific for test case test4
       if(sm_test4==SHIFT_IN_0_IP2_T4 || sm_test4==SHIFT_IN_IP2_T4 ||
@@ -774,18 +779,18 @@ module fw_ip2 (
         //if(test_sample==fw_pl_clk1_cnt) begin
         if(test_loopback) begin
           // overwrite with hard-coded default value - set it non-zero for debug purpose
-          sm_testx_o_scanchain_test_reg[1*dnn_reg_width               -1 : 0*dnn_reg_width] <= dnn_reg_0_default;
-          sm_testx_o_scanchain_test_reg[2*dnn_reg_width               -1 : 1*dnn_reg_width] <= dnn_reg_1_default;
-          sm_testx_o_scanchain_test_reg[3*dnn_reg_width               -1 : 2*dnn_reg_width] <= bxclk_ana_default;
-          sm_testx_o_scanchain_test_reg[4*dnn_reg_width               -1 : 3*dnn_reg_width] <= bxclk_default;
-          sm_testx_o_scanchain_test_reg[sm_testx_i_scanchain_reg_width-1 : 4*dnn_reg_width] <= {(sm_testx_i_scanchain_reg_width-4*dnn_reg_width){1'b0}};
+          sm_testx_o_scanchain_test_reg[1*dnn_reg_width                    -1 : 0*dnn_reg_width] <= dnn_reg_0_default;
+          sm_testx_o_scanchain_test_reg[2*dnn_reg_width                    -1 : 1*dnn_reg_width] <= dnn_reg_1_default;
+          sm_testx_o_scanchain_test_reg[3*dnn_reg_width                    -1 : 2*dnn_reg_width] <= bxclk_ana_default;
+          sm_testx_o_scanchain_test_reg[4*dnn_reg_width                    -1 : 3*dnn_reg_width] <= bxclk_default;
+          sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_test_reg_width-1 : 4*dnn_reg_width] <= {(sm_testx_o_scanchain_test_reg_width-4*dnn_reg_width){1'b0}};
         end else begin
           // overwrite with dnn_output_0/1 data coming from sm_test3
-          sm_testx_o_scanchain_test_reg[1*dnn_reg_width               -1 : 0*dnn_reg_width] <= sm_test4_o_dnn_output_0;
-          sm_testx_o_scanchain_test_reg[2*dnn_reg_width               -1 : 1*dnn_reg_width] <= sm_test4_o_dnn_output_1;
-          sm_testx_o_scanchain_test_reg[3*dnn_reg_width               -1 : 2*dnn_reg_width] <= sm_test4_o_bxclk_ana;
-          sm_testx_o_scanchain_test_reg[4*dnn_reg_width               -1 : 3*dnn_reg_width] <= sm_test4_o_bxclk;
-          sm_testx_o_scanchain_test_reg[sm_testx_i_scanchain_reg_width-1 : 4*dnn_reg_width] <= {(sm_testx_i_scanchain_reg_width-4*dnn_reg_width){1'b0}};
+          sm_testx_o_scanchain_test_reg[1*dnn_reg_width                    -1 : 0*dnn_reg_width] <= sm_test4_o_dnn_output_0;
+          sm_testx_o_scanchain_test_reg[2*dnn_reg_width                    -1 : 1*dnn_reg_width] <= sm_test4_o_dnn_output_1;
+          sm_testx_o_scanchain_test_reg[3*dnn_reg_width                    -1 : 2*dnn_reg_width] <= sm_test4_o_bxclk_ana;
+          sm_testx_o_scanchain_test_reg[4*dnn_reg_width                    -1 : 3*dnn_reg_width] <= sm_test4_o_bxclk;
+          sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_test_reg_width-1 : 4*dnn_reg_width] <= {(sm_testx_o_scanchain_test_reg_width-4*dnn_reg_width){1'b0}};
         end
         //end else begin
         //  // keep old value
@@ -815,7 +820,15 @@ module fw_ip2 (
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
+
+
+
+
       sm_testx_o_scanchain_test_reg       <= {sm_testx_o_scanchain_reg_width*{1'b0}};    // TODO to be updated based on sm_test5 logic
+
+
+
+
     end else begin
       // keep old value; need to do this way to preserve sm_testx_o_scanchain_reg/sm_testx_o_scanchain_test_reg after any of test1,2,3,4 are done
       // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" "op_code_r_data_array_1" for the purpose of AXI readout
@@ -914,15 +927,15 @@ module fw_ip2 (
       end else if(test4_enable) begin
         // use data specific for test case test4
         if(sm_test4!=IDLE_IP2_T4 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
-          // inferred from state machine sm_test3 logic
+          // inferred from state machine sm_test4 logic
           error_w_execute_cfg <= 1'b1;
         end else begin
           error_w_execute_cfg <= 1'b0;
         end
       end else if(test5_enable) begin
         // use data specific for test case test5
-        if(sm_test5!=IDLE_IP2_T5 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
-          // inferred from state machine sm_test3 logic
+        if((sm_test5!=IDLE_IP2_T5 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) | (repeat_pixel>11'h555)) begin
+          // inferred from state machine sm_test5 logic
           error_w_execute_cfg <= 1'b1;
         end else begin
           error_w_execute_cfg <= 1'b0;

@@ -16,6 +16,7 @@
 // 2024-11-27  Cristian  Gingu        Increase dnn_reg_width from 48-bits to 64-bits
 // 2024-12-13  Cristian  Gingu        Add test_number_5, status_index_test5_done
 // 2024-12-16  Cristian  Gingu        Add localparam w_cfg_static_1_reg_* for ip2_test5
+// 2025-01-02  Cristian  Gingu        Add localparam repeat_pixel_bits_total for ip2_test5
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -26,6 +27,7 @@ package cms_pix28_package;
   parameter cfg_reg_bits_total         = 5188;             // configuration register total bits number (including test bits)
   parameter cfg_reg_bits_test          = 24;               // configuration register test  bits number
   parameter scan_reg_bits_total        = 768;              // scan-chain    register total bits number
+  parameter repeat_pixel_bits_total    = 4096;             // repeat-pixel-max==1365-times * 3-bits-per-pixel == 1365*3 == 4095 active, rounded to 4096
   //
   parameter windex_device_id_max       = 31;               // write index for device_id       (upper)
   parameter windex_device_id_min       = 28;               // write index for device_id       (lower)
