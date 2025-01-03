@@ -837,6 +837,10 @@ set id [waveform add -signals [subst  {
 	} ]]
 waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
+	{[format {fw_ipx_wrap_tb.tb_r_cfg_pixels_4096[4095:0]}]}
+	} ]]
+waveform hierarchy collapse $id
+set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.bxclk}]}
 	} ]]
 set id [waveform add -signals [subst  {
@@ -885,4 +889,4 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.bxclks_generators_inst.bxclk_ana}]}
 	} ]]
 
-waveform xview limits 0 1978165ns
+waveform xview limits 0 1988910ns

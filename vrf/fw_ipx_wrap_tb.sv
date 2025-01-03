@@ -17,6 +17,7 @@
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2024-11-27  Cristian  Gingu        Increase dnn_reg_width from 48-bits to 64-bits
 // 2024-12-18  Cristian  Gingu        Add test_number_5 for ip2_test5
+// 2025-01-03  Cristian  Gingu        Add task check_r_data_array_1_pixel for ip2_test5
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -187,11 +188,13 @@ module fw_ipx_wrap_tb ();
   logic [7:0]  tb_select_pixel;                            // test_number_5: selected pixel for ip2_test5: 0-to-255
   logic [10:0] tb_repeat_pixel;                            // test_number_5: loop iterations in ip2_test5: 0-to-2047
   // IP2: Signals related with w_cfg_array_0/1/2_reg
-  logic [255:0][15:0] tb_w_cfg_array_counter;
-  logic [255:0][15:0] tb_w_cfg_array_random;
-  logic [255:0][2:0]  tb_w_cfg_pixels_256x3;               // test_number_5: [256-pixels][3-bits-per-pixel] ==  768-bits
-  logic [256*16-1:0]  tb_w_cfg_pixels_4096;                // test_number_5: [256 * 16  ]                   == 4096-bits
-  logic [255:0][15:0] tb_w_cfg_pixels_256x16;              // test_number_5: [256       ][16              ] == 4096-bits
+  logic [255:0][15:0]   tb_w_cfg_array_counter;
+  logic [255:0][15:0]   tb_w_cfg_array_random;
+  logic [255:0][2:0]    tb_w_cfg_pixels_256x3;             // test_number_5: [256-pixels][3-bits-per-pixel] ==  768-bits
+  logic [256*16-1:0]    tb_w_cfg_pixels_4096;              // test_number_5: [256 * 16  ]                   == 4096-bits
+  logic [255:0][15:0]   tb_w_cfg_pixels_256x16;            // test_number_5: [256       ][16              ] == 4096-bits
+  logic [256*16-1:0]    tb_r_cfg_pixels_4096;              // test_number_5: [256 * 16  ]                          == 4096-bits
+  logic [1365-1:0][2:0] tb_r_cfg_pixels_1365x3;            // test_number_5: [1365-repeat-pixel][3-bits-per-pixel] ==  4095-bits
 
   // IP2: Signals related with w_execute: test_number/delay/sample, etc
   logic [5:0]  tb_test_delay;                              // on clock domain fw_axi_clk
@@ -357,6 +360,10 @@ module fw_ipx_wrap_tb ();
   // 3. Create two-dimensional array [256*16]
   for(genvar i=0; i<256; i++) begin
     assign tb_w_cfg_pixels_256x16[i] = tb_w_cfg_pixels_4096[16*i+15 : 16*i];
+  end
+  //
+  for(genvar i=0; i<1365; i++) begin
+    assign tb_r_cfg_pixels_1365x3[i] = tb_r_cfg_pixels_4096[4096-3*i-1 : 4096-3*i-3];
   end
 
   task w_cfg_static_random(integer index);
@@ -672,6 +679,29 @@ module fw_ipx_wrap_tb ();
     sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
   endtask
 
+  task check_r_data_array_1_counter_b(
+      integer read_n_32bit_words
+    );
+    @(negedge fw_axi_clk);             // ensure enter on FE of AXI CLK
+    tb_function_id           = OP_CODE_R_DATA_ARRAY_1;
+    tb_sw_write24_0          = 24'h0;
+    sw_write32_0             = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
+    #(5*fw_axi_clk_period);
+    for(int i_addr=0; i_addr<read_n_32bit_words; i_addr++) begin
+      tb_sw_write24_0[23:16] = i_addr & 8'hFF;
+      tb_sw_write24_0[15: 0] = 16'hFFFF;
+      sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
+      @(posedge fw_axi_clk);
+      if(sw_read32_0 !== {~tb_w_cfg_array_counter[2*i_addr+1], ~tb_w_cfg_array_counter[2*i_addr]}) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_1 (counter) i_addr=%03d sw_read32_0=0x%08h expected {0x%04h 0x%04h}", $realtime(), i_addr, sw_read32_0, ~tb_w_cfg_array_counter[2*i_addr+1], ~tb_w_cfg_array_counter[2*i_addr]);
+        tb_err[tb_err_index_op_code_r_data_array_1]=1'b1;
+      end
+      @(negedge fw_axi_clk);
+    end
+    tb_function_id           = OP_CODE_NOOP;
+    sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
+  endtask
+
   task check_r_data_array_0_pixel(
       integer read_n_32bit_words
     );
@@ -695,7 +725,7 @@ module fw_ipx_wrap_tb ();
     sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
   endtask
 
-  task check_r_data_array_1_counter_b(
+  task check_r_data_array_1_pixel(
       integer read_n_32bit_words
     );
     @(negedge fw_axi_clk);             // ensure enter on FE of AXI CLK
@@ -708,11 +738,26 @@ module fw_ipx_wrap_tb ();
       tb_sw_write24_0[15: 0] = 16'hFFFF;
       sw_write32_0           = {tb_firmware_id, tb_function_id, tb_sw_write24_0};
       @(posedge fw_axi_clk);
-      if(sw_read32_0 !== {~tb_w_cfg_array_counter[2*i_addr+1], ~tb_w_cfg_array_counter[2*i_addr]}) begin
-        $display("time=%06.2f FAIL op_code_r_data_array_1 (counter) i_addr=%03d sw_read32_0=0x%08h expected {0x%04h 0x%04h}", $realtime(), i_addr, sw_read32_0, ~tb_w_cfg_array_counter[2*i_addr+1], ~tb_w_cfg_array_counter[2*i_addr]);
+      tb_r_cfg_pixels_4096[4096-1:0] = {sw_read32_0, tb_r_cfg_pixels_4096[4096-1:32]};
+      $display("time=%06.2f DEBUG task check_r_data_array_1_pixel i_addr=%03d sw_read32_0=%032b", $realtime(), i_addr, sw_read32_0);
+      @(negedge fw_axi_clk);
+    end
+    $display("time=%06.2f DEBUG task check_r_data_array_1_pixel tb_r_cfg_pixels_4096=%01024h", $realtime(), tb_r_cfg_pixels_4096);
+    //
+    for(int i_pixel=0; i_pixel<tb_repeat_pixel; i_pixel++) begin
+      if(tb_r_cfg_pixels_1365x3[i_pixel] !== tb_w_cfg_pixels_256x3[tb_select_pixel]) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_1 (pixel) i_pixel=%03d tb_select_pixel=%03d tb_r_cfg_pixels_1365x3[%03d]=%03b expected tb_w_cfg_pixels_256x3[%03d]=%03b",
+          $realtime(), i_pixel, tb_select_pixel, i_pixel, tb_r_cfg_pixels_1365x3[i_pixel], tb_select_pixel, tb_w_cfg_pixels_256x3[tb_select_pixel]);
         tb_err[tb_err_index_op_code_r_data_array_1]=1'b1;
       end
-      @(negedge fw_axi_clk);
+    end
+    //
+    for(logic[10:0] i_pixel=tb_repeat_pixel; i_pixel<1365; i_pixel++) begin
+      if(tb_r_cfg_pixels_1365x3[i_pixel] !== 3'b0) begin
+        $display("time=%06.2f FAIL op_code_r_data_array_1 (pixel) i_pixel=%03d tb_select_pixel=%03d tb_r_cfg_pixels_1365x3[%03d]=%03b expected 3'b0",
+          $realtime(), i_pixel, tb_select_pixel, i_pixel, tb_r_cfg_pixels_1365x3[i_pixel]);
+        tb_err[tb_err_index_op_code_r_data_array_1]=1'b1;
+      end
     end
     tb_function_id           = OP_CODE_NOOP;
     sw_write32_0             = {tb_firmware_id, tb_function_id, 24'h0};
@@ -1285,9 +1330,12 @@ module fw_ipx_wrap_tb ();
       #(10*fw_axi_clk_period);
       tb_number   = 907;
       // READ fw_op_code_r_data_array_0
-      check_r_data_array_0_pixel(.read_n_32bit_words(24));   // readout: number of 32-bit words is 24 for firmware_id_2 and test_number_5
+      check_r_data_array_0_pixel(.read_n_32bit_words(24));   // readout: R_DATA_ARRAY_0 for test_number_5: number of 32-bit words is 24 for firmware_id_2 and test_number_5
       #(25*fw_axi_clk_period);                               // readout: wait for at least 24 AXI clock cycles
       tb_number   = 908;
+      // READ fw_op_code_r_data_array_1
+      check_r_data_array_1_pixel(.read_n_32bit_words(128));  // readout: R_DATA_ARRAY_1 for test_number_5: number of 32-bit words is 128 for firmware_id_2 and test_number_5
+      #(150*fw_axi_clk_period);                              // readout: wait for at least 4096/32=128 AXI clock cycles
     end
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);

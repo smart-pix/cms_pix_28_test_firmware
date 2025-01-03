@@ -33,6 +33,7 @@
 // 2024-12-16  Cristian  Gingu        Add localparam w_cfg_static_1_reg_* for ip2_test5
 // 2024-12-17  Cristian  Gingu        Add test ip2_test5
 // 2025-01-02  Cristian  Gingu        Update sm_testx_o_scanchain_test_reg width for ip2_test5 compatibility: from 2*768-bits to 1365*3+1=4096-bits
+// 2025-01-03  Cristian  Gingu        Done updating for ip2_test5
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
