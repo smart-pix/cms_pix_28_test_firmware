@@ -35,9 +35,9 @@ module ip2_test5 (
     output logic       sm_test5_o_scanchain_reg_load,
     output logic       sm_test5_o_scanchain_reg_shift,
     output logic       sm_test5_o_status_done,
-    output logic                                              sm_test5_o_repeat_status_done,  // ip2_test5 specific
-    input  logic [cms_pix28_package::scan_reg_bits_total-1:0] sm_test5_i_scanchain_reg,       // ip2_test5 specific
-    output logic [4096                                  -1:0] sm_test5_o_repeat_pixel_reg,    // ip2_test5 specific
+    output logic                                                  sm_test5_o_repeat_status_done,  // ip2_test5 specific
+    input  logic [cms_pix28_package::scan_reg_bits_total-1:0]     sm_test5_i_scanchain_reg,       // ip2_test5 specific
+    output logic [cms_pix28_package::repeat_pixel_bits_total-1:0] sm_test5_o_repeat_pixel_reg,    // ip2_test5 specific
     // output ports
     output cms_pix28_package::state_t_sm_ip2_test5 sm_test5_state,
     output logic       sm_test5_o_config_clk,
@@ -66,6 +66,9 @@ module ip2_test5 (
   //
   import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
   import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
+  //
+  import cms_pix28_package::scan_reg_bits_total;
+  import cms_pix28_package::repeat_pixel_bits_total;
 
   // ------------------------------------------------------------------------------------------------------------------
   // State Machine for "test5". Test SCAN-CHAIN-MODULE as a serial-in / serial-out shift-tegister.
@@ -89,6 +92,12 @@ module ip2_test5 (
     end
   end
   //
+  // Convert scan-chain register (256-pixels * 3-bit/pixel == 768-bits) to a bi-dimensional array-of-pixels (256-pixels, 3-bits each)
+  logic [scan_reg_bits_total/3-1:0][2:0] scanchain_to_pixels_array_256x3;
+  for(genvar i=0; i<scan_reg_bits_total/3; i++) begin
+    assign scanchain_to_pixels_array_256x3[i] = sm_test5_i_scanchain_reg[3*i+2 : 3*i];
+  end
+  //
   always @(posedge clk) begin : sm_test5_proc
     if(~enable | reset) begin
       sm_test5 <= IDLE_IP2_T5;
@@ -102,6 +111,11 @@ module ip2_test5 (
             sm_test5 <= IDLE_IP2_T5;
           end
           // output state machine signal assignment
+          if(test5_enable_re) begin
+            sm_test5_o_repeat_pixel_reg          <= {repeat_pixel_bits_total*{1'b0}};
+          end else begin
+            sm_test5_o_repeat_pixel_reg          <= sm_test5_o_repeat_pixel_reg;
+          end
           sm_test5_o_reset_not                   <= 1'b1;                      // active  LOW signal; default is inactive
           sm_test5_o_scan_in                     <= 1'b0;                      // arbitrary chosen default LOW
           sm_test5_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;   // scan-chain-mode: LOW==shift-register, HIGH==parallel-load-asic-internal-comparators; default=HIGH
@@ -137,6 +151,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -172,6 +187,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -204,6 +220,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -256,6 +273,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_load          <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           if(scan_load_delay_disable==1) begin
             sm_scan_load_delay_cnt               <= 6'b0;
@@ -288,6 +306,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           if(test_delay==clk_counter) begin
             sm_scan_load_delay_cnt               <= sm_scan_load_delay_cnt + 1;
@@ -316,6 +335,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -346,6 +366,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_load          <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -373,6 +394,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_load          <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -404,6 +426,7 @@ module ip2_test5 (
           sm_test5_o_scan_in                     <= sm_testx_i_scanchain_reg_bit0;
           sm_test5_o_scanchain_reg_load          <= 1'b0;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -419,6 +442,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b1;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt + 1;
@@ -438,6 +462,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b1;
           sm_test5_o_repeat_status_done          <= 1'b0;
+          sm_test5_o_repeat_pixel_reg            <= {scanchain_to_pixels_array_256x3[select_pixel], sm_test5_o_repeat_pixel_reg[repeat_pixel_bits_total-1:3]};
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;
@@ -453,6 +478,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b1;
           sm_test5_o_repeat_status_done          <= 1'b1;
+          sm_test5_o_repeat_pixel_reg            <= sm_test5_o_repeat_pixel_reg;
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= 11'b0;

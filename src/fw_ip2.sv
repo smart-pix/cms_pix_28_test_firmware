@@ -157,7 +157,7 @@ module fw_ip2 (
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T5;
   import cms_pix28_package::SHIFT_IN_0_IP2_T5;
   import cms_pix28_package::SHIFT_IN_IP2_T5;
-  import cms_pix28_package::DONE_IP2_T5;
+  import cms_pix28_package::REPEAT_DONE_IP2_T5;
   //
   import cms_pix28_package::SCAN_REG_MODE_SHIFT_IN;
   import cms_pix28_package::SCAN_REG_MODE_LOAD_COMP;
@@ -820,15 +820,12 @@ module fw_ip2 (
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
-
-
-
-
-      sm_testx_o_scanchain_test_reg       <= {sm_testx_o_scanchain_reg_width*{1'b0}};    // TODO to be updated based on sm_test5 logic
-
-
-
-
+      if(sm_test5==REPEAT_DONE_IP2_T5) begin
+        sm_testx_o_scanchain_test_reg     <= sm_test5_o_repeat_pixel_reg;
+      end else begin
+        // keep old value
+        sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
+      end
     end else begin
       // keep old value; need to do this way to preserve sm_testx_o_scanchain_reg/sm_testx_o_scanchain_test_reg after any of test1,2,3,4 are done
       // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" "op_code_r_data_array_1" for the purpose of AXI readout
