@@ -34,6 +34,8 @@
 // 2024-12-17  Cristian  Gingu        Add test ip2_test5
 // 2025-01-02  Cristian  Gingu        Update sm_testx_o_scanchain_test_reg width for ip2_test5 compatibility: from 2*768-bits to 1365*3+1=4096-bits
 // 2025-01-03  Cristian  Gingu        Done updating for ip2_test5
+// 2025-01-06  Cristian  Gingu        Add pipeline sm_test5_o_repeat_pixel_reg_pipe_1 for ip2_test5                      to make Timing PASS, still FAIL
+// 2025-01-06  Cristian  Gingu        Add pipeline sm_testx_o_scanchain_reg_pipe_1, sm_testx_o_scanchain_test_reg_pipe_1 to make Timing PASS, now   PASS
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -244,8 +246,9 @@ module fw_ip2 (
   localparam                                          sm_testx_o_scanchain_reg_width = 2*scan_reg_bits_total;
   logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg;                    // 2*768=1536-bits shift register; used by all tests 1,2,3,4
   logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_reg_array32;            // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
+  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_1;
   for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_reg_array32_gen
-    assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg[(i+1)*32-1 : i*32];
+    assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg_pipe_1[(i+1)*32-1 : i*32];
   end
   //
   //logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;               // 2*768=1536-bits shift register; used by all tests 1,2,3,4
@@ -253,8 +256,9 @@ module fw_ip2 (
   localparam                                               sm_testx_o_scanchain_test_reg_width = repeat_pixel_bits_total;   // new parameter for test5, compatible with tests 1,2,3,4
   logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;                                   // changed from 2*768=1536-bits to 4096-bits shift register; used by all tests 1,2,3,4,5
   logic [sm_testx_o_scanchain_test_reg_width/32-1:0][31:0] sm_testx_o_scanchain_test_reg_array32;                           // remap 4096-bits shift register into one array of 32-bits; array depth is 4096/32=128 32-bit words
+  logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg_pipe_1;
   for(genvar i = 0; i < sm_testx_o_scanchain_test_reg_width/32; i++) begin: sm_testx_o_scanchain_test_reg_array32_gen
-    assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg[(i+1)*32-1 : i*32];
+    assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg_pipe_1[(i+1)*32-1 : i*32];
   end
   //
   always_comb begin : fw_read_data32_comb_proc
@@ -331,14 +335,8 @@ module fw_ip2 (
     .sm_test2_o_status_done  (sm_test2_o_status_done),
     .sm_test3_o_status_done  (sm_test3_o_status_done),
     .sm_test4_o_status_done  (sm_test4_o_status_done),
-    .sm_test5_o_status_done  (sm_test5_o_status_done),
-
-
-
-//    .sm_test5_o_status_done  (sm_test5_o_repeat_status_done),
-
-
-
+//    .sm_test5_o_status_done  (sm_test5_o_status_done),
+    .sm_test5_o_status_done  (sm_test5_o_repeat_status_done),
     .error_w_execute_cfg     (error_w_execute_cfg),
     //
     .fw_read_status32_reg    (fw_read_status32_reg)
@@ -488,6 +486,7 @@ module fw_ip2 (
   logic                                          sm_test5_o_scanchain_reg_shift_right;
   localparam logic [10 : 0]                      sm_test5_i_scanchain_reg_width = 1*scan_reg_bits_total;     // ip2_test5 specific
   logic [sm_testx_o_scanchain_test_reg_width-1:0]sm_test5_o_repeat_pixel_reg;                                // ip2_test5 specific
+  logic [sm_testx_o_scanchain_test_reg_width-1:0]sm_test5_o_repeat_pixel_reg_pipe_1;                         // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
   //
   always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_testx_i_scanchain_reg_proc
     if(~fw_rst_n) begin
@@ -673,6 +672,11 @@ module fw_ip2 (
     .sm_test5_o_scan_in                      (sm_test5_o_scan_in),
     .sm_test5_o_scan_load                    (sm_test5_o_scan_load)
   );
+  always @(posedge fw_pl_clk1) begin
+    sm_test5_o_repeat_pixel_reg_pipe_1   <= sm_test5_o_repeat_pixel_reg;                             // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
+    sm_testx_o_scanchain_reg_pipe_1      <= sm_testx_o_scanchain_reg;
+    sm_testx_o_scanchain_test_reg_pipe_1 <= sm_testx_o_scanchain_test_reg;
+  end
 
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
   // This is State Machine test dependent: sm_test1, sm_test2, sm_test3, sm_test4, sm_test5
@@ -822,7 +826,7 @@ module fw_ip2 (
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
       if(sm_test5==REPEAT_DONE_IP2_T5) begin
-        sm_testx_o_scanchain_test_reg     <= sm_test5_o_repeat_pixel_reg;
+        sm_testx_o_scanchain_test_reg     <= sm_test5_o_repeat_pixel_reg_pipe_1;                   // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
       end else begin
         // keep old value
         sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
