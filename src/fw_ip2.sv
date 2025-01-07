@@ -36,6 +36,7 @@
 // 2025-01-03  Cristian  Gingu        Done updating for ip2_test5
 // 2025-01-06  Cristian  Gingu        Add pipeline sm_test5_o_repeat_pixel_reg_pipe_1 for ip2_test5                      to make Timing PASS, still FAIL
 // 2025-01-06  Cristian  Gingu        Add pipeline sm_testx_o_scanchain_reg_pipe_1, sm_testx_o_scanchain_test_reg_pipe_1 to make Timing PASS, now   PASS
+// 2025-01-07  Cristian  Gingu        Add pipeline sm_test5_pipe_1 to synchronize with sm_test5_o_repeat_pixel_reg_pipe_1
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -671,8 +672,10 @@ module fw_ip2 (
     .sm_test5_o_vin_test_trig_out            (sm_test5_o_vin_test_trig_out),
     .sm_test5_o_scan_in                      (sm_test5_o_scan_in),
     .sm_test5_o_scan_load                    (sm_test5_o_scan_load)
-  );
+    );
+  state_t_sm_ip2_test5 sm_test5_pipe_1;
   always @(posedge fw_pl_clk1) begin
+    sm_test5_pipe_1                      <= sm_test5;
     sm_test5_o_repeat_pixel_reg_pipe_1   <= sm_test5_o_repeat_pixel_reg;                             // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
     sm_testx_o_scanchain_reg_pipe_1      <= sm_testx_o_scanchain_reg;
     sm_testx_o_scanchain_test_reg_pipe_1 <= sm_testx_o_scanchain_test_reg;
@@ -825,7 +828,7 @@ module fw_ip2 (
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
-      if(sm_test5==REPEAT_DONE_IP2_T5) begin
+      if(sm_test5_pipe_1==REPEAT_DONE_IP2_T5) begin
         sm_testx_o_scanchain_test_reg     <= sm_test5_o_repeat_pixel_reg_pipe_1;                   // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
       end else begin
         // keep old value

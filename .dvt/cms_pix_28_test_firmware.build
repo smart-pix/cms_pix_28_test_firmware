@@ -122,7 +122,7 @@
 ./src/com_testx_decoder.sv
 #./src/com_cdc_synch.sv
 ./src/configclk_generator.sv
-./src/map_scanchain_to_pixels.sv
+#./src/map_scanchain_to_pixels.sv
 ./src/ip1_test1.sv
 ./src/ip1_test2.sv
 ./src/fw_ip1.sv
