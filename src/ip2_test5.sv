@@ -10,6 +10,7 @@
 // Date        Author                 Description
 // 2024-12-17  Cristian  Gingu        Created, based on ip2_test2
 // 2025-01-03  Cristian  Gingu        Done updating for ip2_test5
+// 2025-01-07  Cristian  Gingu        Force bit#0 of sm_test5_o_repeat_pixel_reg to 1'b0
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test5__
 `define __ip2_test5__
@@ -463,7 +464,7 @@ module ip2_test5 (
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b1;
           sm_test5_o_repeat_status_done          <= 1'b0;
-          sm_test5_o_repeat_pixel_reg            <= {scanchain_to_pixels_array_256x3[select_pixel], sm_test5_o_repeat_pixel_reg[repeat_pixel_bits_total-1:3]};
+          sm_test5_o_repeat_pixel_reg            <= {scanchain_to_pixels_array_256x3[select_pixel], sm_test5_o_repeat_pixel_reg[repeat_pixel_bits_total-1:4], 1'b0};
           // internal state machine signal assignment
           sm_scan_load_delay_cnt                 <= 6'b0;
           sm_repeat_pixel_cnt                    <= sm_repeat_pixel_cnt;

@@ -11,6 +11,7 @@
 // 2024-05-24  Cristian  Gingu        Created
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2025-01-07  Cristian Gingu         Add pipelined signal sw_write32_0_pipe_1 to improve timing
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top__
 `define __fw_top__
@@ -147,6 +148,12 @@ module fw_top #(
     .sw_read32_1(sw_read32_1)                                        // register#1 32-bit read  from FW to SW
   );
 
+  // Add pipelined signal sw_write32_0_pipe_1 to improve timing
+  logic [31:0] sw_write32_0_pipe_1;
+  always @(posedge S_AXI_ACLK) begin
+    sw_write32_0_pipe_1      <= sw_write32_0;
+  end
+
   // Instantiate fw_ipx_wrap
   fw_ipx_wrap fw_ipx_wrap_inst (
     //////////////////////////////
@@ -154,7 +161,7 @@ module fw_top #(
     //////////////////////////////
     .S_AXI_ACLK              (S_AXI_ACLK),
     .S_AXI_ARESETN           (S_AXI_ARESETN),
-    .sw_write32_0            (sw_write32_0),                                // register#0 32-bit write from SW to FW
+    .sw_write32_0            (sw_write32_0_pipe_1),                         // register#0 32-bit write from SW to FW
     .sw_read32_0             (sw_read32_0),                                 // register#0 32-bit read  from FW to SW
     .sw_read32_1             (sw_read32_1),                                 // register#1 32-bit read  from FW to SW
     //////////////////////////////////
