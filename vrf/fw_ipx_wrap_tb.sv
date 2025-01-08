@@ -1307,8 +1307,8 @@ module fw_ipx_wrap_tb ();
       w_cfg_static_fixed(.index(0));
       #(5*fw_axi_clk_period);
       tb_number   = 904;
-      tb_select_pixel            = $urandom_range(2**8-1, 0) & 82'hFF;
-      tb_repeat_pixel            = 11'h00C;
+      tb_select_pixel            = $urandom_range(2**8-1, 0) & 8'hFF;
+      tb_repeat_pixel            = $urandom_range(2**11-1, 0) & 11'h7FF;//11'h00C;
       w_cfg_static_fixed(.index(1));
       tb_number   = 905;                                     // BXCLK/ANA is programmed
       #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
