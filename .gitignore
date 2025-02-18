@@ -20,7 +20,7 @@
 vivado/cms_pix_28_test_firmware.cache/*
 vivado/cms_pix_28_test_firmware.gen/*
 vivado/cms_pix_28_test_firmware.runs/*
-
+!*.vcd
 
 # Xcelium related
 xcelium.d/*
