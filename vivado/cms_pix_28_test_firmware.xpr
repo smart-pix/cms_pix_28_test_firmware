@@ -64,13 +64,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="21"/>
-    <Option Name="WTModelSimExportSim" Val="21"/>
-    <Option Name="WTQuestaExportSim" Val="21"/>
+    <Option Name="WTXSimExportSim" Val="22"/>
+    <Option Name="WTModelSimExportSim" Val="22"/>
+    <Option Name="WTQuestaExportSim" Val="22"/>
     <Option Name="WTIesExportSim" Val="0"/>
-    <Option Name="WTVcsExportSim" Val="21"/>
-    <Option Name="WTRivieraExportSim" Val="21"/>
-    <Option Name="WTActivehdlExportSim" Val="21"/>
+    <Option Name="WTVcsExportSim" Val="22"/>
+    <Option Name="WTRivieraExportSim" Val="22"/>
+    <Option Name="WTActivehdlExportSim" Val="22"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -297,8 +297,29 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_clk_wiz_0_0/cms_pix_28_fw_top_bd_clk_wiz_0_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_clk_wiz_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_iob_oddr_0_0/cms_pix_28_fw_top_bd_iob_oddr_0_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_iob_oddr_0_0"/>
+        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_fw_top_v_0_0/cms_pix_28_fw_top_bd_fw_top_v_0_0.xci">
           <Proxy FileSetName="cms_pix_28_fw_top_bd_fw_top_v_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_iob_iddr_0_0/cms_pix_28_fw_top_bd_iob_iddr_0_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_iob_iddr_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_proc_sys_reset_0_0/cms_pix_28_fw_top_bd_proc_sys_reset_0_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_proc_sys_reset_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_auto_ds_0/cms_pix_28_fw_top_bd_auto_ds_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_auto_ds_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="cms_pix_28_fw_top_bd.bd" FileRelPathName="ip/cms_pix_28_fw_top_bd_auto_pc_0/cms_pix_28_fw_top_bd_auto_pc_0.xci">
+          <Proxy FileSetName="cms_pix_28_fw_top_bd_auto_pc_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/hdl/cms_pix_28_fw_top_bd_wrapper.v">
@@ -308,7 +329,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/bd/ibuf_ds/ibuf_ds.bd">
+      <File Path="$PSRCDIR/sources_1/bd/obuf_ds/obuf_ds.bd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -316,7 +337,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/bd/obuf_ds/obuf_ds.bd">
+      <File Path="$PSRCDIR/sources_1/bd/ibuf_ds/ibuf_ds.bd">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -384,10 +405,23 @@
     <FileSet Name="ibuf_ds_inst_0" Type="BlockSrcs" RelSrcDir="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/bd/ibuf_ds_inst_0" RelGenDir="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/bd/ibuf_ds_inst_0">
       <File Path="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/bd/ibuf_ds_inst_0/ibuf_ds_inst_0.bd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
+        <CompFileExtendedInfo CompFileName="ibuf_ds_inst_0.bd" FileRelPathName="ip/ibuf_ds_inst_0_util_ds_buf_0_0/ibuf_ds_inst_0_util_ds_buf_0_0.xci">
+          <Proxy FileSetName="ibuf_ds_inst_0_util_ds_buf_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="ibuf_ds_inst_0.bd" FileRelPathName="ip/ibuf_ds_inst_0_util_ds_buf_1_0/ibuf_ds_inst_0_util_ds_buf_1_0.xci">
+          <Proxy FileSetName="ibuf_ds_inst_0_util_ds_buf_1_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="ibuf_ds_inst_0.bd" FileRelPathName="ip/ibuf_ds_inst_0_util_ds_buf_3_0/ibuf_ds_inst_0_util_ds_buf_3_0.xci">
+          <Proxy FileSetName="ibuf_ds_inst_0_util_ds_buf_3_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="ibuf_ds_inst_0.bd" FileRelPathName="ip/ibuf_ds_inst_0_util_ds_buf_2_0/ibuf_ds_inst_0_util_ds_buf_2_0.xci">
+          <Proxy FileSetName="ibuf_ds_inst_0_util_ds_buf_2_0"/>
+        </CompFileExtendedInfo>
       </File>
       <Config>
         <Option Name="TopModule" Val="ibuf_ds_inst_0"/>
@@ -397,10 +431,38 @@
     <FileSet Name="obuf_ds_inst_0" Type="BlockSrcs" RelSrcDir="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/bd/obuf_ds_inst_0" RelGenDir="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/bd/obuf_ds_inst_0">
       <File Path="$PGENDIR/sources_1/bd/cms_pix_28_fw_top_bd/bd/obuf_ds_inst_0/obuf_ds_inst_0.bd">
         <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_4_0/obuf_ds_inst_0_util_ds_buf_4_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_4_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_3_0/obuf_ds_inst_0_util_ds_buf_3_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_3_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_2_0/obuf_ds_inst_0_util_ds_buf_2_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_2_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_1_0/obuf_ds_inst_0_util_ds_buf_1_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_1_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_8_0/obuf_ds_inst_0_util_ds_buf_8_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_8_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_7_0/obuf_ds_inst_0_util_ds_buf_7_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_7_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_6_0/obuf_ds_inst_0_util_ds_buf_6_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_6_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_0_0/obuf_ds_inst_0_util_ds_buf_0_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="obuf_ds_inst_0.bd" FileRelPathName="ip/obuf_ds_inst_0_util_ds_buf_5_0/obuf_ds_inst_0_util_ds_buf_5_0.xci">
+          <Proxy FileSetName="obuf_ds_inst_0_util_ds_buf_5_0"/>
+        </CompFileExtendedInfo>
       </File>
       <Config>
         <Option Name="TopModule" Val="obuf_ds_inst_0"/>
@@ -410,6 +472,126 @@
     <FileSet Name="cms_pix_28_fw_top_bd_fw_top_v_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_fw_top_v_0_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_fw_top_v_0_0">
       <Config>
         <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_fw_top_v_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="ibuf_ds_inst_0_util_ds_buf_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ibuf_ds_inst_0_util_ds_buf_0_0" RelGenDir="$PGENDIR/ibuf_ds_inst_0_util_ds_buf_0_0">
+      <Config>
+        <Option Name="TopModule" Val="ibuf_ds_inst_0_util_ds_buf_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="ibuf_ds_inst_0_util_ds_buf_1_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ibuf_ds_inst_0_util_ds_buf_1_0" RelGenDir="$PGENDIR/ibuf_ds_inst_0_util_ds_buf_1_0">
+      <Config>
+        <Option Name="TopModule" Val="ibuf_ds_inst_0_util_ds_buf_1_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="ibuf_ds_inst_0_util_ds_buf_2_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ibuf_ds_inst_0_util_ds_buf_2_0" RelGenDir="$PGENDIR/ibuf_ds_inst_0_util_ds_buf_2_0">
+      <Config>
+        <Option Name="TopModule" Val="ibuf_ds_inst_0_util_ds_buf_2_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="ibuf_ds_inst_0_util_ds_buf_3_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/ibuf_ds_inst_0_util_ds_buf_3_0" RelGenDir="$PGENDIR/ibuf_ds_inst_0_util_ds_buf_3_0">
+      <Config>
+        <Option Name="TopModule" Val="ibuf_ds_inst_0_util_ds_buf_3_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_0_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_0_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_2_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_2_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_2_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_2_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_3_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_3_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_3_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_3_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_4_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_4_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_4_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_4_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_5_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_5_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_5_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_5_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_6_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_6_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_6_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_6_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_7_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_7_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_7_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_7_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_8_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_8_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_8_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_8_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="obuf_ds_inst_0_util_ds_buf_1_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/obuf_ds_inst_0_util_ds_buf_1_0" RelGenDir="$PGENDIR/obuf_ds_inst_0_util_ds_buf_1_0">
+      <Config>
+        <Option Name="TopModule" Val="obuf_ds_inst_0_util_ds_buf_1_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="cms_pix_28_fw_top_bd_proc_sys_reset_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_proc_sys_reset_0_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_proc_sys_reset_0_0">
+      <Config>
+        <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_proc_sys_reset_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0">
+      <Config>
+        <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="cms_pix_28_fw_top_bd_clk_wiz_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_clk_wiz_0_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_clk_wiz_0_0">
+      <Config>
+        <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_clk_wiz_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="cms_pix_28_fw_top_bd_iob_iddr_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_iob_iddr_0_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_iob_iddr_0_0">
+      <Config>
+        <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_iob_iddr_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="cms_pix_28_fw_top_bd_iob_oddr_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_iob_oddr_0_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_iob_oddr_0_0">
+      <Config>
+        <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_iob_oddr_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="cms_pix_28_fw_top_bd_auto_ds_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_auto_ds_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_auto_ds_0">
+      <Config>
+        <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_auto_ds_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="cms_pix_28_fw_top_bd_auto_pc_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/cms_pix_28_fw_top_bd_auto_pc_0" RelGenDir="$PGENDIR/cms_pix_28_fw_top_bd_auto_pc_0">
+      <Config>
+        <Option Name="TopModule" Val="cms_pix_28_fw_top_bd_auto_pc_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -448,9 +630,207 @@
     </Run>
     <Run Id="cms_pix_28_fw_top_bd_fw_top_v_0_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_fw_top_v_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_fw_top_v_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_fw_top_v_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_fw_top_v_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_fw_top_v_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_0_0_synth_1" Type="Ft3:Synth" SrcSet="ibuf_ds_inst_0_util_ds_buf_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/ibuf_ds_inst_0_util_ds_buf_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_1_0_synth_1" Type="Ft3:Synth" SrcSet="ibuf_ds_inst_0_util_ds_buf_1_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/ibuf_ds_inst_0_util_ds_buf_1_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_1_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_1_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_2_0_synth_1" Type="Ft3:Synth" SrcSet="ibuf_ds_inst_0_util_ds_buf_2_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_2_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/ibuf_ds_inst_0_util_ds_buf_2_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_2_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_2_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_3_0_synth_1" Type="Ft3:Synth" SrcSet="ibuf_ds_inst_0_util_ds_buf_3_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_3_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/ibuf_ds_inst_0_util_ds_buf_3_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_3_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_3_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_0_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_2_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_2_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_2_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_2_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_2_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_2_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_3_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_3_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_3_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_3_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_3_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_3_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_4_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_4_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_4_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_4_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_4_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_4_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_5_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_5_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_5_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_5_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_5_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_5_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_6_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_6_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_6_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_6_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_6_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_6_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_7_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_7_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_7_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_7_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_7_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_7_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_8_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_8_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_8_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_8_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_8_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_8_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_1_0_synth_1" Type="Ft3:Synth" SrcSet="obuf_ds_inst_0_util_ds_buf_1_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/obuf_ds_inst_0_util_ds_buf_1_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_1_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_1_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_proc_sys_reset_0_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_proc_sys_reset_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_proc_sys_reset_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_proc_sys_reset_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_proc_sys_reset_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_proc_sys_reset_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_clk_wiz_0_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_clk_wiz_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_clk_wiz_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_clk_wiz_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_clk_wiz_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_clk_wiz_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_iob_iddr_0_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_iob_iddr_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_iob_iddr_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_iob_iddr_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_iddr_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_iddr_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_iob_oddr_0_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_iob_oddr_0_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_iob_oddr_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_iob_oddr_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_oddr_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_oddr_0_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_auto_ds_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_auto_ds_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_auto_ds_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_auto_ds_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_ds_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_ds_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_auto_pc_0_synth_1" Type="Ft3:Synth" SrcSet="cms_pix_28_fw_top_bd_auto_pc_0" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_auto_pc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/cms_pix_28_fw_top_bd_auto_pc_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_pc_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_pc_0_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2022"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -478,9 +858,347 @@
     </Run>
     <Run Id="cms_pix_28_fw_top_bd_fw_top_v_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_fw_top_v_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_fw_top_v_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_fw_top_v_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_fw_top_v_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="ibuf_ds_inst_0_util_ds_buf_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_1_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="ibuf_ds_inst_0_util_ds_buf_1_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_1_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_1_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_2_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_2_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="ibuf_ds_inst_0_util_ds_buf_2_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_2_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_2_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="ibuf_ds_inst_0_util_ds_buf_3_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="ibuf_ds_inst_0_util_ds_buf_3_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="ibuf_ds_inst_0_util_ds_buf_3_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_3_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/ibuf_ds_inst_0_util_ds_buf_3_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_2_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_2_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_2_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_2_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_2_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_3_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_3_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_3_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_3_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_3_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_4_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_4_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_4_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_4_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_4_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_5_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_5_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_5_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_5_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_5_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_6_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_6_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_6_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_6_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_6_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_7_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_7_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_7_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_7_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_7_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_8_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_8_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_8_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_8_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_8_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="obuf_ds_inst_0_util_ds_buf_1_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="obuf_ds_inst_0_util_ds_buf_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="obuf_ds_inst_0_util_ds_buf_1_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_1_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/obuf_ds_inst_0_util_ds_buf_1_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_proc_sys_reset_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_proc_sys_reset_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_proc_sys_reset_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_proc_sys_reset_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_proc_sys_reset_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_zynq_ultra_ps_e_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_clk_wiz_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_clk_wiz_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_clk_wiz_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_clk_wiz_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_clk_wiz_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_iob_iddr_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_iob_iddr_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_iob_iddr_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_iddr_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_iddr_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_iob_oddr_0_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_iob_oddr_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_iob_oddr_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_oddr_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_iob_oddr_0_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_auto_ds_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_auto_ds_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_auto_ds_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_ds_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_ds_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2022"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="cms_pix_28_fw_top_bd_auto_pc_0_impl_1" Type="Ft2:EntireDesign" Part="xczu9eg-ffvb1156-2-e" ConstrsSet="cms_pix_28_fw_top_bd_auto_pc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="cms_pix_28_fw_top_bd_auto_pc_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_pc_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/cms_pix_28_fw_top_bd_auto_pc_0_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

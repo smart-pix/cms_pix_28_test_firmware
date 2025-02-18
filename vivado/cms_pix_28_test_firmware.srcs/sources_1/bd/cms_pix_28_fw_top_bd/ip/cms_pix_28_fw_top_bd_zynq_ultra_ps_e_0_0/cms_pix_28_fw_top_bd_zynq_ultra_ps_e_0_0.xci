@@ -1481,8 +1481,8 @@
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_MIO_9_POLARITY">Default</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_MIO_9_PULLUPDOWN">pullup</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_MIO_9_SLEW">fast</spirit:configurableElementValue>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_MIO_TREE_PERIPHERALS"/>
-        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_MIO_TREE_SIGNALS"/>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_MIO_TREE_PERIPHERALS">#############################################################################</spirit:configurableElementValue>
+        <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_MIO_TREE_SIGNALS">#############################################################################</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_PERIPHERAL_BOARD_PRESET"/>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_SD0_INTERNAL_BUS_WIDTH">8</spirit:configurableElementValue>
         <spirit:configurableElementValue spirit:referenceId="PARAM_VALUE.PSU_SD1_INTERNAL_BUS_WIDTH">8</spirit:configurableElementValue>
@@ -4180,6 +4180,7 @@ FFF;0|FPD;DPDMA;FD4C0000;FD4CFFFF;0|FPD;DDR_XMPU5_CFG;FD050000;FD05FFFF;1|FPD;DD
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.UART1_BOARD_INTERFACE" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.USB0_BOARD_INTERFACE" xilinx:valueSource="user"/>
             <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.USB1_BOARD_INTERFACE" xilinx:valueSource="user"/>
+            <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.preset" xilinx:valueSource="user"/>
           </xilinx:configElementInfos>
           <xilinx:boundaryDescriptionInfo>
             <xilinx:boundaryDescription xilinx:boundaryDescriptionJSON="{

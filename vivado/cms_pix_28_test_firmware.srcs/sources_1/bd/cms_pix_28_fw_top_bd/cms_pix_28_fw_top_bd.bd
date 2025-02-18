@@ -1605,6 +1605,12 @@
           "PSU_MIO_9_SLEW": {
             "value": "fast"
           },
+          "PSU_MIO_TREE_PERIPHERALS": {
+            "value": "#############################################################################"
+          },
+          "PSU_MIO_TREE_SIGNALS": {
+            "value": "#############################################################################"
+          },
           "PSU_SD0_INTERNAL_BUS_WIDTH": {
             "value": "8"
           },
@@ -3350,6 +3356,9 @@
           },
           "USB1_BOARD_INTERFACE": {
             "value": "custom"
+          },
+          "preset": {
+            "value": "None"
           }
         },
         "interface_ports": {
@@ -3487,28 +3496,8 @@
             "left": "0",
             "right": "0",
             "parameters": {
-              "CLK_DOMAIN": {
-                "value": "ibuf_ds_inst_0_util_ds_buf_0_0_IBUF_OUT",
-                "value_src": "default"
-              },
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "default"
-              },
-              "FREQ_TOLERANCE_HZ": {
-                "value": "0",
-                "value_src": "default"
-              },
-              "INSERT_VIP": {
-                "value": "0",
-                "value_src": "default"
-              },
               "LAYERED_METADATA": {
                 "value": "undef",
-                "value_src": "default"
-              },
-              "PHASE": {
-                "value": "0.0",
                 "value_src": "default"
               }
             }
@@ -3543,28 +3532,8 @@
             "left": "0",
             "right": "0",
             "parameters": {
-              "CLK_DOMAIN": {
-                "value": "ibuf_ds_inst_0_util_ds_buf_1_0_IBUF_OUT",
-                "value_src": "default"
-              },
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "default"
-              },
-              "FREQ_TOLERANCE_HZ": {
-                "value": "0",
-                "value_src": "default"
-              },
-              "INSERT_VIP": {
-                "value": "0",
-                "value_src": "default"
-              },
               "LAYERED_METADATA": {
                 "value": "undef",
-                "value_src": "default"
-              },
-              "PHASE": {
-                "value": "0.0",
                 "value_src": "default"
               }
             }
@@ -3599,28 +3568,8 @@
             "left": "0",
             "right": "0",
             "parameters": {
-              "CLK_DOMAIN": {
-                "value": "ibuf_ds_inst_0_util_ds_buf_2_0_IBUF_OUT",
-                "value_src": "default"
-              },
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "default"
-              },
-              "FREQ_TOLERANCE_HZ": {
-                "value": "0",
-                "value_src": "default"
-              },
-              "INSERT_VIP": {
-                "value": "0",
-                "value_src": "default"
-              },
               "LAYERED_METADATA": {
                 "value": "undef",
-                "value_src": "default"
-              },
-              "PHASE": {
-                "value": "0.0",
                 "value_src": "default"
               }
             }
@@ -3655,28 +3604,8 @@
             "left": "0",
             "right": "0",
             "parameters": {
-              "CLK_DOMAIN": {
-                "value": "ibuf_ds_inst_0_util_ds_buf_3_0_IBUF_OUT",
-                "value_src": "default"
-              },
-              "FREQ_HZ": {
-                "value": "100000000",
-                "value_src": "default"
-              },
-              "FREQ_TOLERANCE_HZ": {
-                "value": "0",
-                "value_src": "default"
-              },
-              "INSERT_VIP": {
-                "value": "0",
-                "value_src": "default"
-              },
               "LAYERED_METADATA": {
                 "value": "undef",
-                "value_src": "default"
-              },
-              "PHASE": {
-                "value": "0.0",
                 "value_src": "default"
               }
             }
