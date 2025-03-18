@@ -20,6 +20,7 @@
 // 2025-01-03  Cristian  Gingu        Add task check_r_data_array_1_pixel for ip2_test5
 // 2025-01-17  Cristian  Gingu        Split tb_testcase=T3 into T31 and T32 to-be-used by Benjamin Parpillon
 // 2025-01-17  Cristian  Gingu        Update task w_cfg_static_random(integer index) and  task check_r_cfg_static(integer index) for OP_CODE_W_CFG_STATIC_0/1
+// 2025-01-18  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, to illustrate sampling of either current-bit (TB PASS) or previous-bit (TB FAIL)
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -1150,9 +1151,15 @@ module fw_ipx_wrap_tb ();
     w_cfg_static_fixed(.index(0));
     tb_number   = 502;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+    for (tb_i_test = 0; tb_i_test <= 5; tb_i_test++) begin
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h04;                      // on clock domain fw_axi_clk
+      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 4 statements
+//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
+//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
+//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
+//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
       tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
       tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
@@ -1198,9 +1205,15 @@ module fw_ipx_wrap_tb ();
     w_cfg_static_fixed(.index(0));
     tb_number   = 602;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+    for (tb_i_test = 0; tb_i_test <= 5; tb_i_test++) begin
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h05;                      // on clock domain fw_axi_clk
+      tb_test_sample           = 6'h05;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 4 statements
+//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
+//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
+//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
+//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
       tb_test_number           = test_number_2;              // on clock domain fw_axi_clk
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
       tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
@@ -1241,7 +1254,7 @@ module fw_ipx_wrap_tb ();
     tb_i_test   = 0;
     #(5*fw_axi_clk_period);
     // Use predefined BXCLK/ANA 40MHz with 5ns delay
-    tb_bxclk_period            = 6'h0A;                     // on clock domain fw_axi_clk
+    tb_bxclk_period            = 6'h0A;                    // on clock domain fw_axi_clk
     tb_bxclk_delay             = 5'h4;                     // on clock domain fw_axi_clk
     tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
     tb_super_pix_sel           = 1'h0;                     // on clock domain fw_axi_clk
@@ -1301,7 +1314,7 @@ module fw_ipx_wrap_tb ();
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
     for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h05;                      // on clock domain fw_axi_clk
+      tb_test_sample           = 6'h07;                      // on clock domain fw_axi_clk
       tb_test_number           = test_number_4;              // on clock domain fw_axi_clk
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
       tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
@@ -1384,7 +1397,7 @@ module fw_ipx_wrap_tb ();
       tb_number   = 905;                                     // BXCLK/ANA is programmed
       #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
       tb_test_delay            = 6'h08+(tb_i_test & 6'h3F);  // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h05;                      // on clock domain fw_axi_clk
+      tb_test_sample           = 6'h08;                      // on clock domain fw_axi_clk
       tb_test_number           = test_number_5;              // on clock domain fw_axi_clk
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
       tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
