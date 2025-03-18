@@ -1153,7 +1153,7 @@ module fw_ipx_wrap_tb ();
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
     for (tb_i_test = 0; tb_i_test <= 5; tb_i_test++) begin
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 4 statements
+      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 6 statements
 //      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
 //      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
 //      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
@@ -1207,7 +1207,7 @@ module fw_ipx_wrap_tb ();
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
     for (tb_i_test = 0; tb_i_test <= 5; tb_i_test++) begin
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h05;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 4 statements
+      tb_test_sample           = 6'h05;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 6 statements
 //      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
 //      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
 //      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
