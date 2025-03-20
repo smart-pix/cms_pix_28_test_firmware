@@ -1151,7 +1151,7 @@ module fw_ipx_wrap_tb ();
     w_cfg_static_fixed(.index(0));
     tb_number   = 502;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 5; tb_i_test++) begin
+    for (tb_i_test = 0; tb_i_test <= 13; tb_i_test++) begin
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
       tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 6 statements
 //      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
@@ -1160,6 +1160,14 @@ module fw_ipx_wrap_tb ();
 //      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
 //      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
 //      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
+//      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
+//      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0
+//      if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
+//      if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
       tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
       tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
