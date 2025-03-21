@@ -21,7 +21,7 @@
 // 2025-03-17  Cristian  Gingu        Split tb_testcase=T3 into T31 and T32 to-be-used by Benjamin Parpillon
 // 2025-03-17  Cristian  Gingu        Update task w_cfg_static_random(integer index) and  task check_r_cfg_static(integer index) for OP_CODE_W_CFG_STATIC_0/1
 // 2025-03-18  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, to illustrate sampling of either current-bit (TB PASS) or previous-bit (TB FAIL)
-// 2025-03-21  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, tb_test_delay for 14 values; add code for scan_in_del1,2,3,4
+// 2025-03-21  Cristian  Gingu        Upgrade test-case T5 to include change of tb_test_delay; add code for scan_in_del1,2,3,4
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
