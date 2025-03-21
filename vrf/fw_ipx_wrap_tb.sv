@@ -18,9 +18,10 @@
 // 2024-11-27  Cristian  Gingu        Increase dnn_reg_width from 48-bits to 64-bits
 // 2024-12-18  Cristian  Gingu        Add test_number_5 for ip2_test5
 // 2025-01-03  Cristian  Gingu        Add task check_r_data_array_1_pixel for ip2_test5
-// 2025-01-17  Cristian  Gingu        Split tb_testcase=T3 into T31 and T32 to-be-used by Benjamin Parpillon
-// 2025-01-17  Cristian  Gingu        Update task w_cfg_static_random(integer index) and  task check_r_cfg_static(integer index) for OP_CODE_W_CFG_STATIC_0/1
-// 2025-01-18  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, to illustrate sampling of either current-bit (TB PASS) or previous-bit (TB FAIL)
+// 2025-03-17  Cristian  Gingu        Split tb_testcase=T3 into T31 and T32 to-be-used by Benjamin Parpillon
+// 2025-03-17  Cristian  Gingu        Update task w_cfg_static_random(integer index) and  task check_r_cfg_static(integer index) for OP_CODE_W_CFG_STATIC_0/1
+// 2025-03-18  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, to illustrate sampling of either current-bit (TB PASS) or previous-bit (TB FAIL)
+// 2025-03-21  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, tb_test_delay for 14 values; add code for scan_in_del1,2,3,4
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -245,10 +246,21 @@ module fw_ipx_wrap_tb ();
 
   // Inputs from DUT
   assign config_out          = 1'b0;
+  logic scan_in_del1         = 1'b0;
+  logic scan_in_del2         = 1'b0;
+  logic scan_in_del3         = 1'b0;
+  logic scan_in_del4         = 1'b0;
   always @(posedge fw_pl_clk1) begin
-    // arbitrary one clock delay
+    // arbitrary ONE clock delay
     scan_out      <=  scan_in;
     scan_out_test <= ~scan_in;
+    // select arbitrary TWO,THREE,FOUR,FIVE clock delay
+//    scan_in_del1  <=  scan_in;
+//    scan_in_del2  <=  scan_in_del1;
+//    scan_in_del3  <=  scan_in_del2;
+//    scan_in_del4  <=  scan_in_del3;
+//    scan_out      <=  scan_in_del4;
+//    scan_out_test <= ~scan_in_del4;
   end
 
   always @(posedge fw_pl_clk1) begin : dnn_proc
@@ -1152,26 +1164,51 @@ module fw_ipx_wrap_tb ();
     tb_number   = 502;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
     for (tb_i_test = 0; tb_i_test <= 13; tb_i_test++) begin
+      //
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 6 statements
-//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
-//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
-//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
-//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
-//      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
-//      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0
-//      if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
-//      if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 14 statements
+      // the following statements and PASS / FAIL are for different values of tb_test_delay = 6'h08;                               6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08
+//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  PASS  PASS  PASS  PASS  FAIL
+//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  FAIL  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  FAIL  FAIL  PASS  PASS  PASS  PASS
+//      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS
+//      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
       tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
       tb_test_loopback         = (tb_i_test & 2'h1)>>0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
       tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
       tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+      //
+//      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
+//      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 14 statements
+//      // the following statements and PASS / FAIL are for different values of tb_test_delay = 6'h08;                               6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08 6'h08+FOUR-more-2.5ns-delay-scan-in-to-scan-out
+//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL
+//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL
+//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  PASS  PASS  PASS  PASS  PASS  FAIL
+//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  FAIL  PASS  PASS  PASS  PASS  PASS  PASS  FAIL
+//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  FAIL  PASS  PASS  PASS  PASS  PASS  FAIL
+//      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  FAIL  FAIL  PASS  PASS  PASS  PASS  FAIL
+//      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS  PASS  PASS
+//      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS  PASS
+//      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS
+//      if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL
+//      if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
+//      tb_test_loopback         = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+//      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
+//      tb_test_mask_reset_not   = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+      //
       w_execute();
       tb_number   = 503;
       #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test1_o_status_done is asserted
@@ -1412,7 +1449,7 @@ module fw_ipx_wrap_tb ();
       tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
       w_execute();
       tb_number   = 906;
-      #(tb_repeat_pixel*(770+tb_scan_load_delay+3)*tb_bxclk_period*fw_pl_clk1_period); // execution: wait for at least tb_repeat_pixel*(1*768+1) BXCLK cycles; alternatively check when sm_test5_o_status_done is asserted
+      #(tb_repeat_pixel*(770+tb_scan_load_delay+4)*tb_bxclk_period*fw_pl_clk1_period); // execution: wait for at least tb_repeat_pixel*(1*768+1) BXCLK cycles; alternatively check when sm_test5_o_status_done is asserted
       if(sw_read32_1[status_index_test5_done]===1'b1) begin
         $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test5 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_pixel()...check_r_data_array_1_pixel() PIX[%03d]=%03b", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_select_pixel, tb_w_cfg_pixels_256x3[tb_select_pixel]);
       end else begin
