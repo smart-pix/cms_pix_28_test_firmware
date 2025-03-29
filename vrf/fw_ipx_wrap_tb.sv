@@ -250,17 +250,22 @@ module fw_ipx_wrap_tb ();
   logic scan_in_del2         = 1'b0;
   logic scan_in_del3         = 1'b0;
   logic scan_in_del4         = 1'b0;
-  always @(posedge fw_pl_clk1) begin
-    // arbitrary ONE clock delay
+//  always @(posedge fw_pl_clk1) begin
+//    // arbitrary ONE clock delay
+//    scan_out      <=  scan_in;
+//    scan_out_test <= ~scan_in;
+//    // select arbitrary TWO,THREE,FOUR,FIVE clock delay
+////    scan_in_del1  <=  scan_in;
+////    scan_in_del2  <=  scan_in_del1;
+////    scan_in_del3  <=  scan_in_del2;
+////    scan_in_del4  <=  scan_in_del3;
+////    scan_out      <=  scan_in_del4;
+////    scan_out_test <= ~scan_in_del4;
+//  end
+  always @(posedge bxclk) begin
+    // this emulation is more close to ASIC behavior => scan_out toggle @(posedge bxclk)
     scan_out      <=  scan_in;
     scan_out_test <= ~scan_in;
-    // select arbitrary TWO,THREE,FOUR,FIVE clock delay
-//    scan_in_del1  <=  scan_in;
-//    scan_in_del2  <=  scan_in_del1;
-//    scan_in_del3  <=  scan_in_del2;
-//    scan_in_del4  <=  scan_in_del3;
-//    scan_out      <=  scan_in_del4;
-//    scan_out_test <= ~scan_in_del4;
   end
 
   always @(posedge fw_pl_clk1) begin : dnn_proc
@@ -1163,35 +1168,35 @@ module fw_ipx_wrap_tb ();
     w_cfg_static_fixed(.index(0));
     tb_number   = 502;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 13; tb_i_test++) begin
-      //
-      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 14 statements
-      // the following statements and PASS / FAIL are for different values of tb_test_delay = 6'h08;                               6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08
-//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
-//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  PASS  PASS  PASS  PASS  FAIL
-//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  FAIL  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  FAIL  FAIL  PASS  PASS  PASS  PASS
-//      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS
-//      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
-//      if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-//      if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
-      tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
-      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
-      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
-      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+    for (tb_i_test = 0; tb_i_test <= 9; tb_i_test++) begin
       //
 //      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
 //      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 14 statements
+//      // the following statements and PASS / FAIL are for different values of tb_test_delay = 6'h08;                               6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08
+////      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+////      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  PASS  PASS  PASS  PASS  FAIL
+////      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  FAIL  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  FAIL  FAIL  PASS  PASS  PASS  PASS
+////      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS
+////      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+////      if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+////      if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1 PASS  PASS  PASS  PASS  PASS  PASS  PASS  PASS
+//      tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
+//      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+//      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
+//      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+      //
+//      tb_test_delay            = 6'h09;                      // on clock domain fw_axi_clk
+//      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 14 statements
 //      // the following statements and PASS / FAIL are for different values of tb_test_delay = 6'h08;                               6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08 6'h08+FOUR-more-2.5ns-delay-scan-in-to-scan-out
 //      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL
-//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
 //      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL
 //      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  PASS  PASS  PASS  PASS  PASS  FAIL
 //      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  FAIL  PASS  PASS  PASS  PASS  PASS  PASS  FAIL
@@ -1200,14 +1205,35 @@ module fw_ipx_wrap_tb ();
 //      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS  PASS  PASS
 //      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS  PASS
 //      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS
-//      if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL
-//      if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
-//      if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
-//      if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      //if(tb_i_test==10) tb_test_sample = 6'h09;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL
+//      //if(tb_i_test==11) tb_test_sample = 6'h0A;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      //if(tb_i_test==12) tb_test_sample = 6'h0B;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
+//      //if(tb_i_test==13) tb_test_sample = 6'h0C;              // this will FAIL - sampling CORRECT  scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  PASS  PASS  PASS  FAIL  FAIL  FAIL
 //      tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
 //      tb_test_loopback         = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
 //      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
 //      tb_test_mask_reset_not   = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+      //
+      // use this section to record behavior when scan_out test-bench emulation is more close to ASIC behavior => scan_out==scan_in BUT make it toggle @(posedge bxclk)
+      // BXCLKANA RE is always on same counter, by design feature: counter==2
+      // BXCLK    RE is constant for this test and it is set by tb_bxclk_delay = 5'h2 => BXCLK RE will be at counter==4
+      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
+      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample                     MY SUMMARY PLOT ARRANGED LIKE BEN'S PLOTS!
+      // the following statements and PASS / FAIL are for different values of tb_test_delay (6'h08,9,A,3,4,5,6,7,8)                6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08      A   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  PASS
+      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      9   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  PASS  PASS
+      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      8   PASS  FAIL  FAIL  FAIL  FAIL  PASS  PASS  PASS
+      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      7   PASS  FAIL  FAIL  FAIL  PASS  PASS  PASS  PASS
+      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      6   PASS  FAIL  FAIL  PASS  PASS  PASS  PASS  PASS
+      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      5   FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL      4   FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL      3   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  PASS  PASS  PASS      2   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS      1   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL  PASS         6'h03 6'h04 6'h05 6'h06 6'h07 6'h08 6'h09 6'h0A
+      tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
+      tb_test_loopback         = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
+      tb_test_mask_reset_not   = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
       //
       w_execute();
       tb_number   = 503;
@@ -1231,245 +1257,245 @@ module fw_ipx_wrap_tb ();
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);
     $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
-    //---------------------------------------------------------------------------------------------
-    // Test 6: Test SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister. TEST_NUMBER==2
-    tb_testcase = "T6. SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister";
-    tb_number   = 6;
-    tb_firmware_id         = firmware_id_2;
-//    w_reset();
-    tb_number   = 601;
-    tb_i_test   = 0;
-    #(5*fw_axi_clk_period);
-    // Use predefined BXCLK/ANA 40MHz with 5ns delay
-    tb_bxclk_period            = 6'h0A;                    // on clock domain fw_axi_clk
-    tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
-    tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
-    tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
-    tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
-    tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
-    w_cfg_static_fixed(.index(0));
-    tb_number   = 602;                                     // BXCLK/ANA is programmed
-    #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 5; tb_i_test++) begin
-      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h05;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 6 statements
-//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
-//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
-//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
-//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
-      tb_test_number           = test_number_2;              // on clock domain fw_axi_clk
-      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
-      tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
-      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
-      w_execute();
-      tb_number   = 603;
-      #(2*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);         // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test2_o_status_done is asserted
-      if(sw_read32_1[status_index_test2_done]===1'b1) begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback);
-      end else begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test2 in loopback=%01d NOT DONE", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback);
-        tb_err[tb_err_index_test2] = 1'b1;
-      end
-      #(10*fw_axi_clk_period);
-      tb_number   = 604;
-      // READ fw_op_code_r_data_array_0
-      check_r_data_array_0_counter(.read_n_32bit_words(48));   // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_2
-      #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
-      tb_number   = 605;
-      // READ fw_op_code_r_data_array_1
-      check_r_data_array_1_counter_b(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_2
-      #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
-    end
-    tb_firmware_id = firmware_id_none;
-    #(5*fw_axi_clk_period);
-    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
-    //---------------------------------------------------------------------------------------------
-    // Test 7: Test DNN ReadOut. TEST_NUMBER==3
-    tb_testcase = "T7. DNN ReadOut";
-    tb_number   = 7;
-    tb_firmware_id         = firmware_id_2;
-//    w_reset();
-    tb_dnn_reg_0_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_dnn_reg_1_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_dnn_reg_0_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_dnn_reg_1_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_number   = 701;
-    tb_i_test   = 0;
-    #(5*fw_axi_clk_period);
-    // Use predefined BXCLK/ANA 40MHz with 5ns delay
-    tb_bxclk_period            = 6'h0A;                    // on clock domain fw_axi_clk
-    tb_bxclk_delay             = 5'h4;                     // on clock domain fw_axi_clk
-    tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
-    tb_super_pix_sel           = 1'h0;                     // on clock domain fw_axi_clk
-    tb_scan_load_delay         = 6'h05;                    // on clock domain fw_axi_clk
-    tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
-    w_cfg_static_fixed(.index(0));
-    tb_number   = 702;                                     // BXCLK/ANA is programmed
-    #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
-      tb_test_delay            = 6'h05;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h06;                      // on clock domain fw_axi_clk
-      tb_test_number           = test_number_3;              // on clock domain fw_axi_clk
-      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
-      tb_test_trig_out_phase   = 6'h03;                      // on clock domain fw_axi_clk
-      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
-      w_execute();
-      tb_number   = 703;
-//  #(2*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);         // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test2_o_status_done is asserted
-      #((5+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);             // execution: wait for at least 5 BXCLK cycles; alternatively check when sm_test3_o_status_done;
-      if(sw_read32_1[status_index_test3_done]===1'b1) begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test3 in loopback=%01d DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h; starting to check readout data: calling check_r_data_array_0_dnn()...", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
-      end else begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test3 in loopback=%01d NOT DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
-        tb_err[tb_err_index_test3] = 1'b1;
-      end
-      #(10*fw_axi_clk_period);
-      tb_number   = 704;
-      // READ fw_op_code_r_data_array_0
-      check_r_data_array_n_dnn(.r_data_array_n(0));          // readout: R_DATA_ARRAY_0 for test_number_3;
-      #(10*fw_axi_clk_period);                               // readout: wait for at least 4 AXI clock cycles
-    end
-    tb_firmware_id = firmware_id_none;
-    #(5*fw_axi_clk_period);
-    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
-    //---------------------------------------------------------------------------------------------
-    // Test 8: Test SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister (see Test 6) + Test DNN ReadOut (see Test 7). TEST_NUMBER==4
-    tb_testcase = "T8. SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister + DNN ReadOut";
-    tb_number   = 8;
-    tb_firmware_id         = firmware_id_2;
-//    w_reset();
-    tb_dnn_reg_0_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_dnn_reg_1_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_dnn_reg_0_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_dnn_reg_1_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
-    tb_number   = 801;
-    tb_i_test   = 0;
-    #(5*fw_axi_clk_period);
-    // Use predefined BXCLK/ANA 40MHz with 5ns delay
-    tb_bxclk_period            = 6'h28;                    // on clock domain fw_axi_clk
-    tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
-    tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
-    tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
-    tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
-    tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
-    w_cfg_static_fixed(.index(0));
-    tb_number   = 802;                                     // BXCLK/ANA is programmed
-    #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
-      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h07;                      // on clock domain fw_axi_clk
-      tb_test_number           = test_number_4;              // on clock domain fw_axi_clk
-      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
-      tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
-      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
-      w_execute();
-      tb_number   = 803;
-      #(2*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);         // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test4_o_status_done is asserted
-      if(sw_read32_1[status_index_test4_done]===1'b1) begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test4 in loopback=%01d DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h; starting to check readout data: calling check_r_data_array_0_counter()...check_r_data_array_1_dnn()", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
-      end else begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test4 in loopback=%01d NOT DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
-        tb_err[tb_err_index_test4] = 1'b1;
-      end
-      #(10*fw_axi_clk_period);
-      tb_number   = 804;
-      // READ fw_op_code_r_data_array_0
-      check_r_data_array_0_counter(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_4
-      #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
-      tb_number   = 805;
-      // READ fw_op_code_r_data_array_1
-      check_r_data_array_n_dnn(.r_data_array_n(1));          // readout: R_DATA_ARRAY_1 for test_number_3;
-      #(5*fw_axi_clk_period);                                // readout: wait for at least 4 AXI clock cycles
-    end
-    tb_firmware_id = firmware_id_none;
-    #(5*fw_axi_clk_period);
-    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
-    //---------------------------------------------------------------------------------------------
-    // Test 9: Test SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister (see Test 6). TEST_NUMBER==5
-    tb_testcase = "T9. SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister";
-    tb_number   = 9;
-    //logic [255:0][2:0]  tb_w_cfg_pixels_256x3;               // test_number_5: [256-pixels][3-bits-per-pixel] ==  768-bits
-    //logic [256*16-1:0]  tb_w_cfg_pixels_4096;                // test_number_5: [256 * 16  ]                   == 4096-bits
-    //logic [255:0][15:0] tb_w_cfg_pixels_256x16;              // test_number_5: [256       ][16              ] == 4096-bits
-    tb_firmware_id = firmware_id_2;
-    tb_i_test      = 0;
-    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
-      tb_w_cfg_pixels_256x3  = pixel_cfg_array();
-      #(5*fw_axi_clk_period);
-      $display("time=%06.2f test5; PIX[015...000] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 15:  0]);
-      $display("time=%06.2f test5; PIX[031...016] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 31: 16]);
-      $display("time=%06.2f test5; PIX[047...032] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 47: 32]);
-      $display("time=%06.2f test5; PIX[063...048] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 63: 48]);
-      $display("time=%06.2f test5; PIX[079...064] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 79: 64]);
-      $display("time=%06.2f test5; PIX[095...080] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 95: 80]);
-      $display("time=%06.2f test5; PIX[111...096] = %b", $realtime(), tb_w_cfg_pixels_256x3[111: 96]);
-      $display("time=%06.2f test5; PIX[127...112] = %b", $realtime(), tb_w_cfg_pixels_256x3[127:112]);
-      $display("time=%06.2f test5; PIX[143...128] = %b", $realtime(), tb_w_cfg_pixels_256x3[143:128]);
-      $display("time=%06.2f test5; PIX[159...144] = %b", $realtime(), tb_w_cfg_pixels_256x3[159:144]);
-      $display("time=%06.2f test5; PIX[175...160] = %b", $realtime(), tb_w_cfg_pixels_256x3[175:160]);
-      $display("time=%06.2f test5; PIX[191...176] = %b", $realtime(), tb_w_cfg_pixels_256x3[191:176]);
-      $display("time=%06.2f test5; PIX[207...192] = %b", $realtime(), tb_w_cfg_pixels_256x3[207:192]);
-      $display("time=%06.2f test5; PIX[223...208] = %b", $realtime(), tb_w_cfg_pixels_256x3[223:208]);
-      $display("time=%06.2f test5; PIX[239...224] = %b", $realtime(), tb_w_cfg_pixels_256x3[239:224]);
-      $display("time=%06.2f test5; PIX[255...240] = %b", $realtime(), tb_w_cfg_pixels_256x3[255:240]);
-      //for(int i=0; i<16; i++)begin
-      //  $display("time=%06.2f test5; PIX[%03d..%03d] = %b", $realtime(), i*16, (i+1)*16-1, tb_w_cfg_pixels_256x3[i*16+15 : i*16]);  // xmvlog: *E,NOTPAR (./vrf/fw_ipx_wrap_tb.sv,1247|113): Illegal operand for constant expression [4(IEEE)].
-      //end
-      tb_number   = 901;
-      // WRITE fw_op_code_w_cfg_array_0
-      w_cfg_array_0_pixel();
-      #(5*fw_axi_clk_period);
-      tb_number   = 902;
-      // READ fw_op_code_r_cfg_array_0
-      check_r_cfg_array_0_pixel();
-      #(5*fw_axi_clk_period);
-      tb_number   = 903;
-      // Use predefined BXCLK/ANA 40MHz with 5ns delay
-      tb_bxclk_period            = 6'h28;                    // on clock domain fw_axi_clk
-      tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
-      tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
-      tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
-      tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
-      tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
-      w_cfg_static_fixed(.index(0));
-      #(5*fw_axi_clk_period);
-      tb_number   = 904;
-      tb_select_pixel            = $urandom_range(2**8-1, 0) & 8'hFF;
-      tb_repeat_pixel            = 11'h010; // $urandom_range(1365, 1) & 11'h7FF;//11'h00C;
-      w_cfg_static_fixed(.index(1));
-      tb_number   = 905;                                     // BXCLK/ANA is programmed
-      #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-      tb_test_delay            = 6'h08+(tb_i_test & 6'h3F);  // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_number           = test_number_5;              // on clock domain fw_axi_clk
-      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
-      tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
-      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
-      w_execute();
-      tb_number   = 906;
-      #(tb_repeat_pixel*(770+tb_scan_load_delay+4)*tb_bxclk_period*fw_pl_clk1_period); // execution: wait for at least tb_repeat_pixel*(1*768+1) BXCLK cycles; alternatively check when sm_test5_o_status_done is asserted
-      if(sw_read32_1[status_index_test5_done]===1'b1) begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test5 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_pixel()...check_r_data_array_1_pixel() PIX[%03d]=%03b", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_select_pixel, tb_w_cfg_pixels_256x3[tb_select_pixel]);
-      end else begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test5 in loopback=%01d NOT DONE", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback);
-        tb_err[tb_err_index_test5] = 1'b1;
-      end
-      #(10*fw_axi_clk_period);
-      tb_number   = 907;
-      // READ fw_op_code_r_data_array_0
-      check_r_data_array_0_pixel(.read_n_32bit_words(24));   // readout: R_DATA_ARRAY_0 for test_number_5: number of 32-bit words is 24 for firmware_id_2 and test_number_5
-      #(25*fw_axi_clk_period);                               // readout: wait for at least 24 AXI clock cycles
-      tb_number   = 908;
-      // READ fw_op_code_r_data_array_1
-      check_r_data_array_1_pixel(.read_n_32bit_words(128));  // readout: R_DATA_ARRAY_1 for test_number_5: number of 32-bit words is 128 for firmware_id_2 and test_number_5
-      #(150*fw_axi_clk_period);                              // readout: wait for at least 4096/32=128 AXI clock cycles
-    end
-    tb_firmware_id = firmware_id_none;
-    #(5*fw_axi_clk_period);
-    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
-    //---------------------------------------------------------------------------------------------
+//    //---------------------------------------------------------------------------------------------
+//    // Test 6: Test SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister. TEST_NUMBER==2
+//    tb_testcase = "T6. SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister";
+//    tb_number   = 6;
+//    tb_firmware_id         = firmware_id_2;
+////    w_reset();
+//    tb_number   = 601;
+//    tb_i_test   = 0;
+//    #(5*fw_axi_clk_period);
+//    // Use predefined BXCLK/ANA 40MHz with 5ns delay
+//    tb_bxclk_period            = 6'h0A;                    // on clock domain fw_axi_clk
+//    tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
+//    tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
+//    tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
+//    tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
+//    tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
+//    w_cfg_static_fixed(.index(0));
+//    tb_number   = 602;                                     // BXCLK/ANA is programmed
+//    #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
+//    for (tb_i_test = 0; tb_i_test <= 5; tb_i_test++) begin
+//      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
+//      tb_test_sample           = 6'h05;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 6 statements
+////      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
+////      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+////      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0
+////      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+////      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0
+////      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==1
+//      tb_test_number           = test_number_2;              // on clock domain fw_axi_clk
+//      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
+//      tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
+//      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+//      w_execute();
+//      tb_number   = 603;
+//      #(2*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);         // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test2_o_status_done is asserted
+//      if(sw_read32_1[status_index_test2_done]===1'b1) begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test2 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback);
+//      end else begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test2 in loopback=%01d NOT DONE", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback);
+//        tb_err[tb_err_index_test2] = 1'b1;
+//      end
+//      #(10*fw_axi_clk_period);
+//      tb_number   = 604;
+//      // READ fw_op_code_r_data_array_0
+//      check_r_data_array_0_counter(.read_n_32bit_words(48));   // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_2
+//      #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
+//      tb_number   = 605;
+//      // READ fw_op_code_r_data_array_1
+//      check_r_data_array_1_counter_b(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_2
+//      #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
+//    end
+//    tb_firmware_id = firmware_id_none;
+//    #(5*fw_axi_clk_period);
+//    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+//    //---------------------------------------------------------------------------------------------
+//    // Test 7: Test DNN ReadOut. TEST_NUMBER==3
+//    tb_testcase = "T7. DNN ReadOut";
+//    tb_number   = 7;
+//    tb_firmware_id         = firmware_id_2;
+////    w_reset();
+//    tb_dnn_reg_0_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_dnn_reg_1_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_dnn_reg_0_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_dnn_reg_1_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_number   = 701;
+//    tb_i_test   = 0;
+//    #(5*fw_axi_clk_period);
+//    // Use predefined BXCLK/ANA 40MHz with 5ns delay
+//    tb_bxclk_period            = 6'h0A;                    // on clock domain fw_axi_clk
+//    tb_bxclk_delay             = 5'h4;                     // on clock domain fw_axi_clk
+//    tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
+//    tb_super_pix_sel           = 1'h0;                     // on clock domain fw_axi_clk
+//    tb_scan_load_delay         = 6'h05;                    // on clock domain fw_axi_clk
+//    tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
+//    w_cfg_static_fixed(.index(0));
+//    tb_number   = 702;                                     // BXCLK/ANA is programmed
+//    #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
+//    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+//      tb_test_delay            = 6'h05;                      // on clock domain fw_axi_clk
+//      tb_test_sample           = 6'h06;                      // on clock domain fw_axi_clk
+//      tb_test_number           = test_number_3;              // on clock domain fw_axi_clk
+//      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
+//      tb_test_trig_out_phase   = 6'h03;                      // on clock domain fw_axi_clk
+//      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+//      w_execute();
+//      tb_number   = 703;
+////  #(2*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);         // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test2_o_status_done is asserted
+//      #((5+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);             // execution: wait for at least 5 BXCLK cycles; alternatively check when sm_test3_o_status_done;
+//      if(sw_read32_1[status_index_test3_done]===1'b1) begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test3 in loopback=%01d DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h; starting to check readout data: calling check_r_data_array_0_dnn()...", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
+//      end else begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test3 in loopback=%01d NOT DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
+//        tb_err[tb_err_index_test3] = 1'b1;
+//      end
+//      #(10*fw_axi_clk_period);
+//      tb_number   = 704;
+//      // READ fw_op_code_r_data_array_0
+//      check_r_data_array_n_dnn(.r_data_array_n(0));          // readout: R_DATA_ARRAY_0 for test_number_3;
+//      #(10*fw_axi_clk_period);                               // readout: wait for at least 4 AXI clock cycles
+//    end
+//    tb_firmware_id = firmware_id_none;
+//    #(5*fw_axi_clk_period);
+//    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+//    //---------------------------------------------------------------------------------------------
+//    // Test 8: Test SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister (see Test 6) + Test DNN ReadOut (see Test 7). TEST_NUMBER==4
+//    tb_testcase = "T8. SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister + DNN ReadOut";
+//    tb_number   = 8;
+//    tb_firmware_id         = firmware_id_2;
+////    w_reset();
+//    tb_dnn_reg_0_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_dnn_reg_1_random[63:32] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_dnn_reg_0_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_dnn_reg_1_random[31: 0] = $urandom_range(2**32-1, 0) & 32'hFFFFFFFF;
+//    tb_number   = 801;
+//    tb_i_test   = 0;
+//    #(5*fw_axi_clk_period);
+//    // Use predefined BXCLK/ANA 40MHz with 5ns delay
+//    tb_bxclk_period            = 6'h28;                    // on clock domain fw_axi_clk
+//    tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
+//    tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
+//    tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
+//    tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
+//    tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
+//    w_cfg_static_fixed(.index(0));
+//    tb_number   = 802;                                     // BXCLK/ANA is programmed
+//    #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
+//    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+//      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
+//      tb_test_sample           = 6'h07;                      // on clock domain fw_axi_clk
+//      tb_test_number           = test_number_4;              // on clock domain fw_axi_clk
+//      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
+//      tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
+//      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+//      w_execute();
+//      tb_number   = 803;
+//      #(2*(770+tb_scan_load_delay+2)*tb_bxclk_period*fw_pl_clk1_period);         // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test4_o_status_done is asserted
+//      if(sw_read32_1[status_index_test4_done]===1'b1) begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test4 in loopback=%01d DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h; starting to check readout data: calling check_r_data_array_0_counter()...check_r_data_array_1_dnn()", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
+//      end else begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test4 in loopback=%01d NOT DONE tb_dnn_reg_0_random=%016h tb_dnn_reg_1_random=%016h", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_dnn_reg_0_random, tb_dnn_reg_1_random);
+//        tb_err[tb_err_index_test4] = 1'b1;
+//      end
+//      #(10*fw_axi_clk_period);
+//      tb_number   = 804;
+//      // READ fw_op_code_r_data_array_0
+//      check_r_data_array_0_counter(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_4
+//      #(50*fw_axi_clk_period);                               // readout: wait for at least 48 AXI clock cycles
+//      tb_number   = 805;
+//      // READ fw_op_code_r_data_array_1
+//      check_r_data_array_n_dnn(.r_data_array_n(1));          // readout: R_DATA_ARRAY_1 for test_number_3;
+//      #(5*fw_axi_clk_period);                                // readout: wait for at least 4 AXI clock cycles
+//    end
+//    tb_firmware_id = firmware_id_none;
+//    #(5*fw_axi_clk_period);
+//    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+//    //---------------------------------------------------------------------------------------------
+//    // Test 9: Test SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister (see Test 6). TEST_NUMBER==5
+//    tb_testcase = "T9. SCAN-CHAIN-MODULE as a parallel-in / serial-out shift-tegister";
+//    tb_number   = 9;
+//    //logic [255:0][2:0]  tb_w_cfg_pixels_256x3;               // test_number_5: [256-pixels][3-bits-per-pixel] ==  768-bits
+//    //logic [256*16-1:0]  tb_w_cfg_pixels_4096;                // test_number_5: [256 * 16  ]                   == 4096-bits
+//    //logic [255:0][15:0] tb_w_cfg_pixels_256x16;              // test_number_5: [256       ][16              ] == 4096-bits
+//    tb_firmware_id = firmware_id_2;
+//    tb_i_test      = 0;
+//    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+//      tb_w_cfg_pixels_256x3  = pixel_cfg_array();
+//      #(5*fw_axi_clk_period);
+//      $display("time=%06.2f test5; PIX[015...000] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 15:  0]);
+//      $display("time=%06.2f test5; PIX[031...016] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 31: 16]);
+//      $display("time=%06.2f test5; PIX[047...032] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 47: 32]);
+//      $display("time=%06.2f test5; PIX[063...048] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 63: 48]);
+//      $display("time=%06.2f test5; PIX[079...064] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 79: 64]);
+//      $display("time=%06.2f test5; PIX[095...080] = %b", $realtime(), tb_w_cfg_pixels_256x3[ 95: 80]);
+//      $display("time=%06.2f test5; PIX[111...096] = %b", $realtime(), tb_w_cfg_pixels_256x3[111: 96]);
+//      $display("time=%06.2f test5; PIX[127...112] = %b", $realtime(), tb_w_cfg_pixels_256x3[127:112]);
+//      $display("time=%06.2f test5; PIX[143...128] = %b", $realtime(), tb_w_cfg_pixels_256x3[143:128]);
+//      $display("time=%06.2f test5; PIX[159...144] = %b", $realtime(), tb_w_cfg_pixels_256x3[159:144]);
+//      $display("time=%06.2f test5; PIX[175...160] = %b", $realtime(), tb_w_cfg_pixels_256x3[175:160]);
+//      $display("time=%06.2f test5; PIX[191...176] = %b", $realtime(), tb_w_cfg_pixels_256x3[191:176]);
+//      $display("time=%06.2f test5; PIX[207...192] = %b", $realtime(), tb_w_cfg_pixels_256x3[207:192]);
+//      $display("time=%06.2f test5; PIX[223...208] = %b", $realtime(), tb_w_cfg_pixels_256x3[223:208]);
+//      $display("time=%06.2f test5; PIX[239...224] = %b", $realtime(), tb_w_cfg_pixels_256x3[239:224]);
+//      $display("time=%06.2f test5; PIX[255...240] = %b", $realtime(), tb_w_cfg_pixels_256x3[255:240]);
+//      //for(int i=0; i<16; i++)begin
+//      //  $display("time=%06.2f test5; PIX[%03d..%03d] = %b", $realtime(), i*16, (i+1)*16-1, tb_w_cfg_pixels_256x3[i*16+15 : i*16]);  // xmvlog: *E,NOTPAR (./vrf/fw_ipx_wrap_tb.sv,1247|113): Illegal operand for constant expression [4(IEEE)].
+//      //end
+//      tb_number   = 901;
+//      // WRITE fw_op_code_w_cfg_array_0
+//      w_cfg_array_0_pixel();
+//      #(5*fw_axi_clk_period);
+//      tb_number   = 902;
+//      // READ fw_op_code_r_cfg_array_0
+//      check_r_cfg_array_0_pixel();
+//      #(5*fw_axi_clk_period);
+//      tb_number   = 903;
+//      // Use predefined BXCLK/ANA 40MHz with 5ns delay
+//      tb_bxclk_period            = 6'h28;                    // on clock domain fw_axi_clk
+//      tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
+//      tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
+//      tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
+//      tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
+//      tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
+//      w_cfg_static_fixed(.index(0));
+//      #(5*fw_axi_clk_period);
+//      tb_number   = 904;
+//      tb_select_pixel            = $urandom_range(2**8-1, 0) & 8'hFF;
+//      tb_repeat_pixel            = 11'h010; // $urandom_range(1365, 1) & 11'h7FF;//11'h00C;
+//      w_cfg_static_fixed(.index(1));
+//      tb_number   = 905;                                     // BXCLK/ANA is programmed
+//      #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
+//      tb_test_delay            = 6'h08+(tb_i_test & 6'h3F);  // on clock domain fw_axi_clk
+//      tb_test_sample           = 6'h08;                      // on clock domain fw_axi_clk
+//      tb_test_number           = test_number_5;              // on clock domain fw_axi_clk
+//      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      // on clock domain fw_axi_clk
+//      tb_test_trig_out_phase   = 6'h04;                      // on clock domain fw_axi_clk
+//      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      // on clock domain fw_axi_clk
+//      w_execute();
+//      tb_number   = 906;
+//      #(tb_repeat_pixel*(770+tb_scan_load_delay+4)*tb_bxclk_period*fw_pl_clk1_period); // execution: wait for at least tb_repeat_pixel*(1*768+1) BXCLK cycles; alternatively check when sm_test5_o_status_done is asserted
+//      if(sw_read32_1[status_index_test5_done]===1'b1) begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test5 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_pixel()...check_r_data_array_1_pixel() PIX[%03d]=%03b", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_select_pixel, tb_w_cfg_pixels_256x3[tb_select_pixel]);
+//      end else begin
+//        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test5 in loopback=%01d NOT DONE", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback);
+//        tb_err[tb_err_index_test5] = 1'b1;
+//      end
+//      #(10*fw_axi_clk_period);
+//      tb_number   = 907;
+//      // READ fw_op_code_r_data_array_0
+//      check_r_data_array_0_pixel(.read_n_32bit_words(24));   // readout: R_DATA_ARRAY_0 for test_number_5: number of 32-bit words is 24 for firmware_id_2 and test_number_5
+//      #(25*fw_axi_clk_period);                               // readout: wait for at least 24 AXI clock cycles
+//      tb_number   = 908;
+//      // READ fw_op_code_r_data_array_1
+//      check_r_data_array_1_pixel(.read_n_32bit_words(128));  // readout: R_DATA_ARRAY_1 for test_number_5: number of 32-bit words is 128 for firmware_id_2 and test_number_5
+//      #(150*fw_axi_clk_period);                              // readout: wait for at least 4096/32=128 AXI clock cycles
+//    end
+//    tb_firmware_id = firmware_id_none;
+//    #(5*fw_axi_clk_period);
+//    $display("time %06.2f done: tb_testcase=%s\n%s", $realtime, tb_testcase, {80{"-"}});
+//    //---------------------------------------------------------------------------------------------
     #(500*fw_axi_clk_period);
 
     $display("%s", {80{"-"}});
