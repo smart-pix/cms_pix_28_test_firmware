@@ -22,6 +22,7 @@
 // 2025-03-17  Cristian  Gingu        Update task w_cfg_static_random(integer index) and  task check_r_cfg_static(integer index) for OP_CODE_W_CFG_STATIC_0/1
 // 2025-03-18  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, to illustrate sampling of either current-bit (TB PASS) or previous-bit (TB FAIL)
 // 2025-03-21  Cristian  Gingu        Upgrade test-case T5 to include change of tb_test_delay; add code for scan_in_del1,2,3,4
+// 2025-04-01  Cristian  Gingu        More upgrade on test-case T5 to study tb_test_sample vs tb_test_delay 2D plots and compare withe BP and AB experimental plots.
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -171,6 +172,7 @@ module fw_ipx_wrap_tb ();
   string  tb_testcase;
   integer tb_number;
   integer tb_i_test;
+  integer tb_j_test;
   logic   tb_fw_pl_clk1_initial;
   logic   tb_fw_axi_clk_initial;
   logic [31:0] tb_err;
@@ -262,10 +264,22 @@ module fw_ipx_wrap_tb ();
 ////    scan_out      <=  scan_in_del4;
 ////    scan_out_test <= ~scan_in_del4;
 //  end
+//  always @(posedge bxclk) begin
+//    // this emulation is more close to ASIC behavior => scan_out toggle @(posedge bxclk)
+//    scan_out      <=  scan_in;
+//    scan_out_test <= ~scan_in;
+//  end
   always @(posedge bxclk) begin
-    // this emulation is more close to ASIC behavior => scan_out toggle @(posedge bxclk)
-    scan_out      <=  scan_in;
-    scan_out_test <= ~scan_in;
+    // this emulation (feature1) is more close to ASIC behavior => scan_out toggle @(posedge bxclk)
+    scan_in_del1  <=  scan_in;
+  end
+  always @(posedge fw_pl_clk1) begin
+    // this emulation (feature 2) is more close to ASIC behavior => scan_out is delayed an additional 4*2.5ns
+    scan_in_del2  <=  scan_in_del1;
+    scan_in_del3  <=  scan_in_del2;
+    scan_in_del4  <=  scan_in_del3;
+    scan_out      <=  scan_in_del4;
+    scan_out_test <= ~scan_in_del4;
   end
 
   always @(posedge fw_pl_clk1) begin : dnn_proc
@@ -1159,8 +1173,8 @@ module fw_ipx_wrap_tb ();
     tb_i_test   = 0;
     #(5*fw_axi_clk_period);
     // Use predefined BXCLK/ANA 40MHz with 5ns delay
-    tb_bxclk_period            = 6'h0A;                    // on clock domain fw_axi_clk
-    tb_bxclk_delay             = 5'h2;                     // on clock domain fw_axi_clk
+    tb_bxclk_period            = 6'h28;                    // on clock domain fw_axi_clk
+    tb_bxclk_delay             = 5'h11;                    // on clock domain fw_axi_clk
     tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
     tb_super_pix_sel           = 1'h0;                     // on clock domain fw_axi_clk
     tb_scan_load_delay         = 6'h05;                    // on clock domain fw_axi_clk
@@ -1168,8 +1182,9 @@ module fw_ipx_wrap_tb ();
     w_cfg_static_fixed(.index(0));
     tb_number   = 502;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 9; tb_i_test++) begin
-      //
+    for (tb_j_test = 3; tb_j_test <= tb_bxclk_period; tb_j_test++) begin
+      for (tb_i_test = 1; tb_i_test <= tb_bxclk_period; tb_i_test++) begin
+        //
 //      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
 //      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 14 statements
 //      // the following statements and PASS / FAIL are for different values of tb_test_delay = 6'h08;                               6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08
@@ -1191,7 +1206,7 @@ module fw_ipx_wrap_tb ();
 //      tb_test_loopback         = (tb_i_test & 2'h1)>>0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
 //      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
 //      tb_test_mask_reset_not   = (tb_i_test & 2'h2)>>1;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
-      //
+        //
 //      tb_test_delay            = 6'h09;                      // on clock domain fw_axi_clk
 //      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample, use following 14 statements
 //      // the following statements and PASS / FAIL are for different values of tb_test_delay = 6'h08;                               6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08 6'h08+FOUR-more-2.5ns-delay-scan-in-to-scan-out
@@ -1213,46 +1228,151 @@ module fw_ipx_wrap_tb ();
 //      tb_test_loopback         = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
 //      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
 //      tb_test_mask_reset_not   = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
-      //
-      // use this section to record behavior when scan_out test-bench emulation is more close to ASIC behavior => scan_out==scan_in BUT make it toggle @(posedge bxclk)
-      // BXCLKANA RE is always on same counter, by design feature: counter==2
-      // BXCLK    RE is constant for this test and it is set by tb_bxclk_delay = 5'h2 => BXCLK RE will be at counter==4
-      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
-      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample                     MY SUMMARY PLOT ARRANGED LIKE BEN'S PLOTS!
-      // the following statements and PASS / FAIL are for different values of tb_test_delay (6'h08,9,A,3,4,5,6,7,8)                6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08      A   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  PASS
-      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      9   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  PASS  PASS
-      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      8   PASS  FAIL  FAIL  FAIL  FAIL  PASS  PASS  PASS
-      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      7   PASS  FAIL  FAIL  FAIL  PASS  PASS  PASS  PASS
-      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      6   PASS  FAIL  FAIL  PASS  PASS  PASS  PASS  PASS
-      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      5   FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
-      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL      4   FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
-      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL      3   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
-      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  PASS  PASS  PASS      2   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
-      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS      1   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
-      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL  PASS         6'h03 6'h04 6'h05 6'h06 6'h07 6'h08 6'h09 6'h0A
-      tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
-      tb_test_loopback         = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
-      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
-      tb_test_mask_reset_not   = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
-      //
-      w_execute();
-      tb_number   = 503;
-      #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test1_o_status_done is asserted
-      if(sw_read32_1[status_index_test1_done]===1'b1) begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test1 in loopback=%01d tb_test_mask_reset_not=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_test_mask_reset_not);
-      end else begin
-        $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test1 in loopback=%01d tb_test_mask_reset_not=%01d NOT DONE", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_test_mask_reset_not);
-        tb_err[tb_err_index_test1] = 1'b1;
+        //
+//      // use this section to record behavior when scan_out test-bench emulation is more close to ASIC behavior => scan_out==scan_in BUT make it toggle @(posedge bxclk)
+//      // BXCLKANA RE is always on same counter, by design feature: counter==2
+//      // BXCLK    RE is constant for this test and it is set by tb_bxclk_delay = 5'h2 => BXCLK RE will be at counter==4
+//      tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
+//      tb_test_sample           = 6'h04;                      // for NORMAL testing, use this statement for which TB PASS; to simulate TB FAIL due to wrong tb_test_sample                     MY SUMMARY PLOT ARRANGED LIKE BEN'S PLOTS!
+//      // the following statements and PASS / FAIL are for different values of tb_test_delay (6'h08,9,A,3,4,5,6,7,8)                6'h09 6'h0A 6'h03 6'h04 6'h05 6'h06 6'h07 6'h08      A   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  PASS
+//      if(tb_i_test==0) tb_test_sample = 6'h09;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      9   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  PASS  PASS
+//      if(tb_i_test==1) tb_test_sample = 6'h0A;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  PASS  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      8   PASS  FAIL  FAIL  FAIL  FAIL  PASS  PASS  PASS
+//      if(tb_i_test==2) tb_test_sample = 6'h01;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      7   PASS  FAIL  FAIL  FAIL  PASS  PASS  PASS  PASS
+//      if(tb_i_test==3) tb_test_sample = 6'h02;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      6   PASS  FAIL  FAIL  PASS  PASS  PASS  PASS  PASS
+//      if(tb_i_test==4) tb_test_sample = 6'h03;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  PASS  FAIL  FAIL  FAIL  FAIL  FAIL      5   FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+//      if(tb_i_test==5) tb_test_sample = 6'h04;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL      4   FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+//      if(tb_i_test==6) tb_test_sample = 6'h05;               // this will FAIL - sampling PREVIOUS scan_out bit tb_test_loopback==0 FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL      3   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+//      if(tb_i_test==7) tb_test_sample = 6'h06;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  PASS  PASS  PASS      2   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+//      if(tb_i_test==8) tb_test_sample = 6'h07;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  PASS  PASS      1   PASS  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL  FAIL
+//      if(tb_i_test==9) tb_test_sample = 6'h08;               // this will PASS - sampling CORRECT  scan_out bit tb_test_loopback==0 PASS  PASS  PASS  FAIL  FAIL  FAIL  FAIL  PASS         6'h03 6'h04 6'h05 6'h06 6'h07 6'h08 6'h09 6'h0A
+//      tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
+//      tb_test_loopback         = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+//      tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
+//      tb_test_mask_reset_not   = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+        //
+        //                            | 40  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P
+        //                            | 39  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P
+        //                            | 38  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P
+        //                            | 37  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P
+        //                            | 36  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P
+        //                            | 35  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P
+        //                            | 34  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P
+        //                            | 33  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P
+        //                            | 32  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P
+        //                            | 31  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P
+        //                            | 30  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 29  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 28  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 27  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 26  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 25  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 24  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 23  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 22  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 21  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 20  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 19  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 18  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 17  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 16  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 15  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 14  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 13  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 12  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 11  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        // 10  P  P  P  F  F  F  F  P | 10  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  9  P  P  P  F  F  F  P  P |  9  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  8  P  P  P  F  F  P  P  P |  8  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  7  F  F  F  F  F  F  F  F |  7  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  6  F  F  F  F  F  F  F  F |  6  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  5  F  F  P  F  F  F  F  F |  5  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  4  F  P  P  F  F  F  F  F |  4  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  3  P  P  P  F  F  F  F  F |  3  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  2  P  P  P  F  F  F  F  F |  2  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  1  P  P  P  F  F  F  F  F |  1  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //     3  4  5  6  7  8  9 10 |     3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+        //                            |
+        // tb_bxclk_period = 6'h0A;   | tb_bxclk_period = 6'h28;
+        // tb_bxclk_delay  = 5'h4;    | tb_bxclk_delay  = 5'h11; REPORT: /asic/projects/C/CMS_PIX_28/gingu/cms_pix_28_test_firmware/xrun_bxclk_period_h28_bxclk_delay_h11.log
+        //
+        //
+        //
+        //                            | 40  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P
+        //                            | 39  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P
+        //                            | 38  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P
+        //                            | 37  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P
+        //                            | 36  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P
+        //                            | 35  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P
+        //                            | 34  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P
+        //                            | 33  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P
+        //                            | 32  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P
+        //                            | 31  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P
+        //                            | 30  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 29  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 28  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 27  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 26  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 25  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 24  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 23  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 22  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 21  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 20  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 19  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 18  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 17  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 16  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 15  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 14  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 13  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 12  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 11  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 10  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  9  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  8  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  7  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  6  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  5  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  4  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  3  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  2  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |  1  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            |     3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+        //                            |
+        //                            | tb_bxclk_period = 6'h28; plus additional 4*2.5ns delay of scan_out after sampling with BXCLK.
+        //                            | tb_bxclk_delay  = 5'h11; REPORT: /asic/projects/C/CMS_PIX_28/gingu/cms_pix_28_test_firmware/xrun_bxclk_period_h28_bxclk_delay_h11_plus10ns.log
+        //
+        // use this section to record behavior when scan_out test-bench emulation is more close to ASIC behavior => scan_out==scan_in BUT make it toggle @(posedge bxclk)
+        // BXCLKANA RE is always on same counter, by design feature: counter==2
+        // BXCLK    RE is constant for this test and it is set by tb_bxclk_delay = 5'h2 => BXCLK RE will be at counter==4
+        tb_test_delay            = tb_j_test & 6'h3F;
+        tb_test_sample           = tb_i_test & 6'h3F;
+        tb_test_number           = test_number_1;              // on clock domain fw_axi_clk
+        tb_test_loopback         = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+        tb_test_trig_out_phase   = 6'h00;                      // on clock domain fw_axi_clk
+        tb_test_mask_reset_not   = 1'b0;      //$urandom_range(1, 0) & 1'h1;// on clock domain fw_axi_clk
+        //
+        w_execute();
+        tb_number   = 503;
+        #(2*770*tb_bxclk_period*fw_pl_clk1_period);            // execution: wait for at least 2*768+1 BXCLK cycles; alternatively check when sm_test1_o_status_done is asserted
+        if(sw_read32_1[status_index_test1_done]===1'b1) begin
+          $display("time=%06.2f tb_j_test=%01d tb_i_test=%01d tb_test_delay=%01d tb_test_sample=%01d tb_firmware_id=%01d test1 in tb_test_loopback=%01d tb_test_mask_reset_not=%01d DONE; starting to check readout data: calling check_r_data_array_0_counter()...",
+            $realtime(), tb_j_test, tb_i_test, tb_test_delay, tb_test_sample, tb_firmware_id, tb_test_loopback, tb_test_mask_reset_not);
+        end else begin
+          $display("time=%06.2f tb_j_test=%01d tb_i_test=%01d tb_test_delay=%01d tb_test_sample=%01d tb_firmware_id=%01d test1 in tb_test_loopback=%01d tb_test_mask_reset_not=%01d NOT DONE",
+            $realtime(), tb_j_test, tb_i_test, tb_test_delay, tb_test_sample, tb_firmware_id, tb_test_loopback, tb_test_mask_reset_not);
+          tb_err[tb_err_index_test1] = 1'b1;
+        end
+        #(10*fw_axi_clk_period);
+        tb_number   = 504;
+        // READ fw_op_code_r_data_array_0
+        check_r_data_array_0_counter(.read_n_32bit_words(48));   // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_1
+        #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
+        tb_number   = 505;
+        // READ fw_op_code_r_data_array_1
+        check_r_data_array_1_counter_b(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_1
+        #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
       end
-      #(10*fw_axi_clk_period);
-      tb_number   = 504;
-      // READ fw_op_code_r_data_array_0
-      check_r_data_array_0_counter(.read_n_32bit_words(48));   // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_1
-      #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
-      tb_number   = 505;
-      // READ fw_op_code_r_data_array_1
-      check_r_data_array_1_counter_b(.read_n_32bit_words(48)); // readout: number of 32-bit words is 48 for firmware_id_2 and test_number_1
-      #(50*fw_axi_clk_period);                                 // readout: wait for at least 48 AXI clock cycles
     end
     tb_firmware_id = firmware_id_none;
     #(5*fw_axi_clk_period);
