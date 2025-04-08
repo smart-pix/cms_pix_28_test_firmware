@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0x873A8437873A8437",
+      "boundary_crc": "0x2039B3D32039B3D3",
       "device": "xczu9eg-ffvb1156-2-e",
       "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd",
       "name": "cms_pix_28_fw_top_bd",
@@ -344,6 +344,15 @@
             "value_src": "default"
           }
         }
+      },
+      "bxclk_single": {
+        "direction": "O"
+      },
+      "scan_in_single": {
+        "direction": "O"
+      },
+      "scan_out_single": {
+        "direction": "O"
       }
     },
     "components": {
@@ -4175,6 +4184,9 @@
               }
             }
           },
+          "scan_out_i": {
+            "direction": "I"
+          },
           "super_pixel_sel_i": {
             "direction": "I"
           },
@@ -4218,6 +4230,15 @@
           },
           "scan_load_i": {
             "direction": "I"
+          },
+          "scan_out_single_o": {
+            "direction": "O"
+          },
+          "scan_in_single_o": {
+            "direction": "O"
+          },
+          "bxclk_single_o": {
+            "direction": "O"
           },
           "super_pixel_sel_o": {
             "direction": "O"
@@ -4745,6 +4766,7 @@
       "iob_iddr_0_scan_out_o": {
         "ports": [
           "iob_iddr_0/scan_out_o",
+          "iob_oddr_0/scan_out_i",
           "fw_top_v_0/scan_out"
         ]
       },
@@ -4764,6 +4786,12 @@
         "ports": [
           "iob_oddr_0/bxclk_o",
           "obuf_ds_0/bxclk"
+        ]
+      },
+      "iob_oddr_0_bxclk_single_o": {
+        "ports": [
+          "iob_oddr_0/bxclk_single_o",
+          "bxclk_single"
         ]
       },
       "iob_oddr_0_config_clk_o": {
@@ -4796,10 +4824,22 @@
           "obuf_ds_0/scan_in"
         ]
       },
+      "iob_oddr_0_scan_in_single_o": {
+        "ports": [
+          "iob_oddr_0/scan_in_single_o",
+          "scan_in_single"
+        ]
+      },
       "iob_oddr_0_scan_load_o": {
         "ports": [
           "iob_oddr_0/scan_load_o",
           "obuf_ds_0/scan_load"
+        ]
+      },
+      "iob_oddr_0_scan_out_single_o": {
+        "ports": [
+          "iob_oddr_0/scan_out_single_o",
+          "scan_out_single"
         ]
       },
       "iob_oddr_0_super_pixel_sel_o": {

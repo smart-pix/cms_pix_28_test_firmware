@@ -37,6 +37,9 @@
 // 2025-01-06  Cristian  Gingu        Add pipeline sm_test5_o_repeat_pixel_reg_pipe_1 for ip2_test5                      to make Timing PASS, still FAIL
 // 2025-01-06  Cristian  Gingu        Add pipeline sm_testx_o_scanchain_reg_pipe_1, sm_testx_o_scanchain_test_reg_pipe_1 to make Timing PASS, now   PASS
 // 2025-01-07  Cristian  Gingu        Add pipeline sm_test5_pipe_1 to synchronize with sm_test5_o_repeat_pixel_reg_pipe_1
+// 2025-04-03  Cristian  Gingu        In Vivado block design and iob_oddr.v, add single outputs bxclk_single and scan_in_single.
+// 2025-04-03  Cristian  Gingu        To pass timing closure for above, add pipeline for: sm_test4_pipe_1, sm_test4_o_dnn_output_0/1_pipe_1, sm_test4_o_bxclk_ana_pipe_1 and sm_test4_o_bxclk_pipe_1
+// 2025-04-07  Cristian  Gingu        In Vivado block design and iob_oddr.v, add single outputs scan_out_single.
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -672,13 +675,23 @@ module fw_ip2 (
     .sm_test5_o_vin_test_trig_out            (sm_test5_o_vin_test_trig_out),
     .sm_test5_o_scan_in                      (sm_test5_o_scan_in),
     .sm_test5_o_scan_load                    (sm_test5_o_scan_load)
-    );
+  );
   state_t_sm_ip2_test5 sm_test5_pipe_1;
+  state_t_sm_ip2_test4      sm_test4_pipe_1;
+  logic [dnn_reg_width-1:0] sm_test4_o_dnn_output_0_pipe_1;
+  logic [dnn_reg_width-1:0] sm_test4_o_dnn_output_1_pipe_1;
+  logic [dnn_reg_width-1:0] sm_test4_o_bxclk_ana_pipe_1;
+  logic [dnn_reg_width-1:0] sm_test4_o_bxclk_pipe_1;
   always @(posedge fw_pl_clk1) begin
     sm_test5_pipe_1                      <= sm_test5;
     sm_test5_o_repeat_pixel_reg_pipe_1   <= sm_test5_o_repeat_pixel_reg;                             // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
     sm_testx_o_scanchain_reg_pipe_1      <= sm_testx_o_scanchain_reg;
     sm_testx_o_scanchain_test_reg_pipe_1 <= sm_testx_o_scanchain_test_reg;
+    sm_test4_pipe_1                      <= sm_test4;
+    sm_test4_o_dnn_output_0_pipe_1       <= sm_test4_o_dnn_output_0;
+    sm_test4_o_dnn_output_1_pipe_1       <= sm_test4_o_dnn_output_1;
+    sm_test4_o_bxclk_ana_pipe_1          <= sm_test4_o_bxclk_ana;
+    sm_test4_o_bxclk_pipe_1              <= sm_test4_o_bxclk;
   end
 
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
@@ -783,7 +796,7 @@ module fw_ip2 (
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
       // use data specific for test case test4
-      if(sm_test4==DONE_IP2_T4) begin
+      if(sm_test4_pipe_1==DONE_IP2_T4) begin
         //if(test_sample==fw_pl_clk1_cnt) begin
         if(test_loopback) begin
           // overwrite with hard-coded default value - set it non-zero for debug purpose
@@ -794,10 +807,10 @@ module fw_ip2 (
           sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_test_reg_width-1 : 4*dnn_reg_width] <= {(sm_testx_o_scanchain_test_reg_width-4*dnn_reg_width){1'b0}};
         end else begin
           // overwrite with dnn_output_0/1 data coming from sm_test3
-          sm_testx_o_scanchain_test_reg[1*dnn_reg_width                    -1 : 0*dnn_reg_width] <= sm_test4_o_dnn_output_0;
-          sm_testx_o_scanchain_test_reg[2*dnn_reg_width                    -1 : 1*dnn_reg_width] <= sm_test4_o_dnn_output_1;
-          sm_testx_o_scanchain_test_reg[3*dnn_reg_width                    -1 : 2*dnn_reg_width] <= sm_test4_o_bxclk_ana;
-          sm_testx_o_scanchain_test_reg[4*dnn_reg_width                    -1 : 3*dnn_reg_width] <= sm_test4_o_bxclk;
+          sm_testx_o_scanchain_test_reg[1*dnn_reg_width                    -1 : 0*dnn_reg_width] <= sm_test4_o_dnn_output_0_pipe_1;
+          sm_testx_o_scanchain_test_reg[2*dnn_reg_width                    -1 : 1*dnn_reg_width] <= sm_test4_o_dnn_output_1_pipe_1;
+          sm_testx_o_scanchain_test_reg[3*dnn_reg_width                    -1 : 2*dnn_reg_width] <= sm_test4_o_bxclk_ana_pipe_1;
+          sm_testx_o_scanchain_test_reg[4*dnn_reg_width                    -1 : 3*dnn_reg_width] <= sm_test4_o_bxclk_pipe_1;
           sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_test_reg_width-1 : 4*dnn_reg_width] <= {(sm_testx_o_scanchain_test_reg_width-4*dnn_reg_width){1'b0}};
         end
         //end else begin
