@@ -10,6 +10,7 @@
 // Date        Author                 Description
 // 2024-08-08  Cristian  Gingu        Created
 // 2024-12-13  Cristian  Gingu        Add sm_test5_o_status_done
+// 2025-04-08  Cristian  Gingu        Add input ports error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // ------------------------------------------------------------------------------------
 `ifndef __com_status32_reg__
 `define __com_status32_reg__
@@ -40,7 +41,11 @@ module com_status32_reg (
     input  logic        sm_test3_o_status_done,
     input  logic        sm_test4_o_status_done,
     input  logic        sm_test5_o_status_done,
-    input  logic        error_w_execute_cfg,
+    input  logic        error_w_execute_cfg_test1,
+    input  logic        error_w_execute_cfg_test2,
+    input  logic        error_w_execute_cfg_test3,
+    input  logic        error_w_execute_cfg_test4,
+    input  logic        error_w_execute_cfg_test5,
     //
     output logic [31:0] fw_read_status32_reg
   );
@@ -66,7 +71,11 @@ module com_status32_reg (
   import cms_pix28_package::status_index_test5_done;
   import cms_pix28_package::status_index_spare_min;
   import cms_pix28_package::status_index_spare_max;
-  import cms_pix28_package::status_index_error_w_execute_cfg;
+  import cms_pix28_package::status_index_error_w_execute_cfg_test5;
+  import cms_pix28_package::status_index_error_w_execute_cfg_test4;
+  import cms_pix28_package::status_index_error_w_execute_cfg_test3;
+  import cms_pix28_package::status_index_error_w_execute_cfg_test2;
+  import cms_pix28_package::status_index_error_w_execute_cfg_test1;
   //
   always @(posedge fw_axi_clk) begin : fw_read_status32_reg_proc
     if(op_code_w_status_clear | ~fw_rst_n) begin
@@ -91,8 +100,12 @@ module com_status32_reg (
       fw_read_status32_reg[                           status_index_test3_done            ] <= sm_test3_o_status_done;
       fw_read_status32_reg[                           status_index_test4_done            ] <= sm_test4_o_status_done;
       fw_read_status32_reg[                           status_index_test5_done            ] <= sm_test5_o_status_done;
-      fw_read_status32_reg[               status_index_spare_max : status_index_spare_min] <= 12'b0;
-      fw_read_status32_reg[                              status_index_error_w_execute_cfg] <= error_w_execute_cfg;
+      fw_read_status32_reg[               status_index_spare_max : status_index_spare_min] <= 8'b0;
+      fw_read_status32_reg[                        status_index_error_w_execute_cfg_test5] <= error_w_execute_cfg_test5;
+      fw_read_status32_reg[                        status_index_error_w_execute_cfg_test4] <= error_w_execute_cfg_test4;
+      fw_read_status32_reg[                        status_index_error_w_execute_cfg_test3] <= error_w_execute_cfg_test3;
+      fw_read_status32_reg[                        status_index_error_w_execute_cfg_test2] <= error_w_execute_cfg_test2;
+      fw_read_status32_reg[                        status_index_error_w_execute_cfg_test1] <= error_w_execute_cfg_test1;
     end
   end
 

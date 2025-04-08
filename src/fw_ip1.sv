@@ -28,6 +28,7 @@
 // 2024-11-26  Cristian Gingu         Add signals and logic for sm_test1/2_o_gate_config_clk
 // 2024-11-26  Cristian Gingu         Add signal and logic for cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1
 // 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is not defined in IP1
+// 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -250,7 +251,11 @@ module fw_ip1 (
   logic sm_test3_o_status_done; assign sm_test3_o_status_done = 1'b0;          // TODO to be driven by sm_test3
   logic sm_test4_o_status_done; assign sm_test4_o_status_done = 1'b0;          // TODO to be driven by sm_test4
   logic sm_test5_o_status_done; assign sm_test5_o_status_done = 1'b0;          // TODO to be driven by sm_test5
-  logic error_w_execute_cfg;
+  logic error_w_execute_cfg_test1;
+  logic error_w_execute_cfg_test2;
+  logic error_w_execute_cfg_test3; assign error_w_execute_cfg_test3 = 1'b0;    // TODO to be related w sm_test3
+  logic error_w_execute_cfg_test4; assign error_w_execute_cfg_test4 = 1'b0;    // TODO to be related w sm_test4
+  logic error_w_execute_cfg_test5; assign error_w_execute_cfg_test5 = 1'b0;    // TODO to be related w sm_test5
   // Instantiate module com_status32_reg.sv
   com_status32_reg com_status32_reg_inst (
     .fw_axi_clk              (fw_axi_clk),                 // FW clock 100MHz       mapped to S_AXI_ACLK
@@ -276,7 +281,11 @@ module fw_ip1 (
     .sm_test3_o_status_done  (sm_test3_o_status_done),
     .sm_test4_o_status_done  (sm_test4_o_status_done),
     .sm_test5_o_status_done  (sm_test5_o_status_done),
-    .error_w_execute_cfg     (error_w_execute_cfg),
+    .error_w_execute_cfg_test5 (error_w_execute_cfg_test5),
+    .error_w_execute_cfg_test4 (error_w_execute_cfg_test4),
+    .error_w_execute_cfg_test3 (error_w_execute_cfg_test3),
+    .error_w_execute_cfg_test2 (error_w_execute_cfg_test2),
+    .error_w_execute_cfg_test1 (error_w_execute_cfg_test1),
     //
     .fw_read_status32_reg    (fw_read_status32_reg)
   );
@@ -646,40 +655,20 @@ module fw_ip1 (
   end
 
   // Create signal error_w_execute_cfg; used as a bit in fw_read_status32 to flag wrong user settings
-  always @(posedge fw_axi_clk or negedge fw_rst_n) begin
-    if(~fw_rst_n) begin
-      error_w_execute_cfg <= 1'b0;
-    end else begin
-      if(test1_enable) begin
-        if(sm_test1!=IDLE_IP1_T1 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>fast_configclk_period))) begin
-          // inferred from state machine sm_test1 logic
-          error_w_execute_cfg <= 1'b1;
-        end else begin
-          error_w_execute_cfg <= 1'b0;
-        end
-      end else if(test2_enable) begin
-        if(sm_test2!=IDLE_IP1_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>fast_configclk_period))) begin
-          // inferred from state machine sm_test1 logic
-          error_w_execute_cfg <= 1'b1;
-        end else begin
-          error_w_execute_cfg <= 1'b0;
-        end
-      end else if(test3_enable) begin
-        // use data specific for test case test3
-        error_w_execute_cfg <= 1'b0;     // TODO
-      end else if(test4_enable) begin
-        // use data specific for test case test4
-        error_w_execute_cfg <= 1'b0;     // TODO
-      end else if(test5_enable) begin
-        // use data specific for test case test4
-        error_w_execute_cfg <= 1'b0;     // TODO
-      end else begin
-        // keep old value;
-        error_w_execute_cfg <= error_w_execute_cfg;
-      end
+  always @(posedge fw_axi_clk) begin
+    if(test1_enable_re) begin
+      error_w_execute_cfg_test1 <= 1'b0;
+    end else if(sm_test1!=IDLE_IP1_T1 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>fast_configclk_period))) begin
+      error_w_execute_cfg_test1 <= 1'b1;
     end
   end
-  //
+  always @(posedge fw_axi_clk) begin
+    if(test2_enable_re) begin
+      error_w_execute_cfg_test2 <= 1'b0;
+    end else if(sm_test2!=IDLE_IP1_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>fast_configclk_period))) begin
+      error_w_execute_cfg_test2 <= 1'b1;
+    end
+  end
 
 endmodule
 

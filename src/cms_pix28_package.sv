@@ -17,6 +17,7 @@
 // 2024-12-13  Cristian  Gingu        Add test_number_5, status_index_test5_done
 // 2024-12-16  Cristian  Gingu        Add localparam w_cfg_static_1_reg_* for ip2_test5
 // 2025-01-02  Cristian  Gingu        Add localparam repeat_pixel_bits_total for ip2_test5
+// 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -65,7 +66,7 @@ package cms_pix28_package;
     OP_CODE_R_DATA_ARRAY_1             = 4'hD,
     OP_CODE_W_STATUS_FW_CLEAR          = 4'hE,
     OP_CODE_W_EXECUTE                  = 4'hF
-  } op_code;
+    } op_code;
   //
   parameter status_index_op_code_w_reset         = 0;
   parameter status_index_op_code_w_cfg_static_0  = 1;
@@ -87,8 +88,12 @@ package cms_pix28_package;
   parameter status_index_test4_done              = 17;
   parameter status_index_test5_done              = 18;
   parameter status_index_spare_min               = 19;
-  parameter status_index_spare_max               = 30;
-  parameter status_index_error_w_execute_cfg     = 31;
+  parameter status_index_spare_max               = 26;
+  parameter status_index_error_w_execute_cfg_test5 = 27;
+  parameter status_index_error_w_execute_cfg_test4 = 28;
+  parameter status_index_error_w_execute_cfg_test3 = 29;
+  parameter status_index_error_w_execute_cfg_test2 = 30;
+  parameter status_index_error_w_execute_cfg_test1 = 31;
   //
   //---------------------------------------------------------------------------
   // fw_ip1.sv
@@ -97,7 +102,7 @@ package cms_pix28_package;
   parameter w_cfg_static_0_reg_fast_configclk_period_index_max_IP1   =  6;     //
   parameter w_cfg_static_0_reg_super_pix_sel_index_IP1               =  7;     //
   parameter w_cfg_static_0_reg_slow_configclk_period_index_min_IP1   =  8;     // slow_configCLK period is 10ns(AXI100MHz) * 2**27(27-bits) == 10*134217728 == 1342177280ns i.e. 0.745Hz the lowest frequency, thus covering DataSheet minimum 1Hz
-  parameter w_cfg_static_0_reg_slow_configclk_period_index_max_IP1   =  23;    // w_cfg_static_0_reg contains lower 16-bits of the 27-bit period for slow_configCLK
+  parameter w_cfg_static_0_reg_slow_configclk_period_index_max_IP1   = 23;     // w_cfg_static_0_reg contains lower 16-bits of the 27-bit period for slow_configCLK
   parameter w_cfg_static_1_reg_slow_configclk_period_index_min_IP1   =  0;     // w_cfg_static_1_reg contains upper 11-bits of the 27-bit period for slow_configCLK
   parameter w_cfg_static_1_reg_slow_configclk_period_index_max_IP1   = 10;
   parameter w_cfg_static_1_reg_spare_index_min_IP1                   = 11;

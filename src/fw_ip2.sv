@@ -40,6 +40,7 @@
 // 2025-04-03  Cristian  Gingu        In Vivado block design and iob_oddr.v, add single outputs bxclk_single and scan_in_single.
 // 2025-04-03  Cristian  Gingu        To pass timing closure for above, add pipeline for: sm_test4_pipe_1, sm_test4_o_dnn_output_0/1_pipe_1, sm_test4_o_bxclk_ana_pipe_1 and sm_test4_o_bxclk_pipe_1
 // 2025-04-07  Cristian  Gingu        In Vivado block design and iob_oddr.v, add single outputs scan_out_single.
+// 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -314,7 +315,11 @@ module fw_ip2 (
   logic sm_test4_o_status_done;
   logic sm_test5_o_status_done;
   logic sm_test5_o_repeat_status_done;                     // ip2_test5 specific
-  logic error_w_execute_cfg;
+  logic error_w_execute_cfg_test1;
+  logic error_w_execute_cfg_test2;
+  logic error_w_execute_cfg_test3;
+  logic error_w_execute_cfg_test4;
+  logic error_w_execute_cfg_test5;
   // Instantiate module com_status32_reg.sv
   com_status32_reg com_status32_reg_inst (
     .fw_axi_clk              (fw_axi_clk),                 // FW clock 100MHz       mapped to S_AXI_ACLK
@@ -339,9 +344,12 @@ module fw_ip2 (
     .sm_test2_o_status_done  (sm_test2_o_status_done),
     .sm_test3_o_status_done  (sm_test3_o_status_done),
     .sm_test4_o_status_done  (sm_test4_o_status_done),
-//    .sm_test5_o_status_done  (sm_test5_o_status_done),
     .sm_test5_o_status_done  (sm_test5_o_repeat_status_done),
-    .error_w_execute_cfg     (error_w_execute_cfg),
+    .error_w_execute_cfg_test5 (error_w_execute_cfg_test5),
+    .error_w_execute_cfg_test4 (error_w_execute_cfg_test4),
+    .error_w_execute_cfg_test3 (error_w_execute_cfg_test3),
+    .error_w_execute_cfg_test2 (error_w_execute_cfg_test2),
+    .error_w_execute_cfg_test1 (error_w_execute_cfg_test1),
     //
     .fw_read_status32_reg    (fw_read_status32_reg)
   );
@@ -916,55 +924,41 @@ module fw_ip2 (
   end
 
   // Create signal error_w_execute_cfg; used as a bit in fw_read_status32 to flag wrong user settings
-  always @(posedge fw_axi_clk or negedge fw_rst_n) begin
-    if(~fw_rst_n) begin
-      error_w_execute_cfg <= 1'b0;
-    end else begin
-      if(test1_enable) begin
-        if(sm_test1!=IDLE_IP2_T1 & (test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
-          // inferred from state machine sm_test1 logic
-          error_w_execute_cfg <= 1'b1;
-        end else begin
-          error_w_execute_cfg <= 1'b0;
-        end
-      end else if(test2_enable) begin
-        if(sm_test2!=IDLE_IP2_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
-          // inferred from state machine sm_test2 logic
-          error_w_execute_cfg <= 1'b1;
-        end else begin
-          error_w_execute_cfg <= 1'b0;
-        end
-      end else if(test3_enable) begin
-        // use data specific for test case test3
-        if(sm_test3!=IDLE_IP2_T3 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
-          // inferred from state machine sm_test3 logic
-          error_w_execute_cfg <= 1'b1;
-        end else begin
-          error_w_execute_cfg <= 1'b0;
-        end
-      end else if(test4_enable) begin
-        // use data specific for test case test4
-        if(sm_test4!=IDLE_IP2_T4 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
-          // inferred from state machine sm_test4 logic
-          error_w_execute_cfg <= 1'b1;
-        end else begin
-          error_w_execute_cfg <= 1'b0;
-        end
-      end else if(test5_enable) begin
-        // use data specific for test case test5
-        if((sm_test5!=IDLE_IP2_T5 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) | (repeat_pixel>11'h555)) begin
-          // inferred from state machine sm_test5 logic
-          error_w_execute_cfg <= 1'b1;
-        end else begin
-          error_w_execute_cfg <= 1'b0;
-        end
-      end else begin
-        // keep old value;
-        error_w_execute_cfg <= error_w_execute_cfg;
-      end
+  always @(posedge fw_pl_clk1) begin
+    if(test1_enable_re) begin
+      error_w_execute_cfg_test1 <= 1'b0;
+    end else if(sm_test1!=IDLE_IP2_T1 & (test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+      error_w_execute_cfg_test1 <= 1'b1;
     end
   end
-  //
+  always @(posedge fw_pl_clk1) begin
+    if(test2_enable_re) begin
+      error_w_execute_cfg_test2 <= 1'b0;
+    end else if(sm_test2!=IDLE_IP2_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+      error_w_execute_cfg_test2 <= 1'b1;
+    end
+  end
+  always @(posedge fw_pl_clk1) begin
+    if(test3_enable_re) begin
+      error_w_execute_cfg_test3 <= 1'b0;
+    end else if(sm_test3!=IDLE_IP2_T3 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+      error_w_execute_cfg_test3 <= 1'b1;
+    end
+  end
+  always @(posedge fw_pl_clk1) begin
+    if(test4_enable_re) begin
+      error_w_execute_cfg_test4 <= 1'b0;
+    end else if(sm_test4!=IDLE_IP2_T4 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+      error_w_execute_cfg_test4 <= 1'b1;
+    end
+  end
+  always @(posedge fw_pl_clk1) begin
+    if(test5_enable_re) begin
+      error_w_execute_cfg_test5 <= 1'b0;
+    end else if((sm_test5!=IDLE_IP2_T5 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) | (repeat_pixel>11'h555)) begin
+      error_w_execute_cfg_test5 <= 1'b1;
+    end
+  end
 
 endmodule
 
