@@ -23,6 +23,7 @@
 // 2025-03-18  Cristian  Gingu        Upgrade test-case T5 and T6 to include change of tb_test_sample parameter, to illustrate sampling of either current-bit (TB PASS) or previous-bit (TB FAIL)
 // 2025-03-21  Cristian  Gingu        Upgrade test-case T5 to include change of tb_test_delay; add code for scan_in_del1,2,3,4
 // 2025-04-01  Cristian  Gingu        More upgrade on test-case T5 to study tb_test_sample vs tb_test_delay 2D plots and compare withe BP and AB experimental plots.
+// 2025-04-10  Cristian  Gingu        More upgrade on test-case T5 to study tb_test_sample vs tb_test_delay 2D plots and compare withe BP and AB experimental plots. Save 2D plots into https://fermicloud.sharepoint.com/:p:/r/sites/FNALO365-ASICDepartment/_layouts/15/doc2.aspx?sourcedoc=%7B0D668FF8-99D1-47AD-BC37-FAE28DE351B2%7D&file=sampleDelay.pptx&wdLOR=c0506A49F-5559-4DC8-B81D-043D6036590D&fromShare=true&action=edit&mobileredirect=true&previoussessionid=ba957705-d4c3-c057-dccc-5806084326aa
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -271,15 +272,17 @@ module fw_ipx_wrap_tb ();
 //  end
 //  always @(posedge bxclk) begin
 //    // this emulation (feature1) is more close to ASIC behavior => scan_out toggle @(posedge bxclk)
-//    scan_in_del1  <=  scan_in;
-//  end
-//  always @(posedge fw_pl_clk1) begin
-//    // this emulation (feature 2) is more close to ASIC behavior => scan_out is delayed an additional 4*2.5ns
+////    scan_in_del1  <=  scan_in;
 //    scan_in_del2  <=  scan_in_del1;
+//  end
+//  always @(negedge fw_pl_clk1) begin
+//    // this emulation (feature 2) is more close to ASIC behavior => scan_out is delayed an additional 4*2.5ns
+//    scan_in_del1  <=  scan_in;
+////    scan_in_del2  <=  scan_in_del1;
 //    scan_in_del3  <=  scan_in_del2;
-//    scan_in_del4  <=  scan_in_del3;
-//    scan_out      <=  scan_in_del4;
-//    scan_out_test <= ~scan_in_del4;
+////    scan_in_del4  <=  scan_in_del3;
+//    scan_out      <=  scan_in_del3;
+//    scan_out_test <= ~scan_in_del3;
 //  end
 
   always @(posedge fw_pl_clk1) begin : dnn_proc
@@ -1343,6 +1346,285 @@ module fw_ipx_wrap_tb ();
         //                            |
         //                            | tb_bxclk_period = 6'h28; plus additional 4*2.5ns delay of scan_out after sampling with BXCLK.
         //                            | tb_bxclk_delay  = 5'h11; REPORT: /asic/projects/C/CMS_PIX_28/gingu/cms_pix_28_test_firmware/xrun_bxclk_period_h28_bxclk_delay_h11_plus10ns.log
+        //
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //
+        // Simulations done on 2025-04-09 * commit 4614de29de8d6906c4acefaca84fd192ee0ed25d (HEAD -> cg_ip2_test5, origin/cg_ip2_test5)
+        // CASE 1: one FF on fw_pl_clk1 RE
+        //always @(posedge fw_pl_clk1) begin
+        //  scan_out      <=  scan_in;
+        //  scan_out_test <= ~scan_in;
+        //end
+        // SUMMARY: three diagonal FAIL lines
+        //                            | 40  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P
+        //                            | 39  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P
+        //                            | 38  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P
+        //                            | 37  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P
+        //                            | 36  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P
+        //                            | 35  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P
+        //                            | 34  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P
+        //                            | 33  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P
+        //                            | 32  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P
+        //                            | 31  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P
+        //                            | 30  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 29  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 28  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 27  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 26  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 25  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 24  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 23  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 22  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 21  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 20  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 19  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 18  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 17  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 16  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 15  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 14  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 13  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 12  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 11  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        // 10  P  P  P  P  F  F  F  P | 10  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //  9  P  P  P  F  F  F  P  P |  9  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //  8  P  P  F  F  F  P  P  P |  8  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //  7  F  F  F  F  P  P  P  P |  7  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //  6  F  F  F  P  P  P  P  P |  6  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //  5  F  F  P  P  P  P  P  P |  5  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //  4  F  P  P  P  P  P  P  P |  4  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //  3  P  P  P  P  P  P  P  F |  3  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F
+        //  2  P  P  P  P  P  P  F  F |  2  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F
+        //  1  P  P  P  P  P  F  F  F |  1  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F
+        //     3  4  5  6  7  8  9 10 |     3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+        //                            |
+        // tb_bxclk_period = 6'h0A;   | tb_bxclk_period = 6'h28;
+        // tb_bxclk_delay  = 5'h4;    | tb_bxclk_delay  = 5'h11;
+        //
+        //
+        // Simulations done on 2025-04-09 * commit 4614de29de8d6906c4acefaca84fd192ee0ed25d (HEAD -> cg_ip2_test5, origin/cg_ip2_test5)
+        // CASE 2: one FF on bxclk RE
+        //always @(posedge bxclk) begin
+        //  scan_out      <=  scan_in;
+        //  scan_out_test <= ~scan_in;
+        //end
+        // SUMMARY: TWO horizontal and TWO vertical FAIL lines at: a) at 2+4=6,7 b) respectively at 2+17=19,20
+        //                            | 40  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P
+        //                            | 39  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P
+        //                            | 38  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P
+        //                            | 37  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P
+        //                            | 36  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P
+        //                            | 35  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P
+        //                            | 34  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P
+        //                            | 33  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P
+        //                            | 32  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P
+        //                            | 31  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P
+        //                            | 30  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 29  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 28  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 27  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 26  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 25  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 24  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 23  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 22  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 21  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 20  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 19  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 18  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 17  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 16  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 15  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 14  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 13  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 12  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 11  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        // 10  P  P  P  F  F  F  F  P | 10  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  9  P  P  P  F  F  F  P  P |  9  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  8  P  P  P  F  F  P  P  P |  8  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  7  F  F  F  F  F  F  F  F |  7  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  6  F  F  F  F  F  F  F  F |  6  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  5  F  F  P  F  F  F  F  F |  5  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  4  F  P  P  F  F  F  F  F |  4  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  3  P  P  P  F  F  F  F  F |  3  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  2  P  P  P  F  F  F  F  F |  2  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  1  P  P  P  F  F  F  F  F |  1  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //     3  4  5  6  7  8  9 10 |     3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+        //                            |
+        // tb_bxclk_period = 6'h0A;   | tb_bxclk_period = 6'h28;
+        // tb_bxclk_delay  = 5'h4;    | tb_bxclk_delay  = 5'h11;
+        //
+        //
+        // Simulations done on 2025-04-09 * commit 4614de29de8d6906c4acefaca84fd192ee0ed25d (HEAD -> cg_ip2_test5, origin/cg_ip2_test5)
+        // CASE 3: one FF on bxclk RE + one FF on fw_pl_clk1 FE
+        //always @(posedge bxclk) begin
+        //  scan_in_del1  <=  scan_in;
+        //end
+        //always @(negedge fw_pl_clk1) begin     // FE of fw_pl_clk1
+        //  scan_out      <=  scan_in_del1;
+        //  scan_out_test <= ~scan_in_del1;
+        //end
+        // SUMMARY: TWO horizontal and TWO vertical FAIL lines at: a) at 2+4=6,7 b) respectively at 2+17=19,20
+        //                            | 40  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P
+        //                            | 39  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P
+        //                            | 38  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P
+        //                            | 37  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P
+        //                            | 36  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P
+        //                            | 35  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P
+        //                            | 34  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P
+        //                            | 33  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P
+        //                            | 32  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P
+        //                            | 31  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P
+        //                            | 30  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 29  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 28  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 27  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 26  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 25  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 24  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 23  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 22  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 21  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 20  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 19  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 18  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 17  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 16  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 15  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 14  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 13  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 12  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 11  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        // 10  P  P  P  F  F  F  F  P | 10  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  9  P  P  P  F  F  F  P  P |  9  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  8  P  P  P  F  F  P  P  P |  8  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  7  F  F  F  F  F  F  F  F |  7  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  6  F  F  F  F  F  F  F  F |  6  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  5  F  F  P  F  F  F  F  F |  5  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  4  F  P  P  F  F  F  F  F |  4  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  3  P  P  P  F  F  F  F  F |  3  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  2  P  P  P  F  F  F  F  F |  2  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  1  P  P  P  F  F  F  F  F |  1  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //     3  4  5  6  7  8  9 10 |     3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+        //                            |
+        // tb_bxclk_period = 6'h0A;   | tb_bxclk_period = 6'h28;
+        // tb_bxclk_delay  = 5'h4;    | tb_bxclk_delay  = 5'h11;
+        //
+        //
+        // Simulations done on 2025-04-09 * commit 4614de29de8d6906c4acefaca84fd192ee0ed25d (HEAD -> cg_ip2_test5, origin/cg_ip2_test5)
+        // CASE 4: one FF on bxclk RE + two FF on fw_pl_clk1 FE
+        //always @(posedge bxclk) begin
+        //  scan_in_del1  <=  scan_in;
+        //end
+        //always @(negedge fw_pl_clk1) begin
+        //  scan_in_del2  <=  scan_in_del1;
+        //  scan_out      <=  scan_in_del2;
+        //  scan_out_test <= ~scan_in_del2;
+        //end
+        // SUMMARY: THREE horizontal and THREE vertical FAIL lines at: a) at 2+4=6,7,8 b) respectively at 2+17=19,20,21
+        //                            | 40  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P
+        //                            | 39  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P
+        //                            | 38  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P
+        //                            | 37  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P
+        //                            | 36  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P
+        //                            | 35  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P
+        //                            | 34  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P
+        //                            | 33  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P
+        //                            | 32  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P
+        //                            | 31  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P
+        //                            | 30  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 29  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 28  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 27  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 26  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 25  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 24  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 23  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 22  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 21  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 20  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 19  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 18  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 17  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 16  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 15  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 14  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 13  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 12  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 11  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        // 10  P  P  P  F  F  F  F  P | 10  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  9  P  P  P  F  F  F  P  P |  9  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  8  F  F  F  F  F  F  F  F |  8  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  7  F  F  F  F  F  F  F  F |  7  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  6  F  F  F  F  F  F  F  F |  6  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  5  F  F  P  F  F  F  F  F |  5  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  4  F  P  P  F  F  F  F  F |  4  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  3  P  P  P  F  F  F  F  F |  3  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  2  P  P  P  F  F  F  F  F |  2  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  1  P  P  P  F  F  F  F  F |  1  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //     3  4  5  6  7  8  9 10 |     3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+        //                            |
+        // tb_bxclk_period = 6'h0A;   | tb_bxclk_period = 6'h28;
+        // tb_bxclk_delay  = 5'h4;    | tb_bxclk_delay  = 5'h11;
+        //
+        //
+        // Simulations done on 2025-04-09 * commit 4614de29de8d6906c4acefaca84fd192ee0ed25d (HEAD -> cg_ip2_test5, origin/cg_ip2_test5)
+        // CASE 5: one FF on fw_pl_clk1 FE + one FF on bxclk RE + two FF on fw_pl_clk1 FE
+        //always @(posedge bxclk) begin
+        //  scan_in_del2  <=  scan_in_del1;
+        //end
+        //always @(negedge fw_pl_clk1) begin
+        //  scan_in_del1  <=  scan_in;
+        //  scan_in_del3  <=  scan_in_del2;
+        //  scan_out      <=  scan_in_del3;
+        //  scan_out_test <= ~scan_in_del3;
+        // SUMMARY: FOUR horizontal and FOUR vertical FAIL lines at, CAUTION!!!: a) at 2+4-1=5,6,7,8 b) respectively at 2+17-1=18,19,20,21
+        //                            | 40  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P
+        //                            | 39  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P
+        //                            | 38  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P
+        //                            | 37  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P
+        //                            | 36  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P
+        //                            | 35  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P
+        //                            | 34  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P
+        //                            | 33  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P
+        //                            | 32  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P
+        //                            | 31  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P
+        //                            | 30  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 29  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 28  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 27  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 26  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 25  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 24  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 23  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 22  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P
+        //                            | 21  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 20  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 19  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 18  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 17  F  F  F  F  F  F  F  F  F  F  F  F  F  F  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 16  F  F  F  F  F  F  F  F  F  F  F  F  F  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 15  F  F  F  F  F  F  F  F  F  F  F  F  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 14  F  F  F  F  F  F  F  F  F  F  F  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 13  F  F  F  F  F  F  F  F  F  F  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 12  F  F  F  F  F  F  F  F  F  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //                            | 11  F  F  F  F  F  F  F  F  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        // 10  P  P  F  F  F  F  F  P | 10  F  F  F  F  F  F  F  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  9  P  P  F  F  F  F  P  P |  9  F  F  F  F  F  F  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  8  F  F  F  F  F  F  F  F |  8  F  F  F  F  F  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  7  F  F  F  F  F  F  F  F |  7  F  F  F  F  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  6  F  F  F  F  F  F  F  F |  6  F  F  F  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  5  F  F  F  F  F  F  F  F |  5  F  F  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  4  F  P  F  F  F  F  F  F |  4  F  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  3  P  P  F  F  F  F  F  F |  3  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  2  P  P  F  F  F  F  F  F |  2  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //  1  P  P  F  F  F  F  F  F |  1  P  P  P  P  P  P  P  P  P  P  P  P  P  P  P  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F  F
+        //     3  4  5  6  7  8  9 10 |     3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+        //                            |
+        // tb_bxclk_period = 6'h0A;   | tb_bxclk_period = 6'h28;
+        // tb_bxclk_delay  = 5'h4;    | tb_bxclk_delay  = 5'h11;
+        //
+        //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         //
         // use this section to record behavior when scan_out test-bench emulation is more close to ASIC behavior => scan_out==scan_in BUT make it toggle @(posedge bxclk)
         // BXCLKANA RE is always on same counter, by design feature: counter==2
