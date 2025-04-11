@@ -41,6 +41,7 @@
 // 2025-04-03  Cristian  Gingu        To pass timing closure for above, add pipeline for: sm_test4_pipe_1, sm_test4_o_dnn_output_0/1_pipe_1, sm_test4_o_bxclk_ana_pipe_1 and sm_test4_o_bxclk_pipe_1
 // 2025-04-07  Cristian  Gingu        In Vivado block design and iob_oddr.v, add single outputs scan_out_single.
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
+// 2025-04-11  Cristian  Gingu        Clear sm_testx_o_scanchain_reg and sm_testx_o_scanchain_test_reg while sm_test1,2,3,4,5 are in DELAY_TEST_IP2_T1,2,3,4,5
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -132,11 +133,13 @@ module fw_ip2 (
   //
   import cms_pix28_package::state_t_sm_ip2_test1;
   import cms_pix28_package::IDLE_IP2_T1;
+  import cms_pix28_package::DELAY_TEST_IP2_T1;
   import cms_pix28_package::SHIFT_IN_0_IP2_T1;
   import cms_pix28_package::SHIFT_IN_IP2_T1;
   //
   import cms_pix28_package::state_t_sm_ip2_test2;
   import cms_pix28_package::IDLE_IP2_T2;
+  import cms_pix28_package::DELAY_TEST_IP2_T2;
   import cms_pix28_package::TRIGOUT_HIGH_2_IP2_T2;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T2;
   import cms_pix28_package::SHIFT_IN_0_IP2_T2;
@@ -149,10 +152,12 @@ module fw_ip2 (
   import cms_pix28_package::bxclk_default;
   import cms_pix28_package::state_t_sm_ip2_test3;
   import cms_pix28_package::IDLE_IP2_T3;
+  import cms_pix28_package::DELAY_TEST_IP2_T3;
   import cms_pix28_package::DONE_IP2_T3;
   //
   import cms_pix28_package::state_t_sm_ip2_test4;
   import cms_pix28_package::IDLE_IP2_T4;
+  import cms_pix28_package::DELAY_TEST_IP2_T4;
   import cms_pix28_package::TRIGOUT_HIGH_2_IP2_T4;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T4;
   import cms_pix28_package::SHIFT_IN_0_IP2_T4;
@@ -161,6 +166,7 @@ module fw_ip2 (
   //
   import cms_pix28_package::state_t_sm_ip2_test5;
   import cms_pix28_package::IDLE_IP2_T5;
+  import cms_pix28_package::DELAY_TEST_IP2_T5;
   import cms_pix28_package::TRIGOUT_HIGH_2_IP2_T5;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T5;
   import cms_pix28_package::SHIFT_IN_0_IP2_T5;
@@ -723,6 +729,10 @@ module fw_ip2 (
           sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
           sm_testx_o_scanchain_test_reg   <= sm_testx_o_scanchain_test_reg;
         end
+      end else if(sm_test1==DELAY_TEST_IP2_T1) begin
+        // CLEAR
+        sm_testx_o_scanchain_reg          <= {sm_testx_o_scanchain_reg_width{1'b0}};
+        sm_testx_o_scanchain_test_reg     <= {sm_testx_o_scanchain_test_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
@@ -747,6 +757,10 @@ module fw_ip2 (
           sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
           sm_testx_o_scanchain_test_reg   <= sm_testx_o_scanchain_test_reg;
         end
+      end else if(sm_test2==DELAY_TEST_IP2_T2) begin
+        // CLEAR
+        sm_testx_o_scanchain_reg          <= {sm_testx_o_scanchain_reg_width{1'b0}};
+        sm_testx_o_scanchain_test_reg     <= {sm_testx_o_scanchain_test_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
@@ -775,6 +789,9 @@ module fw_ip2 (
           // keep old value
           sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
         end
+      end else if(sm_test3==DELAY_TEST_IP2_T3) begin
+        // CLEAR
+        sm_testx_o_scanchain_reg          <= {sm_testx_o_scanchain_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
@@ -799,6 +816,9 @@ module fw_ip2 (
           // keep old value
           sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
         end
+      end else if(sm_test4==DELAY_TEST_IP2_T4) begin
+        // CLEAR
+        sm_testx_o_scanchain_reg          <= {sm_testx_o_scanchain_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
@@ -825,6 +845,9 @@ module fw_ip2 (
         //  // keep old value
         //  sm_testx_o_scanchain_test_reg   <= sm_testx_o_scanchain_test_reg;
         //end
+      end else if(sm_test4_pipe_1==DELAY_TEST_IP2_T4) begin
+        // CLEAR
+        sm_testx_o_scanchain_test_reg     <= {sm_testx_o_scanchain_test_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
@@ -845,12 +868,18 @@ module fw_ip2 (
           // keep old value
           sm_testx_o_scanchain_reg        <= sm_testx_o_scanchain_reg;
         end
+      end else if(sm_test5==DELAY_TEST_IP2_T5) begin
+        // CLEAR
+        sm_testx_o_scanchain_reg          <= {sm_testx_o_scanchain_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_scanchain_reg          <= sm_testx_o_scanchain_reg;
       end
       if(sm_test5_pipe_1==REPEAT_DONE_IP2_T5) begin
         sm_testx_o_scanchain_test_reg     <= sm_test5_o_repeat_pixel_reg_pipe_1;                   // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
+      end else if(sm_test5_pipe_1==DELAY_TEST_IP2_T5) begin
+        // CLEAR
+        sm_testx_o_scanchain_test_reg     <= {sm_testx_o_scanchain_test_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_scanchain_test_reg     <= sm_testx_o_scanchain_test_reg;
