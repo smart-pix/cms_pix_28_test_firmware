@@ -51,6 +51,7 @@
                   &quot;vin_test_trig_out_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
                   &quot;scan_in_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
                   &quot;scan_load_i&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
+                  &quot;scan_load_single_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;scan_out_single_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;scan_in_single_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;bxclk_single_o&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],

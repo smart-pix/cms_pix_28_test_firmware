@@ -1,7 +1,7 @@
 {
    "ActiveEmotionalView":"Default View",
    "Default View_ScaleFactor":"0.554815",
-   "Default View_TopLeft":"-175,-710",
+   "Default View_TopLeft":"-175,-712",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
 #  -string -flagsOSRD
@@ -10,6 +10,7 @@ preplace port port-id_scan_out_test -pg 1 -lvl 0 -x 0 -y 140 -defaultsOSRD
 preplace port port-id_bxclk_single -pg 1 -lvl 7 -x 2910 -y -10 -defaultsOSRD
 preplace port port-id_scan_in_single -pg 1 -lvl 7 -x 2910 -y -30 -defaultsOSRD
 preplace port port-id_scan_out_single -pg 1 -lvl 7 -x 2910 -y -50 -defaultsOSRD
+preplace port port-id_scan_load_single -pg 1 -lvl 7 -x 2910 -y -70 -defaultsOSRD
 preplace portBus config_out_p -pg 1 -lvl 0 -x 0 -y 210 -defaultsOSRD
 preplace portBus config_out_n -pg 1 -lvl 0 -x 0 -y 230 -defaultsOSRD
 preplace portBus scan_out_p -pg 1 -lvl 0 -x 0 -y 250 -defaultsOSRD
@@ -43,8 +44,8 @@ preplace inst ibuf_ds_0 -pg 1 -lvl 1 -x 400 -y 280 -defaultsOSRD
 preplace inst obuf_ds_0 -pg 1 -lvl 6 -x 2580 -y 240 -defaultsOSRD
 preplace inst clk_wiz_0 -pg 1 -lvl 3 -x 1410 -y 380 -defaultsOSRD
 preplace inst iob_iddr_0 -pg 1 -lvl 2 -x 920 -y 260 -defaultsOSRD
-preplace inst iob_oddr_0 -pg 1 -lvl 5 -x 2110 -y 200 -defaultsOSRD
 preplace inst fw_top_v_0 -pg 1 -lvl 4 -x 1760 -y 220 -defaultsOSRD
+preplace inst iob_oddr_0 -pg 1 -lvl 5 -x 2110 -y 200 -defaultsOSRD
 preplace netloc ARESETN_1 1 2 2 1250 -80 1580
 preplace netloc clk_wiz_0_clk_out1 1 1 4 600 150 1230 160 1560 60 1930
 preplace netloc config_out_n_1 1 0 1 N 230
@@ -74,16 +75,16 @@ preplace netloc iob_iddr_0_scan_out_o 1 2 3 NJ 240 1600 70 1920
 preplace netloc iob_iddr_0_scan_out_test_o 1 2 2 NJ 260 N
 preplace netloc iob_oddr_0_bxclk_ana_o 1 5 1 2320 220n
 preplace netloc iob_oddr_0_bxclk_o 1 5 1 2330 240n
-preplace netloc iob_oddr_0_bxclk_single_o 1 5 2 2310 -10 NJ
-preplace netloc iob_oddr_0_config_clk_o 1 5 1 N 160
+preplace netloc iob_oddr_0_bxclk_single_o 1 5 2 2330 -10 NJ
+preplace netloc iob_oddr_0_config_clk_o 1 5 1 2320 160n
 preplace netloc iob_oddr_0_config_in_o 1 5 1 2300 180n
 preplace netloc iob_oddr_0_config_load_o 1 5 1 2310 200n
-preplace netloc iob_oddr_0_dut_rst_port_o 1 5 1 2290 180n
+preplace netloc iob_oddr_0_dut_rst_port_o 1 5 1 2290 190n
 preplace netloc iob_oddr_0_scan_in_o 1 5 1 2350 280n
-preplace netloc iob_oddr_0_scan_in_single_o 1 5 2 2300 -30 NJ
+preplace netloc iob_oddr_0_scan_in_single_o 1 5 2 2320 -30 NJ
 preplace netloc iob_oddr_0_scan_load_o 1 5 1 2360 300n
-preplace netloc iob_oddr_0_scan_out_single_o 1 5 2 2290 -50 NJ
-preplace netloc iob_oddr_0_super_pixel_sel_o 1 5 2 2320 10 NJ
+preplace netloc iob_oddr_0_scan_out_single_o 1 5 2 2310 -50 NJ
+preplace netloc iob_oddr_0_super_pixel_sel_o 1 5 2 2340 10 NJ
 preplace netloc iob_oddr_0_vin_test_trig_out_o 1 5 1 2340 260n
 preplace netloc obuf_ds_0_bxclk_ana_n 1 6 1 N 210
 preplace netloc obuf_ds_0_bxclk_ana_p 1 6 1 N 190
@@ -109,6 +110,7 @@ preplace netloc scan_out_p_1 1 0 1 N 250
 preplace netloc scan_out_test_1 1 0 2 NJ 140 590
 preplace netloc zynq_ultra_ps_e_0_pl_clk0 1 1 3 590 -280 1240 170 1590
 preplace netloc zynq_ultra_ps_e_0_pl_resetn0 1 1 2 570 -290 1230
+preplace netloc iob_oddr_0_scan_load_single_o 1 5 2 2300 -70 NJ
 preplace netloc axi_interconnect_0_M00_AXI 1 3 1 1570 40n
 preplace netloc zynq_ultra_ps_e_0_M_AXI_HPM0_FPD 1 2 1 N -20
 levelinfo -pg 1 0 400 920 1410 1760 2110 2580 2910
