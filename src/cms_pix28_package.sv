@@ -18,6 +18,7 @@
 // 2024-12-16  Cristian  Gingu        Add localparam w_cfg_static_1_reg_* for ip2_test5
 // 2025-01-02  Cristian  Gingu        Add localparam repeat_pixel_bits_total for ip2_test5
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
+// 2025-04-14  Cristian  Gingu        Add localparam w_cfg_static_0/1_reg_scan_load_phase_index_0/1_min/max_IP2 for ip2_test2_one_scanload. Modify ip2_test2.sv state machine. Update fw_ip2.sv
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
@@ -168,14 +169,16 @@ package cms_pix28_package;
   localparam w_cfg_static_0_reg_scan_load_delay_index_min_IP2        = 13;     //
   localparam w_cfg_static_0_reg_scan_load_delay_index_max_IP2        = 18;     //
   localparam w_cfg_static_0_reg_scan_load_delay_disable_index_IP2    = 19;     //
-  localparam w_cfg_static_0_reg_spare_index_min_IP2                  = 20;     //
-  localparam w_cfg_static_0_reg_spare_index_max_IP2                  = 23;     //
+  localparam w_cfg_static_0_reg_scan_load_phase_index_0_min_IP2      = 20;     // scan_load phase, bit#0-to-3
+  localparam w_cfg_static_0_reg_scan_load_phase_index_0_max_IP2      = 23;     // scan_load phase, bit#0-to-3
   //
   localparam w_cfg_static_1_reg_select_pixel_index_min_IP2           =  0;     // selected pixel for ip2_test5: 0-to-255
   localparam w_cfg_static_1_reg_select_pixel_index_max_IP2           =  7;     // selected pixel for ip2_test5: 0-to-255
   localparam w_cfg_static_1_reg_repeat_pixel_index_min_IP2           =  8;     // loop iterations in ip2_test5: 0-to-2047
   localparam w_cfg_static_1_reg_repeat_pixel_index_max_IP2           = 18;     // loop iterations in ip2_test5: 0-to-2047
-  localparam w_cfg_static_1_reg_spare_index_min_IP2                  = 19;     //
+  localparam w_cfg_static_1_reg_scan_load_phase_index_1_min_IP2      = 19;     // scan_load phase, bit#4-to-5
+  localparam w_cfg_static_1_reg_scan_load_phase_index_1_max_IP2      = 20;     // scan_load phase, bit#4-to-5
+  localparam w_cfg_static_1_reg_spare_index_min_IP2                  = 21;     //
   localparam w_cfg_static_1_reg_spare_index_max_IP2                  = 23;     //
   //
   localparam w_execute_cfg_test_delay_index_min_IP2                  =  0;     //

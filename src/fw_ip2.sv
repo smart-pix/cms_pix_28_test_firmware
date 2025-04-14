@@ -42,6 +42,7 @@
 // 2025-04-07  Cristian  Gingu        In Vivado block design and iob_oddr.v, add single outputs scan_out_single.
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // 2025-04-11  Cristian  Gingu        Clear sm_testx_o_scanchain_reg and sm_testx_o_scanchain_test_reg while sm_test1,2,3,4,5 are in DELAY_TEST_IP2_T1,2,3,4,5
+// 2025-04-14  Cristian  Gingu        Add localparam w_cfg_static_0/1_reg_scan_load_phase_index_0/1_min/max_IP2 for ip2_test2_one_scanload. Modify ip2_test2.sv state machine. Update fw_ip2.sv
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -97,28 +98,30 @@ module fw_ip2 (
   import cms_pix28_package::scan_reg_bits_total;
   import cms_pix28_package::repeat_pixel_bits_total;
   //
-  import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_min_IP2;     // USAGE of first 6-bits: bit#0-to-5. USE to set clock PERIOD
-  import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_max_IP2;     // example for setting bxclk==40MHz derived from fw_pl_clk1==400MHz: write 6'h0A => 10*2.5ns=25ns;
-  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_index_min_IP2;      // USAGE of next  5-bits: bit#6-to-10. Use to set clock DELAY (maximum is half clock PERIOD as set by bits 0-to-5)
-  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_index_max_IP2;      //
-  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_sign_index_IP2;     // USAGE of next 1-bit: bit#11. Use it to set clock value (Lor H) in the first bxclk_delay clocks within a bxclk_period
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_min_IP2;          // USAGE of first 6-bits: bit#0-to-5. USE to set clock PERIOD
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_period_index_max_IP2;          // example for setting bxclk==40MHz derived from fw_pl_clk1==400MHz: write 6'h0A => 10*2.5ns=25ns;
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_index_min_IP2;           // USAGE of next  5-bits: bit#6-to-10. Use to set clock DELAY (maximum is half clock PERIOD as set by bits 0-to-5)
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_index_max_IP2;           //
+  import cms_pix28_package::w_cfg_static_0_reg_bxclk_delay_sign_index_IP2;          // USAGE of next 1-bit: bit#11. Use it to set clock value (Lor H) in the first bxclk_delay clocks within a bxclk_period
   // 00.00.00.01.02.03.04.05.06.07.08.09.10.01.02.03.04.05.06.07.08.09.10.               fw_pl_clk1_cnt
   // LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.            fw_bxclk_ana_ff
   // LL.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.      fw_bxclk_ff when bxclk_delay_sign==0 and bxclk_delay==2
   // LL.LL.LL.LL.HH.HH.HH.LL.LL.LL.LL.LL.HH.HH.HH.HH.HH.LL.LL.LL.LL.LL.                  fw_bxclk_ff when bxclk_delay_sign==1 and bxclk_delay==2
-  import cms_pix28_package::w_cfg_static_0_reg_super_pix_sel_index_IP2;        //
-  import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_index_min_IP2;  //
-  import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_index_max_IP2;  //
+  import cms_pix28_package::w_cfg_static_0_reg_super_pix_sel_index_IP2;             //
+  import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_index_min_IP2;       //
+  import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_index_max_IP2;       //
   import cms_pix28_package::w_cfg_static_0_reg_scan_load_delay_disable_index_IP2;   //
-  import cms_pix28_package::w_cfg_static_0_reg_spare_index_min_IP2;            //
-  import cms_pix28_package::w_cfg_static_0_reg_spare_index_max_IP2;            //
+  import cms_pix28_package::w_cfg_static_0_reg_scan_load_phase_index_0_min_IP2;     // scan_load phase, bit#0-to-3
+  import cms_pix28_package::w_cfg_static_0_reg_scan_load_phase_index_0_max_IP2;     // scan_load phase, bit#0-to-3
   //
-  import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_min_IP2;     // selected pixel for ip2_test5: 0-to-255
-  import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_max_IP2;     // selected pixel for ip2_test5: 0-to-255
-  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_min_IP2;     // loop iterations in ip2_test5: 0-to-2047
-  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_max_IP2;     // loop iterations in ip2_test5: 0-to-2047
-  import cms_pix28_package::w_cfg_static_1_reg_spare_index_min_IP2;            //
-  import cms_pix28_package::w_cfg_static_1_reg_spare_index_max_IP2;            //
+  import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_min_IP2;          // selected pixel for ip2_test5: 0-to-255
+  import cms_pix28_package::w_cfg_static_1_reg_select_pixel_index_max_IP2;          // selected pixel for ip2_test5: 0-to-255
+  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_min_IP2;          // loop iterations in ip2_test5: 0-to-2047
+  import cms_pix28_package::w_cfg_static_1_reg_repeat_pixel_index_max_IP2;          // loop iterations in ip2_test5: 0-to-2047
+  import cms_pix28_package::w_cfg_static_1_reg_scan_load_phase_index_1_min_IP2;     // scan_load phase, bit#4-to-5
+  import cms_pix28_package::w_cfg_static_1_reg_scan_load_phase_index_1_max_IP2;     // scan_load phase, bit#4-to-5
+  import cms_pix28_package::w_cfg_static_1_reg_spare_index_min_IP2;                 //
+  import cms_pix28_package::w_cfg_static_1_reg_spare_index_max_IP2;                 //
   //
   import cms_pix28_package::w_execute_cfg_test_delay_index_min_IP2;            //
   import cms_pix28_package::w_execute_cfg_test_delay_index_max_IP2;            //
@@ -141,6 +144,7 @@ module fw_ip2 (
   import cms_pix28_package::IDLE_IP2_T2;
   import cms_pix28_package::DELAY_TEST_IP2_T2;
   import cms_pix28_package::TRIGOUT_HIGH_2_IP2_T2;
+  import cms_pix28_package::SCANLOAD_HIGH_1_IP2_T2;
   import cms_pix28_package::SCANLOAD_HIGH_2_IP2_T2;
   import cms_pix28_package::SHIFT_IN_0_IP2_T2;
   import cms_pix28_package::SHIFT_IN_IP2_T2;
@@ -368,6 +372,7 @@ module fw_ip2 (
   logic       super_pixel_sel;                             // on clock domain fw_axi_clk
   logic [5:0] scan_load_delay;                             // on clock domain fw_axi_clk
   logic       scan_load_delay_disable;                     // on clock domain fw_axi_clk
+  logic [5:0] scan_load_phase;                             // on clock domain fw_axi_clk
   logic [7:0] select_pixel;                                // on clock domain fw_axi_clk
   logic [10:0]repeat_pixel;                                // on clock domain fw_axi_clk
   assign bxclk_period            = w_cfg_static_0_reg[w_cfg_static_0_reg_bxclk_period_index_max_IP2    : w_cfg_static_0_reg_bxclk_period_index_min_IP2   ];
@@ -376,8 +381,10 @@ module fw_ip2 (
   assign super_pixel_sel         = w_cfg_static_0_reg[w_cfg_static_0_reg_super_pix_sel_index_IP2                                                         ];
   assign scan_load_delay         = w_cfg_static_0_reg[w_cfg_static_0_reg_scan_load_delay_index_max_IP2 : w_cfg_static_0_reg_scan_load_delay_index_min_IP2];
   assign scan_load_delay_disable = w_cfg_static_0_reg[w_cfg_static_0_reg_scan_load_delay_disable_index_IP2                                               ];
+  assign scan_load_phase         = {
+      w_cfg_static_1_reg[w_cfg_static_1_reg_scan_load_phase_index_1_max_IP2 : w_cfg_static_1_reg_scan_load_phase_index_1_min_IP2],
+      w_cfg_static_0_reg[w_cfg_static_0_reg_scan_load_phase_index_0_max_IP2 : w_cfg_static_0_reg_scan_load_phase_index_0_min_IP2] };
   assign select_pixel            = w_cfg_static_1_reg[w_cfg_static_1_reg_select_pixel_index_max_IP2    : w_cfg_static_1_reg_select_pixel_index_min_IP2   ];
-  assign repeat_pixel            = w_cfg_static_1_reg[w_cfg_static_1_reg_repeat_pixel_index_max_IP2    : w_cfg_static_1_reg_repeat_pixel_index_min_IP2   ];
 
   // Instantiate module bxclks_generators.sv
   logic [5:0] fw_pl_clk1_cnt;
@@ -559,6 +566,7 @@ module fw_ip2 (
     .clk_counter                             (fw_pl_clk1_cnt),
     .scan_load_delay                         (scan_load_delay),
     .scan_load_delay_disable                 (scan_load_delay_disable),
+    .scan_load_phase                         (scan_load_phase),
     .test_delay                              (test_delay),
     .test_trig_out_phase                     (test_trig_out_phase),
     .test_mask_reset_not                     (test_mask_reset_not),
@@ -740,7 +748,7 @@ module fw_ip2 (
       end
     end else if(test2_enable) begin
       // use data specific for test case test2
-      if(sm_test2==SHIFT_IN_0_IP2_T2 || sm_test2==SHIFT_IN_IP2_T2 ||
+      if(sm_test2==SCANLOAD_HIGH_1_IP2_T2 || sm_test2==SHIFT_IN_0_IP2_T2 || sm_test2==SHIFT_IN_IP2_T2 ||
           (sm_test2==SCANLOAD_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b0) || (sm_test2==TRIGOUT_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b1)) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
