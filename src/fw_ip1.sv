@@ -29,6 +29,7 @@
 // 2024-11-26  Cristian Gingu         Add signal and logic for cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1
 // 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is not defined in IP1
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
+// 2025-04-15  Cristian  Gingu        Clear sm_testx_o_shift_reg while sm_test1,2 are in DELAY_TEST_IP2_T1,2
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -107,11 +108,13 @@ module fw_ip1 (
   //
   import cms_pix28_package::state_t_sm_ip1_test1;
   import cms_pix28_package::IDLE_IP1_T1;
+  import cms_pix28_package::DELAY_TEST_IP1_T1;
   import cms_pix28_package::SHIFT_IN_0_IP1_T1;
   import cms_pix28_package::SHIFT_IN_IP1_T1;
   //
   import cms_pix28_package::state_t_sm_ip1_test2;
   import cms_pix28_package::IDLE_IP1_T2;
+  import cms_pix28_package::DELAY_TEST_IP1_T2;
   import cms_pix28_package::SHIFT_IN_0_IP1_T2;
   import cms_pix28_package::SHIFT_IN_IP1_T2;
   import cms_pix28_package::SHIFT_IN_SLOW_CLK_IP1_T2;
@@ -540,6 +543,9 @@ module fw_ip1 (
           // keep old value
           sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
         end
+      end else if(sm_test1==DELAY_TEST_IP1_T1) begin
+        // CLEAR
+        sm_testx_o_shift_reg     <= {sm_testx_o_shift_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_shift_reg     <= sm_testx_o_shift_reg;
@@ -572,19 +578,22 @@ module fw_ip1 (
           // keep old value
           sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
         end
+      end else if(sm_test2==DELAY_TEST_IP1_T2) begin
+        // CLEAR
+        sm_testx_o_shift_reg     <= {sm_testx_o_shift_reg_width{1'b0}};
       end else begin
         // keep old value
         sm_testx_o_shift_reg     <= sm_testx_o_shift_reg;
       end
     end else if(test3_enable) begin
       // use data specific for test case test3
-      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width*{1'b0}};     // TODO
+      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width{1'b0}};     // TODO
     end else if(test4_enable) begin
       // use data specific for test case test4
-      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width*{1'b0}};     // TODO
+      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width{1'b0}};     // TODO
     end else if(test5_enable) begin
       // use data specific for test case test5
-      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width*{1'b0}};     // TODO
+      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width{1'b0}};     // TODO
     end else begin
       // keep old value; need to do this way to preserve sm_testx_o_shift_reg after any of test1,2,3,4 are done
       // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" for the purpose of AXI readout
