@@ -1898,7 +1898,6 @@ module fw_ipx_wrap_tb ();
       w_execute();
       tb_number   = 906;
       #(tb_repeat_pixel*(770+tb_scan_load_delay+4)*tb_bxclk_period*fw_pl_clk1_period); // execution: wait for at least tb_repeat_pixel*(1*768+1) BXCLK cycles; alternatively check when sm_test5_o_status_done is asserted
-      #(100*fw_axi_clk_period);
       if(sw_read32_1[status_index_test5_done]===1'b1) begin
         $display("time=%06.2f tb_i_test=%01d firmware_id=%01d test5 in loopback=%01d DONE; starting to check readout data: calling check_r_data_array_0_pixel()...check_r_data_array_1_pixel() PIX[%03d]=%03b", $realtime(), tb_i_test, tb_firmware_id, tb_test_loopback, tb_select_pixel, tb_w_cfg_pixels_256x3[tb_select_pixel]);
       end else begin
