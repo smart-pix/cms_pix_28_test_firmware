@@ -385,6 +385,7 @@ module fw_ip2 (
       w_cfg_static_1_reg[w_cfg_static_1_reg_scan_load_phase_index_1_max_IP2 : w_cfg_static_1_reg_scan_load_phase_index_1_min_IP2],
       w_cfg_static_0_reg[w_cfg_static_0_reg_scan_load_phase_index_0_max_IP2 : w_cfg_static_0_reg_scan_load_phase_index_0_min_IP2] };
   assign select_pixel            = w_cfg_static_1_reg[w_cfg_static_1_reg_select_pixel_index_max_IP2    : w_cfg_static_1_reg_select_pixel_index_min_IP2   ];
+  assign repeat_pixel            = w_cfg_static_1_reg[w_cfg_static_1_reg_repeat_pixel_index_max_IP2    : w_cfg_static_1_reg_repeat_pixel_index_min_IP2   ];
 
   // Instantiate module bxclks_generators.sv
   logic [5:0] fw_pl_clk1_cnt;

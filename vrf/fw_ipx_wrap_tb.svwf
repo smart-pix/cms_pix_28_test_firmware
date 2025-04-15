@@ -95,7 +95,6 @@ set id [waveform add -signals [subst  {
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_dev_id_enable[3:0]}]}
 	} ]]
-waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_op_code_w_reset}]}
 	} ]]
@@ -402,6 +401,7 @@ set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.scan_load_phase[5:0]}]}
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
+waveform hierarchy collapse $id
 set id [waveform add -signals [subst  {
 	{[format {fw_ipx_wrap_tb.DUT.fw_ip2_inst.select_pixel[7:0]}]}
 	} ]]
@@ -960,4 +960,4 @@ set id [waveform add -signals [subst  {
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 
-waveform xview limits 0 2ns
+waveform xview limits 0 7567310ns
