@@ -29,7 +29,7 @@
 // 2024-11-26  Cristian Gingu         Add signal and logic for cms_pix28_package::w_execute_cfg_test_gate_config_clk_IP1
 // 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is not defined in IP1
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
-// 2025-04-15  Cristian  Gingu        Clear sm_testx_o_shift_reg while sm_test1,2 are in DELAY_TEST_IP2_T1,2
+// 2025-04-15  Cristian  Gingu        Clear sm_testx_o_shift_reg while sm_test1,2 are in DELAY_TEST_IP1_T1,2
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
