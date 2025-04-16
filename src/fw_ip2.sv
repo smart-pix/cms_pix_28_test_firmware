@@ -749,7 +749,7 @@ module fw_ip2 (
       end
     end else if(test2_enable) begin
       // use data specific for test case test2
-      if(sm_test2==SCANLOAD_HIGH_1_IP2_T2 || sm_test2==SHIFT_IN_0_IP2_T2 || sm_test2==SHIFT_IN_IP2_T2 ||
+      if(sm_test2==SHIFT_IN_0_IP2_T2 || sm_test2==SHIFT_IN_IP2_T2 ||
           (sm_test2==SCANLOAD_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b0) || (sm_test2==TRIGOUT_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b1)) begin
         if(test_sample==fw_pl_clk1_cnt) begin
           if(test_loopback) begin
@@ -965,35 +965,35 @@ module fw_ip2 (
   always @(posedge fw_pl_clk1) begin
     if(test1_enable_re) begin
       error_w_execute_cfg_test1 <= 1'b0;
-    end else if(sm_test1!=IDLE_IP2_T1 & (test_delay==6'h0 |test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+    end else if(sm_test1!=IDLE_IP2_T1 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
       error_w_execute_cfg_test1 <= 1'b1;
     end
   end
   always @(posedge fw_pl_clk1) begin
     if(test2_enable_re) begin
       error_w_execute_cfg_test2 <= 1'b0;
-    end else if(sm_test2!=IDLE_IP2_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+    end else if(sm_test2!=IDLE_IP2_T2 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period) | scan_load_phase==6'h0 | test_trig_out_phase==6'b0)) begin
       error_w_execute_cfg_test2 <= 1'b1;
     end
   end
   always @(posedge fw_pl_clk1) begin
     if(test3_enable_re) begin
       error_w_execute_cfg_test3 <= 1'b0;
-    end else if(sm_test3!=IDLE_IP2_T3 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+    end else if(sm_test3!=IDLE_IP2_T3 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period) | scan_load_phase==6'h0 | test_trig_out_phase==6'b0)) begin
       error_w_execute_cfg_test3 <= 1'b1;
     end
   end
   always @(posedge fw_pl_clk1) begin
     if(test4_enable_re) begin
       error_w_execute_cfg_test4 <= 1'b0;
-    end else if(sm_test4!=IDLE_IP2_T4 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) begin
+    end else if(sm_test4!=IDLE_IP2_T4 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period) | scan_load_phase==6'h0 | test_trig_out_phase==6'b0)) begin
       error_w_execute_cfg_test4 <= 1'b1;
     end
   end
   always @(posedge fw_pl_clk1) begin
     if(test5_enable_re) begin
       error_w_execute_cfg_test5 <= 1'b0;
-    end else if((sm_test5!=IDLE_IP2_T5 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) | (repeat_pixel>11'h555)) begin
+    end else if((sm_test5!=IDLE_IP2_T5 & (test_delay==6'h0 | test_delay==6'h1 | test_delay==6'h2 | (test_delay>bxclk_period))) | (repeat_pixel>11'h555) | scan_load_phase==6'h0 | test_trig_out_phase==6'b0) begin
       error_w_execute_cfg_test5 <= 1'b1;
     end
   end
