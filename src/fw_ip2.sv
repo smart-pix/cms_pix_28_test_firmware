@@ -43,6 +43,7 @@
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // 2025-04-11  Cristian  Gingu        Clear sm_testx_o_scanchain_reg and sm_testx_o_scanchain_test_reg while sm_test1,2,3,4,5 are in DELAY_TEST_IP2_T1,2,3,4,5
 // 2025-04-14  Cristian  Gingu        Add localparam w_cfg_static_0/1_reg_scan_load_phase_index_0/1_min/max_IP2 for ip2_test2_one_scanload. Modify ip2_test2.sv state machine. Update fw_ip2.sv
+// 2025-04-16  Cristian  Gingu        In ip2_test2.sv done updating state machine. In fw_ip2.sv remove condition sm_test2==SCANLOAD_HIGH_1_IP2_T2 and update error_w_execute_cfg_test1,2,3,4,5
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__

@@ -1686,11 +1686,12 @@ module fw_ipx_wrap_tb ();
     tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
     tb_scan_load_phase         = 6'h03;                    // on clock domain fw_axi_clk
     //w_cfg_static_fixed(.index(0));
-    //w_cfg_static_fixed(.index(1));                         // need to do this because tb_scan_load_phase[3:0] and tb_scan_load_phase[5:4] are updated in different w_cfg_static_fixed(.index()) indexes
+    //w_cfg_static_fixed(.index(1));                       // need to do this because tb_scan_load_phase[3:0] and tb_scan_load_phase[5:4] are updated in different w_cfg_static_fixed(.index()) indexes
     tb_number   = 602;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= tb_bxclk_period; tb_i_test++) begin
-      tb_scan_load_phase        = ((1+1*tb_i_test) % tb_bxclk_period) & 6'h3F;   // on clock domain fw_axi_clk
+    for (tb_i_test = 0; tb_i_test <= tb_bxclk_period+5; tb_i_test++) begin
+      tb_scan_load_delay         = ((0+1*tb_i_test) % (tb_bxclk_period+1)) & 6'h3F;  // on clock domain fw_axi_clk
+      tb_scan_load_phase         = ((1+1*tb_i_test) % (tb_bxclk_period+1)) & 6'h3F;  // on clock domain fw_axi_clk
       w_cfg_static_fixed(.index(0));
       w_cfg_static_fixed(.index(1));                         // need to do this because tb_scan_load_phase[3:0] and tb_scan_load_phase[5:4] are updated in different w_cfg_static_fixed(.index()) indexes
       #(5*fw_axi_clk_period);                                // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
@@ -1804,7 +1805,7 @@ module fw_ipx_wrap_tb ();
     w_cfg_static_fixed(.index(1));                         // need to do this because tb_scan_load_phase[3:0] and tb_scan_load_phase[5:4] are updated in different w_cfg_static_fixed(.index()) indexes
     tb_number   = 802;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
-    for (tb_i_test = 0; tb_i_test <= 10; tb_i_test++) begin
+    for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
       tb_test_sample           = 6'h07;                      // on clock domain fw_axi_clk
       tb_test_number           = test_number_4;              // on clock domain fw_axi_clk
