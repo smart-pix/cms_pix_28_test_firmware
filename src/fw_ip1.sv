@@ -528,76 +528,66 @@ module fw_ip1 (
   // Logic related with readout data from DUT: sm_testx_o_shift_reg
   // This is State Machine for test dependent: sm_test1, sm_test2, sm_test3, sm_test4, sm_test5
   always @(posedge fw_axi_clk) begin : sm_testx_o_shift_reg_proc
-    if(test1_enable) begin
-      // use data specific for test case test1
-      if(sm_test1==SHIFT_IN_0_IP1_T1 | sm_test1==SHIFT_IN_IP1_T1) begin
-        if(test_sample==fast_configclk_clk_counter) begin
-          if(test_loopback) begin
-            // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_shift_reg <= {sm_test1_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
-          end else begin
-            // shift-in new bit using readout-data from DUT
-            sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
-          end
-        end else begin
-          // keep old value
-          sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
-        end
-      end else if(sm_test1==DELAY_TEST_IP1_T1) begin
-        // CLEAR
-        sm_testx_o_shift_reg     <= {sm_testx_o_shift_reg_width{1'b0}};
-      end else begin
-        // keep old value
-        sm_testx_o_shift_reg     <= sm_testx_o_shift_reg;
-      end
-    end else if(test2_enable) begin
-      // use data specific for test case test2
-      if(sm_test2==SHIFT_IN_0_IP1_T2 | sm_test2==SHIFT_IN_IP1_T2) begin      // test2_enable: using fast_configclk to shift-in and fast_configclk_clk_counter to sample at programmable counter value == test_sample
-        if(test_sample==fast_configclk_clk_counter) begin
-          if(test_loopback) begin
-            // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_shift_reg <= {sm_test2_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
-          end else begin
-            // shift-in new bit using readout-data from DUT
-            sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
-          end
-        end else begin
-          // keep old value
-          sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
-        end
-      end else if(sm_test2==SHIFT_IN_SLOW_CLK_IP1_T2) begin              // test2_enable: using slow_configclk to shift-in and slow_configclk_clk_counter to sample at fixed counter value == 27'h1
-        if(27'h1==slow_configclk_clk_counter) begin
-          if(test_loopback) begin
-            // shift-in new bit using loop-back data from sm_test1_o_scan_in
-            sm_testx_o_shift_reg <= {sm_test2_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
-          end else begin
-            // shift-in new bit using readout-data from DUT
-            sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
-          end
-        end else begin
-          // keep old value
-          sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
-        end
-      end else if(sm_test2==DELAY_TEST_IP1_T2) begin
-        // CLEAR
-        sm_testx_o_shift_reg     <= {sm_testx_o_shift_reg_width{1'b0}};
-      end else begin
-        // keep old value
-        sm_testx_o_shift_reg     <= sm_testx_o_shift_reg;
-      end
-    end else if(test3_enable) begin
-      // use data specific for test case test3
-      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width{1'b0}};     // TODO
-    end else if(test4_enable) begin
-      // use data specific for test case test4
-      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width{1'b0}};     // TODO
-    end else if(test5_enable) begin
-      // use data specific for test case test5
-      sm_testx_o_shift_reg <= {sm_testx_o_shift_reg_width{1'b0}};     // TODO
+    if((test1_enable==1'b1 & sm_test1==DELAY_TEST_IP1_T1) | (test2_enable==1'b1 & sm_test2==DELAY_TEST_IP1_T2) | (test3_enable==1'b1) | (test4_enable==1'b1) | (test5_enable==1'b1)) begin
+      // CLEAR
+      sm_testx_o_shift_reg     <= {sm_testx_o_shift_reg_width{1'b0}};
     end else begin
-      // keep old value; need to do this way to preserve sm_testx_o_shift_reg after any of test1,2,3,4 are done
-      // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" for the purpose of AXI readout
-      sm_testx_o_shift_reg <= sm_testx_o_shift_reg;
+      if(test1_enable) begin
+        // use data specific for test case test1
+        if(sm_test1==SHIFT_IN_0_IP1_T1 | sm_test1==SHIFT_IN_IP1_T1) begin
+          if(test_sample==fast_configclk_clk_counter) begin
+            if(test_loopback) begin
+              // shift-in new bit using loop-back data from sm_test1_o_scan_in
+              sm_testx_o_shift_reg <= {sm_test1_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            end else begin
+              // shift-in new bit using readout-data from DUT
+              sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            end
+          end else begin
+            // keep old value
+            sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
+          end
+        end else begin
+          // keep old value
+          sm_testx_o_shift_reg     <= sm_testx_o_shift_reg;
+        end
+      end else if(test2_enable) begin
+        // use data specific for test case test2
+        if(sm_test2==SHIFT_IN_0_IP1_T2 | sm_test2==SHIFT_IN_IP1_T2) begin      // test2_enable: using fast_configclk to shift-in and fast_configclk_clk_counter to sample at programmable counter value == test_sample
+          if(test_sample==fast_configclk_clk_counter) begin
+            if(test_loopback) begin
+              // shift-in new bit using loop-back data from sm_test1_o_scan_in
+              sm_testx_o_shift_reg <= {sm_test2_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            end else begin
+              // shift-in new bit using readout-data from DUT
+              sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            end
+          end else begin
+            // keep old value
+            sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
+          end
+        end else if(sm_test2==SHIFT_IN_SLOW_CLK_IP1_T2) begin              // test2_enable: using slow_configclk to shift-in and slow_configclk_clk_counter to sample at fixed counter value == 27'h1
+          if(27'h1==slow_configclk_clk_counter) begin
+            if(test_loopback) begin
+              // shift-in new bit using loop-back data from sm_test1_o_scan_in
+              sm_testx_o_shift_reg <= {sm_test2_o_config_in,  sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            end else begin
+              // shift-in new bit using readout-data from DUT
+              sm_testx_o_shift_reg <= {sm_testx_i_config_out, sm_testx_o_shift_reg[sm_testx_o_shift_reg_width-1 : 1]};
+            end
+          end else begin
+            // keep old value
+            sm_testx_o_shift_reg   <= sm_testx_o_shift_reg;
+          end
+        end else begin
+          // keep old value
+          sm_testx_o_shift_reg     <= sm_testx_o_shift_reg;
+        end
+      end else begin
+        // keep old value; need to do this way to preserve sm_testx_o_shift_reg after any of test1,2,3,4,5 are done
+        // and the operation code is no more "op_code_w_execute" but instead "op_code_r_data_array_0" for the purpose of AXI readout
+        sm_testx_o_shift_reg <= sm_testx_o_shift_reg;
+      end
     end
   end
 
