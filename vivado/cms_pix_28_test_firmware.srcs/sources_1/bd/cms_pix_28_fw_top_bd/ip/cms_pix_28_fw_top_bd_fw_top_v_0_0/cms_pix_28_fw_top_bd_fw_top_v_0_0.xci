@@ -165,6 +165,7 @@
                   &quot;vin_test_trig_out&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;scan_in&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;scan_load&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
+                  &quot;dbg_first_scan_load_shift&quot;: [ { &quot;direction&quot;: &quot;out&quot; } ],
                   &quot;config_out&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
                   &quot;scan_out&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],
                   &quot;scan_out_test&quot;: [ { &quot;direction&quot;: &quot;in&quot; } ],

@@ -51,6 +51,7 @@ set_property PACKAGE_PIN V7  [get_ports dnn_out_1_n]
 # WARNING: input port dn_event_toggle is NOT connected to wirebonded DUT PCB J-26
 # set_property PACKAGE_PIN T8  [get_ports dn_event_toggle] T8 pin now used by vin_test_trig_out
 # set_property PACKAGE_PIN R8  [get_ports up_event_toggle]
+set_property PACKAGE_PIN AG10 [get_ports dbg_first_scan_load_shift_single]
 
 ###set_property IOSTANDARD LVCMOS18 [get_ports vin_test_trig_out]
 set_property IOSTANDARD LVCMOS18 [get_ports bxclk_single]
@@ -66,6 +67,7 @@ set_property IOSTANDARD LVCMOS18 [get_ports scan_out_single]
 set_property IOSTANDARD LVCMOS18 [get_ports scan_out_test]
 ###set_property IOSTANDARD LVCMOS18 [get_ports dn_event_toggle]
 ###set_property IOSTANDARD LVCMOS18 [get_ports up_event_toggle]
+set_property IOSTANDARD LVCMOS18 [get_ports dbg_first_scan_load_shift_single]
 
 # Differential signals
 set_property IOSTANDARD LVDS [get_ports vin_test_trig_out_p]
