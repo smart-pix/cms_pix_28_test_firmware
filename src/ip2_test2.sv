@@ -231,15 +231,7 @@ module ip2_test2 (
             end
           end else begin
             sm_test2_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-            if(test_delay==clk_counter) begin
-              if(scan_load_delay==0) begin
-                sm_test2_o_scan_in               <= sm_testx_i_scanchain_reg_bit0;
-              end else begin
-                sm_test2_o_scan_in               <= 1'b0;
-              end
-            end else begin
-              sm_test2_o_scan_in                 <= 1'b0;
-            end
+            sm_test2_o_scan_in                   <= 1'b0;
             sm_test2_o_scanchain_reg_shift       <= 1'b0;
           end
           sm_test2_o_reset_not                   <= 1'b1;
@@ -267,11 +259,7 @@ module ip2_test2 (
           // output state machine signal assignment
           sm_test2_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
           sm_test2_o_reset_not                   <= 1'b1;
-          if((test_delay==clk_counter) && (scan_load_delay==sm_scan_load_delay_cnt)) begin
-            sm_test2_o_scan_in                   <= sm_testx_i_scanchain_reg_bit0;
-          end else begin
-            sm_test2_o_scan_in                   <= 1'b0;
-          end
+          sm_test2_o_scan_in                     <= 1'b0;
           sm_test2_o_scanchain_reg_load          <= 1'b0;
           sm_test2_o_scanchain_reg_shift         <= 1'b0;
           sm_test2_o_status_done                 <= 1'b0;

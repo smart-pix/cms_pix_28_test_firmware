@@ -24,6 +24,7 @@
 // 2025-03-21  Cristian  Gingu        Upgrade test-case T5 to include change of tb_test_delay; add code for scan_in_del1,2,3,4
 // 2025-04-01  Cristian  Gingu        More upgrade on test-case T5 to study tb_test_sample vs tb_test_delay 2D plots and compare withe BP and AB experimental plots.
 // 2025-04-10  Cristian  Gingu        More upgrade on test-case T5 to study tb_test_sample vs tb_test_delay 2D plots and compare withe BP and AB experimental plots. Save 2D plots into https://fermicloud.sharepoint.com/:p:/r/sites/FNALO365-ASICDepartment/_layouts/15/doc2.aspx?sourcedoc=%7B0D668FF8-99D1-47AD-BC37-FAE28DE351B2%7D&file=sampleDelay.pptx&wdLOR=c0506A49F-5559-4DC8-B81D-043D6036590D&fromShare=true&action=edit&mobileredirect=true&previoussessionid=ba957705-d4c3-c057-dccc-5806084326aa
+// 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -51,6 +52,7 @@ module fw_ipx_wrap_tb ();
   logic vin_test_trig_out;
   logic scan_in;
   logic scan_load;
+  logic dbg_first_scan_load_shift;
   // Inputs from DUT
   logic config_out;
   logic scan_out;
@@ -84,6 +86,7 @@ module fw_ipx_wrap_tb ();
     .vin_test_trig_out       (vin_test_trig_out),
     .scan_in                 (scan_in),
     .scan_load               (scan_load),
+    .dbg_first_scan_load_shift(dbg_first_scan_load_shift),
     // Inputs from DUT
     .config_out              (config_out),
     .scan_out                (scan_out),
