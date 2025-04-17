@@ -35,7 +35,9 @@ module iob_oddr (
     input  wire vin_test_trig_out_i,
     input  wire scan_in_i,
     input  wire scan_load_i,
+    input  wire dbg_first_scan_load_shift_i,
     //
+    output wire dbg_first_scan_load_shift_o,
     output wire scan_load_single_o,
     output wire scan_out_single_o,
     output wire scan_in_single_o,
@@ -53,6 +55,20 @@ module iob_oddr (
   );
 
   // Instantiate ODDR (not available in IP Catalog) https://docs.amd.com/r/2021.2-English/ug953-vivado-7series-libraries/ODDR
+
+  ODDR #(
+    .DDR_CLK_EDGE  ("SAME_EDGE"),      // "OPPOSITE_EDGE" or "SAME_EDGE"
+    .INIT          (1'b0),             // Initial value of Q: 1'b0 or 1'b1
+    .SRTYPE        ("ASYNC")           // Set/Reset type: "SYNC" or "ASYNC"
+  ) ODDR_dbg_first_scan_load_shift (
+    .Q             (dbg_first_scan_load_shift_o),     // 1-bit DDR output
+    .C             (pl_clk1),                         // 1-bit clock input
+    .CE            (1'b1),                            // 1-bit clock enable input
+    .D1            (dbg_first_scan_load_shift_i),     // 1-bit data input (positive edge)
+    .D2            (dbg_first_scan_load_shift_i),     // 1-bit data input (negative edge)
+    .R             (1'b0),             // 1-bit reset
+    .S             (1'b0)              // 1-bit set
+  );
 
   ODDR #(
     .DDR_CLK_EDGE  ("SAME_EDGE"),      // "OPPOSITE_EDGE" or "SAME_EDGE"

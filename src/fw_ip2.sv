@@ -44,6 +44,7 @@
 // 2025-04-11  Cristian  Gingu        Clear sm_testx_o_scanchain_reg and sm_testx_o_scanchain_test_reg while sm_test1,2,3,4,5 are in DELAY_TEST_IP2_T1,2,3,4,5
 // 2025-04-14  Cristian  Gingu        Add localparam w_cfg_static_0/1_reg_scan_load_phase_index_0/1_min/max_IP2 for ip2_test2_one_scanload. Modify ip2_test2.sv state machine. Update fw_ip2.sv
 // 2025-04-16  Cristian  Gingu        In ip2_test2.sv done updating state machine. In fw_ip2.sv remove condition sm_test2==SCANLOAD_HIGH_1_IP2_T2 and update error_w_execute_cfg_test1,2,3,4,5
+// 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -86,6 +87,7 @@ module fw_ip2 (
     output logic fw_vin_test_trig_out,
     output logic fw_scan_in,
     output logic fw_scan_load,
+    output logic dbg_first_scan_load_shift,
     // input signals to FW from DUT
     input  logic fw_config_out,
     input  logic fw_scan_out,
@@ -717,6 +719,20 @@ module fw_ip2 (
     sm_test4_o_bxclk_ana_pipe_1          <= sm_test4_o_bxclk_ana;
     sm_test4_o_bxclk_pipe_1              <= sm_test4_o_bxclk;
   end
+
+  logic first_scan_load_shift;
+  always @(posedge fw_pl_clk1) begin : first_scan_load_shift_proc
+    if(
+        (sm_test2==SCANLOAD_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b0) || (sm_test2==TRIGOUT_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b1) ||
+        (sm_test4==SCANLOAD_HIGH_2_IP2_T4 && scan_load_delay_disable==1'b0) || (sm_test4==TRIGOUT_HIGH_2_IP2_T4 && scan_load_delay_disable==1'b1) ||
+        (sm_test5==SCANLOAD_HIGH_2_IP2_T5 && scan_load_delay_disable==1'b0) || (sm_test5==TRIGOUT_HIGH_2_IP2_T5 && scan_load_delay_disable==1'b1)
+      ) begin
+      first_scan_load_shift  <= 1'b1;
+    end else begin
+      first_scan_load_shift  <= 1'b0;
+    end
+  end
+  assign dbg_first_scan_load_shift = first_scan_load_shift;     // Assign module debug_output signals:
 
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
   // This is State Machine test dependent: sm_test1, sm_test2, sm_test3, sm_test4, sm_test5

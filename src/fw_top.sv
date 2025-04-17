@@ -13,6 +13,7 @@
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2025-01-07  Cristian Gingu         Add pipelined signal sw_write32_0_pipe_1 to improve timing (on S_AXI_ACLK)
 // 2025-04-03  Cristian Gingu         Add pipelined signal sw_write32_0_pipe_2 to improve timing (on S_AXI_ACLK)
+// 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top__
 `define __fw_top__
@@ -100,6 +101,7 @@ module fw_top #(
     output logic vin_test_trig_out,
     output logic scan_in,
     output logic scan_load,
+    output logic dbg_first_scan_load_shift,
     input  logic config_out,
     input  logic scan_out,
     input  logic scan_out_test,
@@ -183,6 +185,7 @@ module fw_top #(
     .vin_test_trig_out       (vin_test_trig_out),
     .scan_in                 (scan_in),
     .scan_load               (scan_load),
+    .dbg_first_scan_load_shift(dbg_first_scan_load_shift),
     // Input IOB FF
     .config_out              (config_out),
     .scan_out                (scan_out),

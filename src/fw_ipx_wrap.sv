@@ -12,6 +12,7 @@
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap__
 `define __fw_ipx_wrap__
@@ -42,6 +43,7 @@ module fw_ipx_wrap (
     output logic vin_test_trig_out,
     output logic scan_in,
     output logic scan_load,
+    output logic dbg_first_scan_load_shift,
     // Inputs from DUT
     input  logic config_out,
     input  logic scan_out,
@@ -247,6 +249,7 @@ module fw_ipx_wrap (
     .fw_vin_test_trig_out      (fw_vin_test_trig_out[1]),
     .fw_scan_in                (fw_scan_in[1]),
     .fw_scan_load              (fw_scan_load[1]),
+    .dbg_first_scan_load_shift (dbg_first_scan_load_shift),
     // input signals to FW
     .fw_config_out             (fw_config_out[1]),
     .fw_scan_out               (fw_scan_out[1]),

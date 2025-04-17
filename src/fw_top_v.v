@@ -11,6 +11,7 @@
 // 2024-05-29  Cristian  Gingu        Created; Verilog wrapper for usage in Board Diagram IP
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top_v__
 `define __fw_top_v__
@@ -98,6 +99,7 @@ module fw_top_v #(
     output wire vin_test_trig_out,
     output wire scan_in,
     output wire scan_load,
+    output wire dbg_first_scan_load_shift,
     input  wire config_out,
     input  wire scan_out,
     input  wire scan_out_test,
@@ -148,6 +150,7 @@ module fw_top_v #(
     .vin_test_trig_out  (vin_test_trig_out),
     .scan_in            (scan_in),
     .scan_load          (scan_load),
+    .dbg_first_scan_load_shift(dbg_first_scan_load_shift),
     .config_out         (config_out),
     .scan_out           (scan_out),
     .scan_out_test      (scan_out_test),
