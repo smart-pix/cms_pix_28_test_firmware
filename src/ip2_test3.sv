@@ -13,6 +13,7 @@
 // 2024-10-17  Cristian  Gingu        Add delayed vin_test_trig_out in ip2_tes3.sv
 // 2024-10-18  Cristian  Gingu        Update driving sm_test3_o_scan_load from always HIGH to same behavior like in ip2_test2
 // 2024-11-13  Cristian  Gingu        Add input ports (sm_testx_i_bxclk_ana, sm_testx_i_bxclk) and output ports (sm_test3_o_bxclk_ana, sm_test3_o_bxclk)
+// 2025-04-22  Cristian  Gingu        Update this module based on new ip2_test2.sv where the scan_load was modified to one-bxclk-wide
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test3__
 `define __ip2_test3__
@@ -27,6 +28,7 @@ module ip2_test3 (
     input  logic [5:0] clk_counter,
     input  logic [5:0] scan_load_delay,
     input  logic       scan_load_delay_disable,
+    input  logic [5:0] scan_load_phase,
     input  logic [5:0] test_delay,
     input  logic [5:0] test_trig_out_phase,
     input  logic       test_mask_reset_not,
@@ -170,15 +172,7 @@ module ip2_test3 (
               sm_test3_o_reset_not               <= 1'b0;
             end
           end
-          if(scan_load_delay_disable==1) begin
-            if(test_delay==clk_counter) begin
-              sm_test3_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
-            end else begin
-              sm_test3_o_scan_load               <= SCAN_REG_MODE_SHIFT_IN;
-            end
-          end else begin
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-          end
+          sm_test3_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
           sm_test3_o_status_done                 <= 1'b0;
           sm_test3_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
           sm_test3_o_dnn_reg_1                   <= {dnn_reg_width{1'b0}};
@@ -197,7 +191,9 @@ module ip2_test3 (
           end
           // output state machine signal assignment
           if(scan_load_delay_disable==1) begin
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
+            if(scan_load_phase==clk_counter) begin
+              sm_test3_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
+            end
           end else begin
             sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
           end
@@ -231,21 +227,15 @@ module ip2_test3 (
           end
           // output state machine signal assignment
           if(scan_load_delay_disable==1) begin
-            if(test_delay==clk_counter) begin
-              sm_test3_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
-            end else begin
-              sm_test3_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
+            if(scan_load_phase==clk_counter) begin
+              sm_test3_o_scan_load               <= SCAN_REG_MODE_SHIFT_IN;
             end
             sm_test3_o_dnn_reg_0                 <= {sm_test3_o_dnn_reg_0[dnn_reg_width-2:0], sm_testx_i_dnn_output_0};
             sm_test3_o_dnn_reg_1                 <= {sm_test3_o_dnn_reg_1[dnn_reg_width-2:0], sm_testx_i_dnn_output_1};
             sm_test3_o_bxclk_ana                 <= {sm_test3_o_bxclk_ana[dnn_reg_width-2:0], sm_testx_i_bxclk_ana};
             sm_test3_o_bxclk                     <= {sm_test3_o_bxclk    [dnn_reg_width-2:0], sm_testx_i_bxclk    };
           end else begin
-            if((test_delay==clk_counter) && (scan_load_delay==0)) begin
-              sm_test3_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
-            end else begin
-              sm_test3_o_scan_load               <= SCAN_REG_MODE_SHIFT_IN;
-            end
+            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
             sm_test3_o_dnn_reg_0                 <= {dnn_reg_width{1'b0}};
             sm_test3_o_dnn_reg_1                 <= {dnn_reg_width{1'b0}};
             sm_test3_o_bxclk_ana                 <= {dnn_reg_width{1'b0}};
@@ -273,11 +263,7 @@ module ip2_test3 (
             sm_test3 <= DELAY_SCANLOAD_IP2_T3;
           end
           // output state machine signal assignment
-          if((test_delay==clk_counter) && (scan_load_delay==sm_scan_load_delay_cnt)) begin
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
-          end else begin
-            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-          end
+          sm_test3_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
           sm_test3_o_reset_not                   <= 1'b1;
           sm_test3_o_status_done                 <= 1'b0;
           sm_test3_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
@@ -301,7 +287,9 @@ module ip2_test3 (
           end
           // output state machine signal assignment
           sm_test3_o_reset_not                   <= 1'b1;
-          sm_test3_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;
+          if(scan_load_phase==clk_counter) begin
+            sm_test3_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
+          end
           sm_test3_o_status_done                 <= 1'b0;
           sm_test3_o_dnn_reg_0                   <= {dnn_reg_width{1'b0}};
           sm_test3_o_dnn_reg_1                   <= {dnn_reg_width{1'b0}};
@@ -319,7 +307,9 @@ module ip2_test3 (
           end
           // output state machine signal assignment
           sm_test3_o_reset_not                   <= 1'b1;
-          sm_test3_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;
+          if(scan_load_phase==clk_counter) begin
+            sm_test3_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
+          end
           sm_test3_o_status_done                 <= 1'b0;
           sm_test3_o_dnn_reg_0                   <= {sm_test3_o_dnn_reg_0[dnn_reg_width-2:0], sm_testx_i_dnn_output_0};
           sm_test3_o_dnn_reg_1                   <= {sm_test3_o_dnn_reg_1[dnn_reg_width-2:0], sm_testx_i_dnn_output_1};

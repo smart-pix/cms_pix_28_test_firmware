@@ -285,7 +285,6 @@ module ip2_test2 (
             sm_test2_o_scan_in                   <= 1'b0;
           end
           sm_test2_o_reset_not                   <= 1'b1;
-
           if(scan_load_phase==clk_counter) begin
             sm_test2_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
           end
