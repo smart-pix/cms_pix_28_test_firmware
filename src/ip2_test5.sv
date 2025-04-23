@@ -11,6 +11,7 @@
 // 2024-12-17  Cristian  Gingu        Created, based on ip2_test2
 // 2025-01-03  Cristian  Gingu        Done updating for ip2_test5
 // 2025-01-07  Cristian  Gingu        Force bit#0 of sm_test5_o_repeat_pixel_reg to 1'b0
+// 2025-04-23  Cristian  Gingu        Update this module based on new ip2_test2.sv where the scan_load was modified to one-bxclk-wide
 // ------------------------------------------------------------------------------------
 `ifndef __ip2_test5__
 `define __ip2_test5__
@@ -25,6 +26,7 @@ module ip2_test5 (
     input  logic [5:0] clk_counter,
     input  logic [5:0] scan_load_delay,
     input  logic       scan_load_delay_disable,
+    input  logic [5:0] scan_load_phase,
     input  logic [5:0] test_delay,
     input  logic [5:0] test_trig_out_phase,
     input  logic       test_mask_reset_not,
@@ -175,15 +177,7 @@ module ip2_test5 (
               sm_test5_o_reset_not               <= 1'b0;
             end
           end
-          if(scan_load_delay_disable==1) begin
-            if(test_delay==clk_counter) begin
-              sm_test5_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
-            end else begin
-              sm_test5_o_scan_load               <= SCAN_REG_MODE_SHIFT_IN;
-            end
-          end else begin
-            sm_test5_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-          end
+          sm_test5_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
           sm_test5_o_scan_in                     <= 1'b0;
           sm_test5_o_scanchain_reg_load          <= 1'b0;
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
@@ -204,7 +198,9 @@ module ip2_test5 (
           end
           // output state machine signal assignment
           if(scan_load_delay_disable==1) begin
-            sm_test5_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
+            if(scan_load_phase==clk_counter) begin
+              sm_test5_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
+            end
           end else begin
             sm_test5_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
           end
@@ -248,10 +244,8 @@ module ip2_test5 (
           end
           // output state machine signal assignment
           if(scan_load_delay_disable==1) begin
-            if(test_delay==clk_counter) begin
+            if(scan_load_phase==clk_counter) begin
               sm_test5_o_scan_load               <= SCAN_REG_MODE_SHIFT_IN;
-            end else begin
-              sm_test5_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
             end
             sm_test5_o_scan_in                   <= sm_testx_i_scanchain_reg_bit0;
             if(test_delay-2==clk_counter) begin
@@ -263,11 +257,7 @@ module ip2_test5 (
               sm_test5_o_scanchain_reg_shift     <= 1'b0;
             end
           end else begin
-            if((test_delay==clk_counter) && (scan_load_delay==0)) begin
-              sm_test5_o_scan_load               <= SCAN_REG_MODE_LOAD_COMP;
-            end else begin
-              sm_test5_o_scan_load               <= SCAN_REG_MODE_SHIFT_IN;
-            end
+            sm_test5_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
             sm_test5_o_scan_in                   <= 1'b0;
             sm_test5_o_scanchain_reg_shift       <= 1'b0;
           end
@@ -297,11 +287,7 @@ module ip2_test5 (
             sm_test5 <= DELAY_SCANLOAD_IP2_T5;
           end
           // output state machine signal assignment
-          if((test_delay==clk_counter) && (scan_load_delay==sm_scan_load_delay_cnt)) begin
-            sm_test5_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
-          end else begin
-            sm_test5_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-          end
+          sm_test5_o_scan_load                   <= SCAN_REG_MODE_SHIFT_IN;
           sm_test5_o_reset_not                   <= 1'b1;
           sm_test5_o_scan_in                     <= 1'b0;
           sm_test5_o_scanchain_reg_load          <= 1'b0;
@@ -332,7 +318,9 @@ module ip2_test5 (
             sm_test5_o_scan_in                   <= 1'b0;
           end
           sm_test5_o_reset_not                   <= 1'b1;
-          sm_test5_o_scan_load                   <= SCAN_REG_MODE_LOAD_COMP;
+          if(scan_load_phase==clk_counter) begin
+            sm_test5_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
+          end
           sm_test5_o_scanchain_reg_load          <= 1'b0;
           sm_test5_o_scanchain_reg_shift         <= 1'b0;
           sm_test5_o_status_done                 <= 1'b0;
@@ -350,10 +338,8 @@ module ip2_test5 (
             sm_test5 <= SCANLOAD_HIGH_2_IP2_T5;
           end
           // output state machine signal assignment
-          if(test_delay==clk_counter) begin
+          if(scan_load_phase==clk_counter) begin
             sm_test5_o_scan_load                 <= SCAN_REG_MODE_SHIFT_IN;
-          end else begin
-            sm_test5_o_scan_load                 <= SCAN_REG_MODE_LOAD_COMP;
           end
           if(test_delay-2==clk_counter) begin
             // latency sm_test5_o_scanchain_reg_shift to sm_testx_i_scanchain_reg is TWO clk clocks:

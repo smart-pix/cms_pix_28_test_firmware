@@ -27,6 +27,7 @@
 // 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // 2025-04-22  Cristian  Gingu        Update after ip2_test3.sv was modified based on new ip2_test2.sv where the scan_load is now one-bxclk-wide
 // 2025-04-23  Cristian  Gingu        Update after ip2_test4.sv was modified based on new ip2_test2.sv where the scan_load is now one-bxclk-wide
+// 2025-04-23  Cristian  Gingu        Update after ip2_test5.sv was modified based on new ip2_test2.sv where the scan_load is now one-bxclk-wide
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -1888,9 +1889,9 @@ module fw_ipx_wrap_tb ();
       tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
       tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
       tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
-      tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
+      tb_scan_load_delay         = ((0+1*tb_i_test) % (tb_bxclk_period+1)) & 6'h3F;  // on clock domain fw_axi_clk
       tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
-      tb_scan_load_phase         = 6'h03;                    // on clock domain fw_axi_clk
+      tb_scan_load_phase         = ((1+1*tb_i_test) % (tb_bxclk_period+1)) & 6'h3F;  // on clock domain fw_axi_clk
       w_cfg_static_fixed(.index(0));
       #(5*fw_axi_clk_period);
       tb_number   = 904;
