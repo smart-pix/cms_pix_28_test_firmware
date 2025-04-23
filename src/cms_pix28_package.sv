@@ -67,7 +67,7 @@ package cms_pix28_package;
     OP_CODE_R_DATA_ARRAY_1             = 4'hD,
     OP_CODE_W_STATUS_FW_CLEAR          = 4'hE,
     OP_CODE_W_EXECUTE                  = 4'hF
-    } op_code;
+  } op_code;
   //
   parameter status_index_op_code_w_reset         = 0;
   parameter status_index_op_code_w_cfg_static_0  = 1;

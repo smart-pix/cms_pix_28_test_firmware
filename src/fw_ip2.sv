@@ -639,6 +639,7 @@ module fw_ip2 (
     .clk_counter                             (fw_pl_clk1_cnt),
     .scan_load_delay                         (scan_load_delay),
     .scan_load_delay_disable                 (scan_load_delay_disable),
+    .scan_load_phase                         (scan_load_phase),
     .test_delay                              (test_delay),
     .test_trig_out_phase                     (test_trig_out_phase),
     .test_mask_reset_not                     (test_mask_reset_not),

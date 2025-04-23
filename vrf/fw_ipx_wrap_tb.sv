@@ -26,6 +26,7 @@
 // 2025-04-10  Cristian  Gingu        More upgrade on test-case T5 to study tb_test_sample vs tb_test_delay 2D plots and compare withe BP and AB experimental plots. Save 2D plots into https://fermicloud.sharepoint.com/:p:/r/sites/FNALO365-ASICDepartment/_layouts/15/doc2.aspx?sourcedoc=%7B0D668FF8-99D1-47AD-BC37-FAE28DE351B2%7D&file=sampleDelay.pptx&wdLOR=c0506A49F-5559-4DC8-B81D-043D6036590D&fromShare=true&action=edit&mobileredirect=true&previoussessionid=ba957705-d4c3-c057-dccc-5806084326aa
 // 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // 2025-04-22  Cristian  Gingu        Update after ip2_test3.sv was modified based on new ip2_test2.sv where the scan_load is now one-bxclk-wide
+// 2025-04-23  Cristian  Gingu        Update after ip2_test4.sv was modified based on new ip2_test2.sv where the scan_load is now one-bxclk-wide
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap_tb__
 `define __fw_ipx_wrap_tb__
@@ -1806,14 +1807,14 @@ module fw_ipx_wrap_tb ();
     tb_bxclk_delay             = 5'h3;                     // on clock domain fw_axi_clk
     tb_bxclk_delay_sign        = 1'h0;                     // on clock domain fw_axi_clk
     tb_super_pix_sel           = 1'h1;                     // on clock domain fw_axi_clk
-    tb_scan_load_delay         = 6'h0A;                    // on clock domain fw_axi_clk
     tb_scan_load_delay_disable = 1'h0;                     // on clock domain fw_axi_clk
-    tb_scan_load_phase         = 6'h03;                    // on clock domain fw_axi_clk
-    w_cfg_static_fixed(.index(0));
-    w_cfg_static_fixed(.index(1));                         // need to do this because tb_scan_load_phase[3:0] and tb_scan_load_phase[5:4] are updated in different w_cfg_static_fixed(.index()) indexes
     tb_number   = 802;                                     // BXCLK/ANA is programmed
     #(64*fw_axi_clk_period);                               // dummy wait to ensure BXCLK/ANA are started (the fw_pl_clk1_cnt did roll over)
     for (tb_i_test = 0; tb_i_test <= 3; tb_i_test++) begin
+      tb_scan_load_delay         = ((0+1*tb_i_test) % (tb_bxclk_period+1)) & 6'h3F;  // on clock domain fw_axi_clk
+      tb_scan_load_phase         = ((1+1*tb_i_test) % (tb_bxclk_period+1)) & 6'h3F;  // on clock domain fw_axi_clk
+      w_cfg_static_fixed(.index(0));
+      w_cfg_static_fixed(.index(1));                         // need to do this because tb_scan_load_phase[3:0] and tb_scan_load_phase[5:4] are updated in different w_cfg_static_fixed(.index()) indexes
       tb_test_delay            = 6'h08;                      // on clock domain fw_axi_clk
       tb_test_sample           = 6'h07;                      // on clock domain fw_axi_clk
       tb_test_number           = test_number_4;              // on clock domain fw_axi_clk

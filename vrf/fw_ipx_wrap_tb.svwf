@@ -968,4 +968,4 @@ set id [waveform add -signals [subst  {
 	} ]]
 waveform format $id -color #ff9900 -namecolor #ff9900
 
-waveform xview limits 969695.474ns 973444.527ns
+waveform xview limits 0 6660040ns
