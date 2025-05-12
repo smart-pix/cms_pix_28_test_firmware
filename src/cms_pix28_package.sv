@@ -19,6 +19,22 @@
 // 2025-01-02  Cristian  Gingu        Add localparam repeat_pixel_bits_total for ip2_test5
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // 2025-04-14  Cristian  Gingu        Add localparam w_cfg_static_0/1_reg_scan_load_phase_index_0/1_min/max_IP2 for ip2_test2_one_scanload. Modify ip2_test2.sv state machine. Update fw_ip2.sv
+// 2025-05-12  Cristian  Gingu        Add "test_delay" explanatory comments:
+// (1) common to all IPs and all tests, ipX_testY.
+// (2) means the value of an internal FPGA counter: for IP1 this is fast_configclk_clk_counter used to generate fast_configclk            by dividing fw_axi_clk (100MHz) => units are 10.0ns
+// (2) means the value of an internal FPGA counter: for IP2 this is fw_pl_clk1_cnt             used to generate fw_bxclk and fw_bxclk_ana by dividing fw_pl_clk1 (400MHz) => units are  2.5ns
+// (3) when the above counter is equal with the programmable parameter test_delay AND the command to execute testY is sent, the state machine associated with ipX_testY starts, and state machine transitions occurs.
+//     State machines are used in ipX_testY to generate specific output driving signals from FPGA to ASIC.
+// (4) valid numbers are, theoretically, integers from 1 to corresponding period-divider-parameter-value: in IP1 w_cfg_static_0_reg_fast_configclk_period is 7-bits; in IP2 w_cfg_static_0_reg_bxclk_period is 6-bits.
+// (5) because of RTL code latency, values 0,1,2 should be excluded from the above range; they will produce unpredictable results and will set the error bits status_index_error_w_execute_cfg_testY
+// 2025-02-12  Cristian  Gingu        Add "test_sample" explanatory comments:
+// (1) same as above.
+// (2) same as above.
+// (3) when the above counter is equal with the programmable parameter test_sample AND the command to execute testY is executing, the state machine associated with ipX_testY while is some of its states, does sample some/all signals driven by ASIC to FPGA.
+//     State machines are used in ipX_testY to register specific input received signals from ASIC to FPGA.
+// (4) same as above
+// (5) does not apply.
+//
 // ------------------------------------------------------------------------------------
 
 `ifndef __cms_pix28_package__
