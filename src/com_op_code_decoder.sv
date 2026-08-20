@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-31  Cristian  Gingu        Created
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // ------------------------------------------------------------------------------------
 `ifndef __com_op_code_decoder__
 `define __com_op_code_decoder__
@@ -26,6 +27,8 @@ module com_op_code_decoder (
     input  logic fw_op_code_r_cfg_array_0,
     input  logic fw_op_code_w_cfg_array_1,
     input  logic fw_op_code_r_cfg_array_1,
+    input  logic fw_op_code_w_cfg_array_2,
+    input  logic fw_op_code_r_cfg_array_2,
     input  logic fw_op_code_r_data_array_0,
     input  logic fw_op_code_r_data_array_1,
     input  logic fw_op_code_w_status_clear,
@@ -40,6 +43,8 @@ module com_op_code_decoder (
     output logic op_code_r_cfg_array_0,
     output logic op_code_w_cfg_array_1,
     output logic op_code_r_cfg_array_1,
+    output logic op_code_w_cfg_array_2,
+    output logic op_code_r_cfg_array_2,
     output logic op_code_r_data_array_0,
     output logic op_code_r_data_array_1,
     output logic op_code_w_status_clear,
@@ -55,6 +60,8 @@ module com_op_code_decoder (
   assign op_code_r_cfg_array_0    = fw_dev_id_enable & fw_op_code_r_cfg_array_0;
   assign op_code_w_cfg_array_1    = fw_dev_id_enable & fw_op_code_w_cfg_array_1;
   assign op_code_r_cfg_array_1    = fw_dev_id_enable & fw_op_code_r_cfg_array_1;
+  assign op_code_w_cfg_array_2    = fw_dev_id_enable & fw_op_code_w_cfg_array_2;
+  assign op_code_r_cfg_array_2    = fw_dev_id_enable & fw_op_code_r_cfg_array_2;
   assign op_code_r_data_array_0   = fw_dev_id_enable & fw_op_code_r_data_array_0;
   assign op_code_r_data_array_1   = fw_dev_id_enable & fw_op_code_r_data_array_1;
   assign op_code_w_status_clear   = fw_dev_id_enable & fw_op_code_w_status_clear;

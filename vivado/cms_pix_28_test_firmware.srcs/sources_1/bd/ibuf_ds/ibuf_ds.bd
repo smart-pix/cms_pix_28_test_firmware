@@ -1,0 +1,266 @@
+{
+  "design": {
+    "design_info": {
+      "boundary_crc": "0xA02EAEF679E3B45F",
+      "device": "xczu9eg-ffvb1156-2-e",
+      "gen_directory": "../../../../cms_pix_28_test_firmware.gen/sources_1/bd/ibuf_ds",
+      "name": "ibuf_ds",
+      "rev_ctrl_bd_flag": "RevCtrlBdOff",
+      "synth_flow_mode": "Hierarchical",
+      "tool_version": "2022.1",
+      "validated": "true"
+    },
+    "design_tree": {
+      "util_ds_buf_0": "",
+      "util_ds_buf_1": "",
+      "util_ds_buf_2": "",
+      "util_ds_buf_3": ""
+    },
+    "ports": {
+      "config_out_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_out_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "config_out": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_out_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_out_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "scan_out": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_0_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_0_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_0": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_1_p": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_1_n": {
+        "type": "data",
+        "direction": "I",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      },
+      "dnn_out_1": {
+        "type": "data",
+        "direction": "O",
+        "left": "0",
+        "right": "0",
+        "parameters": {
+          "LAYERED_METADATA": {
+            "value": "undef",
+            "value_src": "default"
+          }
+        }
+      }
+    },
+    "components": {
+      "util_ds_buf_0": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "ibuf_ds_util_ds_buf_0_0",
+        "xci_path": "ip/ibuf_ds_util_ds_buf_0_0/ibuf_ds_util_ds_buf_0_0.xci",
+        "inst_hier_path": "util_ds_buf_0"
+      },
+      "util_ds_buf_1": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "ibuf_ds_util_ds_buf_1_0",
+        "xci_path": "ip/ibuf_ds_util_ds_buf_1_0/ibuf_ds_util_ds_buf_1_0.xci",
+        "inst_hier_path": "util_ds_buf_1"
+      },
+      "util_ds_buf_2": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "ibuf_ds_util_ds_buf_2_0",
+        "xci_path": "ip/ibuf_ds_util_ds_buf_2_0/ibuf_ds_util_ds_buf_2_0.xci",
+        "inst_hier_path": "util_ds_buf_2"
+      },
+      "util_ds_buf_3": {
+        "vlnv": "xilinx.com:ip:util_ds_buf:2.2",
+        "xci_name": "ibuf_ds_util_ds_buf_3_0",
+        "xci_path": "ip/ibuf_ds_util_ds_buf_3_0/ibuf_ds_util_ds_buf_3_0.xci",
+        "inst_hier_path": "util_ds_buf_3"
+      }
+    },
+    "nets": {
+      "config_out_n_1": {
+        "ports": [
+          "config_out_n",
+          "util_ds_buf_0/IBUF_DS_N"
+        ]
+      },
+      "config_out_p_1": {
+        "ports": [
+          "config_out_p",
+          "util_ds_buf_0/IBUF_DS_P"
+        ]
+      },
+      "dnn_out_0_n_1": {
+        "ports": [
+          "dnn_out_0_n",
+          "util_ds_buf_2/IBUF_DS_N"
+        ]
+      },
+      "dnn_out_0_p_1": {
+        "ports": [
+          "dnn_out_0_p",
+          "util_ds_buf_2/IBUF_DS_P"
+        ]
+      },
+      "dnn_out_1_n_1": {
+        "ports": [
+          "dnn_out_1_n",
+          "util_ds_buf_3/IBUF_DS_N"
+        ]
+      },
+      "dnn_out_1_p_1": {
+        "ports": [
+          "dnn_out_1_p",
+          "util_ds_buf_3/IBUF_DS_P"
+        ]
+      },
+      "scan_out_n_1": {
+        "ports": [
+          "scan_out_n",
+          "util_ds_buf_1/IBUF_DS_N"
+        ]
+      },
+      "scan_out_p_1": {
+        "ports": [
+          "scan_out_p",
+          "util_ds_buf_1/IBUF_DS_P"
+        ]
+      },
+      "util_ds_buf_0_IBUF_OUT": {
+        "ports": [
+          "util_ds_buf_0/IBUF_OUT",
+          "config_out"
+        ]
+      },
+      "util_ds_buf_1_IBUF_OUT": {
+        "ports": [
+          "util_ds_buf_1/IBUF_OUT",
+          "scan_out"
+        ]
+      },
+      "util_ds_buf_2_IBUF_OUT": {
+        "ports": [
+          "util_ds_buf_2/IBUF_OUT",
+          "dnn_out_0"
+        ]
+      },
+      "util_ds_buf_3_IBUF_OUT": {
+        "ports": [
+          "util_ds_buf_3/IBUF_OUT",
+          "dnn_out_1"
+        ]
+      }
+    }
+  }
+}

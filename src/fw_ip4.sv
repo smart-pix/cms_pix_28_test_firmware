@@ -1,6 +1,5 @@
 // ------------------------------------------------------------------------------------
-// Author       : Neha Kharwadkar      nehak@fnal.gov
-//              : Cristian Gingu       gingu@fnal.gov
+// Author       : Cristian Gingu       gingu@fnal.gov
 // Created      : 2024-05-22
 // ------------------------------------------------------------------------------------
 // Copyright (c) 2024 by FNAL This model is the confidential and
@@ -10,6 +9,10 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-24  Cristian  Gingu        Created template
+// 2024-07-10  Cristian Gingu         Update default values: fw_reset_not=1'b1; fw_config_load=1'b1;
+// 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
+// 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
+// 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip4__
 `define __fw_ip4__
@@ -30,6 +33,8 @@ module fw_ip4 (
     input  logic        fw_op_code_r_cfg_array_0,
     input  logic        fw_op_code_w_cfg_array_1,
     input  logic        fw_op_code_r_cfg_array_1,
+    input  logic        fw_op_code_w_cfg_array_2,
+    input  logic        fw_op_code_r_cfg_array_2,
     input  logic        fw_op_code_r_data_array_0,
     input  logic        fw_op_code_r_data_array_1,
     input  logic        fw_op_code_w_status_clear,
@@ -52,9 +57,11 @@ module fw_ip4 (
     // input signals to FW
     input  logic fw_config_out,
     input  logic fw_scan_out,
+    input  logic fw_scan_out_test,
     input  logic fw_dnn_output_0,
     input  logic fw_dnn_output_1,
-    input  logic fw_dn_event_toggle
+    input  logic fw_dn_event_toggle,
+    input  logic fw_up_event_toggle
   );
 
   // TODO Add real logic for output signals below;
@@ -63,9 +70,9 @@ module fw_ip4 (
   assign fw_read_status32     = 32'h0;
   assign fw_super_pixel_sel   = 1'b0;
   assign fw_config_clk        = 1'b0;
-  assign fw_reset_not         = 1'b0;
+  assign fw_reset_not         = 1'b1;
   assign fw_config_in         = 1'b0;
-  assign fw_config_load       = 1'b0;
+  assign fw_config_load       = 1'b1;
   assign fw_bxclk_ana         = 1'b0;
   assign fw_bxclk             = 1'b0;
   assign fw_vin_test_trig_out = 1'b0;
