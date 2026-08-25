@@ -13,7 +13,7 @@
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
-// 2026-08-25  Cristian Gingu         Update from: logic [3:0][31:0] fw_read_data32 -> logic [3:0][7:0][31:0] fw_read_data32
+// 2026-08-25  Cristian Gingu         Update from: logic [31:0] fw_read_data32 -> logic [7:0][31:0] fw_read_data32
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip3__
 `define __fw_ip3__

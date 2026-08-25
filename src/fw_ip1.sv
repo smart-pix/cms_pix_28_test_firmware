@@ -30,6 +30,8 @@
 // 2024-12-13  Cristian Gingu         Add test5 related signals and default logic; sm_test5 is not defined in IP1
 // 2025-04-08  Cristian  Gingu        Add error_w_execute_cfg_test1,2,3,4,5 remove error_w_execute_cfg
 // 2025-04-15  Cristian  Gingu        Clear sm_testx_o_shift_reg while sm_test1,2 are in DELAY_TEST_IP1_T1,2
+// 2026-08-25  Cristian Gingu         Update from: (1) logic [31:0] fw_read_data32      -> logic [7:0][31:0] fw_read_data32
+// 2026-08-25  Cristian Gingu         Update from: (2) logic [31:0] fw_read_data32_comb -> logic [7:0][31:0] fw_read_data32_comb
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip1__
 `define __fw_ip1__
@@ -56,9 +58,9 @@ module fw_ip1 (
     input  logic        fw_op_code_r_data_array_1,
     input  logic        fw_op_code_w_status_clear,
     input  logic        fw_op_code_w_execute,
-    input  logic [23:0] sw_write24_0,                      // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
-    output logic [31:0] fw_read_data32,                    // 32-bit read_data   from FW to SW
-    output logic [31:0] fw_read_status32,                  // 32-bit read_status from FW to SW
+    input  logic      [23:0] sw_write24_0,                 // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
+    output logic [7:0][31:0] fw_read_data32,               // 32-bit read_data   from FW to SW
+    output logic      [31:0] fw_read_status32,             // 32-bit read_status from FW to SW
     // DUT side signals to/from com_fw_to_dut.sv           // up to 15 FWs can be connected
     // output signals from FW to DUT
     output logic fw_super_pixel_sel,
@@ -199,7 +201,7 @@ module fw_ip1 (
   );
 
   // Combinatorial logic for SW readout data fw_read_data32
-  logic [31:0] fw_read_data32_comb;                        // 32-bit read_data   from FW to SW
+  logic [7:0][31:0] fw_read_data32_comb;                   // 32-bit read_data   from FW to SW
   localparam                                           sm_testx_o_shift_reg_width = 2*cfg_reg_bits_total;
   logic [sm_testx_o_shift_reg_width-1   :0]            sm_testx_o_shift_reg;                       // 2*5188 bit shift register == 2*{4652(NWEIGHTS) + 512(PIXEL_CONFIG) + 24(HIDDEN)} == 10376-bits
   logic [(sm_testx_o_shift_reg_width+24)/32-1:0][31:0] sm_testx_o_shift_reg_array32;               // add 24 to round up to nearest whole number of 32-bits; 10376+24=10400; 10400/32=325 32-bit words
@@ -213,36 +215,85 @@ module fw_ip1 (
   always_comb begin : fw_read_data32_comb_proc
     if(op_code_r_cfg_static_0) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_static_0_reg, which is 24-bits. Must pad with zero up to 32-bits.
-      fw_read_data32_comb = {8'h0, w_cfg_static_0_reg};
+      fw_read_data32_comb[0] = {8'h0, w_cfg_static_0_reg};
+      fw_read_data32_comb[1] = 32'b0;
+      fw_read_data32_comb[2] = 32'b0;
+      fw_read_data32_comb[3] = 32'b0;
+      fw_read_data32_comb[4] = 32'b0;
+      fw_read_data32_comb[5] = 32'b0;
+      fw_read_data32_comb[6] = 32'b0;
+      fw_read_data32_comb[7] = 32'b0;
     end else if(op_code_r_cfg_static_1) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_static_1_reg, which is 24-bits. Must pad with zero up to 32-bits.
-      fw_read_data32_comb = {8'h0, w_cfg_static_1_reg};
+      fw_read_data32_comb[0] = {8'h0, w_cfg_static_1_reg};
+      fw_read_data32_comb[1] = 32'b0;
+      fw_read_data32_comb[2] = 32'b0;
+      fw_read_data32_comb[3] = 32'b0;
+      fw_read_data32_comb[4] = 32'b0;
+      fw_read_data32_comb[5] = 32'b0;
+      fw_read_data32_comb[6] = 32'b0;
+      fw_read_data32_comb[7] = 32'b0;
     end else if(op_code_r_cfg_array_0) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_0_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_0_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
-      fw_read_data32_comb = {w_cfg_array_0_reg[sw_write24_0[23:16]+1], w_cfg_array_0_reg[sw_write24_0[23:16]]};
+      fw_read_data32_comb[0] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 1], w_cfg_array_0_reg[sw_write24_0[23:16]+ 0]};
+      fw_read_data32_comb[1] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 3], w_cfg_array_0_reg[sw_write24_0[23:16]+ 2]};
+      fw_read_data32_comb[2] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 5], w_cfg_array_0_reg[sw_write24_0[23:16]+ 4]};
+      fw_read_data32_comb[3] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 7], w_cfg_array_0_reg[sw_write24_0[23:16]+ 6]};
+      fw_read_data32_comb[4] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 9], w_cfg_array_0_reg[sw_write24_0[23:16]+ 8]};
+      fw_read_data32_comb[5] = {w_cfg_array_0_reg[sw_write24_0[23:16]+11], w_cfg_array_0_reg[sw_write24_0[23:16]+10]};
+      fw_read_data32_comb[6] = {w_cfg_array_0_reg[sw_write24_0[23:16]+13], w_cfg_array_0_reg[sw_write24_0[23:16]+12]};
+      fw_read_data32_comb[7] = {w_cfg_array_0_reg[sw_write24_0[23:16]+15], w_cfg_array_0_reg[sw_write24_0[23:16]+14]};
     end else if(op_code_r_cfg_array_1) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_1_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_1_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
-      fw_read_data32_comb = {w_cfg_array_1_reg[sw_write24_0[23:16]+1], w_cfg_array_1_reg[sw_write24_0[23:16]]};
+      fw_read_data32_comb[0] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 1], w_cfg_array_1_reg[sw_write24_0[23:16]+ 0]};
+      fw_read_data32_comb[1] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 3], w_cfg_array_1_reg[sw_write24_0[23:16]+ 2]};
+      fw_read_data32_comb[2] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 5], w_cfg_array_1_reg[sw_write24_0[23:16]+ 4]};
+      fw_read_data32_comb[3] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 7], w_cfg_array_1_reg[sw_write24_0[23:16]+ 6]};
+      fw_read_data32_comb[4] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 9], w_cfg_array_1_reg[sw_write24_0[23:16]+ 8]};
+      fw_read_data32_comb[5] = {w_cfg_array_1_reg[sw_write24_0[23:16]+11], w_cfg_array_1_reg[sw_write24_0[23:16]+10]};
+      fw_read_data32_comb[6] = {w_cfg_array_1_reg[sw_write24_0[23:16]+13], w_cfg_array_1_reg[sw_write24_0[23:16]+12]};
+      fw_read_data32_comb[7] = {w_cfg_array_1_reg[sw_write24_0[23:16]+15], w_cfg_array_1_reg[sw_write24_0[23:16]+14]};
     end else if(op_code_r_cfg_array_2) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_2_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_2_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
-      fw_read_data32_comb = {w_cfg_array_2_reg[sw_write24_0[23:16]+1], w_cfg_array_2_reg[sw_write24_0[23:16]]};
+      fw_read_data32_comb[0] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 1], w_cfg_array_2_reg[sw_write24_0[23:16]+ 0]};
+      fw_read_data32_comb[1] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 3], w_cfg_array_2_reg[sw_write24_0[23:16]+ 2]};
+      fw_read_data32_comb[2] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 5], w_cfg_array_2_reg[sw_write24_0[23:16]+ 4]};
+      fw_read_data32_comb[3] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 7], w_cfg_array_2_reg[sw_write24_0[23:16]+ 6]};
+      fw_read_data32_comb[4] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 9], w_cfg_array_2_reg[sw_write24_0[23:16]+ 8]};
+      fw_read_data32_comb[5] = {w_cfg_array_2_reg[sw_write24_0[23:16]+11], w_cfg_array_2_reg[sw_write24_0[23:16]+10]};
+      fw_read_data32_comb[6] = {w_cfg_array_2_reg[sw_write24_0[23:16]+13], w_cfg_array_2_reg[sw_write24_0[23:16]+12]};
+      fw_read_data32_comb[7] = {w_cfg_array_2_reg[sw_write24_0[23:16]+15], w_cfg_array_2_reg[sw_write24_0[23:16]+14]};
     end else if(op_code_r_data_array_0) begin
       // AXI SW will readout sm_testx_o_shift_reg signal which is 2*5188-bits for the requested address sw_write24_0[23:16].
       // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_0, valid addresses are 0-to-255 which means first 256 out of total 325 addresses each containing one 32-bit word
-      fw_read_data32_comb = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]];
+      fw_read_data32_comb[0] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+0];
+      fw_read_data32_comb[1] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+1];
+      fw_read_data32_comb[2] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+2];
+      fw_read_data32_comb[3] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+3];
+      fw_read_data32_comb[4] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+4];
+      fw_read_data32_comb[5] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+5];
+      fw_read_data32_comb[6] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+6];
+      fw_read_data32_comb[7] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+7];
     end else if(op_code_r_data_array_1) begin
       // AXI SW will readout sm_testx_o_shift_reg signal which is 2*5188-bits for the requested address sw_write24_0[23:16].
       // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_1, valid addresses are 0-to-68  which means next   69 out of total 325 addresses each containing one 32-bit word
-      if(sw_write24_0[23:16]<69) begin
-        fw_read_data32_comb = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]];               // apply address offset 256
+      if(sw_write24_0[23:16]<62) begin                                                             // 2026-08-25 update from <69 to <62
+        fw_read_data32_comb[0] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+0];          // apply address offset 256
+        fw_read_data32_comb[1] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+1];          // apply address offset 256
+        fw_read_data32_comb[2] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+2];          // apply address offset 256
+        fw_read_data32_comb[3] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+3];          // apply address offset 256
+        fw_read_data32_comb[4] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+4];          // apply address offset 256
+        fw_read_data32_comb[5] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+5];          // apply address offset 256
+        fw_read_data32_comb[6] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+6];          // apply address offset 256
+        fw_read_data32_comb[7] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+7];          // apply address offset 256
       end else begin
-        fw_read_data32_comb = 32'b0;                       // return ZERO if address is outside range for op_code_r_data_array_1
+        fw_read_data32_comb = 256'b0;                       // return ZERO if address is outside range for op_code_r_data_array_1
       end
     end else begin
-      fw_read_data32_comb = 32'b0;
+      fw_read_data32_comb = 256'b0;
     end
   end
   assign fw_read_data32 = fw_read_data32_comb;
