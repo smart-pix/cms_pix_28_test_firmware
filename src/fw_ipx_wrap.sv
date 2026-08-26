@@ -13,6 +13,8 @@
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
 // 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
+// 2026-08-25  Cristian Gingu         Update from: (1) logic      [31:0] sw_read32_0    -> logic      [7:0][31:0] sw_read32_0
+// 2026-08-25  Cristian Gingu         Update from: (2) logic [3:0][31:0] fw_read_data32 -> logic [3:0][7:0][31:0] fw_read_data32
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ipx_wrap__
 `define __fw_ipx_wrap__
@@ -25,9 +27,9 @@ module fw_ipx_wrap (
     //////////////////////////////
     input  logic S_AXI_ACLK,
     input  logic S_AXI_ARESETN,
-    input  logic [31:0] sw_write32_0,                                // register#0 32-bit write from SW to FW
-    output logic [31:0] sw_read32_0,                                 // register#0 32-bit read  from FW to SW
-    output logic [31:0] sw_read32_1,                                 // register#1 32-bit read  from FW to SW
+    input  logic      [31:0] sw_write32_0,                           // register#0 32-bit write from SW to FW
+    output logic [7:0][31:0] sw_read32_0,                            // register#0 32-bit read  from FW to SW
+    output logic      [31:0] sw_read32_1,                            // register#1 32-bit read  from FW to SW
     //////////////////////////////////
     // DUT side ports == FPGA pins: //
     //////////////////////////////////
@@ -71,9 +73,9 @@ module fw_ipx_wrap (
   logic        fw_op_code_r_data_array_1;
   logic        fw_op_code_w_status_clear;
   logic        fw_op_code_w_execute;
-  logic [23:0]      sw_write24_0;                                    // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
-  logic [3:0][31:0] fw_read_data32;                                  // 32-bit read_data   from FW to SW
-  logic [3:0][31:0] fw_read_status32;                                // 32-bit read_status from FW to SW
+  logic           [23:0] sw_write24_0;                               // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
+  logic [3:0][7:0][31:0] fw_read_data32;                             // 32-bit read_data   from FW to SW
+  logic [3:0]     [31:0] fw_read_status32;                           // 32-bit read_status from FW to SW
   com_sw_to_fw com_sw_to_fw_inst (
     // SW side ports:
     .sw_write32_0              (sw_write32_0),                       // register#0 32-bit write from SW to FW
