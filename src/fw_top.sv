@@ -14,6 +14,7 @@
 // 2025-01-07  Cristian Gingu         Add pipelined signal sw_write32_0_pipe_1 to improve timing (on S_AXI_ACLK)
 // 2025-04-03  Cristian Gingu         Add pipelined signal sw_write32_0_pipe_2 to improve timing (on S_AXI_ACLK)
 // 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
+// 2026-08-25  Cristian Gingu         Update from: logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0 -> logic [7:0][C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top__
 `define __fw_top__
@@ -112,9 +113,9 @@ module fw_top #(
   );
 
   // Instantiate axi4lite_interface_top_for_pix28_fw
-  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_write32_0;                     // register#0 32-bit write from SW to FW
-  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0;                      // register#0 32-bit read  from FW to SW
-  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_1;                      // register#1 32-bit read  from FW to SW
+  logic      [C_S_AXI_DATA_WIDTH-1 : 0] sw_write32_0;                // register#0 32-bit write from SW to FW
+  logic [7:0][C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0;                 // register#0 32-bit read  from FW to SW
+  logic      [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_1;                 // register#1 32-bit read  from FW to SW
   axi4lite_interface_top_for_pix28_fw #(
     .C_S_AXI_DATA_WIDTH(C_S_AXI_DATA_WIDTH),
     .C_S_AXI_ADDR_WIDTH(C_S_AXI_ADDR_WIDTH)
