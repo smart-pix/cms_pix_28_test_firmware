@@ -236,6 +236,7 @@ module fw_ip1 (
     end else if(op_code_r_cfg_array_0) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_0_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_0_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
+      // CAUTION as of 2026-08-25: SW must take care not to OVERFLOW addresses: for op_code_r_cfg_array_0, valid addresses are 0-to-255 which means sw_write24_0[23:16] must be 0-to-240
       fw_read_data32_comb[0] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 1], w_cfg_array_0_reg[sw_write24_0[23:16]+ 0]};
       fw_read_data32_comb[1] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 3], w_cfg_array_0_reg[sw_write24_0[23:16]+ 2]};
       fw_read_data32_comb[2] = {w_cfg_array_0_reg[sw_write24_0[23:16]+ 5], w_cfg_array_0_reg[sw_write24_0[23:16]+ 4]};
@@ -247,6 +248,7 @@ module fw_ip1 (
     end else if(op_code_r_cfg_array_1) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_1_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_1_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
+      // CAUTION as of 2026-08-25: SW must take care not to OVERFLOW addresses: for op_code_r_cfg_array_1, valid addresses are 0-to-255 which means sw_write24_0[23:16] must be 0-to-240
       fw_read_data32_comb[0] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 1], w_cfg_array_1_reg[sw_write24_0[23:16]+ 0]};
       fw_read_data32_comb[1] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 3], w_cfg_array_1_reg[sw_write24_0[23:16]+ 2]};
       fw_read_data32_comb[2] = {w_cfg_array_1_reg[sw_write24_0[23:16]+ 5], w_cfg_array_1_reg[sw_write24_0[23:16]+ 4]};
@@ -258,6 +260,7 @@ module fw_ip1 (
     end else if(op_code_r_cfg_array_2) begin
       // AXI SW will readout com_config_write_regs.sv output signal w_cfg_array_2_reg, which is 16-bits for the requested address sw_write24_0[23:16].
       // For efficiency, read also w_cfg_array_2_reg at next address. CAUTION: SW must take care not to OVERFLOW addresses
+      // CAUTION as of 2026-08-25: SW must take care not to OVERFLOW addresses: for op_code_r_cfg_array_2, valid addresses are 0-to-255 which means sw_write24_0[23:16] must be 0-to-240
       fw_read_data32_comb[0] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 1], w_cfg_array_2_reg[sw_write24_0[23:16]+ 0]};
       fw_read_data32_comb[1] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 3], w_cfg_array_2_reg[sw_write24_0[23:16]+ 2]};
       fw_read_data32_comb[2] = {w_cfg_array_2_reg[sw_write24_0[23:16]+ 5], w_cfg_array_2_reg[sw_write24_0[23:16]+ 4]};
@@ -269,6 +272,7 @@ module fw_ip1 (
     end else if(op_code_r_data_array_0) begin
       // AXI SW will readout sm_testx_o_shift_reg signal which is 2*5188-bits for the requested address sw_write24_0[23:16].
       // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_0, valid addresses are 0-to-255 which means first 256 out of total 325 addresses each containing one 32-bit word
+      // CAUTION as of 2026-08-25: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_0, valid addresses are 0-to-255 which means sw_write24_0[23:16] must be 0-to-248
       fw_read_data32_comb[0] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+0];
       fw_read_data32_comb[1] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+1];
       fw_read_data32_comb[2] = sm_testx_o_shift_reg_array32[sw_write24_0[23:16]+2];
@@ -280,7 +284,8 @@ module fw_ip1 (
     end else if(op_code_r_data_array_1) begin
       // AXI SW will readout sm_testx_o_shift_reg signal which is 2*5188-bits for the requested address sw_write24_0[23:16].
       // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_1, valid addresses are 0-to-68  which means next   69 out of total 325 addresses each containing one 32-bit word
-      if(sw_write24_0[23:16]<62) begin                                                             // 2026-08-25 update from <69 to <62
+      // CAUTION as of 2026-08-25: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_1, valid addresses are 0-to-255 which means sw_write24_0[23:16] must be 0-to-248
+      if(sw_write24_0[23:16]<62) begin                                                             // CAUTION as of 2026-08-25: update from <69 to <62
         fw_read_data32_comb[0] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+0];          // apply address offset 256
         fw_read_data32_comb[1] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+1];          // apply address offset 256
         fw_read_data32_comb[2] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+2];          // apply address offset 256
@@ -290,7 +295,7 @@ module fw_ip1 (
         fw_read_data32_comb[6] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+6];          // apply address offset 256
         fw_read_data32_comb[7] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+7];          // apply address offset 256
       end else begin
-        fw_read_data32_comb = 256'b0;                       // return ZERO if address is outside range for op_code_r_data_array_1
+        fw_read_data32_comb = 256'b0;                      // return ZERO if address is outside range for op_code_r_data_array_1
       end
     end else begin
       fw_read_data32_comb = 256'b0;
