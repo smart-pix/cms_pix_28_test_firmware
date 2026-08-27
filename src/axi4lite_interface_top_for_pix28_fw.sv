@@ -9,6 +9,7 @@
 // Revisions  :
 // Date        Author                 Description
 // 2024-05-23  Cristian  Gingu        Created; based on https://github.com/SpacelyProject/spacely-caribou-common-blocks/blob/main/ExampleBlock/ExampleBlock.sv
+// 2026-08-25  Cristian Gingu         Update to 8 read data registers: sw_read32_0_0, sw_read32_0_1, sw_read32_0_2, ... sw_read32_0_7
 // ------------------------------------------------------------------------------------
 `ifndef __axi4lite_interface_top_for_pix28_fw__
 `define __axi4lite_interface_top_for_pix28_fw__
@@ -85,15 +86,22 @@ module axi4lite_interface_top_for_pix28_fw #(
     ///////////////////////////
     // FIRMWARE SIDE SIGNALS //
     ///////////////////////////
-    output logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_write32_0,                      // register#0 32-bit write from SW to FW
-    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0,                       // register#0 32-bit read  from FW to SW
-    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_1                        // register#1 32-bit read  from FW to SW
+    output logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_write32_0,                 // register#0 32-bit write from SW to FW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_0,                // register#1 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_1,                // register#2 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_2,                // register#3 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_3,                // register#4 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_4,                // register#5 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_5,                // register#6 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_6,                // register#7 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_7,                // register#8 32-bit read  from FW to SW
+    input  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_1                   // register#9 32-bit read  from FW to SW
   );
 
   ///////////////////////////
   // REG INTERFACE SIGNALS //
   ///////////////////////////
-  localparam FPGA_REGISTER_N = 3;
+  localparam FPGA_REGISTER_N = 10;                                             // CAUTION 2026-08-25: update from 3-registers to 10-registers
   logic [C_S_AXI_DATA_WIDTH-1:0]       reg_wrdout;                             // 32-bit data from AXI interface
   logic [((C_S_AXI_DATA_WIDTH-1)/8):0] reg_wrByteStrobe [FPGA_REGISTER_N-1:0]; // write strobe per byte of reg_wrdout per FPGA register
   logic                                reg_rdStrobe     [FPGA_REGISTER_N-1:0]; // read strobe per FPGA register
@@ -166,8 +174,15 @@ module axi4lite_interface_top_for_pix28_fw #(
 //  end
   // Option 3: simple assignment
   assign reg_rddin[0] = sw_write32_0;
-  assign reg_rddin[1] = sw_read32_0;
-  assign reg_rddin[2] = sw_read32_1;
+  assign reg_rddin[1] = sw_read32_0_0;
+  assign reg_rddin[2] = sw_read32_0_1;
+  assign reg_rddin[3] = sw_read32_0_2;
+  assign reg_rddin[4] = sw_read32_0_3;
+  assign reg_rddin[5] = sw_read32_0_4;
+  assign reg_rddin[6] = sw_read32_0_5;
+  assign reg_rddin[7] = sw_read32_0_6;
+  assign reg_rddin[8] = sw_read32_0_7;
+  assign reg_rddin[9] = sw_read32_1;
 
 endmodule
 
