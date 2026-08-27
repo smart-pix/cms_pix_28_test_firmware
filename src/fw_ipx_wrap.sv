@@ -27,9 +27,9 @@ module fw_ipx_wrap (
     //////////////////////////////
     input  logic S_AXI_ACLK,
     input  logic S_AXI_ARESETN,
-    input  logic      [31:0] sw_write32_0,                           // register#0 32-bit write from SW to FW
-    output logic [7:0][31:0] sw_read32_0,                            // register#0 32-bit read  from FW to SW
-    output logic      [31:0] sw_read32_1,                            // register#1 32-bit read  from FW to SW
+    input  logic      [31:0] sw_write32_0,                           // register#0      32-bit write from SW to FW
+    output logic [7:0][31:0] sw_read32_0,                            // register#1-to-8 32-bit read  from FW to SW
+    output logic      [31:0] sw_read32_1,                            // register#9      32-bit read  from FW to SW
     //////////////////////////////////
     // DUT side ports == FPGA pins: //
     //////////////////////////////////
