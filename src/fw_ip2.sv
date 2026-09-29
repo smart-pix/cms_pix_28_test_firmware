@@ -593,7 +593,7 @@ module fw_ip2 (
   ip2_test1 ip2_test1_inst (
     .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
     .reset                                   (op_code_w_reset),
-    .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
+    .enable                                  (fw_dev_id_enable),               // up to 15 FW can be connected
     // Control signals:
     .clk_counter                             (fw_pl_clk1_cnt),
     .test_delay                              (test_delay),
@@ -621,7 +621,7 @@ module fw_ip2 (
   ip2_test2 ip2_test2_inst (
     .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
     .reset                                   (op_code_w_reset),
-    .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
+    .enable                                  (fw_dev_id_enable),               // up to 15 FW can be connected
     // Control signals:
     .clk_counter                             (fw_pl_clk1_cnt),
     .scan_load_delay                         (scan_load_delay),
@@ -653,7 +653,7 @@ module fw_ip2 (
   ip2_test3 ip2_test3_inst (
     .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
     .reset                                   (op_code_w_reset),
-    .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
+    .enable                                  (fw_dev_id_enable),               // up to 15 FW can be connected
     // Control signals:
     .clk_counter                             (fw_pl_clk1_cnt),
     .scan_load_delay                         (scan_load_delay),
@@ -690,7 +690,7 @@ module fw_ip2 (
   ip2_test4 ip2_test4_inst (
     .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
     .reset                                   (op_code_w_reset),
-    .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
+    .enable                                  (fw_dev_id_enable),               // up to 15 FW can be connected
     // Control signals:
     .clk_counter                             (fw_pl_clk1_cnt),
     .scan_load_delay                         (scan_load_delay),
@@ -730,7 +730,7 @@ module fw_ip2 (
   ip2_test5 ip2_test5_inst (
     .clk                                     (fw_pl_clk1),                     // FM clock 400MHz       mapped to pl_clk1
     .reset                                   (op_code_w_reset),
-    .enable                                  (fw_dev_id_enable),                // up to 15 FW can be connected
+    .enable                                  (fw_dev_id_enable),               // up to 15 FW can be connected
     // Control signals:
     .clk_counter                             (fw_pl_clk1_cnt),
     .scan_load_delay                         (scan_load_delay),
@@ -919,7 +919,7 @@ module fw_ip2 (
           sm_testx_o_scanchain_test_reg[4*dnn_reg_width                    -1 : 3*dnn_reg_width] <= bxclk_default;
           sm_testx_o_scanchain_test_reg[sm_testx_o_scanchain_test_reg_width-1 : 4*dnn_reg_width] <= {(sm_testx_o_scanchain_test_reg_width-4*dnn_reg_width){1'b0}};
         end else begin
-          // overwrite with dnn_output_0/1 data coming from sm_test3
+          // overwrite with dnn_output_0/1 data coming from sm_test4
           sm_testx_o_scanchain_test_reg[1*dnn_reg_width                    -1 : 0*dnn_reg_width] <= sm_test4_o_dnn_output_0_pipe_1;
           sm_testx_o_scanchain_test_reg[2*dnn_reg_width                    -1 : 1*dnn_reg_width] <= sm_test4_o_dnn_output_1_pipe_1;
           sm_testx_o_scanchain_test_reg[3*dnn_reg_width                    -1 : 2*dnn_reg_width] <= sm_test4_o_bxclk_ana_pipe_1;
