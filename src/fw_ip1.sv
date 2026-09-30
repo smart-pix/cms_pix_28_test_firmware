@@ -285,7 +285,7 @@ module fw_ip1 (
       // AXI SW will readout sm_testx_o_shift_reg signal which is 2*5188-bits for the requested address sw_write24_0[23:16].
       // CAUTION: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_1, valid addresses are 0-to-68  which means next   69 out of total 325 addresses each containing one 32-bit word
       // CAUTION as of 2026-08-25: SW must take care not to OVERFLOW addresses: for op_code_r_data_array_1, valid addresses are 0-to-255 which means sw_write24_0[23:16] must be 0-to-248
-      if(sw_write24_0[23:16]<62) begin                                                             // CAUTION as of 2026-08-25: update from <69 to <62
+      if(sw_write24_0[23:16]<69) begin                                                             // CAUTION as of 2026-08-25: update from <69 to <62
         fw_read_data32_comb[0] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+0];          // apply address offset 256
         fw_read_data32_comb[1] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+1];          // apply address offset 256
         fw_read_data32_comb[2] = sm_testx_o_shift_reg_array32[256+sw_write24_0[23:16]+2];          // apply address offset 256
