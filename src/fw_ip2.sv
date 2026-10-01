@@ -47,6 +47,7 @@
 // 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
 // 2026-08-25  Cristian Gingu         Update from: (1) logic [31:0] fw_read_data32      -> logic [7:0][31:0] fw_read_data32
 // 2026-08-25  Cristian Gingu         Update from: (2) logic [31:0] fw_read_data32_comb -> logic [7:0][31:0] fw_read_data32_comb
+// 2026-10-01  Cristian Gingu         Add pipeline sm_testx_o_scanchain_reg_pipe_2, sm_testx_o_scanchain_test_reg_pipe_2 to make Vivado Timing PASS
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -267,8 +268,9 @@ module fw_ip2 (
   logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg;                    // 2*768=1536-bits shift register; used by all tests 1,2,3,4
   logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_reg_array32;            // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
   logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_1;
+  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_2;
   for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_reg_array32_gen
-    assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg_pipe_1[(i+1)*32-1 : i*32];
+    assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg_pipe_2[(i+1)*32-1 : i*32];
   end
   //
   //logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;               // 2*768=1536-bits shift register; used by all tests 1,2,3,4
@@ -277,8 +279,9 @@ module fw_ip2 (
   logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;                                   // changed from 2*768=1536-bits to 4096-bits shift register; used by all tests 1,2,3,4,5
   logic [sm_testx_o_scanchain_test_reg_width/32-1:0][31:0] sm_testx_o_scanchain_test_reg_array32;                           // remap 4096-bits shift register into one array of 32-bits; array depth is 4096/32=128 32-bit words
   logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg_pipe_1;
+  logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg_pipe_2;
   for(genvar i = 0; i < sm_testx_o_scanchain_test_reg_width/32; i++) begin: sm_testx_o_scanchain_test_reg_array32_gen
-    assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg_pipe_1[(i+1)*32-1 : i*32];
+    assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg_pipe_2[(i+1)*32-1 : i*32];
   end
   //
   always_comb begin : fw_read_data32_comb_proc
@@ -769,9 +772,11 @@ module fw_ip2 (
   logic [dnn_reg_width-1:0] sm_test4_o_bxclk_pipe_1;
   always @(posedge fw_pl_clk1) begin
     sm_test5_pipe_1                      <= sm_test5;
-    sm_test5_o_repeat_pixel_reg_pipe_1   <= sm_test5_o_repeat_pixel_reg;                             // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
+    sm_test5_o_repeat_pixel_reg_pipe_1   <= sm_test5_o_repeat_pixel_reg;                           // ip2_test5 specific NEW: introduce pipeline to make Timing PASS
     sm_testx_o_scanchain_reg_pipe_1      <= sm_testx_o_scanchain_reg;
+    sm_testx_o_scanchain_reg_pipe_2      <= sm_testx_o_scanchain_reg_pipe_1;                       // 2026-10-01 Update *_pipe_2 for Vivado timing
     sm_testx_o_scanchain_test_reg_pipe_1 <= sm_testx_o_scanchain_test_reg;
+    sm_testx_o_scanchain_test_reg_pipe_2 <= sm_testx_o_scanchain_test_reg_pipe_1;                  // 2026-10-01 Update *_pipe_2 for Vivado timing
     sm_test4_pipe_1                      <= sm_test4;
     sm_test4_o_dnn_output_0_pipe_1       <= sm_test4_o_dnn_output_0;
     sm_test4_o_dnn_output_1_pipe_1       <= sm_test4_o_dnn_output_1;
