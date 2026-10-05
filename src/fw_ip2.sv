@@ -50,6 +50,8 @@
 // 2026-10-01  Cristian Gingu         Add pipeline sm_testx_o_scanchain_reg_pipe_2, sm_testx_o_scanchain_test_reg_pipe_2 to make Vivado Timing PASS, still FAIL
 // 2026-10-02  Cristian Gingu         Major change. Improve Vivado timing by using separate signals sm_test1/2/4/5_i_scanchain_reg,   sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
 // 2026-10-02  Cristian Gingu         Major change. Improve Vivado timing by using separate signals sm_test1/2/3/4/5_o_scanchain_reg, sm_test1/2/3/4/5_o_scanchain_test_reg    for each test
+// 2026-10-02  Cristian Gingu         Change asynchronous reset fw_rst_n to synchronous in  signals sm_test1/2/4/5_i_scanchain_reg,   sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test Timing FAIL by LITTLE: TNS=-0.033ns on 29 netstest
+// 2026-10-02  Cristian Gingu         Add second pipe for debug signal first_scan_load_shift_pipe_1
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -616,60 +618,40 @@ module fw_ip2 (
 //    end
 //  end
   // 2026-10-02 Improve Vivado timing by using separate signals sm_test1/2/4/5_i_scanchain_reg, sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
-  always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_test1_i_scanchain_reg_proc
-    if(~fw_rst_n) begin
-      sm_test1_i_scanchain_reg             <= {sm_testx_i_scanchain_reg_width{1'b0}};
-      sm_test1_i_scanchain_reg_shift_cnt   <= 11'h0;
-    end else begin
-      if(sm_test1_o_scanchain_reg_load) begin
-        sm_test1_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
-        sm_test1_i_scanchain_reg_shift_cnt <= 11'h0;
-      end else if(sm_test1_o_scanchain_reg_shift_right) begin
-        sm_test1_i_scanchain_reg           <= {1'b0, sm_test1_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
-        sm_test1_i_scanchain_reg_shift_cnt <= sm_test1_i_scanchain_reg_shift_cnt + 1'b1;
-      end
+  always @(posedge fw_pl_clk1) begin : sm_test1_i_scanchain_reg_proc
+    if(~fw_rst_n==1 || sm_test1_o_scanchain_reg_load==1) begin
+      sm_test1_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
+      sm_test1_i_scanchain_reg_shift_cnt <= 11'h0;
+    end else if(sm_test1_o_scanchain_reg_shift_right) begin
+      sm_test1_i_scanchain_reg           <= {1'b0, sm_test1_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
+      sm_test1_i_scanchain_reg_shift_cnt <= sm_test1_i_scanchain_reg_shift_cnt + 1'b1;
     end
   end
-  always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_test2_i_scanchain_reg_proc
-    if(~fw_rst_n) begin
-      sm_test2_i_scanchain_reg             <= {sm_testx_i_scanchain_reg_width{1'b0}};
-      sm_test2_i_scanchain_reg_shift_cnt   <= 11'h0;
-    end else begin
-      if(sm_test2_o_scanchain_reg_load) begin
-        sm_test2_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
-        sm_test2_i_scanchain_reg_shift_cnt <= 11'h0;
-      end else if(sm_test2_o_scanchain_reg_shift_right) begin
-        sm_test2_i_scanchain_reg           <= {1'b0, sm_test2_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
-        sm_test2_i_scanchain_reg_shift_cnt <= sm_test2_i_scanchain_reg_shift_cnt + 1'b1;
-      end
+  always @(posedge fw_pl_clk1) begin : sm_test2_i_scanchain_reg_proc
+    if(~fw_rst_n==1 || sm_test2_o_scanchain_reg_load==1) begin
+      sm_test2_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
+      sm_test2_i_scanchain_reg_shift_cnt <= 11'h0;
+    end else if(sm_test2_o_scanchain_reg_shift_right) begin
+      sm_test2_i_scanchain_reg           <= {1'b0, sm_test2_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
+      sm_test2_i_scanchain_reg_shift_cnt <= sm_test2_i_scanchain_reg_shift_cnt + 1'b1;
     end
   end
-  always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_test4_i_scanchain_reg_proc
-    if(~fw_rst_n) begin
-      sm_test4_i_scanchain_reg             <= {sm_testx_i_scanchain_reg_width{1'b0}};
-      sm_test4_i_scanchain_reg_shift_cnt   <= 11'h0;
-    end else begin
-      if(sm_test4_o_scanchain_reg_load) begin
-        sm_test4_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
-        sm_test4_i_scanchain_reg_shift_cnt <= 11'h0;
-      end else if(sm_test4_o_scanchain_reg_shift_right) begin
-        sm_test4_i_scanchain_reg           <= {1'b0, sm_test4_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
-        sm_test4_i_scanchain_reg_shift_cnt <= sm_test4_i_scanchain_reg_shift_cnt + 1'b1;
-      end
+  always @(posedge fw_pl_clk1) begin : sm_test4_i_scanchain_reg_proc
+    if(~fw_rst_n==1 || sm_test4_o_scanchain_reg_load==1) begin
+      sm_test4_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
+      sm_test4_i_scanchain_reg_shift_cnt <= 11'h0;
+    end else if(sm_test4_o_scanchain_reg_shift_right) begin
+      sm_test4_i_scanchain_reg           <= {1'b0, sm_test4_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
+      sm_test4_i_scanchain_reg_shift_cnt <= sm_test4_i_scanchain_reg_shift_cnt + 1'b1;
     end
   end
-  always @(posedge fw_pl_clk1 or negedge fw_rst_n) begin : sm_test5_i_scanchain_reg_proc
-    if(~fw_rst_n) begin
-      sm_test5_i_scanchain_reg             <= {sm_testx_i_scanchain_reg_width{1'b0}};
-      sm_test5_i_scanchain_reg_shift_cnt   <= 11'h0;
-    end else begin
-      if(sm_test5_o_scanchain_reg_load) begin
-        sm_test5_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
-        sm_test5_i_scanchain_reg_shift_cnt <= 11'h0;
-      end else if(sm_test5_o_scanchain_reg_shift_right) begin
-        sm_test5_i_scanchain_reg           <= {1'b0, sm_test5_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
-        sm_test5_i_scanchain_reg_shift_cnt <= sm_test5_i_scanchain_reg_shift_cnt + 1'b1;
-      end
+  always @(posedge fw_pl_clk1) begin : sm_test5_i_scanchain_reg_proc
+    if(~fw_rst_n==1 || sm_test5_o_scanchain_reg_load==1) begin
+      sm_test5_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
+      sm_test5_i_scanchain_reg_shift_cnt <= 11'h0;
+    end else if(sm_test5_o_scanchain_reg_shift_right) begin
+      sm_test5_i_scanchain_reg           <= {1'b0, sm_test5_i_scanchain_reg[sm_testx_i_scanchain_reg_width-1 : 1]};
+      sm_test5_i_scanchain_reg_shift_cnt <= sm_test5_i_scanchain_reg_shift_cnt + 1'b1;
     end
   end
   //
@@ -888,6 +870,8 @@ module fw_ip2 (
   end
   //
   logic first_scan_load_shift;
+  logic first_scan_load_shift_pipe_1;
+  logic first_scan_load_shift_pipe_2;
   always @(posedge fw_pl_clk1) begin : first_scan_load_shift_proc
     if(
         (sm_test2==SCANLOAD_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b0) || (sm_test2==TRIGOUT_HIGH_2_IP2_T2 && scan_load_delay_disable==1'b1) ||
@@ -898,8 +882,11 @@ module fw_ip2 (
     end else begin
       first_scan_load_shift  <= 1'b0;
     end
+    //
+    first_scan_load_shift_pipe_1 <= first_scan_load_shift;
+    first_scan_load_shift_pipe_2 <= first_scan_load_shift_pipe_1;
   end
-  assign dbg_first_scan_load_shift = first_scan_load_shift;     // Assign module debug_output signals:
+  assign dbg_first_scan_load_shift = first_scan_load_shift_pipe_2;     // Assign module debug_output signals:
   //
   // Logic related with readout data from DUT: sm_testx_o_scanchain_reg
   // This is State Machine test dependent: sm_test1, sm_test2, sm_test3, sm_test4, sm_test5
