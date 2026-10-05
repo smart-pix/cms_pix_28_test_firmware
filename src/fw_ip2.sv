@@ -50,8 +50,10 @@
 // 2026-10-01  Cristian Gingu         Add pipeline sm_testx_o_scanchain_reg_pipe_2, sm_testx_o_scanchain_test_reg_pipe_2 to make Vivado Timing PASS, still FAIL
 // 2026-10-02  Cristian Gingu         Major change. Improve Vivado timing by using separate signals sm_test1/2/4/5_i_scanchain_reg,   sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
 // 2026-10-02  Cristian Gingu         Major change. Improve Vivado timing by using separate signals sm_test1/2/3/4/5_o_scanchain_reg, sm_test1/2/3/4/5_o_scanchain_test_reg    for each test
-// 2026-10-02  Cristian Gingu         Change asynchronous reset fw_rst_n to synchronous in  signals sm_test1/2/4/5_i_scanchain_reg,   sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test Timing FAIL by LITTLE: TNS=-0.033ns on 29 netstest
-// 2026-10-02  Cristian Gingu         Add second pipe for debug signal first_scan_load_shift_pipe_1
+// 2026-10-02  Cristian Gingu         Improve Vivado timing by changing reset fw_rst_n from asynchronous to synchronous in signals sm_test1/2/4/5_i_scanchain_reg, sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
+// 2026-10-02  Cristian Gingu         Improve Vivado timing by adding second pipe for debug signal first_scan_load_shift_pipe_1; Timing now ALMOST PASS, it FAIL by LITTLE: TNS=-0.033ns on 29 netstest
+// 2026-10-06  Cristian Gingu         Improve Vivado timing by removing the reset fw_rst_n in signals sm_test1/2/4/5_i_scanchain_reg, sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
+// 2026-10-06  Cristian Gingu         Improve Vivado timing by simplifying the logic signal for sm_last_testx
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -618,8 +620,9 @@ module fw_ip2 (
 //    end
 //  end
   // 2026-10-02 Improve Vivado timing by using separate signals sm_test1/2/4/5_i_scanchain_reg, sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
+  // 2026-10-05 Improve Vivado timing by removing fw_rst_n
   always @(posedge fw_pl_clk1) begin : sm_test1_i_scanchain_reg_proc
-    if(~fw_rst_n==1 || sm_test1_o_scanchain_reg_load==1) begin
+    if(sm_test1_o_scanchain_reg_load==1) begin
       sm_test1_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
       sm_test1_i_scanchain_reg_shift_cnt <= 11'h0;
     end else if(sm_test1_o_scanchain_reg_shift_right) begin
@@ -628,7 +631,7 @@ module fw_ip2 (
     end
   end
   always @(posedge fw_pl_clk1) begin : sm_test2_i_scanchain_reg_proc
-    if(~fw_rst_n==1 || sm_test2_o_scanchain_reg_load==1) begin
+    if(sm_test2_o_scanchain_reg_load==1) begin
       sm_test2_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
       sm_test2_i_scanchain_reg_shift_cnt <= 11'h0;
     end else if(sm_test2_o_scanchain_reg_shift_right) begin
@@ -637,7 +640,7 @@ module fw_ip2 (
     end
   end
   always @(posedge fw_pl_clk1) begin : sm_test4_i_scanchain_reg_proc
-    if(~fw_rst_n==1 || sm_test4_o_scanchain_reg_load==1) begin
+    if(sm_test4_o_scanchain_reg_load==1) begin
       sm_test4_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
       sm_test4_i_scanchain_reg_shift_cnt <= 11'h0;
     end else if(sm_test4_o_scanchain_reg_shift_right) begin
@@ -646,7 +649,7 @@ module fw_ip2 (
     end
   end
   always @(posedge fw_pl_clk1) begin : sm_test5_i_scanchain_reg_proc
-    if(~fw_rst_n==1 || sm_test5_o_scanchain_reg_load==1) begin
+    if(sm_test5_o_scanchain_reg_load==1) begin
       sm_test5_i_scanchain_reg           <= w_cfg_array_0_reg[sm_testx_i_scanchain_reg_width/16-1 : 0];
       sm_test5_i_scanchain_reg_shift_cnt <= 11'h0;
     end else if(sm_test5_o_scanchain_reg_shift_right) begin
@@ -1102,15 +1105,15 @@ module fw_ip2 (
   end
   //
   always @(posedge fw_pl_clk1) begin : sm_last_testx_proc
-    if(test1_enable==1 && sm_test1==DELAY_TEST_IP2_T1) begin
+    if(test1_enable_re) begin
       sm_last_testx          <= 5'b00001;
-    end else if(test2_enable==1 && sm_test2==DELAY_TEST_IP2_T2) begin
+    end else if(test2_enable_re) begin
       sm_last_testx          <= 5'b00010;
-    end else if(test3_enable==1 && sm_test3==DELAY_TEST_IP2_T3) begin
+    end else if(test3_enable_re) begin
       sm_last_testx          <= 5'b00100;
-    end else if(test4_enable==1 && sm_test4==DELAY_TEST_IP2_T4) begin
+    end else if(test4_enable_re) begin
       sm_last_testx          <= 5'b01000;
-    end else if(test5_enable==1 && sm_test5==DELAY_TEST_IP2_T5) begin
+    end else if(test5_enable_re) begin
       sm_last_testx          <= 5'b10000;
     end else begin
       sm_last_testx          <= sm_last_testx;
