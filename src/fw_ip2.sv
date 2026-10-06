@@ -52,9 +52,13 @@
 // 2026-10-02  Cristian Gingu         Major change. Improve Vivado timing by using separate signals sm_test1/2/3/4/5_o_scanchain_reg, sm_test1/2/3/4/5_o_scanchain_test_reg    for each test
 // 2026-10-02  Cristian Gingu         Improve Vivado timing by changing reset fw_rst_n from asynchronous to synchronous in signals sm_test1/2/4/5_i_scanchain_reg, sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
 // 2026-10-02  Cristian Gingu         Improve Vivado timing by adding second pipe for debug signal first_scan_load_shift_pipe_1; Timing now ALMOST PASS, it FAIL by LITTLE: TNS=-0.033ns on 29 netstest
-// 2026-10-06  Cristian Gingu         Improve Vivado timing by removing the reset fw_rst_n in signals sm_test1/2/4/5_i_scanchain_reg, sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
-// 2026-10-06  Cristian Gingu         Improve Vivado timing by simplifying the logic signal for sm_last_testx; Vivado FAIL with TNS=-1.775ns on 111 nets
-// 2026-10-06  Cristian Gingu         Improve Vivado timing by adding third pipesm_testx_o_scanchain_reg_pipe_3
+// 2026-10-05  Cristian Gingu         Improve Vivado timing by removing the reset fw_rst_n in signals sm_test1/2/4/5_i_scanchain_reg, sm_test1/2/4/5_i_scanchain_reg_shift_cnt for each test
+// 2026-10-05  Cristian Gingu         Improve Vivado timing by simplifying the logic signal for sm_last_testx; Vivado FAIL with TNS=-1.775ns on 111 nets
+// 2026-10-05  Cristian Gingu         Improve Vivado timing by adding third pipe sm_testx_o_scanchain_reg_pipe_3
+// 2026-10-06  Cristian Gingu         Improve Vivado timing by adding third pipe sm_testx_o_scanchain_test_reg_pipe_3 ... realy bad!
+// 2026-10-06  Cristian Gingu         Improve Vivado timing by removing *_pipe_2 and *_pipe_3. Vivado 2022 TIMING PASS (failed by TNS=-0.897ns with the old strategies for synthesis and implementation)
+// 2026-10-06  Cristian Gingu         Also changed Vivado Synthesis Strategy to Flow_PerfOptimized-high with -directive = PerformanceOptimized
+// 2026-10-06  Cristian Gingu         Also changed Vivado Implementation to (opt_design) -directive=Explore(was default) (place_design) -directive=ExtraTimingOpt(was Explore) and (phys_opt_design)(route_design)(phys_opt_design) -directive=AggressiveExplore
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip2__
 `define __fw_ip2__
@@ -275,10 +279,10 @@ module fw_ip2 (
 //logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg;                    // 2*768=1536-bits shift register; used by all tests 1,2,3,4,5
   logic [sm_testx_o_scanchain_reg_width/32-1:0][31:0] sm_testx_o_scanchain_reg_array32;            // remap the 2*768-bits register into one array of 32-bits; array depth is 2*768/32=2*24=48 32-bit words
   logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_1;
-  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_2;
-  logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_3;
+//logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_2;
+//logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_reg_pipe_3;
   for(genvar i = 0; i < sm_testx_o_scanchain_reg_width/32; i++) begin: sm_testx_o_scanchain_reg_array32_gen
-    assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg_pipe_3[(i+1)*32-1 : i*32];
+    assign sm_testx_o_scanchain_reg_array32[i] = sm_testx_o_scanchain_reg_pipe_1[(i+1)*32-1 : i*32];
   end
   //
   //logic [sm_testx_o_scanchain_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;               // 2*768=1536-bits shift register; used by all tests 1,2,4,5
@@ -287,9 +291,10 @@ module fw_ip2 (
 //logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg;                                   // changed from 2*768=1536-bits to 4096-bits shift register; used by all tests 1,2,3,4,5
   logic [sm_testx_o_scanchain_test_reg_width/32-1:0][31:0] sm_testx_o_scanchain_test_reg_array32;                           // remap 4096-bits shift register into one array of 32-bits; array depth is 4096/32=128 32-bit words
   logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg_pipe_1;
-  logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg_pipe_2;
+//logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg_pipe_2;
+//logic [sm_testx_o_scanchain_test_reg_width-1   :0]       sm_testx_o_scanchain_test_reg_pipe_3;
   for(genvar i = 0; i < sm_testx_o_scanchain_test_reg_width/32; i++) begin: sm_testx_o_scanchain_test_reg_array32_gen
-    assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg_pipe_2[(i+1)*32-1 : i*32];
+    assign sm_testx_o_scanchain_test_reg_array32[i] = sm_testx_o_scanchain_test_reg_pipe_1[(i+1)*32-1 : i*32];
   end
   //
   always_comb begin : fw_read_data32_comb_proc
@@ -865,9 +870,10 @@ module fw_ip2 (
       sm_testx_o_scanchain_test_reg_pipe_1 <= sm_testx_o_scanchain_test_reg_pipe_1;
     end
     //
-    sm_testx_o_scanchain_reg_pipe_2      <= sm_testx_o_scanchain_reg_pipe_1;                       // 2026-10-01 Update *_pipe_2 for Vivado timing
-    sm_testx_o_scanchain_test_reg_pipe_2 <= sm_testx_o_scanchain_test_reg_pipe_1;                  // 2026-10-01 Update *_pipe_2 for Vivado timing
-    sm_testx_o_scanchain_reg_pipe_3      <= sm_testx_o_scanchain_reg_pipe_2;                       // 2026-10-05 Update *_pipe_3 for Vivado timing
+    //sm_testx_o_scanchain_reg_pipe_2      <= sm_testx_o_scanchain_reg_pipe_1;                       // 2026-10-01 Update *_pipe_2 for Vivado timing
+    //sm_testx_o_scanchain_test_reg_pipe_2 <= sm_testx_o_scanchain_test_reg_pipe_1;                  // 2026-10-01 Update *_pipe_2 for Vivado timing
+    //sm_testx_o_scanchain_reg_pipe_3      <= sm_testx_o_scanchain_reg_pipe_2;                       // 2026-10-05 Update *_pipe_3 for Vivado timing
+    //sm_testx_o_scanchain_test_reg_pipe_3 <= sm_testx_o_scanchain_test_reg_pipe_2;                  // 2026-10-06 Update *_pipe_3 for Vivado timing
     sm_test4_pipe_1                      <= sm_test4;
     sm_test4_o_dnn_output_0_pipe_1       <= sm_test4_o_dnn_output_0;
     sm_test4_o_dnn_output_1_pipe_1       <= sm_test4_o_dnn_output_1;
