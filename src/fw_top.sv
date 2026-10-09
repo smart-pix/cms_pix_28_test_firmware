@@ -14,6 +14,7 @@
 // 2025-01-07  Cristian Gingu         Add pipelined signal sw_write32_0_pipe_1 to improve timing (on S_AXI_ACLK)
 // 2025-04-03  Cristian Gingu         Add pipelined signal sw_write32_0_pipe_2 to improve timing (on S_AXI_ACLK)
 // 2025-04-17  Cristian Gingu         Add debug signal dbg_first_scan_load_shift
+// 2026-08-25  Cristian Gingu         Update to 8 read data registers: sw_read32_0_0, sw_read32_0_1, sw_read32_0_2, ... sw_read32_0_7
 // ------------------------------------------------------------------------------------
 `ifndef __fw_top__
 `define __fw_top__
@@ -112,9 +113,26 @@ module fw_top #(
   );
 
   // Instantiate axi4lite_interface_top_for_pix28_fw
-  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_write32_0;                     // register#0 32-bit write from SW to FW
-  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0;                      // register#0 32-bit read  from FW to SW
-  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_1;                      // register#1 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_write32_0;                // register#0 32-bit write from SW to FW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_0;               // register#1 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_1;               // register#2 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_2;               // register#3 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_3;               // register#4 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_4;               // register#5 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_5;               // register#6 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_6;               // register#7 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0_7;               // register#8 32-bit read  from FW to SW
+  logic [C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_1;                 // register#9 32-bit read  from FW to SW
+  // Connect the 8 read data registers: sw_read32_0_0, sw_read32_0_1, sw_read32_0_2, ... sw_read32_0_7
+  logic [7:0][C_S_AXI_DATA_WIDTH-1 : 0] sw_read32_0;
+  assign sw_read32_0_0 = sw_read32_0[0];
+  assign sw_read32_0_1 = sw_read32_0[1];
+  assign sw_read32_0_2 = sw_read32_0[2];
+  assign sw_read32_0_3 = sw_read32_0[3];
+  assign sw_read32_0_4 = sw_read32_0[4];
+  assign sw_read32_0_5 = sw_read32_0[5];
+  assign sw_read32_0_6 = sw_read32_0[6];
+  assign sw_read32_0_7 = sw_read32_0[7];
   axi4lite_interface_top_for_pix28_fw #(
     .C_S_AXI_DATA_WIDTH(C_S_AXI_DATA_WIDTH),
     .C_S_AXI_ADDR_WIDTH(C_S_AXI_ADDR_WIDTH)
@@ -147,8 +165,15 @@ module fw_top #(
     // FIRMWARE SIDE SIGNALS //
     ///////////////////////////
     .sw_write32_0(sw_write32_0),                                     // register#0 32-bit write from SW to FW
-    .sw_read32_0(sw_read32_0),                                       // register#0 32-bit read  from FW to SW
-    .sw_read32_1(sw_read32_1)                                        // register#1 32-bit read  from FW to SW
+    .sw_read32_0_0(sw_read32_0_0),                                   // register#1 32-bit read  from FW to SW
+    .sw_read32_0_1(sw_read32_0_1),                                   // register#2 32-bit read  from FW to SW
+    .sw_read32_0_2(sw_read32_0_2),                                   // register#3 32-bit read  from FW to SW
+    .sw_read32_0_3(sw_read32_0_3),                                   // register#4 32-bit read  from FW to SW
+    .sw_read32_0_4(sw_read32_0_4),                                   // register#5 32-bit read  from FW to SW
+    .sw_read32_0_5(sw_read32_0_5),                                   // register#6 32-bit read  from FW to SW
+    .sw_read32_0_6(sw_read32_0_6),                                   // register#7 32-bit read  from FW to SW
+    .sw_read32_0_7(sw_read32_0_7),                                   // register#8 32-bit read  from FW to SW
+    .sw_read32_1(sw_read32_1)                                        // register#9 32-bit read  from FW to SW
   );
 
   // Add pipelined signal sw_write32_0_pipe_1 to improve timing
@@ -167,9 +192,9 @@ module fw_top #(
     //////////////////////////////
     .S_AXI_ACLK              (S_AXI_ACLK),
     .S_AXI_ARESETN           (S_AXI_ARESETN),
-    .sw_write32_0            (sw_write32_0_pipe_2),                         // register#0 32-bit write from SW to FW
-    .sw_read32_0             (sw_read32_0),                                 // register#0 32-bit read  from FW to SW
-    .sw_read32_1             (sw_read32_1),                                 // register#1 32-bit read  from FW to SW
+    .sw_write32_0            (sw_write32_0_pipe_2),                  // register#0      32-bit write from SW to FW
+    .sw_read32_0             (sw_read32_0),                          // register#1-to-8 32-bit read  from FW to SW
+    .sw_read32_1             (sw_read32_1),                          // register#9      32-bit read  from FW to SW
     //////////////////////////////////
     // DUT side ports == FPGA pins: //
     //////////////////////////////////

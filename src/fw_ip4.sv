@@ -13,6 +13,7 @@
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-09-30  Cristian Gingu         Add IOB input port scan_out_test and associated logic for ip2_test2.sv
 // 2024-10-01  Cristian Gingu         Add IOB input port up_event_toggle
+// 2026-08-25  Cristian Gingu         Update from: logic [31:0] fw_read_data32 -> logic [7:0][31:0] fw_read_data32
 // ------------------------------------------------------------------------------------
 `ifndef __fw_ip4__
 `define __fw_ip4__
@@ -39,9 +40,9 @@ module fw_ip4 (
     input  logic        fw_op_code_r_data_array_1,
     input  logic        fw_op_code_w_status_clear,
     input  logic        fw_op_code_w_execute,
-    input  logic [23:0] sw_write24_0,                      // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
-    output logic [31:0] fw_read_data32,                    // 32-bit read_data   from FW to SW
-    output logic [31:0] fw_read_status32,                  // 32-bit read_status from FW to SW
+    input  logic      [23:0] sw_write24_0,                 // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
+    output logic [7:0][31:0] fw_read_data32,               // 32-bit read_data   from FW to SW
+    output logic      [31:0] fw_read_status32,             // 32-bit read_status from FW to SW
     // DUT side signals to/from common_fw_to_dut_side      // up to 15 FWs can be connected
     // output signals from FW
     output logic fw_super_pixel_sel,
@@ -66,7 +67,7 @@ module fw_ip4 (
 
   // TODO Add real logic for output signals below;
   // TODO If the output signal is not used by this module, leave assignment to zero.
-  assign fw_read_data32       = 32'h0;
+  assign fw_read_data32       = 256'h0;
   assign fw_read_status32     = 32'h0;
   assign fw_super_pixel_sel   = 1'b0;
   assign fw_config_clk        = 1'b0;

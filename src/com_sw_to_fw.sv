@@ -11,6 +11,8 @@
 // 2024-05-22  Cristian  Gingu        Created; this is a combinatorial module
 // 2024-07-23  Cristian Gingu         Add fw_op_code_w_cfg_array_2 and fw_op_code_r_cfg_array_2
 // 2024-08-12  Cristian Gingu         Add references to cms_pix28_package.sv
+// 2026-08-25  Cristian Gingu         Update from: (1) logic      [31:0] sw_read32_0    -> logic      [7:0][31:0] sw_read32_0
+// 2026-08-25  Cristian Gingu         Update from: (2) logic [3:0][31:0] fw_read_data32 -> logic [3:0][7:0][31:0] fw_read_data32
 // ------------------------------------------------------------------------------------
 `ifndef __com_sw_to_fw__
 `define __com_sw_to_fw__
@@ -18,9 +20,9 @@
 
 module com_sw_to_fw(
     // SW side ports:
-    input  logic [31:0] sw_write32_0,                      // register#0 32-bit write       from SW to FW
-    output logic [31:0] sw_read32_0,                       // register#0 32-bit read_data   from FW to SW
-    output logic [31:0] sw_read32_1,                       // register#1 32-bit read_status from FW to SW
+    input  logic      [31:0] sw_write32_0,                 // register#0 32-bit write       from SW to FW
+    output logic [7:0][31:0] sw_read32_0,                  // register#0 32-bit read_data   from FW to SW
+    output logic      [31:0] sw_read32_1,                  // register#1 32-bit read_status from FW to SW
     // FW side ports
     output logic [3:0]  fw_dev_id_enable,                  // up to 15 FW can be connected;
     output logic        fw_op_code_w_reset,
@@ -38,9 +40,9 @@ module com_sw_to_fw(
     output logic        fw_op_code_r_data_array_1,
     output logic        fw_op_code_w_status_clear,
     output logic        fw_op_code_w_execute,
-    output logic [23:0]      sw_write24_0,                 // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
-    input  logic [3:0][31:0] fw_read_data32,               // 32-bit read_data   from FW to SW
-    input  logic [3:0][31:0] fw_read_status32              // 32-bit read_status from FW to SW
+    output logic           [23:0] sw_write24_0,            // feed-through bytes 2, 1, 0 of sw_write32_0 from SW to FW
+    input  logic [3:0][7:0][31:0] fw_read_data32,          // 32-bit read_data   from FW to SW
+    input  logic [3:0]     [31:0] fw_read_status32         // 32-bit read_status from FW to SW
   );
 
   import cms_pix28_package::windex_device_id_max;          // write index for device_id       (upper)
@@ -96,7 +98,7 @@ module com_sw_to_fw(
       sw_read32_1       = fw_read_status32[3];
     end else begin
       fw_dev_id_enable  = firmware_id_none;
-      sw_read32_0       = 32'h0;
+      sw_read32_0       = 256'h0;
       sw_read32_1       = 32'h0;
     end
   end
