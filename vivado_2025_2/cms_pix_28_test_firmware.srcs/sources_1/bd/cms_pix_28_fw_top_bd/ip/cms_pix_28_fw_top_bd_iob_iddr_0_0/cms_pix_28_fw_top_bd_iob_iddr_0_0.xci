@@ -1,0 +1,54 @@
+{
+  "schema": "xilinx.com:schema:json_instance:1.0",
+  "ip_inst": {
+    "xci_name": "cms_pix_28_fw_top_bd_iob_iddr_0_0",
+    "cell_name": "iob_iddr_0",
+    "component_reference": "xilinx.com:module_ref:iob_iddr:1.0",
+    "ip_revision": "1",
+    "gen_directory": "../../../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd/ip/cms_pix_28_fw_top_bd_iob_iddr_0_0",
+    "parameters": {
+      "component_parameters": {
+        "Component_Name": [ { "value": "cms_pix_28_fw_top_bd_iob_iddr_0_0", "resolve_type": "user", "usage": "all" } ]
+      },
+      "project_parameters": {
+        "ARCHITECTURE": [ { "value": "zynquplus", "resolve_type": "generated", "usage": "all" } ],
+        "BASE_BOARD_PART": [ { "value": "xilinx.com:zcu102:part0:3.4", "resolve_type": "generated", "usage": "all" } ],
+        "BOARD_CONNECTIONS": [ { "value": "", "resolve_type": "generated", "usage": "all" } ],
+        "DEVICE": [ { "value": "xczu9eg", "resolve_type": "generated", "usage": "all" } ],
+        "PACKAGE": [ { "value": "ffvb1156", "resolve_type": "generated", "usage": "all" } ],
+        "PREFHDL": [ { "value": "VERILOG", "resolve_type": "generated", "usage": "all" } ],
+        "SILICON_REVISION": [ { "value": "", "resolve_type": "generated", "usage": "all" } ],
+        "SIMULATOR_LANGUAGE": [ { "value": "MIXED", "resolve_type": "generated", "usage": "all" } ],
+        "SPEEDGRADE": [ { "value": "-2", "resolve_type": "generated", "usage": "all" } ],
+        "STATIC_POWER": [ { "value": "", "resolve_type": "generated", "usage": "all" } ],
+        "TEMPERATURE_GRADE": [ { "value": "E", "resolve_type": "generated", "usage": "all" } ]
+      },
+      "runtime_parameters": {
+        "IPCONTEXT": [ { "value": "IP_Integrator" } ],
+        "IPREVISION": [ { "value": "1" } ],
+        "MANAGED": [ { "value": "TRUE" } ],
+        "OUTPUTDIR": [ { "value": "../../../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd/ip/cms_pix_28_fw_top_bd_iob_iddr_0_0" } ],
+        "SELECTEDSIMMODEL": [ { "value": "" } ],
+        "SHAREDDIR": [ { "value": "../../ipshared" } ],
+        "SWVERSION": [ { "value": "2025.2" } ],
+        "SYNTHESISFLOW": [ { "value": "OOC_HIERARCHICAL" } ]
+      }
+    },
+    "boundary": {
+      "ports": {
+        "pl_clk1": [ { "direction": "in" } ],
+        "config_out_i": [ { "direction": "in" } ],
+        "scan_out_i": [ { "direction": "in" } ],
+        "scan_out_test_i": [ { "direction": "in" } ],
+        "dnn_output_0_i": [ { "direction": "in" } ],
+        "dnn_output_1_i": [ { "direction": "in" } ],
+        "config_out_o": [ { "direction": "out" } ],
+        "scan_out_o": [ { "direction": "out" } ],
+        "scan_out_test_o": [ { "direction": "out" } ],
+        "dnn_output_0_o": [ { "direction": "out" } ],
+        "dnn_output_1_o": [ { "direction": "out" } ]
+      }
+    }
+  },
+  "checksum": "5372bd6e"
+}

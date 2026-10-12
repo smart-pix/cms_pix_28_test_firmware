@@ -1,6 +1,14 @@
 # Automatically identify and compile all the source files in the project directory.
 # DO NOT explicitly list files/directories in 'dvt_auto_init' sections. Use 'dvt_init' sections instead.
 +dvt_init+ius.irun
++dvt_elaboration_loop_block_cutoff+1400
+//due to following code
+//  for(genvar i=0; i<1365; i++) begin
+//    assign tb_r_cfg_pixels_1365x3[i] = tb_r_cfg_pixels_4096[4096-3*i-1 : 4096-3*i-3];
+//  end
+//Description	Resource	Path	Location	ID	Type
+//MAX_COUNT_LOOP_GENERATE: Max count '200' exceeded for loop generate 'genblk1' (increase limit with directive +dvt_elaboration_loop_block_cutoff)	fw_ipx_wrap_tb.sv	/cms_pix_28_test_firmware/vrf	line 405	1629312	Verilog Semantic Problem
+
 
 #Uncomment to force recompilation
 -clean
@@ -16,13 +24,13 @@
 
 # Setup UVM
 #Uncomment to enable support for UVM
--uvm
+//-uvm
 #Uncomment to trace activity in the Config DB
-+UVM_CONFIG_DB_TRACE
+//+UVM_CONFIG_DB_TRACE
 #Uncomment to switch to the use of UVM version 1.2 rather than the default UVM v1.2
--uvmhome CDNS-1.2
+//-uvmhome CDNS-1.2
 #Uncomment to allow single-stepping through UVM content to debug UVM code
--uvmlinedebug
+//-uvmlinedebug
 #Set elaboration timescale. It will be used for any files that do not have a specified timescale, like Genus Synthesis files r2g.v
 -timescale 1ns/10ps
 -sv

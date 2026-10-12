@@ -1,0 +1,71 @@
+{
+  "schema": "xilinx.com:schema:json_instance:1.0",
+  "ip_inst": {
+    "xci_name": "cms_pix_28_fw_top_bd_iob_oddr_0_0",
+    "cell_name": "iob_oddr_0",
+    "component_reference": "xilinx.com:module_ref:iob_oddr:1.0",
+    "ip_revision": "1",
+    "gen_directory": "../../../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd/ip/cms_pix_28_fw_top_bd_iob_oddr_0_0",
+    "parameters": {
+      "component_parameters": {
+        "Component_Name": [ { "value": "cms_pix_28_fw_top_bd_iob_oddr_0_0", "resolve_type": "user", "usage": "all" } ]
+      },
+      "project_parameters": {
+        "ARCHITECTURE": [ { "value": "zynquplus", "resolve_type": "generated", "usage": "all" } ],
+        "BASE_BOARD_PART": [ { "value": "xilinx.com:zcu102:part0:3.4", "resolve_type": "generated", "usage": "all" } ],
+        "BOARD_CONNECTIONS": [ { "value": "", "resolve_type": "generated", "usage": "all" } ],
+        "DEVICE": [ { "value": "xczu9eg", "resolve_type": "generated", "usage": "all" } ],
+        "PACKAGE": [ { "value": "ffvb1156", "resolve_type": "generated", "usage": "all" } ],
+        "PREFHDL": [ { "value": "VERILOG", "resolve_type": "generated", "usage": "all" } ],
+        "SILICON_REVISION": [ { "value": "", "resolve_type": "generated", "usage": "all" } ],
+        "SIMULATOR_LANGUAGE": [ { "value": "MIXED", "resolve_type": "generated", "usage": "all" } ],
+        "SPEEDGRADE": [ { "value": "-2", "resolve_type": "generated", "usage": "all" } ],
+        "STATIC_POWER": [ { "value": "", "resolve_type": "generated", "usage": "all" } ],
+        "TEMPERATURE_GRADE": [ { "value": "E", "resolve_type": "generated", "usage": "all" } ]
+      },
+      "runtime_parameters": {
+        "IPCONTEXT": [ { "value": "IP_Integrator" } ],
+        "IPREVISION": [ { "value": "1" } ],
+        "MANAGED": [ { "value": "TRUE" } ],
+        "OUTPUTDIR": [ { "value": "../../../../../../cms_pix_28_test_firmware.gen/sources_1/bd/cms_pix_28_fw_top_bd/ip/cms_pix_28_fw_top_bd_iob_oddr_0_0" } ],
+        "SELECTEDSIMMODEL": [ { "value": "" } ],
+        "SHAREDDIR": [ { "value": "../../ipshared" } ],
+        "SWVERSION": [ { "value": "2025.2" } ],
+        "SYNTHESISFLOW": [ { "value": "OOC_HIERARCHICAL" } ]
+      }
+    },
+    "boundary": {
+      "ports": {
+        "pl_clk1": [ { "direction": "in" } ],
+        "scan_out_i": [ { "direction": "in" } ],
+        "super_pixel_sel_i": [ { "direction": "in" } ],
+        "config_clk_i": [ { "direction": "in" } ],
+        "dut_rst_port_i": [ { "direction": "in" } ],
+        "config_in_i": [ { "direction": "in" } ],
+        "config_load_i": [ { "direction": "in" } ],
+        "bxclk_ana_i": [ { "direction": "in" } ],
+        "bxclk_i": [ { "direction": "in" } ],
+        "vin_test_trig_out_i": [ { "direction": "in" } ],
+        "scan_in_i": [ { "direction": "in" } ],
+        "scan_load_i": [ { "direction": "in" } ],
+        "dbg_first_scan_load_shift_i": [ { "direction": "in" } ],
+        "dbg_first_scan_load_shift_o": [ { "direction": "out" } ],
+        "scan_load_single_o": [ { "direction": "out" } ],
+        "scan_out_single_o": [ { "direction": "out" } ],
+        "scan_in_single_o": [ { "direction": "out" } ],
+        "bxclk_single_o": [ { "direction": "out" } ],
+        "super_pixel_sel_o": [ { "direction": "out" } ],
+        "config_clk_o": [ { "direction": "out" } ],
+        "dut_rst_port_o": [ { "direction": "out" } ],
+        "config_in_o": [ { "direction": "out" } ],
+        "config_load_o": [ { "direction": "out" } ],
+        "bxclk_ana_o": [ { "direction": "out" } ],
+        "bxclk_o": [ { "direction": "out" } ],
+        "vin_test_trig_out_o": [ { "direction": "out" } ],
+        "scan_in_o": [ { "direction": "out" } ],
+        "scan_load_o": [ { "direction": "out" } ]
+      }
+    }
+  },
+  "checksum": "abc857bc"
+}
